@@ -9,7 +9,6 @@ from email.message import EmailMessage
 from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
 import streamlit as st
-from streamlit_date_picker import date_picker, date_range_picker, PickerType, Unit
 
 ## Météo
 DJ_REF_ANNUELS = 3260.539010836340
@@ -411,25 +410,30 @@ def generate_dashboard():
             except ValueError:
                 st.write("Problème dans la somme des agents énergétiques")
 
-        # dates
         st.subheader('Sélectionner les dates de début et fin de période')
-        # https://github.com/imdreamer2018/streamlit-date-picker
-        date_range_string = date_range_picker(picker_type=PickerType.date.string_value,
-                                            start=-365, end=0, unit=Unit.days.string_value,
-                                            key='range_picker',
-                                            refresh_button={'is_show': True, 'button_name': 'Last 365 days',
-                                                            'refresh_date': -365,
-                                                            'unit': Unit.days.string_value})
-        if date_range_string is not None:
-            periode_start = pd.to_datetime(date_range_string[0])
-            periode_end = pd.to_datetime(date_range_string[1])
-            periode_nb_jours = (periode_end - periode_start).days + 1
-            st.write(f"Période du {periode_start} - {periode_end} soit {periode_nb_jours} jours")
+        col3, col4 = st.columns(2)
+        # dates
+        with col3:
+            periode_start = st.date_input("Début de la période", datetime.date(2021, 1, 1))
+        
+        with col4:
+            periode_end = st.date_input("Fin de la période", datetime.date(2021, 12, 31))
+        
+        periode_nb_jours = (periode_end - periode_start).days + 1
+        periode_start = pd.to_datetime(periode_start)
+        periode_end = pd.to_datetime(periode_start)
+                
+        try:
+            if periode_nb_jours <= 180:
+                st.write("<p style='color: red;'><strong>La période de mesure doit être supérieure à 3 mois (minimum recommandé 6 mois)</strong></p>", unsafe_allow_html=True)
+        except ValueError:  
+            st.write("Problème de date de début et de fin de période")
+        st.write(f"Période du {periode_start} au {periode_end} soit {periode_nb_jours} jours")
 
         st.subheader('Données Excel validation atteinte performances')
-        col3, col4 = st.columns(2)
+        col5, col6 = st.columns(2)
                 
-        with col3:
+        with col5:
             # Autres données
             st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
             
@@ -454,7 +458,7 @@ def generate_dashboard():
             delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
             st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
 
-        with col4:
+        with col6:
             # Répartition énergie finale
             st.write('Répartition en énergie finale - Chauffage partie rénovée')
             repartition_energie_finale_partie_renovee_chauffage = st.text_input("Répartition EF - Chauffage partie rénovée", value=0, label_visibility="collapsed")

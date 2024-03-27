@@ -1,18 +1,15 @@
 # TODO: 
 
-
-import pandas as pd
-import numpy as np
-import streamlit as st
-from streamlit_date_picker import date_range_picker, PickerType, Unit, date_picker
 import datetime
+import io
+import numpy as np
+import pandas as pd
 import smtplib
 from email.message import EmailMessage
-from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
-import io
-
-# Constantes
+from email.mime.text import MIMEText
+import streamlit as st
+from streamlit_date_picker import date_picker, date_range_picker, PickerType, Unit
 
 ## Météo
 DJ_REF_ANNUELS = 3260.539010836340
@@ -631,10 +628,15 @@ def generate_dashboard():
             'estimation_energie_finale_periode_sur_annuel = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + repartition_energie_finale_partie_surelevee_ecs)) +\
                 (estimation_part_chauffage_periode_sur_annuel * (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage))')
 
-        print(estimation_energie_finale_periode_sur_annuel)
         # C95 → Est. Part ECS période comptage
-        part_ecs_periode_comptage = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + \
-            repartition_energie_finale_partie_surelevee_ecs)) / estimation_energie_finale_periode_sur_annuel
+        try:
+            if estimation_energie_finale_periode_sur_annuel != 0:
+                part_ecs_periode_comptage = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + \
+                    repartition_energie_finale_partie_surelevee_ecs)) / estimation_energie_finale_periode_sur_annuel
+            else:
+                part_ecs_periode_comptage = 0.0
+        except ZeroDivisionError:
+            part_ecs_periode_comptage = 0.0
         df = new_row(df,
             'Est. Part ECS période comptage',
             part_ecs_periode_comptage*100,
@@ -645,8 +647,14 @@ def generate_dashboard():
             repartition_energie_finale_partie_surelevee_ecs)) / estimation_energie_finale_periode_sur_annuel')
 
         # C96 → Est. Part Chauffage période comptage
-        part_chauffage_periode_comptage = (estimation_part_chauffage_periode_sur_annuel * \
-            (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage)) / estimation_energie_finale_periode_sur_annuel
+        try:
+            if estimation_energie_finale_periode_sur_annuel != 0:
+                part_chauffage_periode_comptage = (estimation_part_chauffage_periode_sur_annuel * \
+                    (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage)) / estimation_energie_finale_periode_sur_annuel
+            else:
+                part_chauffage_periode_comptage = 0.0
+        except ZeroDivisionError:
+            part_chauffage_periode_comptage = 0.0
         df = new_row(df,
             'Est. Part Chauffage période comptage',
             part_chauffage_periode_comptage*100,
@@ -707,7 +715,13 @@ def generate_dashboard():
             'Part de ECS en énergie finale sur la période')
 
         # C100 → Methodo_Eww
-        methodo_e_ww_kwh = (methodo_b_ww_kwh / sre_renovation_m2) * (365 / periode_nb_jours)
+        try:
+            if sre_renovation_m2 != 0 and periode_nb_jours != 0:
+                methodo_e_ww_kwh = (methodo_b_ww_kwh / sre_renovation_m2) * (365 / periode_nb_jours)
+            else:
+                methodo_e_ww_kwh = 0.0
+        except ZeroDivisionError:
+            methodo_e_ww_kwh = 0.0
         df = new_row(df,
             'Methodo_Eww',
             methodo_e_ww_kwh,
@@ -745,7 +759,13 @@ def generate_dashboard():
             "methodo_b_h_kwh = agent_energetique_ef_somme_kwh * part_chauffage_periode_comptage")
 
         # C104 → Methodo_Eh
-        methodo_e_h_kwh = (methodo_b_h_kwh / sre_renovation_m2) * (DJ_REF_ANNUELS / dj_periode)
+        try:
+            if sre_renovation_m2 != 0 and dj_periode != 0:
+                methodo_e_h_kwh = (methodo_b_h_kwh / sre_renovation_m2) * (DJ_REF_ANNUELS / dj_periode)
+            else:
+                methodo_e_h_kwh = 0.0
+        except ZeroDivisionError:
+            methodo_e_h_kwh = 0.0
         df = new_row(df,
             'Methodo_Eh',
             methodo_e_h_kwh,
@@ -785,18 +805,21 @@ def generate_dashboard():
                 energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 * (repartition_energie_finale_partie_renovee_somme / 100)',)
 
         # C108 → fp → facteur de pondération moyen
-        if agent_energetique_ef_somme_kwh:
-            facteur_ponderation_moyen = (agent_energetique_ef_mazout_somme_mj * FACTEUR_PONDERATION_MAZOUT + \
-                                agent_energetique_ef_gaz_naturel_somme_mj * FACTEUR_PONDERATION_GAZ_NATUREL + \
-                                agent_energetique_ef_bois_buches_dur_somme_mj * FACTEUR_PONDERATION_BOIS_BUCHES_DUR + \
-                                agent_energetique_ef_bois_buches_tendre_somme_mj * FACTEUR_PONDERATION_BOIS_BUCHES_TENDRE + \
-                                agent_energetique_ef_pellets_somme_mj * FACTEUR_PONDERATION_PELLETS + \
-                                agent_energetique_ef_plaquettes_somme_mj * FACTEUR_PONDERATION_PLAQUETTES + \
-                                agent_energetique_ef_cad_somme_mj * FACTEUR_PONDERATION_CAD + \
-                                agent_energetique_ef_electricite_pac_somme_mj * FACTEUR_PONDERATION_ELECTRICITE_PAC + \
-                                agent_energetique_ef_electricite_directe_somme_mj * FACTEUR_PONDERATION_ELECTRICITE_DIRECTE + \
-                                agent_energetique_ef_autre_somme_mj * FACTEUR_PONDERATION_AUTRE) / (agent_energetique_ef_somme_kwh * 3.6)
-        else:
+        try:
+            if agent_energetique_ef_somme_kwh:
+                facteur_ponderation_moyen = (agent_energetique_ef_mazout_somme_mj * FACTEUR_PONDERATION_MAZOUT + \
+                                    agent_energetique_ef_gaz_naturel_somme_mj * FACTEUR_PONDERATION_GAZ_NATUREL + \
+                                    agent_energetique_ef_bois_buches_dur_somme_mj * FACTEUR_PONDERATION_BOIS_BUCHES_DUR + \
+                                    agent_energetique_ef_bois_buches_tendre_somme_mj * FACTEUR_PONDERATION_BOIS_BUCHES_TENDRE + \
+                                    agent_energetique_ef_pellets_somme_mj * FACTEUR_PONDERATION_PELLETS + \
+                                    agent_energetique_ef_plaquettes_somme_mj * FACTEUR_PONDERATION_PLAQUETTES + \
+                                    agent_energetique_ef_cad_somme_mj * FACTEUR_PONDERATION_CAD + \
+                                    agent_energetique_ef_electricite_pac_somme_mj * FACTEUR_PONDERATION_ELECTRICITE_PAC + \
+                                    agent_energetique_ef_electricite_directe_somme_mj * FACTEUR_PONDERATION_ELECTRICITE_DIRECTE + \
+                                    agent_energetique_ef_autre_somme_mj * FACTEUR_PONDERATION_AUTRE) / (agent_energetique_ef_somme_kwh * 3.6)
+            else:
+                facteur_ponderation_moyen = 0
+        except ZeroDivisionError:
             facteur_ponderation_moyen = 0
         df = new_row(df,
             'Facteur de pondération des agents énergétiques',
@@ -920,11 +943,13 @@ def generate_dashboard():
 
     with tab4:
         st.subheader("Synthèse des résultats")
-        
-        st.write("Atteinte des objectifs")
+
         # calculs
         delta_ef_realisee_kwh_m2 = ef_avant_corr_kwh_m2 - energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
-        atteinte_objectif = delta_ef_realisee_kwh_m2/delta_ef_visee_kwh_m2
+        try:
+            atteinte_objectif = delta_ef_realisee_kwh_m2/delta_ef_visee_kwh_m2
+        except ZeroDivisionError:
+            atteinte_objectif = 0.0
 
         df_resultats1 = pd.DataFrame({
             'Variable': [
@@ -977,8 +1002,6 @@ def generate_dashboard():
         st.latex(formula_atteinte_objectif_num)
         st.latex(formula_atteinte_objectifs_pourcent)
 
-        st.write("Analyse des données")
-
     with tab5:
         st.subheader("Envoi des données")
 
@@ -1029,7 +1052,6 @@ def generate_dashboard():
             'IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])' : [ef_avant_corr_kwh_m2],
             'Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])' : [ef_objectif_pondere_kwh_m2],
             })
-        st.dataframe(df_envoi.transpose())
 
         def send_email(subject, body, dataframe, attachment_name="data.csv"):
             GMAIL_ADDRESS = st.secrets["GMAIL_ADDRESS"]
@@ -1063,8 +1085,7 @@ def generate_dashboard():
         if st.button("Envoyer les données"):
             send_email("DataFrame Attachment", "Here is the data you requested.", df_envoi, "my_data.csv")
 
-
-
+        st.dataframe(df_envoi.transpose())
 
 if __name__ == "__main__":
     # Météo

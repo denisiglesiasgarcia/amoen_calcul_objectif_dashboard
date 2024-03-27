@@ -1137,11 +1137,10 @@ def generate_dashboard():
             msg.attach(attachment)
 
             try:
-                server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-                server.login(GMAIL_ADDRESS, GMAIL_PASSWORD)
-                server.send_message(msg)
-                server.quit()
-                st.success("Email envoyé!")
+                with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+                    smtp_server.login(GMAIL_ADDRESS, GMAIL_PASSWORD)
+                    smtp_server.sendmail(GMAIL_ADDRESS, TO_ADRESS_EMAIL, msg.as_string())
+                print("Message sent!")
 
             except Exception as e:
                 st.error(f"Error sending email: {e}")

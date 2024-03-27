@@ -1119,11 +1119,11 @@ def generate_dashboard():
 
         def send_email(subject, body, dataframe, GMAIL_ADDRESS, GMAIL_PASSWORD, TO_ADRESS_EMAIL, attachment_name="data.csv"):
             msg = EmailMessage()
-            msg.set_content(body)
             msg["Subject"] = 'AMOén Dashboard - envoi données'
             msg["From"] = GMAIL_ADDRESS
             msg["To"] = TO_ADRESS_EMAIL
-            del msg["Content-Type"]
+            msg.preamble = 'You are receiving this email because you requested data from the AMOén Dashboard.'
+            msg.set_content(body)
             msg.add_header('content-type', 'multipart/mixed')
 
             # Convert DataFrame to CSV and attach it to the email

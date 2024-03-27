@@ -1119,7 +1119,7 @@ def generate_dashboard():
         df_envoi = pd.DataFrame([df_envoi_values], columns=df_envoi_columns)
 
         def send_email(subject, body, dataframe, GMAIL_ADDRESS, GMAIL_PASSWORD, TO_ADRESS_EMAIL, attachment_name="data.csv"):
-            msg = MIMEMultipart('mixed')
+            msg = MIMEMultipart()
             msg["Subject"] = 'AMOén Dashboard - envoi données'
             msg["From"] = GMAIL_ADDRESS
             msg["To"] = TO_ADRESS_EMAIL
@@ -1137,7 +1137,7 @@ def generate_dashboard():
             msg.attach(attachment)
 
             try:
-                with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+                with smtplib.SMTP_SSL('smtp.gmail.com', 587) as smtp_server:
                     smtp_server.login(GMAIL_ADDRESS, GMAIL_PASSWORD)
                     smtp_server.sendmail(GMAIL_ADDRESS, TO_ADRESS_EMAIL, msg.as_string())
                 print("Message sent!")

@@ -8,6 +8,7 @@ import pandas as pd
 import smtplib
 from email.message import EmailMessage
 from email.mime.application import MIMEApplication
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import streamlit as st
 
@@ -1118,18 +1119,14 @@ def generate_dashboard():
         df_envoi = pd.DataFrame([df_envoi_values], columns=df_envoi_columns)
 
         def send_email(subject, body, dataframe, GMAIL_ADDRESS, GMAIL_PASSWORD, TO_ADRESS_EMAIL, attachment_name="data.csv"):
-            msg = EmailMessage()
+            msg = MIMEMultipart('mixed')
             msg["Subject"] = 'AMOén Dashboard - envoi données'
             msg["From"] = GMAIL_ADDRESS
             msg["To"] = TO_ADRESS_EMAIL
             msg.preamble = 'You are receiving this email because you requested data from the AMOén Dashboard.'
 
-            # Set content-type header to multipart/mixed
-            msg.set_content(body)
-            msg.add_header('content-type', 'multipart/mixed')
-
             # Attach the body as a separate part of the message
-            msg.add_alternative(body, subtype='plain')
+            msg.attach(MIMEText(body, 'plain'))
 
             # Convert DataFrame to CSV and attach it to the email
             csv_buffer = io.StringIO()
@@ -1148,8 +1145,6 @@ def generate_dashboard():
 
             except Exception as e:
                 st.error(f"Error sending email: {e}")
-
-
 
         if st.button("Envoyer les données"):
             send_email("DataFrame Attachment",

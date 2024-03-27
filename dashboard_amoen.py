@@ -1123,8 +1123,13 @@ def generate_dashboard():
             msg["From"] = GMAIL_ADDRESS
             msg["To"] = TO_ADRESS_EMAIL
             msg.preamble = 'You are receiving this email because you requested data from the AMOén Dashboard.'
+
+            # Set content-type header to multipart/mixed
             msg.set_content(body)
             msg.add_header('content-type', 'multipart/mixed')
+
+            # Attach the body as a separate part of the message
+            msg.add_alternative(body, subtype='plain')
 
             # Convert DataFrame to CSV and attach it to the email
             csv_buffer = io.StringIO()

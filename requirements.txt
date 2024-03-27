@@ -59,6 +59,7 @@ pyOpenSSL==22.1.0
 pyparsing==3.0.9
 pyrsistent==0.19.2
 PySocks==1.7.1
+python==3.10.*
 python-dateutil==2.8.2
 pytz==2022.6
 pytz_deprecation_shim==0.1.0.post0 ; python_version >= "3.10"

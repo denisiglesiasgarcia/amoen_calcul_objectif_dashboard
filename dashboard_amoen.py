@@ -1123,7 +1123,6 @@ def generate_dashboard():
             msg["Subject"] = 'AMOén Dashboard - envoi données'
             msg["From"] = GMAIL_ADDRESS
             msg["To"] = TO_ADRESS_EMAIL
-            msg.preamble = 'You are receiving this email because you requested data from the AMOén Dashboard.'
             msg.add_header('content-type', 'multipart/mixed')
 
             # Convert DataFrame to CSV and attach it to the email
@@ -1140,9 +1139,10 @@ def generate_dashboard():
                 server.send_message(msg)
                 server.quit()
                 st.success("Email envoyé!")
-                
+
             except Exception as e:
                 st.error(f"Error sending email: {e}")
+
 
 
         if st.button("Envoyer les données"):

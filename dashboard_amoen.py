@@ -51,6 +51,11 @@ FACTEUR_PONDERATION_AUTRE = 1
 # Variable pour la mise a jour de la météo
 last_update_time_meteo = datetime.datetime(2021, 1, 1)
 
+# Variables pour l'envoi de mail
+GMAIL_ADDRESS = st.secrets["GMAIL_ADDRESS"]
+GMAIL_PASSWORD = st.secrets["GMAIL_PASSWORD"]
+TO_ADRESS_EMAIL = st.secrets["TO_ADRESS_EMAIL"]
+
 # Météo
 def get_meteo_data():
     global DJ_TEMPERATURE_REFERENCE
@@ -417,10 +422,10 @@ def generate_dashboard():
         col3, col4 = st.columns(2)
         # dates
         with col3:
-            periode_start = st.date_input("Début de la période", datetime.date(2022, 1, 1))
+            periode_start = st.date_input("Début de la période", datetime.date(2023, 12, 31))
         
         with col4:
-            periode_end = st.date_input("Fin de la période", datetime.date(2022, 12, 31))
+            periode_end = st.date_input("Fin de la période", datetime.date(2024, 2, 15))
         
         periode_nb_jours = (periode_end - periode_start).days + 1
         periode_nb_jours = float(periode_nb_jours)
@@ -504,39 +509,6 @@ def generate_dashboard():
                 st.write("Problème dans la somme des pourcentages de répartition de l'énergie finale")
 
     with tab3:
-        # Create a DataFrame
-        df = pd.DataFrame({
-            'Dénomination': [],
-            'Valeur': [],
-            'Unité': [],
-            'Commentaire': [],
-            'Excel': [],
-            'Variable/Formule': []
-        })
-
-        df['Dénomination'] = df['Dénomination'].astype(str)
-        df['Valeur'] = df['Valeur'].astype(float)
-        df['Unité'] = df['Unité'].astype(str)
-        df['Commentaire'] = df['Commentaire'].astype(str)
-        df['Excel'] = df['Excel'].astype(str)
-        df['Variable/Formule'] = df['Variable/Formule'].astype(str)
-
-        df_periode = pd.DataFrame({
-            'Dénomination': [],
-            'Valeur': [],
-            'Unité': [],
-            'Commentaire': [],
-            'Excel': [],
-            'Variable/Formule': []
-        })
-
-        df_periode['Dénomination'] = df_periode['Dénomination'].astype(str)
-        df_periode['Valeur'] = df_periode['Valeur'].astype(float)
-        df_periode['Unité'] = df_periode['Unité'].astype(str)
-        df_periode['Commentaire'] = df_periode['Commentaire'].astype(str)
-        df_periode['Excel'] = df_periode['Excel'].astype(str)
-        df_periode['Variable/Formule'] = df_periode['Variable/Formule'].astype(str)
-
         columns = ['Dénomination', 'Valeur', 'Unité', 'Commentaire', 'Excel', 'Variable/Formule']
         df_periode_list = []
         df_list = []
@@ -1057,7 +1029,7 @@ def generate_dashboard():
         st.latex(formula_atteinte_objectifs_pourcent)
 
     with tab5:
-        st.subheader("Envoi des données")
+        st.subheader("Envoi des données à eco21/HEPIA")
 
         nom_projet = st.text_input("Nom du projet")
         adresse_projet = st.text_input("Adresse")
@@ -1145,10 +1117,7 @@ def generate_dashboard():
 
         df_envoi = pd.DataFrame([df_envoi_values], columns=df_envoi_columns)
 
-        def send_email(subject, body, dataframe, attachment_name="data.csv"):
-            GMAIL_ADDRESS = st.secrets["GMAIL_ADDRESS"]
-            GMAIL_PASSWORD = st.secrets["GMAIL_PASSWORD"]
-            TO_ADRESS_EMAIL = st.secrets["TO_ADRESS_EMAIL"]
+        def send_email(subject, body, dataframe, GMAIL_ADDRESS, GMAIL_PASSWORD, TO_ADRESS_EMAIL, attachment_name="data.csv"):
             msg = EmailMessage()
             msg.set_content(body)
             msg["Subject"] = 'AMOén Dashboard - envoi données'
@@ -1175,7 +1144,13 @@ def generate_dashboard():
 
 
         if st.button("Envoyer les données"):
-            send_email("DataFrame Attachment", "Here is the data you requested.", df_envoi, "my_data.csv")
+            send_email("DataFrame Attachment",
+                        "Here is the data you requested.",
+                        df_envoi,
+                        GMAIL_ADDRESS,
+                        GMAIL_PASSWORD,
+                        TO_ADRESS_EMAIL,
+                        "my_data.csv")
 
         st.dataframe(df_envoi)
 
@@ -1212,6 +1187,10 @@ if __name__ == "__main__":
     st.session_state.FACTEUR_PONDERATION_ELECTRICITE_PAC = FACTEUR_PONDERATION_ELECTRICITE_PAC
     st.session_state.FACTEUR_PONDERATION_ELECTRICITE_DIRECTE = FACTEUR_PONDERATION_ELECTRICITE_DIRECTE
     st.session_state.FACTEUR_PONDERATION_AUTRE = FACTEUR_PONDERATION_AUTRE
+    # email
+    st.session_state.GMAIL_ADDRESS = GMAIL_ADDRESS
+    st.session_state.GMAIL_PASSWORD = GMAIL_PASSWORD
+    st.session_state.TO_ADRESS_EMAIL = TO_ADRESS_EMAIL
     # Mise à jour météo
     now = datetime.datetime.now()
     if (now - last_update_time_meteo).days > 1:

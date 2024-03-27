@@ -1,4 +1,4 @@
-# TODO: 
+# TODO: email sending
 
 import os
 import datetime
@@ -1029,132 +1029,132 @@ def generate_dashboard():
         st.latex(formula_atteinte_objectif_num)
         st.latex(formula_atteinte_objectifs_pourcent)
 
-    with tab5:
-        st.subheader("Envoi des données à eco21/HEPIA")
+    # with tab5:
+    #     st.subheader("Envoi des données à eco21/HEPIA")
 
-        nom_projet = st.text_input("Nom du projet")
-        adresse_projet = st.text_input("Adresse")
-        amoen_id = st.text_input("AMOEN")
+    #     nom_projet = st.text_input("Nom du projet")
+    #     adresse_projet = st.text_input("Adresse")
+    #     amoen_id = st.text_input("AMOEN")
 
-        df_envoi_columns = [
-            'Nom_projet', 'Adresse', 'AMOEN',
-            'SRE rénovée', 'Affectation habitat collectif pourcentage',
-            'Affectation habitat individuel pourcentage',
-            'Affectation administration pourcentage',
-            'Affectation écoles pourcentage',
-            'Affectation commerce pourcentage',
-            'Affectation restauration pourcentage',
-            'Affectation lieux de rassemblement pourcentage',
-            'Affectation hopitaux pourcentage',
-            'Affectation industrie pourcentage',
-            'Affectation dépots pourcentage',
-            'Affectation installations sportives pourcentage',
-            'Affectation piscines couvertes pourcentage',
-            'Agent énergétique mazout kg',
-            'Agent énergétique mazout litres',
-            'Agent énergétique mazout kWh',
-            'Agent énergétique gaz naturel m3',
-            'Agent énergétique gaz naturel kWh',
-            'Agent énergétique bois buches dur stère',
-            'Agent énergétique bois buches tendre stère',
-            'Agent énergétique bois buches tendre kWh',
-            'Agent énergétique pellets m3',
-            'Agent énergétique pellets kg',
-            'Agent énergétique pellets kWh',
-            'Agent énergétique plaquettes m3',
-            'Agent énergétique plaquettes kWh',
-            'Agent énergétique CAD kWh',
-            'Agent énergétique Electricité PAC kWh',
-            'Agent énergétique Electricité directe kWh',
-            'Agent énergétique Autre kWh',
-            'Période début', 'Période fin',
-            'Répartition en énergie finale - Chauffage partie rénovée',
-            'Répartition en énergie finale - ECS partie rénovée',
-            'Répartition en énergie finale - Chauffage partie surélévée',
-            'Répartition en énergie finale - ECS partie surélévée',
-            'IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])',
-            'Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])'
-        ]
+    #     df_envoi_columns = [
+    #         'Nom_projet', 'Adresse', 'AMOEN',
+    #         'SRE rénovée', 'Affectation habitat collectif pourcentage',
+    #         'Affectation habitat individuel pourcentage',
+    #         'Affectation administration pourcentage',
+    #         'Affectation écoles pourcentage',
+    #         'Affectation commerce pourcentage',
+    #         'Affectation restauration pourcentage',
+    #         'Affectation lieux de rassemblement pourcentage',
+    #         'Affectation hopitaux pourcentage',
+    #         'Affectation industrie pourcentage',
+    #         'Affectation dépots pourcentage',
+    #         'Affectation installations sportives pourcentage',
+    #         'Affectation piscines couvertes pourcentage',
+    #         'Agent énergétique mazout kg',
+    #         'Agent énergétique mazout litres',
+    #         'Agent énergétique mazout kWh',
+    #         'Agent énergétique gaz naturel m3',
+    #         'Agent énergétique gaz naturel kWh',
+    #         'Agent énergétique bois buches dur stère',
+    #         'Agent énergétique bois buches tendre stère',
+    #         'Agent énergétique bois buches tendre kWh',
+    #         'Agent énergétique pellets m3',
+    #         'Agent énergétique pellets kg',
+    #         'Agent énergétique pellets kWh',
+    #         'Agent énergétique plaquettes m3',
+    #         'Agent énergétique plaquettes kWh',
+    #         'Agent énergétique CAD kWh',
+    #         'Agent énergétique Electricité PAC kWh',
+    #         'Agent énergétique Electricité directe kWh',
+    #         'Agent énergétique Autre kWh',
+    #         'Période début', 'Période fin',
+    #         'Répartition en énergie finale - Chauffage partie rénovée',
+    #         'Répartition en énergie finale - ECS partie rénovée',
+    #         'Répartition en énergie finale - Chauffage partie surélévée',
+    #         'Répartition en énergie finale - ECS partie surélévée',
+    #         'IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])',
+    #         'Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])'
+    #     ]
 
-        df_envoi_values = [
-            nom_projet, adresse_projet, amoen_id,
-            sre_renovation_m2, sre_pourcentage_habitat_collectif,
-            sre_pourcentage_habitat_individuel,
-            sre_pourcentage_administration,
-            sre_pourcentage_ecoles,
-            sre_pourcentage_commerce,
-            sre_pourcentage_restauration,
-            sre_pourcentage_lieux_de_rassemblement,
-            sre_pourcentage_hopitaux,
-            sre_pourcentage_industrie,
-            sre_pourcentage_depots,
-            sre_pourcentage_installations_sportives,
-            sre_pourcentage_piscines_couvertes,
-            agent_energetique_ef_mazout_kg,
-            agent_energetique_ef_mazout_litres,
-            agent_energetique_ef_mazout_kwh,
-            agent_energetique_ef_gaz_naturel_m3,
-            agent_energetique_ef_gaz_naturel_kwh,
-            agent_energetique_ef_bois_buches_dur_stere,
-            agent_energetique_ef_bois_buches_tendre_stere,
-            agent_energetique_ef_bois_buches_tendre_kwh,
-            agent_energetique_ef_pellets_m3,
-            agent_energetique_ef_pellets_kg,
-            agent_energetique_ef_pellets_kwh,
-            agent_energetique_ef_plaquettes_m3,
-            agent_energetique_ef_plaquettes_kwh,
-            agent_energetique_ef_cad_kwh,
-            agent_energetique_ef_electricite_pac_kwh,
-            agent_energetique_ef_electricite_directe_kwh,
-            agent_energetique_ef_autre_kwh,
-            periode_start, periode_end,
-            repartition_energie_finale_partie_renovee_chauffage,
-            repartition_energie_finale_partie_renovee_ecs,
-            repartition_energie_finale_partie_surelevee_chauffage,
-            repartition_energie_finale_partie_surelevee_ecs,
-            ef_avant_corr_kwh_m2,
-            ef_objectif_pondere_kwh_m2
-        ]
+    #     df_envoi_values = [
+    #         nom_projet, adresse_projet, amoen_id,
+    #         sre_renovation_m2, sre_pourcentage_habitat_collectif,
+    #         sre_pourcentage_habitat_individuel,
+    #         sre_pourcentage_administration,
+    #         sre_pourcentage_ecoles,
+    #         sre_pourcentage_commerce,
+    #         sre_pourcentage_restauration,
+    #         sre_pourcentage_lieux_de_rassemblement,
+    #         sre_pourcentage_hopitaux,
+    #         sre_pourcentage_industrie,
+    #         sre_pourcentage_depots,
+    #         sre_pourcentage_installations_sportives,
+    #         sre_pourcentage_piscines_couvertes,
+    #         agent_energetique_ef_mazout_kg,
+    #         agent_energetique_ef_mazout_litres,
+    #         agent_energetique_ef_mazout_kwh,
+    #         agent_energetique_ef_gaz_naturel_m3,
+    #         agent_energetique_ef_gaz_naturel_kwh,
+    #         agent_energetique_ef_bois_buches_dur_stere,
+    #         agent_energetique_ef_bois_buches_tendre_stere,
+    #         agent_energetique_ef_bois_buches_tendre_kwh,
+    #         agent_energetique_ef_pellets_m3,
+    #         agent_energetique_ef_pellets_kg,
+    #         agent_energetique_ef_pellets_kwh,
+    #         agent_energetique_ef_plaquettes_m3,
+    #         agent_energetique_ef_plaquettes_kwh,
+    #         agent_energetique_ef_cad_kwh,
+    #         agent_energetique_ef_electricite_pac_kwh,
+    #         agent_energetique_ef_electricite_directe_kwh,
+    #         agent_energetique_ef_autre_kwh,
+    #         periode_start, periode_end,
+    #         repartition_energie_finale_partie_renovee_chauffage,
+    #         repartition_energie_finale_partie_renovee_ecs,
+    #         repartition_energie_finale_partie_surelevee_chauffage,
+    #         repartition_energie_finale_partie_surelevee_ecs,
+    #         ef_avant_corr_kwh_m2,
+    #         ef_objectif_pondere_kwh_m2
+    #     ]
 
-        df_envoi = pd.DataFrame([df_envoi_values], columns=df_envoi_columns)
+    #     df_envoi = pd.DataFrame([df_envoi_values], columns=df_envoi_columns)
 
-        def send_email(subject, body, dataframe, GMAIL_ADDRESS, GMAIL_PASSWORD, TO_ADRESS_EMAIL, attachment_name="data.csv"):
-            msg = MIMEMultipart()
-            msg["Subject"] = 'AMOén Dashboard - envoi données'
-            msg["From"] = GMAIL_ADDRESS
-            msg["To"] = TO_ADRESS_EMAIL
-            msg.preamble = 'You are receiving this email because you requested data from the AMOén Dashboard.'
+    #     def send_email(subject, body, dataframe, GMAIL_ADDRESS, GMAIL_PASSWORD, TO_ADRESS_EMAIL, attachment_name="data.csv"):
+    #         msg = MIMEMultipart()
+    #         msg["Subject"] = 'AMOén Dashboard - envoi données'
+    #         msg["From"] = GMAIL_ADDRESS
+    #         msg["To"] = TO_ADRESS_EMAIL
+    #         msg.preamble = 'You are receiving this email because you requested data from the AMOén Dashboard.'
 
-            # Attach the body as a separate part of the message
-            msg.attach(MIMEText(body, 'plain'))
+    #         # Attach the body as a separate part of the message
+    #         msg.attach(MIMEText(body, 'plain'))
 
-            # Convert DataFrame to CSV and attach it to the email
-            csv_buffer = io.StringIO()
-            dataframe.to_csv(csv_buffer, index=False)
-            csv_buffer.seek(0)
-            attachment = MIMEApplication(csv_buffer.read(), _subtype="csv")
-            attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
-            msg.attach(attachment)
+    #         # Convert DataFrame to CSV and attach it to the email
+    #         csv_buffer = io.StringIO()
+    #         dataframe.to_csv(csv_buffer, index=False)
+    #         csv_buffer.seek(0)
+    #         attachment = MIMEApplication(csv_buffer.read(), _subtype="csv")
+    #         attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
+    #         msg.attach(attachment)
 
-            try:
-                with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
-                    smtp_server.login(GMAIL_ADDRESS, GMAIL_PASSWORD)
-                    smtp_server.sendmail(GMAIL_ADDRESS, TO_ADRESS_EMAIL, msg.as_string())
-                print("Message sent!")
+    #         try:
+    #             with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+    #                 smtp_server.login(GMAIL_ADDRESS, GMAIL_PASSWORD)
+    #                 smtp_server.sendmail(GMAIL_ADDRESS, TO_ADRESS_EMAIL, msg.as_string())
+    #             print("Message sent!")
 
-            except Exception as e:
-                st.error(f"Error sending email: {e}")
+    #         except Exception as e:
+    #             st.error(f"Error sending email: {e}")
 
-        if st.button("Envoyer les données"):
-            send_email("DataFrame Attachment",
-                        "Here is the data you requested.",
-                        df_envoi,
-                        GMAIL_ADDRESS,
-                        GMAIL_PASSWORD,
-                        TO_ADRESS_EMAIL,
-                        "my_data.csv")
+    #     if st.button("Envoyer les données"):
+    #         send_email("DataFrame Attachment",
+    #                     "Here is the data you requested.",
+    #                     df_envoi,
+    #                     GMAIL_ADDRESS,
+    #                     GMAIL_PASSWORD,
+    #                     TO_ADRESS_EMAIL,
+    #                     "my_data.csv")
 
-        st.dataframe(df_envoi)
+    #     st.dataframe(df_envoi)
 
 if __name__ == "__main__":
     # Météo

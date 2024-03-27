@@ -1,5 +1,6 @@
 # TODO: 
 
+import os
 import datetime
 import io
 import numpy as np
@@ -9,6 +10,8 @@ from email.message import EmailMessage
 from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
 import streamlit as st
+
+os.environ['USE_ARROW_extension'] = '1'
 
 ## Météo
 DJ_REF_ANNUELS = 3260.539010836340
@@ -388,23 +391,23 @@ def generate_dashboard():
                 agent_energetique_ef_autre_kwh = 0.0
             
             try:
-                agent_energetique_ef_somme_avertissement = float(agent_energetique_ef_mazout_kg) + \
-                    float(agent_energetique_ef_mazout_litres) + \
-                    float(agent_energetique_ef_mazout_kwh) + \
-                    float(agent_energetique_ef_gaz_naturel_m3) + \
-                    float(agent_energetique_ef_gaz_naturel_kwh) + \
-                    float(agent_energetique_ef_bois_buches_dur_stere) + \
-                    float(agent_energetique_ef_bois_buches_tendre_stere) + \
-                    float(agent_energetique_ef_bois_buches_tendre_kwh) + \
-                    float(agent_energetique_ef_pellets_m3) + \
-                    float(agent_energetique_ef_pellets_kg) + \
-                    float(agent_energetique_ef_pellets_kwh) + \
-                    float(agent_energetique_ef_plaquettes_m3) + \
-                    float(agent_energetique_ef_plaquettes_kwh) + \
-                    float(agent_energetique_ef_cad_kwh) + \
-                    float(agent_energetique_ef_electricite_pac_kwh) + \
-                    float(agent_energetique_ef_electricite_directe_kwh) + \
-                    float(agent_energetique_ef_autre_kwh)
+                agent_energetique_ef_somme_avertissement = agent_energetique_ef_mazout_kg + \
+                    agent_energetique_ef_mazout_litres + \
+                    agent_energetique_ef_mazout_kwh + \
+                    agent_energetique_ef_gaz_naturel_m3 + \
+                    agent_energetique_ef_gaz_naturel_kwh + \
+                    agent_energetique_ef_bois_buches_dur_stere + \
+                    agent_energetique_ef_bois_buches_tendre_stere + \
+                    agent_energetique_ef_bois_buches_tendre_kwh + \
+                    agent_energetique_ef_pellets_m3 + \
+                    agent_energetique_ef_pellets_kg + \
+                    agent_energetique_ef_pellets_kwh + \
+                    agent_energetique_ef_plaquettes_m3 + \
+                    agent_energetique_ef_plaquettes_kwh + \
+                    agent_energetique_ef_cad_kwh + \
+                    agent_energetique_ef_electricite_pac_kwh + \
+                    agent_energetique_ef_electricite_directe_kwh + \
+                    agent_energetique_ef_autre_kwh
                 if agent_energetique_ef_somme_avertissement <= 0:
                     st.write(f"<p style='color: red;'><strong>Veuillez renseigner une quantité d'énergie utilisée sur la période ({agent_energetique_ef_somme_avertissement})</strong></p>", unsafe_allow_html=True)
             except ValueError:
@@ -414,21 +417,23 @@ def generate_dashboard():
         col3, col4 = st.columns(2)
         # dates
         with col3:
-            periode_start = st.date_input("Début de la période", datetime.date(2021, 1, 1))
+            periode_start = st.date_input("Début de la période", datetime.date(2022, 1, 1))
         
         with col4:
-            periode_end = st.date_input("Fin de la période", datetime.date(2021, 12, 31))
+            periode_end = st.date_input("Fin de la période", datetime.date(2022, 12, 31))
         
         periode_nb_jours = (periode_end - periode_start).days + 1
+        periode_nb_jours = float(periode_nb_jours)
+
         periode_start = pd.to_datetime(periode_start)
-        periode_end = pd.to_datetime(periode_start)
+        periode_end = pd.to_datetime(periode_end)
                 
         try:
             if periode_nb_jours <= 180:
                 st.write("<p style='color: red;'><strong>La période de mesure doit être supérieure à 3 mois (minimum recommandé 6 mois)</strong></p>", unsafe_allow_html=True)
         except ValueError:  
             st.write("Problème de date de début et de fin de période")
-        st.write(f"Période du {periode_start} au {periode_end} soit {periode_nb_jours} jours")
+        st.write(f"Période du {periode_start} au {periode_end} soit {int(periode_nb_jours)} jours")
 
         st.subheader('Données Excel validation atteinte performances')
         col5, col6 = st.columns(2)
@@ -509,6 +514,13 @@ def generate_dashboard():
             'Variable/Formule': []
         })
 
+        df['Dénomination'] = df['Dénomination'].astype(str)
+        df['Valeur'] = df['Valeur'].astype(float)
+        df['Unité'] = df['Unité'].astype(str)
+        df['Commentaire'] = df['Commentaire'].astype(str)
+        df['Excel'] = df['Excel'].astype(str)
+        df['Variable/Formule'] = df['Variable/Formule'].astype(str)
+
         df_periode = pd.DataFrame({
             'Dénomination': [],
             'Valeur': [],
@@ -518,119 +530,134 @@ def generate_dashboard():
             'Variable/Formule': []
         })
 
-        def new_row(df, denomination, valeur, unite, commentaire, excel, formule=''):
-            new_row_added = {'Dénomination': denomination, 'Valeur': valeur, 'Unité': unite, 'Commentaire': commentaire, 'Excel': excel, 'Variable/Formule': formule}
-            df = pd.concat([df, pd.DataFrame(new_row_added, index=[0])], ignore_index=True)
-            return df
-        
+        df_periode['Dénomination'] = df_periode['Dénomination'].astype(str)
+        df_periode['Valeur'] = df_periode['Valeur'].astype(float)
+        df_periode['Unité'] = df_periode['Unité'].astype(str)
+        df_periode['Commentaire'] = df_periode['Commentaire'].astype(str)
+        df_periode['Excel'] = df_periode['Excel'].astype(str)
+        df_periode['Variable/Formule'] = df_periode['Variable/Formule'].astype(str)
+
+        columns = ['Dénomination', 'Valeur', 'Unité', 'Commentaire', 'Excel', 'Variable/Formule']
+        df_periode_list = []
+        df_list = []
+
         # C65 → Début période
-        df_periode = new_row(df_periode,
-            'Début période',
-            periode_start,
-            '-',
-            'Date de début de la période',
-            'C65',
-            'periode_start')
+        df_periode_list.append({
+            'Dénomination': 'Début période',
+            'Valeur': periode_start,
+            'Unité': '-',
+            'Commentaire': 'Date de début de la période',
+            'Excel': 'C65',
+            'Variable/Formule' : 'periode_start'})
         
         # C66 → Fin période
-        df_periode = new_row(df_periode,
-            'Fin période',
-            periode_end,
-            '-',
-            'Date de fin de la période',
-            'C66',
-            'periode_end')
+        df_periode_list.append({
+            'Dénomination': 'Fin période',
+            'Valeur': periode_end,
+            'Unité': '-',
+            'Commentaire': 'Date de fin de la période',
+            'Excel': 'C66',
+            'Variable/Formule': 'periode_end'
+        })
 
         # C67 → Nombre de jours
-        df = new_row(df,
-            'Nombre de jours',
-            periode_nb_jours,
-            'jours',
-            'Nombre de jours de la période',
-            'C67',
-            'periode_nb_jours')
+        df_list.append({
+            'Dénomination': 'Nombre de jour(s)',
+            'Valeur': periode_nb_jours,
+            'Unité': 'jour(s)',
+            'Commentaire': 'Nombre de jour(s) dans la période',
+            'Excel': 'C67',
+            'Variable/Formule': 'periode_nb_jours'
+        })
 
 
-        # C86 → Répartition EF - Chauffage partie rénovée
-        df = new_row(df,
-            'Répartition en énergie finale - Chauffage partie rénovée',
-            repartition_energie_finale_partie_renovee_chauffage,
-            '%',
-            "Part d'énergie finale (chauffage) pour la partie rénové.",
-            'C86',
-            "repartition_energie_finale_partie_renovee_chauffage")
-        
-        # C87 → Répartition EF - ECS partie rénovée
-        df = new_row(df,
-            'Répartition en énergie finale - ECS partie rénovée',
-            repartition_energie_finale_partie_renovee_ecs,
-            '%',
-            "Part d'énergie finale (ECS) pour la partie rénové.",
-            'C87',
-            "repartition_energie_finale_partie_renovee_ecs")
+        # C86 → Répartition en énergie finale - Chauffage partie rénovée
+        df_list.append({
+            'Dénomination': 'Répartition en énergie finale (chauffage) pour la partie rénové',
+            'Valeur': repartition_energie_finale_partie_renovee_chauffage,
+            'Unité': '%',
+            'Commentaire': '',
+            'Excel': 'C86',
+            'Variable/Formule': "repartition_energie_finale_partie_renovee_chauffage"
+        })
 
-        # C88 → Répartition EF - Chauffage partie surélévée
-        df = new_row(df,
-            'Répartition en énergie finale - Chauffage partie surélévée',
-            repartition_energie_finale_partie_surelevee_chauffage,
-            '%',
-             "Part d'énergie finale (chauffage) pour la partie surélévée. 0 s'il n'y a pas de surélévation",
-            'C88',
-            "repartition_energie_finale_partie_surelevee_chauffage")
+        # C87 → Répartition en énergie finale - ECS partie rénovée
+        df_list.append({
+            'Dénomination': 'Répartition en énergie finale (ECS) pour la partie rénové',
+            'Valeur': repartition_energie_finale_partie_renovee_ecs,
+            'Unité': '%',
+            'Commentaire': '',  # You can add a comment if needed
+            'Excel': 'C87',
+            'Variable/Formule': "repartition_energie_finale_partie_renovee_ecs"
+        })
+
+        # C88 → Répartition en énergie finale - Chauffage partie surélévée
+        df_list.append({
+            'Dénomination': 'Répartition en énergie finale (chauffage) pour la partie surélévée',
+            'Valeur': repartition_energie_finale_partie_surelevee_chauffage,
+            'Unité': '%',
+            'Commentaire': "0 if no surélévation",  # You can add a comment if needed
+            'Excel': 'C88',
+            'Variable/Formule': "repartition_energie_finale_partie_surelevee_chauffage"
+        })
         
         # C89 → Répartition EF - ECS partie surélévée
-        df = new_row(df,
-            'Répartition en énergie finale - ECS partie surélévée',
-            repartition_energie_finale_partie_surelevee_ecs,
-            '%',
-            "Part d'énergie finale (ECS) pour la partie surélévée. 0 s'il n'y a pas de surélévation",
-            'C89',
-            "repartition_energie_finale_partie_surelevee_ecs")
+        df_list.append({
+            'Dénomination': 'Répartition en énergie finale - ECS partie surélévée',
+            'Valeur': repartition_energie_finale_partie_surelevee_ecs,
+            'Unité': '%',
+            'Commentaire': "Part d'énergie finale (ECS) pour la partie surélévée. 0 s'il n'y a pas de surélévation",
+            'Excel': 'C89',
+            'Variable/Formule': "repartition_energie_finale_partie_surelevee_ecs"
+        })
         
         # C91 → Part EF pour partie rénové (Chauffage + ECS)
         repartition_energie_finale_partie_renovee_somme = repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_renovee_ecs
-        df = new_row(df,
-            'Part EF pour partie rénové (Chauffage + ECS)',
-            repartition_energie_finale_partie_renovee_somme,
-            '%',
-            "Part d'énergie finale (Chauffage + ECS) pour la partie rénové. 100% si pas de surélévation",
-            'C91',
-            "repartition_energie_finale_partie_renovee_somme = repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_renovee_ecs")
+        df_list.append({
+            'Dénomination': 'Part EF pour partie rénové (Chauffage + ECS)',
+            'Valeur': repartition_energie_finale_partie_renovee_somme,
+            'Unité': '%',
+            'Commentaire': "Part d'énergie finale (Chauffage + ECS) pour la partie rénové. 100% si pas de surélévation",
+            'Excel': 'C91',
+            'Variable/Formule': "repartition_energie_finale_partie_renovee_somme = repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_renovee_ecs"
+        })
         
         # C92 → Est. ECS/ECS annuelle
         estimation_ecs_annuel = periode_nb_jours/365
-        df = new_row(df,
-            'Est. ECS/ECS annuelle',
-            estimation_ecs_annuel,
-            '-',
-            'Estimation de la part ECS sur une année',
-            'C92',
-            'estimation_ecs_annuel = periode_nb_jours/365')
+        df_list.append({
+            'Dénomination': 'Est. ECS/ECS annuelle',
+            'Valeur': estimation_ecs_annuel,
+            'Unité': '-',
+            'Commentaire': 'Estimation de la part ECS sur une année',
+            'Excel': 'C92',
+            'Variable/Formule': 'estimation_ecs_annuel = periode_nb_jours/365'
+        })
 
         # C93 → Est. Chauffage/Chauffage annuel prévisible
         dj_periode = calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end)
         dj_periode = float(dj_periode)
         estimation_part_chauffage_periode_sur_annuel = dj_periode / DJ_REF_ANNUELS
         estimation_part_chauffage_periode_sur_annuel = float(estimation_part_chauffage_periode_sur_annuel)
-        df = new_row(df,
-            'Est. Chauffage/Chauffage annuel prévisible',
-            estimation_part_chauffage_periode_sur_annuel*100,
-            '%',
-            'Est. Chauffage/Chauffage annuel prévisible → dj_periode (C101) / DJ_REF_ANNUELS (C102)',
-            'C93',
-            'estimation_part_chauffage_periode_sur_annuel = dj_periode / DJ_REF_ANNUELS')
+        df_list.append({
+            'Dénomination': 'Est. Chauffage/Chauffage annuel prévisible',
+            'Valeur': estimation_part_chauffage_periode_sur_annuel*100,
+            'Unité': '%',
+            'Commentaire': 'Est. Chauffage/Chauffage annuel prévisible → dj_periode (C101) / DJ_REF_ANNUELS (C102)',
+            'Excel': 'C93',
+            'Variable/Formule': 'estimation_part_chauffage_periode_sur_annuel = dj_periode / DJ_REF_ANNUELS'
+        })
 
         # C94 → Est. EF période / EF année
         estimation_energie_finale_periode_sur_annuel = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + repartition_energie_finale_partie_surelevee_ecs)) +\
                                             (estimation_part_chauffage_periode_sur_annuel * (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage))
-        df = new_row(df,
-            'Est. EF période / EF année',
-            estimation_energie_finale_periode_sur_annuel,
-            '%',
-            "Estimation en énergie finale sur la période / énergie finale sur une année",
-            'C94',
-            'estimation_energie_finale_periode_sur_annuel = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + repartition_energie_finale_partie_surelevee_ecs)) +\
-                (estimation_part_chauffage_periode_sur_annuel * (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage))')
+        df_list.append({
+            'Dénomination': 'Est. EF période / EF année',
+            'Valeur': estimation_energie_finale_periode_sur_annuel,
+            'Unité': '%',
+            'Commentaire': 'Estimation en énergie finale sur la période / énergie finale sur une année',
+            'Excel': 'C94',
+            'Variable/Formule': 'estimation_energie_finale_periode_sur_annuel = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + repartition_energie_finale_partie_surelevee_ecs)) + (estimation_part_chauffage_periode_sur_annuel * (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage))'
+        })
 
         # C95 → Est. Part ECS période comptage
         try:
@@ -641,14 +668,14 @@ def generate_dashboard():
                 part_ecs_periode_comptage = 0.0
         except ZeroDivisionError:
             part_ecs_periode_comptage = 0.0
-        df = new_row(df,
-            'Est. Part ECS période comptage',
-            part_ecs_periode_comptage*100,
-            '%', 
-            "",
-            'C95',
-            'part_ecs_periode_comptage = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + \
-            repartition_energie_finale_partie_surelevee_ecs)) / estimation_energie_finale_periode_sur_annuel')
+        df_list.append({
+            'Dénomination': 'Est. Part ECS période comptage',
+            'Valeur': part_ecs_periode_comptage*100,
+            'Unité': '%',
+            'Commentaire': '',
+            'Excel': 'C95',
+            'Variable/Formule': 'part_ecs_periode_comptage = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + repartition_energie_finale_partie_surelevee_ecs)) / estimation_energie_finale_periode_sur_annuel'
+        })
 
         # C96 → Est. Part Chauffage période comptage
         try:
@@ -659,24 +686,26 @@ def generate_dashboard():
                 part_chauffage_periode_comptage = 0.0
         except ZeroDivisionError:
             part_chauffage_periode_comptage = 0.0
-        df = new_row(df,
-            'Est. Part Chauffage période comptage',
-            part_chauffage_periode_comptage*100,
-            '%',
-            "",
-            'C96',
-            'part_chauffage_periode_comptage = (estimation_part_chauffage_periode_sur_annuel * \
-            (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage)) / estimation_energie_finale_periode_sur_annuel')
+        df_list.append({
+            'Dénomination': 'Est. Part Chauffage période comptage',
+            'Valeur': part_chauffage_periode_comptage*100,
+            'Unité': '%',
+            'Commentaire': '',
+            'Excel': 'C96',
+            'Variable/Formule': 'part_chauffage_periode_comptage = (estimation_part_chauffage_periode_sur_annuel * \
+            (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage)) / estimation_energie_finale_periode_sur_annuel'
+        })
 
         # C97 → correction ECS = 365/nb jour comptage
         correction_ecs = 365/periode_nb_jours
-        df = new_row(df,
-            'Correction ECS',
-            correction_ecs,
-            '-',
-            "",
-            'C97',
-            'correction_ecs = 365/periode_nb_jours')
+        df_list.append({
+            'Dénomination': 'Correction ECS',
+            'Valeur': correction_ecs,
+            'Unité': '-',
+            'Commentaire': '',
+            'Excel': 'C97',
+            'Variable/Formule': 'correction_ecs = 365/periode_nb_jours'
+        })
 
         # C98 → Energie finale indiqué par le(s) compteur(s)
         agent_energetique_ef_mazout_somme_mj = (agent_energetique_ef_mazout_kg * CONVERSION_MAZOUT_KG_MJ + agent_energetique_ef_mazout_litres * CONVERSION_MAZOUT_LITRES_MJ + agent_energetique_ef_mazout_kwh * CONVERSION_MAZOUT_KWH_MJ)
@@ -700,23 +729,25 @@ def generate_dashboard():
                                         agent_energetique_ef_electricite_pac_somme_mj + \
                                         agent_energetique_ef_electricite_directe_somme_mj + \
                                         agent_energetique_ef_autre_somme_mj) / 3.6
-        df = new_row(df,
-            'Energie finale indiqué par le(s) compteur(s)',
-            agent_energetique_ef_somme_kwh,
-            'kWh', 
-            "Somme de l'énergie finale indiqué par le(s) compteur(s) en kWh",
-            'C98',
-            'agent_energetique_ef_somme_kwh')
+        df_list.append({
+            'Dénomination': 'Energie finale indiqué par le(s) compteur(s)',
+            'Valeur': agent_energetique_ef_somme_kwh,
+            'Unité': 'kWh',
+            'Commentaire': "Somme de l'énergie finale indiqué par le(s) compteur(s) en kWh",
+            'Excel': 'C98',
+            'Variable/Formule': 'agent_energetique_ef_somme_kwh'
+        })
 
         # C99 → Methodo_Bww → Part de ECS en énergie finale sur la période
         methodo_b_ww_kwh = (agent_energetique_ef_somme_kwh) * part_ecs_periode_comptage
-        df = new_row(df,
-            'Methodo_Bww',
-            methodo_b_ww_kwh,
-            'kWh',
-            "",
-            'C99',
-            'Part de ECS en énergie finale sur la période')
+        df_list.append({
+            'Dénomination': 'Methodo_Bww',
+            'Valeur': methodo_b_ww_kwh,
+            'Unité': 'kWh',
+            'Commentaire': '',
+            'Excel': 'C99',
+            'Variable/Formule': 'methodo_b_ww_kwh'
+        })
 
         # C100 → Methodo_Eww
         try:
@@ -726,41 +757,45 @@ def generate_dashboard():
                 methodo_e_ww_kwh = 0.0
         except ZeroDivisionError:
             methodo_e_ww_kwh = 0.0
-        df = new_row(df,
-            'Methodo_Eww',
-            methodo_e_ww_kwh,
-            'kWh',
-            "",
-            'C100',
-            'Methodo_Eww')
+        df_list.append({
+            'Dénomination': 'Methodo_Eww',
+            'Valeur': methodo_e_ww_kwh,
+            'Unité': 'kWh',
+            'Commentaire': '',
+            'Excel': 'C100',
+            'Variable/Formule': 'Methodo_Eww'
+        })
 
         # C101 → DJ ref annuels
-        df = new_row(df,
-            'DJ ref annuels',
-            DJ_REF_ANNUELS,
-            'Degré-jour',
-            'Degré-jour 20/16 avec les températures extérieures de référence pour Genève-Cointrin selon SIA 2028:2008',
-            'C101',
-            "DJ_REF_ANNUELS")
+        df_list.append({
+            'Dénomination': 'DJ ref annuels',
+            'Valeur': DJ_REF_ANNUELS,
+            'Unité': 'Degré-jour',
+            'Commentaire': 'Degré-jour 20/16 avec les températures extérieures de référence pour Genève-Cointrin selon SIA 2028:2008',
+            'Excel': 'C101',
+            'Variable/Formule': 'DJ_REF_ANNUELS'
+        })
 
         # C102 → DJ période comptage
-        df = new_row(df,
-            'DJ période comptage',
-            dj_periode,
-            'Degré-jour',
-            'Degré-jour 20/16 avec les températures extérieures (tre200d0) pour Genève-Cointrin relevée par MétéoSuisse',
-            'C102',
-            'dj_periode')
+        df_list.append({
+            'Dénomination': 'DJ période comptage',
+            'Valeur': dj_periode,
+            'Unité': 'Degré-jour',
+            'Commentaire': 'Degré-jour 20/16 avec les températures extérieures (tre200d0) pour Genève-Cointrin relevée par MétéoSuisse',
+            'Excel': 'C102',
+            'Variable/Formule': 'dj_periode'
+        })
 
         # C103 → Methodo_Bh → Part de chauffage en énergie finale sur la période
         methodo_b_h_kwh = agent_energetique_ef_somme_kwh * part_chauffage_periode_comptage
-        df = new_row(df,
-            'Methodo_Bh',
-            methodo_b_h_kwh,
-            'kWh',
-            'Part de chauffage en énergie finale sur la période',
-            'C103',
-            "methodo_b_h_kwh = agent_energetique_ef_somme_kwh * part_chauffage_periode_comptage")
+        df_list.append({
+            'Dénomination': 'Methodo_Bh',
+            'Valeur': methodo_b_h_kwh,
+            'Unité': 'kWh',
+            'Commentaire': 'Part de chauffage en énergie finale sur la période',
+            'Excel': 'C103',
+            'Variable/Formule': 'methodo_b_h_kwh = agent_energetique_ef_somme_kwh * part_chauffage_periode_comptage'
+        })
 
         # C104 → Methodo_Eh
         try:
@@ -770,43 +805,46 @@ def generate_dashboard():
                 methodo_e_h_kwh = 0.0
         except ZeroDivisionError:
             methodo_e_h_kwh = 0.0
-        df = new_row(df,
-            'Methodo_Eh',
-            methodo_e_h_kwh,
-            'kWh/m²',
-            'Energie finale par unité de surface pour le chauffage sur la période climatiquement corrigée',
-            'C104',
-            'methodo_e_h_kwh = (methodo_b_h_kwh / sre_renovation_m2) * (DJ_REF_ANNUELS / dj_periode)')
+        df_list.append({
+            'Dénomination': 'Methodo_Eh',
+            'Valeur': methodo_e_h_kwh,
+            'Unité': 'kWh/m²',
+            'Commentaire': 'Energie finale par unité de surface pour le chauffage sur la période climatiquement corrigée',
+            'Excel': 'C104',
+            'Variable/Formule': 'methodo_e_h_kwh = (methodo_b_h_kwh / sre_renovation_m2) * (DJ_REF_ANNUELS / dj_periode)'
+        })
 
         # C105 → Ef,après,corr → Methodo_Eww + Methodo_Eh
         energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = methodo_e_ww_kwh + methodo_e_h_kwh
-        df = new_row(df,
-            'Ef,après,corr (inclus surélévation)',
-            energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2,
-            'kWh/m²',
-            "Energie finale par unité de surface pour le chauffage climatiquement corrigée et l'ECS sur la période (inclus surélévation)",
-            'C105',
-            'energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = methodo_e_ww_kwh + methodo_e_h_kwh')
+        df_list.append({
+            'Dénomination': 'Ef,après,corr (inclus surélévation)',
+            'Valeur': energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2,
+            'Unité': 'kWh/m²',
+            'Commentaire': "Energie finale par unité de surface pour le chauffage climatiquement corrigée et l'ECS sur la période (inclus surélévation)",
+            'Excel': 'C105',
+            'Variable/Formule': 'energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = methodo_e_ww_kwh + methodo_e_h_kwh'
+        })
 
         # C106 → Part de l'énergie finale théorique dédiée à la partie rénovée (ECS+Ch.)
-        df = new_row(df,
-            'Part de l\'énergie finale théorique dédiée à la partie rénovée (ECS+Ch.)',
-            repartition_energie_finale_partie_renovee_somme,
-            '%',
-            'Part de l\'énergie finale théorique dédiée à la partie rénovée (ECS+Ch.)',
-            'C106',
-            "repartition_energie_finale_partie_renovee_somme")
+        df_list.append({
+            'Dénomination': "Part de l'énergie finale théorique dédiée à la partie rénovée (ECS+Ch.)",
+            'Valeur': repartition_energie_finale_partie_renovee_somme,
+            'Unité': '%',
+            'Commentaire': "Part de l'énergie finale théorique dédiée à la partie rénovée (ECS+Ch.)",
+            'Excel': 'C106',
+            'Variable/Formule': 'repartition_energie_finale_partie_renovee_somme'
+        })
 
         # C107 → Ef,après,corr,rénové →Total en énergie finale (Eww+Eh) pour la partie rénovée
         energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 = energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 * (repartition_energie_finale_partie_renovee_somme / 100)
-        df = new_row(df,
-            'Ef,après,corr,rénové',
-            energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2,
-            'kWh/m²',
-            'Energie finale par unité de surface pour le chauffage et l\'ECS sur la période climatiquement corrigée pour la partie rénovée',
-            'C107',
-            'energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 = \
-                energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 * (repartition_energie_finale_partie_renovee_somme / 100)',)
+        df_list.append({
+            'Dénomination': 'Ef,après,corr,rénové',
+            'Valeur': energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2,
+            'Unité': 'kWh/m²',
+            'Commentaire': "Energie finale par unité de surface pour le chauffage et l'ECS sur la période climatiquement corrigée pour la partie rénovée",
+            'Excel': 'C107',
+            'Variable/Formule': 'energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 = energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 * (repartition_energie_finale_partie_renovee_somme / 100)'
+        })
 
         # C108 → fp → facteur de pondération moyen
         try:
@@ -825,58 +863,66 @@ def generate_dashboard():
                 facteur_ponderation_moyen = 0
         except ZeroDivisionError:
             facteur_ponderation_moyen = 0
-        df = new_row(df,
-            'Facteur de pondération des agents énergétiques',
-            facteur_ponderation_moyen,
-            '-',
-            'Facteur de pondération moyen des agents énergétiques',
-            'C108',
-            'facteur_ponderation_moyen')
+        df_list.append({
+            'Dénomination': 'Facteur de pondération des agents énergétiques',
+            'Valeur': facteur_ponderation_moyen,
+            'Unité': '-',
+            'Commentaire': 'Facteur de pondération moyen des agents énergétiques',
+            'Excel': 'C108',
+            'Variable/Formule': 'facteur_ponderation_moyen'
+        })
 
         # C109 → Methodo_Eww*fp
         methodo_e_ww_renovee_pondere_kwh_m2 = methodo_e_ww_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)
-        df = new_row(df,
-            'Methodo_Eww*fp',
-            methodo_e_ww_renovee_pondere_kwh_m2,
-            'kWh/m²',
-            '',
-            'C109',
-            'methodo_e_ww_renovee_pondere_kwh_m2 = methodo_e_ww_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)')
+        df_list.append({
+            'Dénomination': 'Methodo_Eww*fp',
+            'Valeur': methodo_e_ww_renovee_pondere_kwh_m2,
+            'Unité': 'kWh/m²',
+            'Commentaire': '',
+            'Excel': 'C109',
+            'Variable/Formule': 'methodo_e_ww_renovee_pondere_kwh_m2 = methodo_e_ww_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)'
+        })
 
         # C110 → Methodo_Eh*fp
         methodo_e_h_renovee_pondere_kwh_m2 = methodo_e_h_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)
-        df = new_row(df,
-            'Methodo_Eh*fp',
-            methodo_e_h_renovee_pondere_kwh_m2,
-            'kWh/m²',
-            '',
-            'C110',
-            'methodo_e_h_renovee_pondere_kwh_m2 = methodo_e_h_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)')
+        df_list.append({
+            'Dénomination': 'Methodo_Eh*fp',
+            'Valeur':methodo_e_h_renovee_pondere_kwh_m2,
+            'Unité': 'kWh/m²',
+            'Commentaire': '',
+            'Excel': 'C110',
+            'Variable/Formule': 'methodo_e_h_renovee_pondere_kwh_m2 = methodo_e_h_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)'
+        })
 
         # C113 → Ef,après,corr,rénové*fp
         energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 * facteur_ponderation_moyen
-        df = new_row(df,
-            'Ef,après,corr,rénové*fp',
-            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
-            'kWh/m²',
-            "",
-            'C113',
-            'energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 * facteur_ponderation_moyen')
+        df_list.append({
+            'Dénomination': 'Ef,après,corr,rénové*fp',
+            'Valeur': energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
+            'Unité': 'kWh/m²',
+            'Commentaire': '',
+            'Excel': 'C113',
+            'Variable/Formule': 'energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 * facteur_ponderation_moyen'
+        })
 
         # C114 → Ef,après,corr,rénové*fp
         energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 * 3.6
-        df = new_row(df,
-            'Ef,après,corr,rénové*fp',
-            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2,
-            'MJ/m²',
-            "",
-            'C114',
-            'energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 * 3.6')
+        df_list.append({
+            'Dénomination': 'Ef,après,corr,rénové*fp',
+            'Valeur': energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2,
+            'Unité': 'MJ/m²',
+            'Commentaire': '',
+            'Excel': 'C114',
+            'Variable/Formule': 'energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 * 3.6'
+        })
 
-        # Reset the index to make it a column
-        df = df.reset_index(drop=True)
 
         # Autres dataframe
+        df_periode = pd.DataFrame(df_periode_list, columns=columns)
+
+        df = pd.DataFrame(df_list, columns=columns)
+
+
         df_meteo_note_calcul = df_meteo_tre200d0[(df_meteo_tre200d0['time'] >= periode_start) & (df_meteo_tre200d0['time'] <= periode_end)][['time', 'tre200d0', 'DJ_theta0_16']]
 
         df_agent_energetique = pd.DataFrame({
@@ -975,6 +1021,10 @@ def generate_dashboard():
                 delta_ef_visee_kwh_m2*3.6],
         })
 
+        # dtypes
+        df_resultats1['Variable'] = df_resultats1['Variable'].astype(str)
+        df_resultats1['kWh/m²/an'] = df_resultats1['kWh/m²/an'].astype(float)
+        df_resultats1['MJ/m²/an'] = df_resultats1['MJ/m²/an'].astype(float)
         st.table(df_resultats1)
 
         # résultats en latex
@@ -1013,49 +1063,87 @@ def generate_dashboard():
         adresse_projet = st.text_input("Adresse")
         amoen_id = st.text_input("AMOEN")
 
-        df_envoi = pd.DataFrame({
-            'Nom_projet': [nom_projet],
-            'Adresse': [adresse_projet],
-            'AMOEN': [amoen_id],
-            'SRE rénovée' : [sre_renovation_m2],
-            'Affectation habitat collectif pourcentage': [sre_pourcentage_habitat_collectif],
-            'Affectation habitat individuel pourcentage': [sre_pourcentage_habitat_individuel],
-            'Affectation administration pourcentage': [sre_pourcentage_administration],
-            'Affectation écoles pourcentage': [sre_pourcentage_ecoles],
-            'Affectation commerce pourcentage': [sre_pourcentage_commerce],
-            'Affectation restauration pourcentage': [sre_pourcentage_restauration],
-            'Affectation lieux de rassemblement pourcentage': [sre_pourcentage_lieux_de_rassemblement],
-            'Affectation hopitaux pourcentage': [sre_pourcentage_hopitaux],
-            'Affectation industrie pourcentage': [sre_pourcentage_industrie],
-            'Affectation dépots pourcentage': [sre_pourcentage_depots],
-            'Affectation installations sportives pourcentage': [sre_pourcentage_installations_sportives],
-            'Affectation piscines couvertes pourcentage': [sre_pourcentage_piscines_couvertes],
-            'Agent énergétique mazout kg': [agent_energetique_ef_mazout_kg],
-            'Agent énergétique mazout litres': [agent_energetique_ef_mazout_litres],
-            'Agent énergétique mazout kWh': [agent_energetique_ef_mazout_kwh],
-            'Agent énergétique gaz naturel m3': [agent_energetique_ef_gaz_naturel_m3],
-            'Agent énergétique gaz naturel kWh': [agent_energetique_ef_gaz_naturel_kwh],
-            'Agent énergétique bois buches dur stère': [agent_energetique_ef_bois_buches_dur_stere],
-            'Agent énergétique bois buches tendre stère': [agent_energetique_ef_bois_buches_tendre_stere],
-            'Agent énergétique bois buches tendre kWh': [agent_energetique_ef_bois_buches_tendre_kwh],
-            'Agent énergétique pellets m3': [agent_energetique_ef_pellets_m3],
-            'Agent énergétique pellets kg': [agent_energetique_ef_pellets_kg],
-            'Agent énergétique pellets kWh': [agent_energetique_ef_pellets_kwh],
-            'Agent énergétique plaquettes m3': [agent_energetique_ef_plaquettes_m3],
-            'Agent énergétique plaquettes kWh': [agent_energetique_ef_plaquettes_kwh],
-            'Agent énergétique CAD kWh': [agent_energetique_ef_cad_kwh],
-            'Agent énergétique Electricité PAC kWh': [agent_energetique_ef_electricite_pac_kwh],
-            'Agent énergétique Electricité directe kWh': [agent_energetique_ef_electricite_directe_kwh],
-            'Agent énergétique Autre kWh': [agent_energetique_ef_autre_kwh],
-            'Période début': [periode_start],
-            'Période fin': [periode_end],
-            'Répartition en énergie finale - Chauffage partie rénovée': [repartition_energie_finale_partie_renovee_chauffage],
-            'Répartition en énergie finale - ECS partie rénovée': [repartition_energie_finale_partie_renovee_ecs],
-            'Répartition en énergie finale - Chauffage partie surélévée': [repartition_energie_finale_partie_surelevee_chauffage],
-            'Répartition en énergie finale - ECS partie surélévée': [repartition_energie_finale_partie_surelevee_ecs],
-            'IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])' : [ef_avant_corr_kwh_m2],
-            'Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])' : [ef_objectif_pondere_kwh_m2],
-            })
+        df_envoi_columns = [
+            'Nom_projet', 'Adresse', 'AMOEN',
+            'SRE rénovée', 'Affectation habitat collectif pourcentage',
+            'Affectation habitat individuel pourcentage',
+            'Affectation administration pourcentage',
+            'Affectation écoles pourcentage',
+            'Affectation commerce pourcentage',
+            'Affectation restauration pourcentage',
+            'Affectation lieux de rassemblement pourcentage',
+            'Affectation hopitaux pourcentage',
+            'Affectation industrie pourcentage',
+            'Affectation dépots pourcentage',
+            'Affectation installations sportives pourcentage',
+            'Affectation piscines couvertes pourcentage',
+            'Agent énergétique mazout kg',
+            'Agent énergétique mazout litres',
+            'Agent énergétique mazout kWh',
+            'Agent énergétique gaz naturel m3',
+            'Agent énergétique gaz naturel kWh',
+            'Agent énergétique bois buches dur stère',
+            'Agent énergétique bois buches tendre stère',
+            'Agent énergétique bois buches tendre kWh',
+            'Agent énergétique pellets m3',
+            'Agent énergétique pellets kg',
+            'Agent énergétique pellets kWh',
+            'Agent énergétique plaquettes m3',
+            'Agent énergétique plaquettes kWh',
+            'Agent énergétique CAD kWh',
+            'Agent énergétique Electricité PAC kWh',
+            'Agent énergétique Electricité directe kWh',
+            'Agent énergétique Autre kWh',
+            'Période début', 'Période fin',
+            'Répartition en énergie finale - Chauffage partie rénovée',
+            'Répartition en énergie finale - ECS partie rénovée',
+            'Répartition en énergie finale - Chauffage partie surélévée',
+            'Répartition en énergie finale - ECS partie surélévée',
+            'IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])',
+            'Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])'
+        ]
+
+        df_envoi_values = [
+            nom_projet, adresse_projet, amoen_id,
+            sre_renovation_m2, sre_pourcentage_habitat_collectif,
+            sre_pourcentage_habitat_individuel,
+            sre_pourcentage_administration,
+            sre_pourcentage_ecoles,
+            sre_pourcentage_commerce,
+            sre_pourcentage_restauration,
+            sre_pourcentage_lieux_de_rassemblement,
+            sre_pourcentage_hopitaux,
+            sre_pourcentage_industrie,
+            sre_pourcentage_depots,
+            sre_pourcentage_installations_sportives,
+            sre_pourcentage_piscines_couvertes,
+            agent_energetique_ef_mazout_kg,
+            agent_energetique_ef_mazout_litres,
+            agent_energetique_ef_mazout_kwh,
+            agent_energetique_ef_gaz_naturel_m3,
+            agent_energetique_ef_gaz_naturel_kwh,
+            agent_energetique_ef_bois_buches_dur_stere,
+            agent_energetique_ef_bois_buches_tendre_stere,
+            agent_energetique_ef_bois_buches_tendre_kwh,
+            agent_energetique_ef_pellets_m3,
+            agent_energetique_ef_pellets_kg,
+            agent_energetique_ef_pellets_kwh,
+            agent_energetique_ef_plaquettes_m3,
+            agent_energetique_ef_plaquettes_kwh,
+            agent_energetique_ef_cad_kwh,
+            agent_energetique_ef_electricite_pac_kwh,
+            agent_energetique_ef_electricite_directe_kwh,
+            agent_energetique_ef_autre_kwh,
+            periode_start, periode_end,
+            repartition_energie_finale_partie_renovee_chauffage,
+            repartition_energie_finale_partie_renovee_ecs,
+            repartition_energie_finale_partie_surelevee_chauffage,
+            repartition_energie_finale_partie_surelevee_ecs,
+            ef_avant_corr_kwh_m2,
+            ef_objectif_pondere_kwh_m2
+        ]
+
+        df_envoi = pd.DataFrame([df_envoi_values], columns=df_envoi_columns)
 
         def send_email(subject, body, dataframe, attachment_name="data.csv"):
             GMAIL_ADDRESS = st.secrets["GMAIL_ADDRESS"]
@@ -1089,7 +1177,7 @@ def generate_dashboard():
         if st.button("Envoyer les données"):
             send_email("DataFrame Attachment", "Here is the data you requested.", df_envoi, "my_data.csv")
 
-        st.dataframe(df_envoi.transpose())
+        st.dataframe(df_envoi)
 
 if __name__ == "__main__":
     # Météo

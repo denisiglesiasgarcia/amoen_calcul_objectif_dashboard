@@ -1120,36 +1120,29 @@ def generate_dashboard():
 
         df_envoi = pd.DataFrame([df_envoi_values], columns=df_envoi_columns)
 
-        def send_email(subject, body, dataframe, GMAIL_ADDRESS, GMAIL_PASSWORD, TO_ADRESS_EMAIL, attachment_name="data.csv"):
+        def send_email(subject, body, dataframe, GMAIL_ADDRESS, GMAIL_PASSWORD, TO_ADDRESS_EMAIL, attachment_name="data.csv"):
             msg = EmailMessage()
             msg["Subject"] = subject
             msg["From"] = GMAIL_ADDRESS
-            msg["To"] = TO_ADRESS_EMAIL
-            msg.preamble = "You are receiving this email because you requested data from the AMOén Dashboard."
-
-            # Attach the body as a separate part of the message
-            msg.set_content(body, subtype='plain', charset='utf-8')
-            msg.set_payload(body, charset='utf-8')
+            msg["To"] = TO_ADDRESS_EMAIL
+            msg.set_content(body)  # Attach the body as the main content of the email
 
             # Convert DataFrame to CSV and attach it to the email
             csv_buffer = io.StringIO()
-            dataframe.to_csv(csv_buffer, index=False, encoding="utf-8")  # Fix: Use "utf-8" encoding
+            dataframe.to_csv(csv_buffer, index=False, encoding="utf-8")
             csv_buffer.seek(0)
-            attachment = MIMEApplication(csv_buffer.read(), _subtype="csv", Name=attachment_name)
-            attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
+            attachment = MIMEApplication(csv_buffer.read(), _subtype="csv")
+            attachment.add_header("Content-Disposition", "attachment", filename=attachment_name)
             msg.add_attachment(attachment)
-
 
             try:
                 with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:
                     smtp_server.login(GMAIL_ADDRESS, GMAIL_PASSWORD)
-                    # Encode the message to bytes using utf-8 encoding and then decode back to string
-                    raw_message = msg.as_bytes()
-                    smtp_server.sendmail(GMAIL_ADDRESS, TO_ADRESS_EMAIL, raw_message)
-                st.write("Données envoyées!")
+                    smtp_server.send_message(msg)  # This automatically handles encoding
+                print("Data sent successfully!")
 
             except Exception as e:
-                st.write(f"Error sending email: {e}")
+                print(f"Error sending email: {e}")
 
         if st.button("Envoyer les données"):
             send_email("DataFrame Attachment",

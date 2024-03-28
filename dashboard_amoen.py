@@ -1033,8 +1033,6 @@ def generate_dashboard():
         st.latex(formula_atteinte_objectifs_pourcent)
 
     with tab5:
-        st.subheader("En cours de développement")
-
         st.subheader("Envoi des données à eco21/HEPIA")
 
         nom_projet = st.text_input("Nom du projet")

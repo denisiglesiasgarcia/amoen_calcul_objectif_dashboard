@@ -1136,7 +1136,7 @@ def generate_dashboard():
             csv_buffer.seek(0)
             attachment = MIMEApplication(csv_buffer.read(), _subtype="csv", Name=attachment_name)
             attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
-            msg.attach(attachment)
+            msg.add_attachment(attachment)
             msg.set_payload(body, charset='utf-8')
 
             try:

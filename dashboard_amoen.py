@@ -1128,7 +1128,7 @@ def generate_dashboard():
             msg.preamble = "You are receiving this email because you requested data from the AMOén Dashboard."
 
             # Attach the body as a separate part of the message
-            msg.attach(MIMEText(body, "plain", "latin1"))  # Use UTF-8 encoding for the body
+            msg.attach(MIMEText(body, "plain"))
 
             # Convert DataFrame to CSV and attach it to the email
             csv_buffer = io.StringIO()
@@ -1153,7 +1153,7 @@ def generate_dashboard():
                         "Here is the data you requested.\n\nBest regards,\nYour Name",
                         df_envoi,
                         GMAIL_ADDRESS,
-                        GMAIL_PASSWORD,  # Use your App Password here if you have two-factor authentication enabled
+                        GMAIL_PASSWORD,
                         TO_ADRESS_EMAIL,
                         "my_data.csv")
 

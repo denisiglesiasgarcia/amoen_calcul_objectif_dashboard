@@ -1128,7 +1128,7 @@ def generate_dashboard():
             msg.preamble = "You are receiving this email because you requested data from the AMOén Dashboard."
 
             # Attach the body as a separate part of the message
-            msg.set_content(body, sutype='plain', charset='utf-8')
+            msg.set_content(body, subtype='plain', charset='utf-8')
             msg.set_payload(body, charset='utf-8')
 
             # Convert DataFrame to CSV and attach it to the email

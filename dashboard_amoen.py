@@ -1131,6 +1131,7 @@ def generate_dashboard():
             msg.attach(MIMEText(body, "plain", "utf-8"))  # Use UTF-8 encoding for the body
 
             # Convert DataFrame to CSV and attach it to the email
+            dataframe = dataframe.encode("utf-8")  # Use UTF-8 encoding for DataFrame
             csv_buffer = io.StringIO()
             dataframe.to_csv(csv_buffer, index=False, encoding="utf-8")  # Use UTF-8 encoding for the CSV
             csv_buffer.seek(0)
@@ -1142,7 +1143,7 @@ def generate_dashboard():
                 with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:
                     smtp_server.login(gmail_address, gmail_password)
                     # Encode the message to bytes using utf-8 encoding and then decode back to string
-                    smtp_server.sendmail(gmail_address, to_address, msg.as_bytes().decode('utf-8'))
+                    smtp_server.sendmail(gmail_address, to_address, msg.as_bytes())
                 st.write("Email sent successfully!")
 
             except Exception as e:

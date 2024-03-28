@@ -89,7 +89,7 @@ def generate_dashboard():
         if (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and latex is False:
             st.write(name, variable, " ", unité)
         elif (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and latex is True:
-            st.latex(name, variable, " ", unité)
+            st.latex(name, variable, "\_", unité)
         else:
             st.write(name, "doit être un chiffre")
     
@@ -450,7 +450,7 @@ def generate_dashboard():
             # Autres données
             st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
             ef_avant_corr_kwh_m2 = st.text_input("Ef,avant,corr [kWh/m²/an]:", value=0, help="IDC moyen 3 ans avant travaux", label_visibility="collapsed")
-            validate_input(r"E_{f,avant,corr}:", ef_avant_corr_kwh_m2, r"kWh/m²/an", latex=True)
+            validate_input(r"E_{f,avant,corr}:", ef_avant_corr_kwh_m2, r"$kWh/m²/an", latex=True)
             ef_avant_corr_kwh_m2 = float(ef_avant_corr_kwh_m2)
             try:
                 if float(ef_avant_corr_kwh_m2) <= 0:

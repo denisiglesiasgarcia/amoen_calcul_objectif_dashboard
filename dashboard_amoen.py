@@ -1128,12 +1128,12 @@ def generate_dashboard():
             msg.preamble = "You are receiving this email because you requested data from the AMOén Dashboard."
 
             # Attach the body as a separate part of the message
-            msg.attach(MIMEText(body, "plain", "utf-8"))  # Use UTF-8 encoding for the body
+            msg.attach(MIMEText(body, "plain", "latin1"))  # Use UTF-8 encoding for the body
 
             # Convert DataFrame to CSV and attach it to the email
-            dataframe = dataframe.encode("utf-8")  # Use UTF-8 encoding for DataFrame
+            dataframe = dataframe.encode("latin1")
             csv_buffer = io.StringIO()
-            dataframe.to_csv(csv_buffer, index=False, encoding="utf-8")  # Use UTF-8 encoding for the CSV
+            dataframe.to_csv(csv_buffer, index=False, encoding="latin1")
             csv_buffer.seek(0)
             attachment = MIMEApplication(csv_buffer.read(), _subtype="csv")
             attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")

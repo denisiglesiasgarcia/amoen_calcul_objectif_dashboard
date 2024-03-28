@@ -483,7 +483,7 @@ def generate_dashboard():
             
             show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Surélévation")
             if show_text_input_agent_energetique_ef_autre_kwh:
-                st.write('Répartition en énergie finale - Chauffage partie surélévée [%]')
+                st.write('Répartition EF - Chauffage partie surélévée [%]')
                 repartition_energie_finale_partie_surelevee_chauffage = st.text_input("Répartition EF - Chauffage partie surélévée",
                                                                                         value=0,
                                                                                         help= "Laisser a 0 si pas de surélévation",
@@ -491,8 +491,9 @@ def generate_dashboard():
                 validate_input("Répartition en énergie finale - Chauffage partie surélévée:", repartition_energie_finale_partie_surelevee_chauffage, "%")
                 repartition_energie_finale_partie_surelevee_chauffage = float(repartition_energie_finale_partie_surelevee_chauffage)
                 
+                st.write('Répartition en énergie finale - ECS partie surélévée [%]')
                 repartition_energie_finale_partie_surelevee_ecs = st.text_input("Répartition EF - ECS partie surélevée", value=0, help= "Laisser a 0 si pas de surélévation")
-                validate_input("Répartition en énergie finale - ECS partie surélevée:", repartition_energie_finale_partie_surelevee_ecs, "%")
+                validate_input("Répartition EF - ECS partie surélevée:", repartition_energie_finale_partie_surelevee_ecs, "%")
                 repartition_energie_finale_partie_surelevee_ecs = float(repartition_energie_finale_partie_surelevee_ecs)
             else:
                 repartition_energie_finale_partie_surelevee_chauffage = 0.0

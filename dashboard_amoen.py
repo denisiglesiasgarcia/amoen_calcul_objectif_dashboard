@@ -87,9 +87,9 @@ def generate_dashboard():
     # Validation données saisies
     def validate_input(name, variable, unité):
         if variable.isnumeric() or variable.replace('.', '', 1).isnumeric():
-            st.write(name, variable, " ", unité)
+            st.latex(name, variable, " ", unité)
         else:
-            st.write(name, "doit être un chiffre")
+            st.latex(name, "doit être un chiffre")
     
     # Calcul des degrés-jours
     def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):

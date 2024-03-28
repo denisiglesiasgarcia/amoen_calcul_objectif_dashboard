@@ -1134,20 +1134,19 @@ def generate_dashboard():
             csv_buffer = io.StringIO()
             dataframe.to_csv(csv_buffer, index=False, encoding="utf-8")  # Use UTF-8 encoding for the CSV
             csv_buffer.seek(0)
-            attachment = MIMEApplication(csv_buffer.getvalue().encode('utf-8'), _subtype="csv")
+            attachment = MIMEApplication(csv_buffer.read(), _subtype="csv")
             attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
-            attachment.add_header("Content-Transfer-Encoding", "base64")
-            attachment.add_header("Content-Type", "text/csv; charset=utf-8")
             msg.attach(attachment)
 
             try:
                 with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:
                     smtp_server.login(gmail_address, gmail_password)
-                    smtp_server.sendmail(gmail_address, to_address, msg.as_string())
+                    # Encode the message to bytes using utf-8 encoding and then decode back to string
+                    smtp_server.sendmail(gmail_address, to_address, msg.as_bytes().decode('utf-8'))
                 print("Message sent!")
 
             except Exception as e:
-                st.error(f"Error sending email: {e}")
+                print(f"Error sending email: {e}")
 
         if st.button("Envoyer les données"):
             send_email("DataFrame Attachment",

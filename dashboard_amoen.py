@@ -1132,7 +1132,7 @@ def generate_dashboard():
 
             # Convert DataFrame to CSV and attach it to the email
             csv_buffer = io.StringIO()
-            dataframe.to_csv(csv_buffer, index=False, encoding="latin1")
+            dataframe.to_csv(csv_buffer, index=False, encoding="utf-8")  # Fix: Use "utf-8" encoding
             csv_buffer.seek(0)
             attachment = MIMEApplication(csv_buffer.read(), _subtype="csv")
             attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")

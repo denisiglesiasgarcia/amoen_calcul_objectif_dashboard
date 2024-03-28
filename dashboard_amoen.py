@@ -1121,7 +1121,7 @@ def generate_dashboard():
         df_envoi = pd.DataFrame([df_envoi_values], columns=df_envoi_columns)
 
         def send_email(subject, body, dataframe, gmail_address, gmail_password, to_address, attachment_name="data.csv"):
-            msg = MIMEMultipart()
+            msg = EmailMessage()
             msg["Subject"] = subject
             msg["From"] = gmail_address
             msg["To"] = to_address

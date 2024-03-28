@@ -85,13 +85,11 @@ def get_meteo_data():
 
 def generate_dashboard():
     # Validation données saisies
-    def validate_input(name, variable, unité, latex=False):
-        if (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and not latex:
-            st.write(f"{name} {variable} {unité}")
-        elif (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and latex:
-            return True
+    def validate_input(name, variable, unité):
+        if (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()):
+            st.text(f"{name} {variable} {unité}")
         else:
-            st.write(name, "doit être un chiffre")
+            st.text(name, "doit être un chiffre")
     
     # Calcul des degrés-jours
     def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):
@@ -450,7 +448,7 @@ def generate_dashboard():
             # Autres données
             st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
             ef_avant_corr_kwh_m2 = st.text_input("Ef,avant,corr [kWh/m²/an]:", value=0, help="IDC moyen 3 ans avant travaux", label_visibility="collapsed")
-            validate_input("E_{f,avant,corr}:", ef_avant_corr_kwh_m2, "$kWh/m²/an", latex=True)
+            validate_input("E_{f,avant,corr}:", ef_avant_corr_kwh_m2, "$kWh/m²/an")
             ef_avant_corr_kwh_m2 = float(ef_avant_corr_kwh_m2)
             try:
                 if float(ef_avant_corr_kwh_m2) <= 0:

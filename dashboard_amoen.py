@@ -1134,8 +1134,10 @@ def generate_dashboard():
             csv_buffer = io.StringIO()
             dataframe.to_csv(csv_buffer, index=False, encoding="utf-8")  # Use UTF-8 encoding for the CSV
             csv_buffer.seek(0)
-            attachment = MIMEApplication(csv_buffer.read(), _subtype="csv")
+            attachment = MIMEApplication(csv_buffer.getvalue().encode('utf-8'), _subtype="csv")
             attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
+            attachment.add_header("Content-Transfer-Encoding", "base64")
+            attachment.add_header("Content-Type", "text/csv; charset=utf-8")
             msg.attach(attachment)
 
             try:

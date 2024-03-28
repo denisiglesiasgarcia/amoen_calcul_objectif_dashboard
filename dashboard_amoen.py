@@ -85,11 +85,13 @@ def get_meteo_data():
 
 def generate_dashboard():
     # Validation données saisies
-    def validate_input(name, variable, unité):
-        if variable.isnumeric() or variable.replace('.', '', 1).isnumeric():
+    def validate_input(name, variable, unité, latex=False):
+        if (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and latex is False:
+            st.write(name, variable, " ", unité)
+        elif (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and latex is True:
             st.latex(name, variable, " ", unité)
         else:
-            st.latex(name, "doit être un chiffre")
+            st.write(name, "doit être un chiffre")
     
     # Calcul des degrés-jours
     def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):

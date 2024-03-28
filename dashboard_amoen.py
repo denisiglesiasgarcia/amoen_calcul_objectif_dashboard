@@ -89,7 +89,7 @@ def generate_dashboard():
         if (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and not latex:
             st.write(f"{name} {variable} {unité}")
         elif (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and latex:
-            pass
+            return True
         else:
             st.write(name, "doit être un chiffre")
     

@@ -1131,7 +1131,6 @@ def generate_dashboard():
             msg.attach(MIMEText(body, "plain", "latin1"))  # Use UTF-8 encoding for the body
 
             # Convert DataFrame to CSV and attach it to the email
-            dataframe = dataframe.encode("latin1")
             csv_buffer = io.StringIO()
             dataframe.to_csv(csv_buffer, index=False, encoding="latin1")
             csv_buffer.seek(0)

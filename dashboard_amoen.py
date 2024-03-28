@@ -86,11 +86,12 @@ def get_meteo_data():
 def generate_dashboard():
     # Validation données saisies
     def validate_input(name, variable, unité, latex=False):
-        if (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and not latex:
-            st.write(f"{name} {variable} {unité}")
-        elif (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and latex:
-            return True
-        else:
+        try:
+            if (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and not latex:
+                st.write(f"{name} {variable} {unité}")
+            elif (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()) and latex:
+                return True
+        except ValueError:
             st.write(name, "doit être un chiffre")
     
     # Calcul des degrés-jours

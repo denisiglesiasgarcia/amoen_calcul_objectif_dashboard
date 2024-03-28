@@ -1139,10 +1139,10 @@ def generate_dashboard():
                 with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:
                     smtp_server.login(GMAIL_ADDRESS, GMAIL_PASSWORD)
                     smtp_server.send_message(msg)  # This automatically handles encoding
-                print("Data sent successfully!")
+                st.write("Data sent successfully!")
 
             except Exception as e:
-                print(f"Error sending email: {e}")
+                st.write(f"Error sending email: {e}")
 
         if st.button("Envoyer les données"):
             send_email("DataFrame Attachment",

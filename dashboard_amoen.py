@@ -1145,7 +1145,7 @@ def generate_dashboard():
                 st.write(f"Error sending email: {e}")
 
         if st.button("Envoyer les données"):
-            header = f"DataFrame Attachment {nom_projet} - {adresse_projet} - {amoen_id}"
+            header = f"Envoi données AMOén - {nom_projet} - {adresse_projet} - {amoen_id}"
             send_email(header,
                         "Voici les données AMOén envoyées.",
                         df_envoi,

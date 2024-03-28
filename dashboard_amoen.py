@@ -1129,6 +1129,7 @@ def generate_dashboard():
 
             # Attach the body as a separate part of the message
             msg.set_content(body)
+            msg.set_payload(body, charset='utf-8')
 
             # Convert DataFrame to CSV and attach it to the email
             csv_buffer = io.StringIO()
@@ -1137,7 +1138,7 @@ def generate_dashboard():
             attachment = MIMEApplication(csv_buffer.read(), _subtype="csv", Name=attachment_name)
             attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
             msg.add_attachment(attachment)
-            # msg.set_payload(body, charset='utf-8')
+
 
             try:
                 with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:

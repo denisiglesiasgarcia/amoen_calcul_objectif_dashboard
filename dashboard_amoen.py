@@ -1120,15 +1120,15 @@ def generate_dashboard():
 
         df_envoi = pd.DataFrame([df_envoi_values], columns=df_envoi_columns)
 
-        def send_email(subject, body, dataframe, GMAIL_ADDRESS, GMAIL_PASSWORD, TO_ADRESS_EMAIL, attachment_name="data.csv"):
+        def send_email(subject, body, dataframe, gmail_address, gmail_password, to_address, attachment_name="data.csv"):
             msg = MIMEMultipart()
-            msg["Subject"] = 'AMOén Dashboard - envoi données'
-            msg["From"] = GMAIL_ADDRESS
-            msg["To"] = TO_ADRESS_EMAIL
-            msg.preamble = 'You are receiving this email because you requested data from the AMOén Dashboard.'
+            msg["Subject"] = subject
+            msg["From"] = gmail_address
+            msg["To"] = to_address
+            msg.preamble = "You are receiving this email because you requested data from the AMOén Dashboard."
 
             # Attach the body as a separate part of the message
-            msg.attach(MIMEText(body, 'plain'))
+            msg.attach(MIMEText(body, "plain"))
 
             # Convert DataFrame to CSV and attach it to the email
             csv_buffer = io.StringIO()
@@ -1139,9 +1139,9 @@ def generate_dashboard():
             msg.attach(attachment)
 
             try:
-                with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
-                    smtp_server.login(GMAIL_ADDRESS, GMAIL_PASSWORD)
-                    smtp_server.sendmail(GMAIL_ADDRESS, TO_ADRESS_EMAIL, msg.as_string())
+                with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:
+                    smtp_server.login(gmail_address, gmail_password)
+                    smtp_server.sendmail(gmail_address, to_address, msg.as_string())
                 print("Message sent!")
 
             except Exception as e:
@@ -1149,10 +1149,10 @@ def generate_dashboard():
 
         if st.button("Envoyer les données"):
             send_email("DataFrame Attachment",
-                        "Here is the data you requested.",
+                        "Here is the data you requested.\n\nBest regards,\nYour Name",
                         df_envoi,
                         GMAIL_ADDRESS,
-                        GMAIL_PASSWORD,
+                        GMAIL_PASSWORD,  # Use your App Password here if you have two-factor authentication enabled
                         TO_ADRESS_EMAIL,
                         "my_data.csv")
 

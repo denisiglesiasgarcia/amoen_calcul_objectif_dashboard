@@ -492,7 +492,10 @@ def generate_dashboard():
                 repartition_energie_finale_partie_surelevee_chauffage = float(repartition_energie_finale_partie_surelevee_chauffage)
                 
                 st.write('Répartition en énergie finale - ECS partie surélévée [%]')
-                repartition_energie_finale_partie_surelevee_ecs = st.text_input("Répartition EF - ECS partie surélevée", value=0, help= "Laisser a 0 si pas de surélévation")
+                repartition_energie_finale_partie_surelevee_ecs = st.text_input("Répartition EF - ECS partie surélevée",
+                                                                                value=0,
+                                                                                help= "Laisser a 0 si pas de surélévation",
+                                                                                label_visibility="collapsed")
                 validate_input("Répartition EF - ECS partie surélevée:", repartition_energie_finale_partie_surelevee_ecs, "%")
                 repartition_energie_finale_partie_surelevee_ecs = float(repartition_energie_finale_partie_surelevee_ecs)
             else:

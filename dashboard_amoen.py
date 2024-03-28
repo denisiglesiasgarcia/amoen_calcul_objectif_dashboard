@@ -1137,7 +1137,7 @@ def generate_dashboard():
             attachment = MIMEApplication(csv_buffer.read(), _subtype="csv", Name=attachment_name)
             attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
             msg.add_attachment(attachment)
-            msg.set_payload(body, charset='utf-8')
+            # msg.set_payload(body, charset='utf-8')
 
             try:
                 with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:

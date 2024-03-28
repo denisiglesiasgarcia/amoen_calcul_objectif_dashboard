@@ -471,19 +471,19 @@ def generate_dashboard():
 
         with col6:
             # Répartition énergie finale
-            st.write('Répartition en énergie finale - Chauffage partie rénovée')
+            st.write('Répartition en énergie finale - Chauffage partie rénovée [%]')
             repartition_energie_finale_partie_renovee_chauffage = st.text_input("Répartition EF - Chauffage partie rénovée", value=0, label_visibility="collapsed")
             validate_input("Répartition EF - Chauffage partie rénovée:", repartition_energie_finale_partie_renovee_chauffage, "%")
             repartition_energie_finale_partie_renovee_chauffage = float(repartition_energie_finale_partie_renovee_chauffage)
 
-            st.write('Répartition en énergie finale - ECS partie rénovée')
+            st.write('Répartition en énergie finale - ECS partie rénovée [%]')
             repartition_energie_finale_partie_renovee_ecs = st.text_input("Répartition EF - ECS partie rénovée", value=0, label_visibility="collapsed")
             validate_input("Répartition EF - ECS partie rénovée:", repartition_energie_finale_partie_renovee_ecs, "%")
             repartition_energie_finale_partie_renovee_ecs = float(repartition_energie_finale_partie_renovee_ecs)
             
             show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Surélévation")
             if show_text_input_agent_energetique_ef_autre_kwh:
-                st.write('Répartition en énergie finale - Chauffage partie surélévée')
+                st.write('Répartition en énergie finale - Chauffage partie surélévée [%]')
                 repartition_energie_finale_partie_surelevee_chauffage = st.text_input("Répartition EF - Chauffage partie surélévée",
                                                                                         value=0,
                                                                                         help= "Laisser a 0 si pas de surélévation",
@@ -1075,7 +1075,8 @@ def generate_dashboard():
             'Répartition en énergie finale - Chauffage partie surélévée',
             'Répartition en énergie finale - ECS partie surélévée',
             'IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])',
-            'Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])'
+            'Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])',
+            'Atteinte objectif'
         ]
 
         df_envoi_values = [
@@ -1115,7 +1116,8 @@ def generate_dashboard():
             repartition_energie_finale_partie_surelevee_chauffage,
             repartition_energie_finale_partie_surelevee_ecs,
             ef_avant_corr_kwh_m2,
-            ef_objectif_pondere_kwh_m2
+            ef_objectif_pondere_kwh_m2,
+            atteinte_objectif
         ]
 
         df_envoi = pd.DataFrame([df_envoi_values], columns=df_envoi_columns)
@@ -1139,7 +1141,7 @@ def generate_dashboard():
                 with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp_server:
                     smtp_server.login(GMAIL_ADDRESS, GMAIL_PASSWORD)
                     smtp_server.send_message(msg)  # This automatically handles encoding
-                st.write("Data sent successfully!")
+                st.write("Données envoyées!")
 
             except Exception as e:
                 st.write(f"Error sending email: {e}")
@@ -1152,7 +1154,7 @@ def generate_dashboard():
                         GMAIL_ADDRESS,
                         GMAIL_PASSWORD,
                         TO_ADRESS_EMAIL,
-                        "my_data.csv")
+                        "df_envoi.csv")
 
         st.dataframe(df_envoi)
 

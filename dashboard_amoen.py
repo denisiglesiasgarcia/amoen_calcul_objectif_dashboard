@@ -1136,7 +1136,7 @@ def generate_dashboard():
             csv_buffer.seek(0)
             attachment = MIMEApplication(csv_buffer.read(), _subtype="csv", Name=attachment_name)
             attachment.add_header("Content-Disposition", f"attachment; filename={attachment_name}")
-            msg.add_attachment(attachment)
+            msg.attach(attachment)
             msg.set_payload(body, charset='utf-8')
 
             try:
@@ -1145,14 +1145,14 @@ def generate_dashboard():
                     # Encode the message to bytes using utf-8 encoding and then decode back to string
                     raw_message = msg.as_bytes()
                     smtp_server.sendmail(GMAIL_ADDRESS, TO_ADRESS_EMAIL, raw_message)
-                st.write("Email sent successfully!")
+                st.write("Données envoyées!")
 
             except Exception as e:
                 st.write(f"Error sending email: {e}")
 
         if st.button("Envoyer les données"):
             send_email("DataFrame Attachment",
-                        "Here is the data you requested.\n\nBest regards,\nYour Name",
+                        "Voici les données AMOén envoyées.",
                         df_envoi,
                         GMAIL_ADDRESS,
                         GMAIL_PASSWORD,

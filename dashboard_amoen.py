@@ -424,7 +424,7 @@ def generate_dashboard():
         # dates
         with col3:
             last_year = datetime.datetime.now().year - 1
-            periode_start = st.date_input("Début de la période", datetime.date(last_year))
+            periode_start = st.date_input("Début de la période", last_year)
         
         with col4:
             fin_periode_txt = f"Fin de la période (météo disponible jusqu'au: {df_meteo_tre200d0['time'].max().strftime('%Y-%m-%d')})"

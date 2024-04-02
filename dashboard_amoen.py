@@ -426,7 +426,7 @@ def generate_dashboard():
             periode_start = st.date_input("Début de la période", datetime.date(2023, 12, 31))
         
         with col4:
-            fin_periode_txt = f"Fin de la période (dernières données météo disponible: {df_meteo_tre200d0['time'].max()})"
+            fin_periode_txt = f"Fin de la période (météo disponible jusqu'au: {df_meteo_tre200d0['time'].max().strftime('%Y-%m-%d')})"
             periode_end = st.date_input(fin_periode_txt, datetime.date(2024, 2, 15))
         
         periode_nb_jours = (periode_end - periode_start).days + 1

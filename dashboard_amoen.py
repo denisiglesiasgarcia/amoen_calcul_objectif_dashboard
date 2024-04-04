@@ -1,4 +1,4 @@
-# TODO: renseigner les consommations ECS séparées du total
+# TODO: email sending
 
 import os
 import datetime
@@ -514,10 +514,10 @@ def generate_dashboard():
             
             # Validation somme des pourcentages
             try:
-                repartition_ef_somme_avertissement = repartition_energie_finale_partie_renovee_chauffage + \
-                    repartition_energie_finale_partie_renovee_ecs +\
-                    repartition_energie_finale_partie_surelevee_chauffage + \
-                    repartition_energie_finale_partie_surelevee_ecs
+                repartition_ef_somme_avertissement = int(repartition_energie_finale_partie_renovee_chauffage) + \
+                    int(repartition_energie_finale_partie_renovee_ecs) +\
+                    int(repartition_energie_finale_partie_surelevee_chauffage) + \
+                    int(repartition_energie_finale_partie_surelevee_ecs)
                 if repartition_ef_somme_avertissement != 100:
                     st.write(f"<p style='color: red;'><strong>La somme des pourcentages de répartition de l'énergie finale doit être égale à 100% ({repartition_ef_somme_avertissement}%)</strong></p>", unsafe_allow_html=True)
             except ValueError:

@@ -419,15 +419,21 @@ def generate_dashboard():
             except ValueError:
                 st.write("Problème dans la somme des agents énergétiques")
 
-        st.subheader('Sélectionner les dates de début et fin de période')
+
         col3, col4 = st.columns(2)
-        # dates
         with col3:
             col3.subheader('Sélectionner les dates de début et fin de période')
+
+        with col4:
+            col4.button("Mise à jour de la météo", on_click=get_meteo_data())
+
+        col5, col6 = st.columns(2)
+        # dates
+        with col5:
             last_year = pd.to_datetime(df_meteo_tre200d0['time'].max()) - pd.DateOffset(days=365)
             periode_start = st.date_input("Début de la période", datetime.date(last_year.year, last_year.month, last_year.day))
         
-        with col4:
+        with col6:
             col4.button("fodas")
             fin_periode_txt = f"Fin de la période (météo disponible jusqu'au: {df_meteo_tre200d0['time'].max().strftime('%Y-%m-%d')})"
             max_date = pd.to_datetime(df_meteo_tre200d0['time'].max())
@@ -447,9 +453,9 @@ def generate_dashboard():
         st.write(f"Période du {periode_start} au {periode_end} soit {int(periode_nb_jours)} jours")
 
         st.subheader('Données Excel validation atteinte performances')
-        col5, col6 = st.columns(2)
+        col7, col8 = st.columns(2)
                 
-        with col5:
+        with col7:
             # Autres données
             st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
             ef_avant_corr_kwh_m2 = st.text_input("Ef,avant,corr [kWh/m²/an]:", value=0, help="IDC moyen 3 ans avant travaux", label_visibility="collapsed")
@@ -473,7 +479,7 @@ def generate_dashboard():
             delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
             st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
 
-        with col6:
+        with col8:
             # Répartition énergie finale
             st.write('Répartition en énergie finale - Chauffage partie rénovée [%]')
             repartition_energie_finale_partie_renovee_chauffage = st.text_input("Répartition EF - Chauffage partie rénovée", value=0, label_visibility="collapsed")

@@ -1,4 +1,4 @@
-# TODO: email sending
+# TODO: renseigner les consommations ECS séparées du total
 
 import os
 import datetime
@@ -90,7 +90,7 @@ def generate_dashboard():
             st.text(f"{name} {variable} {unité}")
         else:
             st.text(name, "doit être un chiffre")
-
+    
     # Calcul des degrés-jours
     def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):
         dj_periode = df_meteo_tre200d0[(df_meteo_tre200d0['time'] >= periode_start) & (df_meteo_tre200d0['time'] <= periode_end)]['DJ_theta0_16'].sum()
@@ -419,22 +419,14 @@ def generate_dashboard():
             except ValueError:
                 st.write("Problème dans la somme des agents énergétiques")
 
-
+        st.subheader('Sélectionner les dates de début et fin de période')
         col3, col4 = st.columns(2)
-        with col3:
-            col3.subheader('Sélectionner les dates de début et fin de période')
-
-        with col4:
-            if col4.button("Mise à jour de la météo"):
-                df_meteo_tre200d0 = get_meteo_data()
-
-        col5, col6 = st.columns(2)
         # dates
-        with col5:
+        with col3:
             last_year = pd.to_datetime(df_meteo_tre200d0['time'].max()) - pd.DateOffset(days=365)
             periode_start = st.date_input("Début de la période", datetime.date(last_year.year, last_year.month, last_year.day))
         
-        with col6:
+        with col4:
             fin_periode_txt = f"Fin de la période (météo disponible jusqu'au: {df_meteo_tre200d0['time'].max().strftime('%Y-%m-%d')})"
             max_date = pd.to_datetime(df_meteo_tre200d0['time'].max())
             periode_end = st.date_input(fin_periode_txt, datetime.date(max_date.year, max_date.month, max_date.day))
@@ -453,9 +445,9 @@ def generate_dashboard():
         st.write(f"Période du {periode_start} au {periode_end} soit {int(periode_nb_jours)} jours")
 
         st.subheader('Données Excel validation atteinte performances')
-        col7, col8 = st.columns(2)
+        col5, col6 = st.columns(2)
                 
-        with col7:
+        with col5:
             # Autres données
             st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
             ef_avant_corr_kwh_m2 = st.text_input("Ef,avant,corr [kWh/m²/an]:", value=0, help="IDC moyen 3 ans avant travaux", label_visibility="collapsed")
@@ -479,7 +471,7 @@ def generate_dashboard():
             delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
             st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
 
-        with col8:
+        with col6:
             # Répartition énergie finale
             st.write('Répartition en énergie finale - Chauffage partie rénovée [%]')
             repartition_energie_finale_partie_renovee_chauffage = st.text_input("Répartition EF - Chauffage partie rénovée", value=0, label_visibility="collapsed")
@@ -514,10 +506,10 @@ def generate_dashboard():
             
             # Validation somme des pourcentages
             try:
-                repartition_ef_somme_avertissement = int(repartition_energie_finale_partie_renovee_chauffage) + \
-                    int(repartition_energie_finale_partie_renovee_ecs) +\
-                    int(repartition_energie_finale_partie_surelevee_chauffage) + \
-                    int(repartition_energie_finale_partie_surelevee_ecs)
+                repartition_ef_somme_avertissement = repartition_energie_finale_partie_renovee_chauffage + \
+                    repartition_energie_finale_partie_renovee_ecs +\
+                    repartition_energie_finale_partie_surelevee_chauffage + \
+                    repartition_energie_finale_partie_surelevee_ecs
                 if repartition_ef_somme_avertissement != 100:
                     st.write(f"<p style='color: red;'><strong>La somme des pourcentages de répartition de l'énergie finale doit être égale à 100% ({repartition_ef_somme_avertissement}%)</strong></p>", unsafe_allow_html=True)
             except ValueError:
@@ -1208,9 +1200,11 @@ if __name__ == "__main__":
     st.session_state.GMAIL_PASSWORD = GMAIL_PASSWORD
     st.session_state.TO_ADRESS_EMAIL = TO_ADRESS_EMAIL
     # Mise à jour météo
-    df_meteo_tre200d0 = get_meteo_data()
-    st.session_state.df_meteo_tre200d0 = df_meteo_tre200d0
-    # Titre de la page
+    now = datetime.datetime.now()
+    if (now - last_update_time_meteo).days > 1:
+        last_update_time_meteo = now
+        df_meteo_tre200d0 = get_meteo_data()
+        st.session_state.df_meteo_tre200d0 = df_meteo_tre200d0
     st.set_page_config(page_title="AMOEN Dashboard", page_icon=":bar_chart:", layout="wide")
     generate_dashboard()
     # st.experimental_run()

@@ -442,7 +442,7 @@ def generate_dashboard():
                 st.write("<p style='color: red;'><strong>La période de mesure doit être supérieure à 3 mois (minimum recommandé 6 mois)</strong></p>", unsafe_allow_html=True)
         except ValueError:  
             st.write("Problème de date de début et de fin de période")
-        st.write(f"Période du {periode_start} au {periode_end} soit {int(periode_nb_jours)} jours")
+        st.write(f"Période du {periode_start.strftime('%Y-%m-%d')} au {periode_end.strftime('%Y-%m-%d')} soit {int(periode_nb_jours)} jours")
 
         st.subheader('Données Excel validation atteinte performances')
         col5, col6 = st.columns(2)

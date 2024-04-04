@@ -423,10 +423,12 @@ def generate_dashboard():
         col3, col4 = st.columns(2)
         # dates
         with col3:
+            col3.subheader('Sélectionner les dates de début et fin de période')
             last_year = pd.to_datetime(df_meteo_tre200d0['time'].max()) - pd.DateOffset(days=365)
             periode_start = st.date_input("Début de la période", datetime.date(last_year.year, last_year.month, last_year.day))
         
         with col4:
+            col4.button("fodas")
             fin_periode_txt = f"Fin de la période (météo disponible jusqu'au: {df_meteo_tre200d0['time'].max().strftime('%Y-%m-%d')})"
             max_date = pd.to_datetime(df_meteo_tre200d0['time'].max())
             periode_end = st.date_input(fin_periode_txt, datetime.date(max_date.year, max_date.month, max_date.day))
@@ -1205,6 +1207,7 @@ if __name__ == "__main__":
         last_update_time_meteo = now
         df_meteo_tre200d0 = get_meteo_data()
         st.session_state.df_meteo_tre200d0 = df_meteo_tre200d0
+    # Titre de la page
     st.set_page_config(page_title="AMOEN Dashboard", page_icon=":bar_chart:", layout="wide")
     generate_dashboard()
     # st.experimental_run()

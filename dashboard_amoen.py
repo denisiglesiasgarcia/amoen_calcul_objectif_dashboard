@@ -434,7 +434,6 @@ def generate_dashboard():
             periode_start = st.date_input("Début de la période", datetime.date(last_year.year, last_year.month, last_year.day))
         
         with col6:
-            col4.button("fodas")
             fin_periode_txt = f"Fin de la période (météo disponible jusqu'au: {df_meteo_tre200d0['time'].max().strftime('%Y-%m-%d')})"
             max_date = pd.to_datetime(df_meteo_tre200d0['time'].max())
             periode_end = st.date_input(fin_periode_txt, datetime.date(max_date.year, max_date.month, max_date.day))

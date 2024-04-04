@@ -425,7 +425,8 @@ def generate_dashboard():
             col3.subheader('Sélectionner les dates de début et fin de période')
 
         with col4:
-            col4.button("Mise à jour de la météo", on_click=get_meteo_data())
+            if col4.button("Mise à jour de la météo"):
+                df_meteo_tre200d0 = get_meteo_data()
 
         col5, col6 = st.columns(2)
         # dates

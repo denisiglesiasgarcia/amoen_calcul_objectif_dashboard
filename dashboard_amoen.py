@@ -92,10 +92,11 @@ def generate_dashboard():
             st.text(name, "doit être un chiffre")
     
     def validate_input_affectation(name, variable, unite, sre_renovation_m2):
-        if (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()):
-            st.text(f"{name} {variable} {unite} → {round(variable * float(sre_renovation_m2) / 100,2)} m²")
+        if variable.replace(',', '.', 1).replace('.', '', 1).isnumeric():
+            variable = float(variable.replace(',', '.', 1))
+            st.text(f"{name} {variable} {unite} → {round(variable * float(sre_renovation_m2) / 100, 2)} m²")
         else:
-            st.text(name, "doit être un chiffre")
+            st.text(f"{name} doit être un chiffre")
 
     # Calcul des degrés-jours
     def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):

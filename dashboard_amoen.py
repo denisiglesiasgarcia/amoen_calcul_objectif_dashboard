@@ -170,88 +170,99 @@ def generate_dashboard():
             show_text_input_sre_pourcentage_habitat_individuel = st.checkbox("Habitat individuel")
             if show_text_input_sre_pourcentage_habitat_individuel:
                 sre_pourcentage_habitat_individuel = st.text_input("Habitat individuel (% SRE):", value=0)
-                validate_input("Habitat individuel:", sre_pourcentage_habitat_individuel, "%")
-                sre_pourcentage_habitat_individuel = float(sre_pourcentage_habitat_individuel)
+                if sre_pourcentage_habitat_individuel != "0":
+                    validate_input_affectation("Habitat individuel:", sre_pourcentage_habitat_individuel, "%", sre_renovation_m2)
+                    # sre_pourcentage_habitat_individuel = float(sre_pourcentage_habitat_individuel)
             else:
                 sre_pourcentage_habitat_individuel = 0.0
             
             show_text_input_sre_pourcentage_administration = st.checkbox("Administration")
             if show_text_input_sre_pourcentage_administration:
                 sre_pourcentage_administration = st.text_input("Administration (% SRE):", value=0)
-                validate_input("Administration:", sre_pourcentage_administration, "%")
-                sre_pourcentage_administration = float(sre_pourcentage_administration)
+                if sre_pourcentage_administration != "0":
+                    validate_input_affectation("Administration:", sre_pourcentage_administration, "%", sre_renovation_m2)
+                    # sre_pourcentage_administration = float(sre_pourcentage_administration)
             else:
                 sre_pourcentage_administration = 0.0
             
             show_text_input_sre_pourcentage_ecoles = st.checkbox("Écoles")
             if show_text_input_sre_pourcentage_ecoles:
                 sre_pourcentage_ecoles = st.text_input("Écoles (% SRE):", value=0)
-                validate_input("Écoles.", sre_pourcentage_ecoles, "%")
-                sre_pourcentage_ecoles = float(sre_pourcentage_ecoles)
+                if sre_pourcentage_ecoles != "0":
+                    validate_input_affectation("Écoles:", sre_pourcentage_ecoles, "%", sre_renovation_m2)
+                    # sre_pourcentage_ecoles = float(sre_pourcentage_ecoles)
             else:
                 sre_pourcentage_ecoles = 0.0
             
             show_text_input_sre_pourcentage_commerce = st.checkbox("Commerce")
             if show_text_input_sre_pourcentage_commerce:
                 sre_pourcentage_commerce = st.text_input("Commerce (% SRE):", value=0)
-                validate_input("Commerce:", sre_pourcentage_commerce, "%")
-                sre_pourcentage_commerce = float(sre_pourcentage_commerce)
+                if sre_pourcentage_commerce != "0":
+                    validate_input_affectation("Commerce:", sre_pourcentage_commerce, "%", sre_renovation_m2)
+                    # sre_pourcentage_commerce = float(sre_pourcentage_commerce)
             else:
                 sre_pourcentage_commerce = 0.0
             
             show_text_input_sre_pourcentage_restauration = st.checkbox("Restauration")
             if show_text_input_sre_pourcentage_restauration:
                 sre_pourcentage_restauration = st.text_input("Restauration (% SRE):", value=0)
-                validate_input("Restauration:", sre_pourcentage_restauration, "%")
-                sre_pourcentage_restauration = float(sre_pourcentage_restauration)
+                if sre_pourcentage_restauration != "0":
+                    validate_input_affectation("Restauration:", sre_pourcentage_restauration, "%", sre_renovation_m2)
+                    # sre_pourcentage_restauration = float(sre_pourcentage_restauration)
             else:
                 sre_pourcentage_restauration = 0.0
             
             show_text_input_sre_pourcentage_lieux_de_rassemblement = st.checkbox("Lieux de rassemblement")
             if show_text_input_sre_pourcentage_lieux_de_rassemblement:
                 sre_pourcentage_lieux_de_rassemblement = st.text_input("Lieux de rassemblement (% SRE):", value=0)
-                validate_input("Lieux de rassemblement:", sre_pourcentage_lieux_de_rassemblement, "%")
-                sre_pourcentage_lieux_de_rassemblement = float(sre_pourcentage_lieux_de_rassemblement)
+                if sre_pourcentage_lieux_de_rassemblement != "0":
+                    validate_input_affectation("Lieux de rassemblement:", sre_pourcentage_lieux_de_rassemblement, "%", sre_renovation_m2)
+                    # sre_pourcentage_lieux_de_rassemblement = float(sre_pourcentage_lieux_de_rassemblement)
             else:
                 sre_pourcentage_lieux_de_rassemblement = 0.0
             
             show_text_input_sre_pourcentage_hopitaux = st.checkbox("Hôpitaux")
             if show_text_input_sre_pourcentage_hopitaux:
                 sre_pourcentage_hopitaux = st.text_input("Hôpitaux (% SRE):", value=0)
-                validate_input("Hôpitaux:", sre_pourcentage_hopitaux, "%")
-                sre_pourcentage_hopitaux = float(sre_pourcentage_hopitaux)
+                if sre_pourcentage_hopitaux != "0":
+                    validate_input_affectation("Hôpitaux:", sre_pourcentage_hopitaux, "%", sre_renovation_m2)
+                    # sre_pourcentage_hopitaux = float(sre_pourcentage_hopitaux)
             else:
                 sre_pourcentage_hopitaux = 0.0
             
             show_text_input_sre_pourcentage_industrie = st.checkbox("Industrie")
             if show_text_input_sre_pourcentage_industrie:
                 sre_pourcentage_industrie = st.text_input("Industrie (% SRE):", value=0)
-                validate_input("Industrie:", sre_pourcentage_industrie, "%")
-                sre_pourcentage_industrie = float(sre_pourcentage_industrie)
+                if sre_pourcentage_industrie != "0":
+                    validate_input_affectation("Industrie:", sre_pourcentage_industrie, "%", sre_renovation_m2)
+                    # sre_pourcentage_industrie = float(sre_pourcentage_industrie)
             else:
                 sre_pourcentage_industrie = 0.0
             
             show_text_input_sre_pourcentage_depots = st.checkbox("Dépôts")
             if show_text_input_sre_pourcentage_depots:
                 sre_pourcentage_depots = st.text_input("Dépôts (% SRE):", value=0)
-                validate_input("Dépôts:", sre_pourcentage_depots, "%")
-                sre_pourcentage_depots = float(sre_pourcentage_depots)
+                if sre_pourcentage_depots != "0":
+                    validate_input_affectation("Dépôts:", sre_pourcentage_depots, "%", sre_renovation_m2)
+                    # sre_pourcentage_depots = float(sre_pourcentage_depots)
             else:
                 sre_pourcentage_depots = 0.0
             
             show_text_input_sre_pourcentage_installations_sportives = st.checkbox("Installations sportives")
             if show_text_input_sre_pourcentage_installations_sportives:
                 sre_pourcentage_installations_sportives = st.text_input("Installations sportives (% SRE):", value=0)
-                validate_input("Installations sportives:", sre_pourcentage_installations_sportives, "%")
-                sre_pourcentage_installations_sportives = float(sre_pourcentage_installations_sportives)
+                if sre_pourcentage_installations_sportives != "0":
+                    validate_input_affectation("Installations sportives:", sre_pourcentage_installations_sportives, "%", sre_renovation_m2)
+                    # sre_pourcentage_installations_sportives = float(sre_pourcentage_installations_sportives)
             else:
                 sre_pourcentage_installations_sportives = 0.0
             
             show_text_input_sre_pourcentage_piscines_couvertes = st.checkbox("Piscines couvertes")
             if show_text_input_sre_pourcentage_piscines_couvertes:
                 sre_pourcentage_piscines_couvertes = st.text_input("Piscines couvertes (% SRE):", value=0)
-                validate_input("Piscines couvertes:", sre_pourcentage_piscines_couvertes, "%")
-                sre_pourcentage_piscines_couvertes = float(sre_pourcentage_piscines_couvertes)
+                if sre_pourcentage_piscines_couvertes != "0":
+                    validate_input_affectation("Piscines couvertes:", sre_pourcentage_piscines_couvertes, "%", sre_renovation_m2)
+                    # sre_pourcentage_piscines_couvertes = float(sre_pourcentage_piscines_couvertes)
             else:
                 sre_pourcentage_piscines_couvertes = 0.0
 

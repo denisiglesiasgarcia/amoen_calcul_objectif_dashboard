@@ -483,34 +483,35 @@ def generate_dashboard():
         st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\n\
         - Surélévation: C77:C81\n\
         - Rénovation: C49:C50")
-        col7, col8 = st.columns(2)
         show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Surélévation")
+        col7, col8 = st.columns(2)
         with col7:
             # Répartition énergie finale
             #st.write('Répartition en énergie finale - Chauffage partie rénovée [%]')
-            repartition_energie_finale_partie_renovee_chauffage = st.text_input("Répartition EF - Chauffage partie rénovée",
+            repartition_energie_finale_partie_renovee_chauffage = st.text_input("Chauffage partie rénovée [%]",
                                                                                 value=0,
                                                                                 help="Surélévation: C77")
             validate_input("Répartition EF - Chauffage partie rénovée:", repartition_energie_finale_partie_renovee_chauffage, "%")
             repartition_energie_finale_partie_renovee_chauffage = float(repartition_energie_finale_partie_renovee_chauffage)
-
-            st.write('Répartition en énergie finale - ECS partie rénovée [%]')
-            repartition_energie_finale_partie_renovee_ecs = st.text_input("Répartition EF - ECS partie rénovée",
-                                                                          value=0,
-                                                                          label_visibility="collapsed")
-            validate_input("Répartition EF - ECS partie rénovée:", repartition_energie_finale_partie_renovee_ecs, "%")
-            repartition_energie_finale_partie_renovee_ecs = float(repartition_energie_finale_partie_renovee_ecs)
-        
-        with col8:
+            
             if show_text_input_agent_energetique_ef_autre_kwh:
                 st.write('Répartition EF - Chauffage partie surélévée [%]')
-                repartition_energie_finale_partie_surelevee_chauffage = st.text_input("Répartition EF - Chauffage partie surélévée",
+                repartition_energie_finale_partie_surelevee_chauffage = st.text_input("Chauffage partie surélévée",
                                                                                         value=0,
                                                                                         help= "Laisser a 0 si pas de surélévation",
                                                                                         label_visibility="collapsed")
                 validate_input("Répartition en énergie finale - Chauffage partie surélévée:", repartition_energie_finale_partie_surelevee_chauffage, "%")
                 repartition_energie_finale_partie_surelevee_chauffage = float(repartition_energie_finale_partie_surelevee_chauffage)
-                
+
+        with col8:
+            st.write('Répartition en énergie finale - ECS partie rénovée [%]')
+            repartition_energie_finale_partie_renovee_ecs = st.text_input("ECS partie rénovée [%]",
+                                                                          value=0,
+                                                                          label_visibility="collapsed")
+            validate_input("Répartition EF - ECS partie rénovée:", repartition_energie_finale_partie_renovee_ecs, "%")
+            repartition_energie_finale_partie_renovee_ecs = float(repartition_energie_finale_partie_renovee_ecs)
+
+            if show_text_input_agent_energetique_ef_autre_kwh:
                 st.write('Répartition en énergie finale - ECS partie surélévée [%]')
                 repartition_energie_finale_partie_surelevee_ecs = st.text_input("Répartition EF - ECS partie surélevée",
                                                                                 value=0,
@@ -522,16 +523,16 @@ def generate_dashboard():
                 repartition_energie_finale_partie_surelevee_chauffage = 0.0
                 repartition_energie_finale_partie_surelevee_ecs = 0.0
             
-            # Validation somme des pourcentages
-            try:
-                repartition_ef_somme_avertissement = repartition_energie_finale_partie_renovee_chauffage + \
-                    repartition_energie_finale_partie_renovee_ecs +\
-                    repartition_energie_finale_partie_surelevee_chauffage + \
-                    repartition_energie_finale_partie_surelevee_ecs
-                if repartition_ef_somme_avertissement != 100:
-                    st.write(f"<p style='color: red;'><strong>La somme des pourcentages de répartition de l'énergie finale doit être égale à 100% ({repartition_ef_somme_avertissement}%)</strong></p>", unsafe_allow_html=True)
-            except ValueError:
-                st.write("Problème dans la somme des pourcentages de répartition de l'énergie finale")
+        # Validation somme des pourcentages
+        try:
+            repartition_ef_somme_avertissement = repartition_energie_finale_partie_renovee_chauffage + \
+                repartition_energie_finale_partie_renovee_ecs +\
+                repartition_energie_finale_partie_surelevee_chauffage + \
+                repartition_energie_finale_partie_surelevee_ecs
+            if repartition_ef_somme_avertissement != 100:
+                st.write(f"<p style='color: red;'><strong>La somme des pourcentages de répartition de l'énergie finale doit être égale à 100% ({repartition_ef_somme_avertissement}%)</strong></p>", unsafe_allow_html=True)
+        except ValueError:
+            st.write("Problème dans la somme des pourcentages de répartition de l'énergie finale")
 
     with tab3:
         columns = ['Dénomination', 'Valeur', 'Unité', 'Commentaire', 'Excel', 'Variable/Formule']

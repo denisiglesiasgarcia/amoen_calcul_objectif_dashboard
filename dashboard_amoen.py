@@ -475,10 +475,11 @@ def generate_dashboard():
                     st.write("<p style='color: red;'><strong>Ef,obj *fp [kWh/m²/an] doit être supérieur à 0</strong></p>", unsafe_allow_html=True)
             except ValueError:
                 st.write("Problème dans Ef,obj *fp [kWh/m²/an]")
-            delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
-            st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
+        delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
+        st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
         
-
+        col7, col8 = st.columns(2)
+        with col7:
             # Répartition énergie finale
             st.write('Répartition en énergie finale - Chauffage partie rénovée [%]')
             repartition_energie_finale_partie_renovee_chauffage = st.text_input("Répartition EF - Chauffage partie rénovée",
@@ -492,7 +493,8 @@ def generate_dashboard():
             repartition_energie_finale_partie_renovee_ecs = st.text_input("Répartition EF - ECS partie rénovée", value=0, label_visibility="collapsed")
             validate_input("Répartition EF - ECS partie rénovée:", repartition_energie_finale_partie_renovee_ecs, "%")
             repartition_energie_finale_partie_renovee_ecs = float(repartition_energie_finale_partie_renovee_ecs)
-            
+        
+        with col8:
             show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Surélévation")
             if show_text_input_agent_energetique_ef_autre_kwh:
                 st.write('Répartition EF - Chauffage partie surélévée [%]')

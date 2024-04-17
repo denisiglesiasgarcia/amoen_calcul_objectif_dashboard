@@ -455,7 +455,7 @@ def generate_dashboard():
             # Autres données
             st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
             ef_avant_corr_kwh_m2 = st.text_input("Ef,avant,corr [kWh/m²/an]:", value=0, help="IDC moyen 3 ans avant travaux", label_visibility="collapsed")
-            validate_input("Ef,avant,corr}:", ef_avant_corr_kwh_m2, "kWh/m²/an")
+            validate_input("Ef,avant,corr:", ef_avant_corr_kwh_m2, "kWh/m²/an")
             ef_avant_corr_kwh_m2 = float(ef_avant_corr_kwh_m2)
             try:
                 if float(ef_avant_corr_kwh_m2) <= 0:
@@ -463,6 +463,9 @@ def generate_dashboard():
             except ValueError:
                 st.write("Problème dans Ef,avant,corr [kWh/m²/an]")
             
+
+
+        with col6:
             st.write('Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])')
             ef_objectif_pondere_kwh_m2 = st.text_input("Ef,obj *fp [kWh/m²/an]:", value=0, label_visibility="collapsed")
             validate_input("Ef,obj *fp:", ef_objectif_pondere_kwh_m2, "kWh/m²/an")
@@ -474,11 +477,14 @@ def generate_dashboard():
                 st.write("Problème dans Ef,obj *fp [kWh/m²/an]")
             delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
             st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
+        
 
-        with col6:
             # Répartition énergie finale
             st.write('Répartition en énergie finale - Chauffage partie rénovée [%]')
-            repartition_energie_finale_partie_renovee_chauffage = st.text_input("Répartition EF - Chauffage partie rénovée", value=0, label_visibility="collapsed", help="Surélévation: C77")
+            repartition_energie_finale_partie_renovee_chauffage = st.text_input("Répartition EF - Chauffage partie rénovée",
+                                                                                value=0,
+                                                                                label_visibility="collapsed",
+                                                                                help="Surélévation: C77")
             validate_input("Répartition EF - Chauffage partie rénovée:", repartition_energie_finale_partie_renovee_chauffage, "%")
             repartition_energie_finale_partie_renovee_chauffage = float(repartition_energie_finale_partie_renovee_chauffage)
 

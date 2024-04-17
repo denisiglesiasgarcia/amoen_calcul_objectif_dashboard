@@ -107,24 +107,19 @@ def generate_dashboard():
         with tab1_col1:
             st.write("Méthodologie")
             st.write("- PAC: Dans la méthodologie on applique un facteur de pondération de 2 sur l'électricité consommée par les PAC")
-            st.write("- CAD: Tous les CAD sont identiques dans la méthodologie")
+            st.write("- CAD: Tous les CAD sont identiques dans la méthodologie. Il n'y a pas de différence entre CAD réparti ou facturé")
             st.write("- Météo: utilisation de MétéoSuisse station Cointrin, mesure tre200d0. ")
             st.write("- Répartition ECS/chauffage: la méthodologie se base sur la répartition théorique des besoins ECS/chauffage \
-                 selon rénové/neuf ou les compteurs si disponible (ECS/Chauffage). Règlement IDC se base sur consommation \
-                 normalisé de ECS (Eww) et le reste est pour le chauffage ou bien sur les compteurs disponibles (ECS/Chauffage).")
+                    selon rénové/neuf ou les compteurs si disponible (ECS/Chauffage). Ces chiffres sont indiqueés dans le tableau Excel\
+                    de fixation d'objectif de performances")
 
-
-        st.write("- Répartition ECS/chauffage: méthodologie se base sur la répartition théorique des besoins ECS/chauffage \
-                 selon rénové/neuf ou les compteurs si disponible (ECS/Chauffage). Règlement IDC se base sur consommation \
-                 normalisé de ECS (Eww) et le reste est pour le chauffage ou bien sur les compteurs disponibles (ECS/Chauffage).")
-        st.write("- ECS: L'outil IDC estime un Eww sur la base de la 380/1 (par exemple 128MJ/m² pour du logement). \
-                 Selon la méthodologie, les besoins d'eau chaude sont calculés selon la SIA380/1 en déduisant la production de \
-                 solaire thermique (400 kWh/m² de panneau ST).")
         with tab1_col2:
-            st.write("Calcul IDC")
+            st.write("Règlement IDC")
             st.write("- PAC: Dans le règlement IDC on doit appliquer un COP de 3.25 sur l'électricité consommée par les PAC après 2010.")
             st.write('- CAD: Dans le règlement IDC, on doit appliquer des pertes → 1kWh utile = 3.6/0.925 MJ = 3.892 MJ normalisés')
             st.write("- Météo: Le tableau Excel IDC utilise des données similaires mais la mesure exacte n'est pas indiquée.")
+            st.write("- Répartition ECS/chauffage: Règlement IDC se base sur consommation normalisé de ECS (Eww), par exemple 128 MJ/m²\
+                     pour du logement collectif. Tout le reste de l'énergie est pour le chauffage donc soumis a correction climatique.")
         
         st.subheader('Limitations du calcul')
         st.write("On ne peut pas prédire de manière fiable le futur. Lorsqu'on a moins de 6 mois de consommation d'énergie, \

@@ -163,7 +163,7 @@ def generate_dashboard():
                                                                   label_visibility="collapsed")
                 if sre_pourcentage_habitat_collectif != "0":
                     validate_input_affectation("Habitat collectif:", sre_pourcentage_habitat_collectif, "%", sre_renovation_m2)
-                    sre_pourcentage_habitat_collectif = float(sre_pourcentage_habitat_collectif)
+                    # sre_pourcentage_habitat_collectif = float(sre_pourcentage_habitat_collectif)
             else:
                 sre_pourcentage_habitat_collectif = 0.0
             

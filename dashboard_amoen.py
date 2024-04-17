@@ -512,7 +512,7 @@ def generate_dashboard():
         delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
         if delta_ef_visee_kwh_m2 > 0:
             eq = r"\begin{split}"
-            eq += r"\Delta E_{f\text{visée}} = E_{f,\text{avant,corr}} - E_{f,\text{objectif}} \cdot f_p = "
+            eq += r"\Delta E_{f,\text{visée}} = E_{f,\text{avant,corr}} - E_{f,\text{objectif}} \cdot f_p = "
             eq += f"{round(ef_avant_corr_kwh_m2, 2)} - {round(ef_objectif_pondere_kwh_m2, 2)} = {round(delta_ef_visee_kwh_m2, 2)}"
             eq += r"\quad\text{kWh/m²/an}"
             eq += r"\end{split}"
@@ -1069,7 +1069,7 @@ def generate_dashboard():
 
         # résultats en latex
 
-        formula_atteinte_objectif = r"Atteinte\ objectif = \frac{{\Delta Ef_{{réel}}}}{{\Delta Ef_{{visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}"
+        formula_atteinte_objectif = r"Atteinte\ objectif = \frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}"
 
         formula_atteinte_objectif_num = r"Atteinte\ objectif = \frac{{{} - {}*{}}}{{{} - {}*{}}} = {}".format(
             ef_avant_corr_kwh_m2,

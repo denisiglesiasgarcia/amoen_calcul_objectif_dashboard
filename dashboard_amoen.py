@@ -483,9 +483,13 @@ def generate_dashboard():
                     st.write("<p style='color: red;'><strong>Ef,obj *fp [kWh/m²/an] doit être supérieur à 0</strong></p>", unsafe_allow_html=True)
             except ValueError:
                 st.write("Problème dans Ef,obj *fp [kWh/m²/an]")
+
         delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
-        st.write(f"Baisse ΔEf visée = Ef,avant,corr - Ef,obj *fp: {round(ef_avant_corr_kwh_m2,2)} - {round(ef_objectif_pondere_kwh_m2,2)} = {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
-        
+        eq = r"$\Delta E_f\ \text{vis\'ee} = E_{f,\text{avant,corr}} - E_{f,\text{objectif}} \cdot f_p$"
+        eq_values = f"${round(ef_avant_corr_kwh_m2, 2)} - {round(ef_objectif_pondere_kwh_m2, 2)} = {round(delta_ef_visee_kwh_m2, 2)}$ kWh/m²/an"
+        st.latex(eq)
+        st.latex(eq_values)
+
         st.subheader('Répartition énergie finale ECS/Chauffage')
         # st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\n\
         # - Surélévation: C77:C81\n\

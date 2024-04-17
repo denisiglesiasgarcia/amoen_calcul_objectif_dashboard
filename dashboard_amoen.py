@@ -449,11 +449,12 @@ def generate_dashboard():
         st.write(f"Période du {periode_start.strftime('%Y-%m-%d')} au {periode_end.strftime('%Y-%m-%d')} soit {int(periode_nb_jours)} jours")
 
         st.subheader('IDC moyen avant travaux et objectif en énergie finale')
-        st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances.\n\
-        Surélévation: C92/C94\n\
-        Rénovation: C61/C63")
+        st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\n\
+        - Surélévation: C92/C94\n\
+        - Rénovation: C61/C63")
+
         col5, col6 = st.columns(2)
-                
+
         with col5:
             # Autres données
             st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
@@ -490,33 +491,31 @@ def generate_dashboard():
             #st.write('Répartition en énergie finale - Chauffage partie rénovée [%]')
             repartition_energie_finale_partie_renovee_chauffage = st.text_input("Chauffage partie rénovée [%]",
                                                                                 value=0,
-                                                                                help="Surélévation: C77")
+                                                                                help="Surélévation: C77 / Rénovation: C49")
             validate_input("Répartition EF - Chauffage partie rénovée:", repartition_energie_finale_partie_renovee_chauffage, "%")
             repartition_energie_finale_partie_renovee_chauffage = float(repartition_energie_finale_partie_renovee_chauffage)
             
             if show_text_input_agent_energetique_ef_autre_kwh:
-                st.write('Répartition EF - Chauffage partie surélévée [%]')
+                # st.write('Répartition EF - Chauffage partie surélévée [%]')
                 repartition_energie_finale_partie_surelevee_chauffage = st.text_input("Chauffage partie surélévée",
                                                                                         value=0,
-                                                                                        help= "Laisser a 0 si pas de surélévation",
-                                                                                        label_visibility="collapsed")
+                                                                                        help= "C79")
                 validate_input("Répartition en énergie finale - Chauffage partie surélévée:", repartition_energie_finale_partie_surelevee_chauffage, "%")
                 repartition_energie_finale_partie_surelevee_chauffage = float(repartition_energie_finale_partie_surelevee_chauffage)
 
         with col8:
-            st.write('Répartition en énergie finale - ECS partie rénovée [%]')
+            #st.write('Répartition en énergie finale - ECS partie rénovée [%]')
             repartition_energie_finale_partie_renovee_ecs = st.text_input("ECS partie rénovée [%]",
                                                                           value=0,
-                                                                          label_visibility="collapsed")
+                                                                          help="Surélévation: C78 / Rénovation: C50")
             validate_input("Répartition EF - ECS partie rénovée:", repartition_energie_finale_partie_renovee_ecs, "%")
             repartition_energie_finale_partie_renovee_ecs = float(repartition_energie_finale_partie_renovee_ecs)
 
             if show_text_input_agent_energetique_ef_autre_kwh:
-                st.write('Répartition en énergie finale - ECS partie surélévée [%]')
-                repartition_energie_finale_partie_surelevee_ecs = st.text_input("Répartition EF - ECS partie surélevée",
+                # st.write('Répartition en énergie finale - ECS partie surélévée [%]')
+                repartition_energie_finale_partie_surelevee_ecs = st.text_input("ECS partie surélévée [%]",
                                                                                 value=0,
-                                                                                help= "Laisser a 0 si pas de surélévation",
-                                                                                label_visibility="collapsed")
+                                                                                help= "C80")
                 validate_input("Répartition EF - ECS partie surélevée:", repartition_energie_finale_partie_surelevee_ecs, "%")
                 repartition_energie_finale_partie_surelevee_ecs = float(repartition_energie_finale_partie_surelevee_ecs)
             else:

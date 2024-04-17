@@ -480,17 +480,16 @@ def generate_dashboard():
         st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
         
         st.subheader('Répartition énergie finale ECS/Chauffage')
-        st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\
+        st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\n\
         - Surélévation: C77:C81\n\
         - Rénovation: C49:C50")
         col7, col8 = st.columns(2)
         show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Surélévation")
         with col7:
             # Répartition énergie finale
-            st.write('Répartition en énergie finale - Chauffage partie rénovée [%]')
+            #st.write('Répartition en énergie finale - Chauffage partie rénovée [%]')
             repartition_energie_finale_partie_renovee_chauffage = st.text_input("Répartition EF - Chauffage partie rénovée",
                                                                                 value=0,
-                                                                                label_visibility="collapsed",
                                                                                 help="Surélévation: C77")
             validate_input("Répartition EF - Chauffage partie rénovée:", repartition_energie_finale_partie_renovee_chauffage, "%")
             repartition_energie_finale_partie_renovee_chauffage = float(repartition_energie_finale_partie_renovee_chauffage)

@@ -485,7 +485,7 @@ def generate_dashboard():
                 st.write("Problème dans Ef,obj *fp [kWh/m²/an]")
 
         delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
-        if delta_ef_visee_kwh_m2 < 0:
+        if delta_ef_visee_kwh_m2 > 0:
             eq = r"\Delta E_f\ \text{visée} = E_{f,\text{avant,corr}} - E_{f,\text{objectif}} \cdot f_p"
             eq_values = f"{round(ef_avant_corr_kwh_m2, 2)} - {round(ef_objectif_pondere_kwh_m2, 2)} = {round(delta_ef_visee_kwh_m2, 2)}"
             text_values = f"kWh/m²/an"

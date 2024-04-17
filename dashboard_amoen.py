@@ -106,7 +106,7 @@ def generate_dashboard():
         tab1_col1, tab1_col2 = st.columns(2)
         with tab1_col1:
             st.write("Méthodologie")
-            st.write("- PAC: Dans la méthodologie on applique un facteur de pondération de 2 sur l'électricité consommée par les PAC")
+            st.write("- PAC: Dans la méthodologie on applique un facteur de pondération de 2 sur l'électricité consommée par les PAC.")
             st.write("- CAD: Tous les CAD sont identiques dans la méthodologie. Il n'y a pas de différence entre CAD réparti ou tarifé")
             st.write("- Météo: utilisation des données MétéoSuisse station Cointrin, mesure tre200d0.")
             st.write("- Répartition ECS/chauffage: la méthodologie se base sur la répartition théorique des besoins ECS/chauffage \
@@ -123,6 +123,9 @@ def generate_dashboard():
         
         st.subheader('Limitations du calcul')
         st.write("La période minimale recommandée de calcul est de 6 mois de données.")
+
+        st.subheader('Liens utiles')
+        st.markdown("**[GitHub](https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard)**", unsafe_allow_html=True)
 
     with tab2:
         col1, col2 = st.columns(2)

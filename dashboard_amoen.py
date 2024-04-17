@@ -484,7 +484,7 @@ def generate_dashboard():
             except ValueError:
                 st.write("Problème dans Ef,obj *fp [kWh/m²/an]")
         delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
-        st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
+        st.write(f"Baisse ΔEf visée = Ef,avant,corr - Ef,obj *fp: {round(ef_avant_corr_kwh_m2,2)} - {round(ef_objectif_pondere_kwh_m2,2)} = {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
         
         st.subheader('Répartition énergie finale ECS/Chauffage')
         # st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\n\

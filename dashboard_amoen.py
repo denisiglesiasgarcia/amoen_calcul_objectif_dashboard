@@ -457,8 +457,10 @@ def generate_dashboard():
 
         with col5:
             # Autres données
-            st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
-            ef_avant_corr_kwh_m2 = st.text_input("Ef,avant,corr [kWh/m²/an]:", value=0, help="IDC moyen 3 ans avant travaux", label_visibility="collapsed")
+            # st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
+            ef_avant_corr_kwh_m2 = st.text_input("IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an]):",
+                                                 value=0,
+                                                 help="Surélévation: C92 / Rénovation: C61",)
             validate_input("Ef,avant,corr:", ef_avant_corr_kwh_m2, "kWh/m²/an")
             ef_avant_corr_kwh_m2 = float(ef_avant_corr_kwh_m2)
             try:
@@ -468,8 +470,10 @@ def generate_dashboard():
                 st.write("Problème dans Ef,avant,corr [kWh/m²/an]")
 
         with col6:
-            st.write('Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])')
-            ef_objectif_pondere_kwh_m2 = st.text_input("Ef,obj * fp [kWh/m²/an]:", value=0, label_visibility="collapsed")
+            # st.write('Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])')
+            ef_objectif_pondere_kwh_m2 = st.text_input("Ef,obj * fp [kWh/m²/an]:",
+                                                       value=0,
+                                                       help="Surélévation: C94 / Rénovation: C63",)
             validate_input("Ef,obj * fp:", ef_objectif_pondere_kwh_m2, "kWh/m²/an")
             ef_objectif_pondere_kwh_m2 = float(ef_objectif_pondere_kwh_m2)
             try:
@@ -481,9 +485,9 @@ def generate_dashboard():
         st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
         
         st.subheader('Répartition énergie finale ECS/Chauffage')
-        st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\n\
-        - Surélévation: C77:C81\n\
-        - Rénovation: C49:C50")
+        # st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\n\
+        # - Surélévation: C77:C81\n\
+        # - Rénovation: C49:C50")
         show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Surélévation")
         col7, col8 = st.columns(2)
         with col7:

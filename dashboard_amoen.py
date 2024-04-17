@@ -449,6 +449,9 @@ def generate_dashboard():
         st.write(f"Période du {periode_start.strftime('%Y-%m-%d')} au {periode_end.strftime('%Y-%m-%d')} soit {int(periode_nb_jours)} jours")
 
         st.subheader('IDC moyen avant travaux et objectif en énergie finale')
+        st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances.\n\
+        Surélévation: C92/C94\n\
+        Rénovation: C61/C63")
         col5, col6 = st.columns(2)
                 
         with col5:
@@ -465,8 +468,8 @@ def generate_dashboard():
 
         with col6:
             st.write('Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])')
-            ef_objectif_pondere_kwh_m2 = st.text_input("Ef,obj *fp [kWh/m²/an]:", value=0, label_visibility="collapsed")
-            validate_input("Ef,obj *fp:", ef_objectif_pondere_kwh_m2, "kWh/m²/an")
+            ef_objectif_pondere_kwh_m2 = st.text_input("Ef,obj * fp [kWh/m²/an]:", value=0, label_visibility="collapsed")
+            validate_input("Ef,obj * fp:", ef_objectif_pondere_kwh_m2, "kWh/m²/an")
             ef_objectif_pondere_kwh_m2 = float(ef_objectif_pondere_kwh_m2)
             try:
                 if float(ef_objectif_pondere_kwh_m2) <= 0:
@@ -477,6 +480,9 @@ def generate_dashboard():
         st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
         
         st.subheader('Répartition énergie finale ECS/Chauffage')
+        st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances.\n\
+                Surélévation: C77:C81\n\
+                Rénovation: C49:C50")
         col7, col8 = st.columns(2)
         show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Surélévation")
         with col7:
@@ -490,7 +496,9 @@ def generate_dashboard():
             repartition_energie_finale_partie_renovee_chauffage = float(repartition_energie_finale_partie_renovee_chauffage)
 
             st.write('Répartition en énergie finale - ECS partie rénovée [%]')
-            repartition_energie_finale_partie_renovee_ecs = st.text_input("Répartition EF - ECS partie rénovée", value=0, label_visibility="collapsed")
+            repartition_energie_finale_partie_renovee_ecs = st.text_input("Répartition EF - ECS partie rénovée",
+                                                                          value=0,
+                                                                          label_visibility="collapsed")
             validate_input("Répartition EF - ECS partie rénovée:", repartition_energie_finale_partie_renovee_ecs, "%")
             repartition_energie_finale_partie_renovee_ecs = float(repartition_energie_finale_partie_renovee_ecs)
         

@@ -125,7 +125,7 @@ def generate_dashboard():
         st.write("La période minimale recommandée de calcul est de 6 mois de données.")
 
         st.subheader('Liens utiles')
-        st.markdown("**[GitHub](https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard)**", unsafe_allow_html=True)
+        st.markdown("**[GitHub de la dashboard](https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard)**", unsafe_allow_html=True)
 
     with tab2:
         col1, col2 = st.columns(2)
@@ -478,7 +478,7 @@ def generate_dashboard():
         with col6:
             # Répartition énergie finale
             st.write('Répartition en énergie finale - Chauffage partie rénovée [%]')
-            repartition_energie_finale_partie_renovee_chauffage = st.text_input("Répartition EF - Chauffage partie rénovée", value=0, label_visibility="collapsed")
+            repartition_energie_finale_partie_renovee_chauffage = st.text_input("Répartition EF - Chauffage partie rénovée", value=0, label_visibility="collapsed", help="Surélévation: C77")
             validate_input("Répartition EF - Chauffage partie rénovée:", repartition_energie_finale_partie_renovee_chauffage, "%")
             repartition_energie_finale_partie_renovee_chauffage = float(repartition_energie_finale_partie_renovee_chauffage)
 

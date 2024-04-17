@@ -92,10 +92,12 @@ def generate_dashboard():
             st.text(name, "doit être un chiffre")
     
     def validate_input_affectation(name, variable, unite, sre_renovation_m2):
-        if variable.replace(',', '.', 1).replace('.', '', 1).isnumeric():
+        try:
             variable = float(variable.replace(',', '.', 1))
-            st.text(f"{name} {variable} {unite} → {round(variable * float(sre_renovation_m2) / 100, 2)} m²")
-        else:
+            if variable.replace(',', '.', 1).replace('.', '', 1).isnumeric() & variable >= 0 & variable <= 100:
+                variable = float(variable.replace(',', '.', 1))
+                st.text(f"{name} {variable} {unite} → {round(variable * float(sre_renovation_m2) / 100, 2)} m²")
+        except ValueError:
             st.text(f"{name} doit être un chiffre")
 
     # Calcul des degrés-jours

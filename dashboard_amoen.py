@@ -449,9 +449,9 @@ def generate_dashboard():
         st.write(f"Période du {periode_start.strftime('%Y-%m-%d')} au {periode_end.strftime('%Y-%m-%d')} soit {int(periode_nb_jours)} jours")
 
         st.subheader('IDC moyen avant travaux et objectif en énergie finale')
-        st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\n\
-        - Surélévation: C92/C94\n\
-        - Rénovation: C61/C63")
+        # st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\n\
+        # - Surélévation: C92/C94\n\
+        # - Rénovation: C61/C63")
 
         col5, col6 = st.columns(2)
 

@@ -91,6 +91,12 @@ def generate_dashboard():
         else:
             st.text(name, "doit être un chiffre")
     
+    def validate_input_affectation(name, variable, unite, sre_renovation_m2):
+        if (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()):
+            st.text(f"{name} {variable} {unite} → {variable * sre_renovation_m2 / 100} m²")
+        else:
+            st.text(name, "doit être un chiffre")
+
     # Calcul des degrés-jours
     def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):
         dj_periode = df_meteo_tre200d0[(df_meteo_tre200d0['time'] >= periode_start) & (df_meteo_tre200d0['time'] <= periode_end)]['DJ_theta0_16'].sum()
@@ -147,9 +153,12 @@ def generate_dashboard():
             st.subheader('Affectations')
             show_text_input_sre_pourcentage_habitat_collectif = st.checkbox("Habitat collectif", value=0)
             if show_text_input_sre_pourcentage_habitat_collectif:
-                sre_pourcentage_habitat_collectif = st.text_input("Habitat collectif (% SRE):", value=0, label_visibility="collapsed")
-                validate_input("Habitat collectif:", sre_pourcentage_habitat_collectif, "%")
-                sre_pourcentage_habitat_collectif = float(sre_pourcentage_habitat_collectif)
+                sre_pourcentage_habitat_collectif = st.text_input("Habitat collectif (% SRE):",
+                                                                  value=0,
+                                                                  label_visibility="collapsed")
+                if sre_pourcentage_habitat_collectif != "0":
+                    validate_input_affectation("Habitat collectif:", sre_pourcentage_habitat_collectif, "%", sre_renovation_m2)
+                    sre_pourcentage_habitat_collectif = float(sre_pourcentage_habitat_collectif)
             else:
                 sre_pourcentage_habitat_collectif = 0.0
             

@@ -93,7 +93,7 @@ def generate_dashboard():
     
     def validate_input_affectation(name, variable, unite, sre_renovation_m2):
         if (variable.isnumeric() or variable.replace('.', '', 1).isnumeric()):
-            st.text(f"{name} {variable} {unite} → {variable * sre_renovation_m2 / 100} m²")
+            st.text(f"{name} {variable} {unite} → {round(variable * float(sre_renovation_m2) / 100,2)} m²")
         else:
             st.text(name, "doit être un chiffre")
 

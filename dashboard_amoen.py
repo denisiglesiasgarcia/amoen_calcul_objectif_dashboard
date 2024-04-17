@@ -156,7 +156,7 @@ def generate_dashboard():
 
             # SRE pourcentage
             st.subheader('Affectations')
-            show_text_input_sre_pourcentage_habitat_collectif = st.checkbox("Habitat collectif", value=0)
+            show_text_input_sre_pourcentage_habitat_collectif = st.checkbox("Habitat collectif (%)", value=0)
             if show_text_input_sre_pourcentage_habitat_collectif:
                 sre_pourcentage_habitat_collectif = st.text_input("Habitat collectif (% SRE):",
                                                                   value=0,
@@ -167,7 +167,7 @@ def generate_dashboard():
             else:
                 sre_pourcentage_habitat_collectif = 0.0
             
-            show_text_input_sre_pourcentage_habitat_individuel = st.checkbox("Habitat individuel")
+            show_text_input_sre_pourcentage_habitat_individuel = st.checkbox("Habitat individuel (%)")
             if show_text_input_sre_pourcentage_habitat_individuel:
                 sre_pourcentage_habitat_individuel = st.text_input("Habitat individuel (% SRE):", value=0)
                 if sre_pourcentage_habitat_individuel != "0":
@@ -176,7 +176,7 @@ def generate_dashboard():
             else:
                 sre_pourcentage_habitat_individuel = 0.0
             
-            show_text_input_sre_pourcentage_administration = st.checkbox("Administration")
+            show_text_input_sre_pourcentage_administration = st.checkbox("Administration (%)")
             if show_text_input_sre_pourcentage_administration:
                 sre_pourcentage_administration = st.text_input("Administration (% SRE):", value=0)
                 if sre_pourcentage_administration != "0":
@@ -185,7 +185,7 @@ def generate_dashboard():
             else:
                 sre_pourcentage_administration = 0.0
             
-            show_text_input_sre_pourcentage_ecoles = st.checkbox("Écoles")
+            show_text_input_sre_pourcentage_ecoles = st.checkbox("Écoles (%)")
             if show_text_input_sre_pourcentage_ecoles:
                 sre_pourcentage_ecoles = st.text_input("Écoles (% SRE):", value=0)
                 if sre_pourcentage_ecoles != "0":
@@ -194,7 +194,7 @@ def generate_dashboard():
             else:
                 sre_pourcentage_ecoles = 0.0
             
-            show_text_input_sre_pourcentage_commerce = st.checkbox("Commerce")
+            show_text_input_sre_pourcentage_commerce = st.checkbox("Commerce (%)")
             if show_text_input_sre_pourcentage_commerce:
                 sre_pourcentage_commerce = st.text_input("Commerce (% SRE):", value=0)
                 if sre_pourcentage_commerce != "0":
@@ -203,7 +203,7 @@ def generate_dashboard():
             else:
                 sre_pourcentage_commerce = 0.0
             
-            show_text_input_sre_pourcentage_restauration = st.checkbox("Restauration")
+            show_text_input_sre_pourcentage_restauration = st.checkbox("Restauration (%)")
             if show_text_input_sre_pourcentage_restauration:
                 sre_pourcentage_restauration = st.text_input("Restauration (% SRE):", value=0)
                 if sre_pourcentage_restauration != "0":
@@ -212,7 +212,7 @@ def generate_dashboard():
             else:
                 sre_pourcentage_restauration = 0.0
             
-            show_text_input_sre_pourcentage_lieux_de_rassemblement = st.checkbox("Lieux de rassemblement")
+            show_text_input_sre_pourcentage_lieux_de_rassemblement = st.checkbox("Lieux de rassemblement (%)")
             if show_text_input_sre_pourcentage_lieux_de_rassemblement:
                 sre_pourcentage_lieux_de_rassemblement = st.text_input("Lieux de rassemblement (% SRE):", value=0)
                 if sre_pourcentage_lieux_de_rassemblement != "0":
@@ -221,7 +221,7 @@ def generate_dashboard():
             else:
                 sre_pourcentage_lieux_de_rassemblement = 0.0
             
-            show_text_input_sre_pourcentage_hopitaux = st.checkbox("Hôpitaux")
+            show_text_input_sre_pourcentage_hopitaux = st.checkbox("Hôpitaux (%)")
             if show_text_input_sre_pourcentage_hopitaux:
                 sre_pourcentage_hopitaux = st.text_input("Hôpitaux (% SRE):", value=0)
                 if sre_pourcentage_hopitaux != "0":
@@ -230,7 +230,7 @@ def generate_dashboard():
             else:
                 sre_pourcentage_hopitaux = 0.0
             
-            show_text_input_sre_pourcentage_industrie = st.checkbox("Industrie")
+            show_text_input_sre_pourcentage_industrie = st.checkbox("Industrie (%)")
             if show_text_input_sre_pourcentage_industrie:
                 sre_pourcentage_industrie = st.text_input("Industrie (% SRE):", value=0)
                 if sre_pourcentage_industrie != "0":
@@ -239,7 +239,7 @@ def generate_dashboard():
             else:
                 sre_pourcentage_industrie = 0.0
             
-            show_text_input_sre_pourcentage_depots = st.checkbox("Dépôts")
+            show_text_input_sre_pourcentage_depots = st.checkbox("Dépôts (%)")
             if show_text_input_sre_pourcentage_depots:
                 sre_pourcentage_depots = st.text_input("Dépôts (% SRE):", value=0)
                 if sre_pourcentage_depots != "0":
@@ -248,7 +248,7 @@ def generate_dashboard():
             else:
                 sre_pourcentage_depots = 0.0
             
-            show_text_input_sre_pourcentage_installations_sportives = st.checkbox("Installations sportives")
+            show_text_input_sre_pourcentage_installations_sportives = st.checkbox("Installations sportives (%)")
             if show_text_input_sre_pourcentage_installations_sportives:
                 sre_pourcentage_installations_sportives = st.text_input("Installations sportives (% SRE):", value=0)
                 if sre_pourcentage_installations_sportives != "0":
@@ -257,7 +257,7 @@ def generate_dashboard():
             else:
                 sre_pourcentage_installations_sportives = 0.0
             
-            show_text_input_sre_pourcentage_piscines_couvertes = st.checkbox("Piscines couvertes")
+            show_text_input_sre_pourcentage_piscines_couvertes = st.checkbox("Piscines couvertes (%)")
             if show_text_input_sre_pourcentage_piscines_couvertes:
                 sre_pourcentage_piscines_couvertes = st.text_input("Piscines couvertes (% SRE):", value=0)
                 if sre_pourcentage_piscines_couvertes != "0":

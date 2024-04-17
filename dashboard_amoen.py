@@ -480,9 +480,9 @@ def generate_dashboard():
         st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
         
         st.subheader('Répartition énergie finale ECS/Chauffage')
-        st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances.\n\
-                Surélévation: C77:C81\n\
-                Rénovation: C49:C50")
+        st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\n\
+        - Surélévation: C77:C81\n\
+        - Rénovation: C49:C50")
         col7, col8 = st.columns(2)
         show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Surélévation")
         with col7:

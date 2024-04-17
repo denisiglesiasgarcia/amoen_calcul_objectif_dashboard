@@ -103,6 +103,12 @@ def generate_dashboard():
     # Calcul des index selon dates
     with tab1:
         st.subheader('Différences entre méthodologie et calcul IDC:')
+        tab1_col1, tab1_col2 = st.columns(2)
+        with tab1_col1:
+            st.write("Méthodologie")
+            st.write("- PAC: Dans la méthodologie on applique un facteur de pondération de 2 sur l'électricité consommée par les PAC")
+
+        st.write("- Mazout: Dans la méthodologie on applique un facteur de pondération de 1 sur le mazout. Dans le règlement IDC on doit appliquer un facteur de pondération de 1.2 sur le mazout.")
         st.write("- PAC: Dans la méthodologie on applique un facteur de pondération de 2 sur l'électricité consommée par les PAC.\
                  Dans le règlement IDC on doit appliquer un COP de 3.25 sur l'électricité consommée par les PAC après 2010.")
         st.write('- CAD: Tous les CAD sont identiques dans la méthodologie. Dans le règlement IDC, on doit appliquer des pertes \
@@ -116,7 +122,10 @@ def generate_dashboard():
         st.write("- ECS: L'outil IDC estime un Eww sur la base de la 380/1 (par exemple 128MJ/m² pour du logement). \
                  Selon la méthodologie, les besoins d'eau chaude sont calculés selon la SIA380/1 en déduisant la production de \
                  solaire thermique (400 kWh/m² de panneau ST).")
-        
+        with tab1_col2:
+            st.write("Calcul IDC")
+            st.write("-PAC: Dans le règlement IDC on doit appliquer un COP de 3.25 sur l'électricité consommée par les PAC après 2010.")
+
         st.subheader('Limitations du calcul')
         st.write("On ne peut pas prédire de manière fiable le futur. Lorsqu'on a moins de 6 mois de consommation d'énergie, \
                  l'influence des degré-jour de l'année de référence va hautement influencer le calcul et va faire une \

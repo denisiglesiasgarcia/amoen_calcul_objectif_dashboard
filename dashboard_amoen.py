@@ -476,8 +476,8 @@ def generate_dashboard():
         delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
         st.write(f"Baisse ΔEf visée: {round(delta_ef_visee_kwh_m2,2)} kWh/m²/an")
         
-        col7, col8 = st.columns(2)
         st.subheader('Répartition énergie finale ECS/Chauffage')
+        col7, col8 = st.columns(2)
         show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Surélévation")
         with col7:
             # Répartition énergie finale

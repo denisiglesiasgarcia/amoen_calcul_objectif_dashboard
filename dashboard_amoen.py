@@ -475,7 +475,8 @@ def generate_dashboard():
             ef_objectif_pondere_kwh_m2 = st.text_input("Ef,obj * fp [kWh/m²/an]:",
                                                        value=0,
                                                        help="Surélévation: C94 / Rénovation: C63",)
-            validate_input("Ef,obj * fp:", ef_objectif_pondere_kwh_m2, "kWh/m²/an")
+            if ef_objectif_pondere_kwh_m2 != "0":
+                validate_input("Ef,obj * fp:", ef_objectif_pondere_kwh_m2, "kWh/m²/an")
             ef_objectif_pondere_kwh_m2 = float(ef_objectif_pondere_kwh_m2)
             try:
                 if float(ef_objectif_pondere_kwh_m2) <= 0:
@@ -497,7 +498,8 @@ def generate_dashboard():
             repartition_energie_finale_partie_renovee_chauffage = st.text_input("Chauffage partie rénovée [%]",
                                                                                 value=0,
                                                                                 help="Surélévation: C77 / Rénovation: C49")
-            validate_input("Répartition EF - Chauffage partie rénovée:", repartition_energie_finale_partie_renovee_chauffage, "%")
+            if repartition_energie_finale_partie_renovee_chauffage != "0":
+                validate_input("Répartition EF - Chauffage partie rénovée:", repartition_energie_finale_partie_renovee_chauffage, "%")
             repartition_energie_finale_partie_renovee_chauffage = float(repartition_energie_finale_partie_renovee_chauffage)
             
             if show_text_input_agent_energetique_ef_autre_kwh:
@@ -505,7 +507,8 @@ def generate_dashboard():
                 repartition_energie_finale_partie_surelevee_chauffage = st.text_input("Chauffage partie surélévée",
                                                                                         value=0,
                                                                                         help= "C79")
-                validate_input("Répartition en énergie finale - Chauffage partie surélévée:", repartition_energie_finale_partie_surelevee_chauffage, "%")
+                if repartition_energie_finale_partie_surelevee_chauffage != "0":
+                    validate_input("Répartition en énergie finale - Chauffage partie surélévée:", repartition_energie_finale_partie_surelevee_chauffage, "%")
                 repartition_energie_finale_partie_surelevee_chauffage = float(repartition_energie_finale_partie_surelevee_chauffage)
 
         with col8:
@@ -513,7 +516,8 @@ def generate_dashboard():
             repartition_energie_finale_partie_renovee_ecs = st.text_input("ECS partie rénovée [%]",
                                                                           value=0,
                                                                           help="Surélévation: C78 / Rénovation: C50")
-            validate_input("Répartition EF - ECS partie rénovée:", repartition_energie_finale_partie_renovee_ecs, "%")
+            if repartition_energie_finale_partie_renovee_ecs != "0":
+                validate_input("Répartition EF - ECS partie rénovée:", repartition_energie_finale_partie_renovee_ecs, "%")
             repartition_energie_finale_partie_renovee_ecs = float(repartition_energie_finale_partie_renovee_ecs)
 
             if show_text_input_agent_energetique_ef_autre_kwh:
@@ -521,7 +525,8 @@ def generate_dashboard():
                 repartition_energie_finale_partie_surelevee_ecs = st.text_input("ECS partie surélévée [%]",
                                                                                 value=0,
                                                                                 help= "C80")
-                validate_input("Répartition EF - ECS partie surélevée:", repartition_energie_finale_partie_surelevee_ecs, "%")
+                if repartition_energie_finale_partie_surelevee_ecs != "0":
+                    validate_input("Répartition EF - ECS partie surélevée:", repartition_energie_finale_partie_surelevee_ecs, "%")
                 repartition_energie_finale_partie_surelevee_ecs = float(repartition_energie_finale_partie_surelevee_ecs)
             else:
                 repartition_energie_finale_partie_surelevee_chauffage = 0.0

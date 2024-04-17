@@ -487,7 +487,7 @@ def generate_dashboard():
         delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
         if delta_ef_visee_kwh_m2 > 0:
             eq = r"\begin{split}"
-            eq += r"\Delta E_{f\text{visée}} = E_{f,\text{avant,corr}} - E_{f,\text{objectif}} \cdot f_p = \quad"
+            eq += r"\Delta E_{f\text{visée}} = E_{f,\text{avant,corr}} - E_{f,\text{objectif}} \cdot f_p = "
             eq += f"{round(ef_avant_corr_kwh_m2, 2)} - {round(ef_objectif_pondere_kwh_m2, 2)} = {round(delta_ef_visee_kwh_m2, 2)} \quad"
             eq += r"\text{kWh/m²/an}"
             eq += r"\end{split}"

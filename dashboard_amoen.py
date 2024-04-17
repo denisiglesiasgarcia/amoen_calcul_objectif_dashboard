@@ -107,8 +107,8 @@ def generate_dashboard():
         with tab1_col1:
             st.write("Méthodologie")
             st.write("- PAC: Dans la méthodologie on applique un facteur de pondération de 2 sur l'électricité consommée par les PAC")
-            st.write("- CAD: Tous les CAD sont identiques dans la méthodologie. Il n'y a pas de différence entre CAD réparti ou facturé")
-            st.write("- Météo: utilisation de MétéoSuisse station Cointrin, mesure tre200d0. ")
+            st.write("- CAD: Tous les CAD sont identiques dans la méthodologie. Il n'y a pas de différence entre CAD réparti ou tarifé")
+            st.write("- Météo: utilisation des données MétéoSuisse station Cointrin, mesure tre200d0.")
             st.write("- Répartition ECS/chauffage: la méthodologie se base sur la répartition théorique des besoins ECS/chauffage \
                     selon rénové/neuf ou les compteurs si disponible (ECS/Chauffage). Ces chiffres sont indiqueés dans le tableau Excel\
                     de fixation d'objectif de performances")
@@ -116,16 +116,13 @@ def generate_dashboard():
         with tab1_col2:
             st.write("Règlement IDC")
             st.write("- PAC: Dans le règlement IDC on doit appliquer un COP de 3.25 sur l'électricité consommée par les PAC après 2010.")
-            st.write('- CAD: Dans le règlement IDC, on doit appliquer des pertes → 1kWh utile = 3.6/0.925 MJ = 3.892 MJ normalisés')
-            st.write("- Météo: Le tableau Excel IDC utilise des données similaires mais la mesure exacte n'est pas indiquée.")
-            st.write("- Répartition ECS/chauffage: Règlement IDC se base sur consommation normalisé de ECS (Eww), par exemple 128 MJ/m²\
+            st.write('- CAD: Dans le cas du CAD tarifé, on doit appliquer des pertes → 1kWh utile = 3.6/0.925 MJ = 3.892 MJ normalisés')
+            st.write("- Météo: Le tableau Excel IDC ne précise pas les données météo exactes utilisées.")
+            st.write("- Répartition ECS/chauffage: Le règlement IDC se base sur consommation normalisé de ECS (Eww), par exemple 128 MJ/m²\
                      pour du logement collectif. Tout le reste de l'énergie est pour le chauffage donc soumis a correction climatique.")
         
         st.subheader('Limitations du calcul')
-        st.write("On ne peut pas prédire de manière fiable le futur. Lorsqu'on a moins de 6 mois de consommation d'énergie, \
-                 l'influence des degré-jour de l'année de référence va hautement influencer le calcul et va faire une \
-                 prédiction avec un haut degré d'incertitude. Normalisation = DJ_ref/DJ_période (eq. 2 règlement IDC). \
-                 La période minimale recommandée est de 6 mois de données.")
+        st.write("La période minimale recommandée de calcul est de 6 mois de données.")
 
     with tab2:
         col1, col2 = st.columns(2)

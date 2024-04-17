@@ -97,9 +97,10 @@ def generate_dashboard():
             if 0 <= variable <= 100:
                 st.text(f"{name} {variable} {unite} → {round(variable * float(sre_renovation_m2) / 100, 2)} m²")
             else:
-                st.text(f"{name} doit être compris entre 0 et 100")
+                st.text(f"Valeur doit être comprise entre 0 et 100")
         except ValueError:
             st.text(f"{name} doit être un chiffre")
+            variable = 0
 
     # Calcul des degrés-jours
     def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):

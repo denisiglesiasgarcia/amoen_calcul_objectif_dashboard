@@ -461,8 +461,8 @@ def generate_dashboard():
             ef_avant_corr_kwh_m2 = st.text_input("IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an]):",
                                                  value=0,
                                                  help="Surélévation: C92 / Rénovation: C61",)
-            if ef_avant_corr_kwh_m2 != 0:
-                validate_input("Ef,avant,corr:", ef_avant_corr_kwh_m2, "kWh/m²/an")
+            st.write(ef_avant_corr_kwh_m2)
+            validate_input("Ef,avant,corr:", ef_avant_corr_kwh_m2, "kWh/m²/an")
             ef_avant_corr_kwh_m2 = float(ef_avant_corr_kwh_m2)
             try:
                 if float(ef_avant_corr_kwh_m2) <= 0:

@@ -185,105 +185,141 @@ def generate_dashboard():
             # SRE pourcentage
             st.subheader('Affectations')
             
-            options_sre_pourcentage = ['Habitat collectif (%)',
-                                    'Habitat individuel (%)',
-                                    'Administration (%)',
-                                    'Écoles (%)',
-                                    'Commerce (%)',
-                                    'Restauration (%)',
-                                    'Lieux de rassemblement (%)',
-                                    'Hôpitaux (%)',
-                                    'Industrie (%)',
-                                    'Dépôts (%)',
-                                    'Installations sportives (%)',
-                                    'Piscines couvertes (%)']
+            options_sre_pourcentage = [
+                {'label': 'Habitat collectif (%)', 'unit': '%', 'variable': 'sre_pourcentage_habitat_collectif', 'value': 0.0},
+                {'label': 'Habitat individuel (%)', 'unit': '%', 'variable': 'sre_pourcentage_habitat_individuel', 'value': 0.0},
+                {'label': 'Administration (%)', 'unit': '%', 'variable': 'sre_pourcentage_administration', 'value': 0.0},
+                {'label': 'Écoles (%)', 'unit': '%', 'variable': 'sre_pourcentage_ecoles', 'value': 0.0},
+                {'label': 'Commerce (%)', 'unit': '%', 'variable': 'sre_pourcentage_commerce', 'value': 0.0},
+                {'label': 'Restauration (%)', 'unit': '%', 'variable': 'sre_pourcentage_restauration', 'value': 0.0},
+                {'label': 'Lieux de rassemblement (%)', 'unit': '%', 'variable': 'sre_pourcentage_lieux_de_rassemblement', 'value': 0.0},
+                {'label': 'Hôpitaux (%)', 'unit': '%', 'variable': 'sre_pourcentage_hopitaux', 'value': 0.0},
+                {'label': 'Industrie (%)', 'unit': '%', 'variable': 'sre_pourcentage_industrie', 'value': 0.0},
+                {'label': 'Dépôts (%)', 'unit': '%', 'variable': 'sre_pourcentage_depots', 'value': 0.0},
+                {'label': 'Installations sportives (%)', 'unit': '%', 'variable': 'sre_pourcentage_installations_sportives', 'value': 0.0},
+                {'label': 'Piscines couvertes (%)', 'unit': '%', 'variable': 'sre_pourcentage_piscines_couvertes', 'value': 0.0}
+                ]
+            # options_sre_pourcentage = ['Habitat collectif (%)',
+            #                         'Habitat individuel (%)',
+            #                         'Administration (%)',
+            #                         'Écoles (%)',
+            #                         'Commerce (%)',
+            #                         'Restauration (%)',
+            #                         'Lieux de rassemblement (%)',
+            #                         'Hôpitaux (%)',
+            #                         'Industrie (%)',
+            #                         'Dépôts (%)',
+            #                         'Installations sportives (%)',
+            #                         'Piscines couvertes (%)']
             selected_sre_pourcentage = st.multiselect('Affectations:', options_sre_pourcentage)
 
-            # initialisation des variables
-            sre_pourcentage_habitat_collectif = 0.0
-            sre_pourcentage_habitat_individuel = 0.0
-            sre_pourcentage_administration = 0.0
-            sre_pourcentage_ecoles = 0.0
-            sre_pourcentage_commerce = 0.0
-            sre_pourcentage_restauration = 0.0
-            sre_pourcentage_lieux_de_rassemblement = 0.0
-            sre_pourcentage_hopitaux = 0.0
-            sre_pourcentage_industrie = 0.0
-            sre_pourcentage_depots = 0.0
-            sre_pourcentage_installations_sportives = 0.0
-            sre_pourcentage_piscines_couvertes = 0.0
+            sre_pourcentage = {}
 
-            if "Habitat collectif (%)" in selected_sre_pourcentage:
-                sre_pourcentage_habitat_collectif = st.text_input("Habitat collectif (% SRE):", value=0.0)
-                if sre_pourcentage_habitat_collectif != "0":
-                    validate_input_affectation("Habitat collectif:", sre_pourcentage_habitat_collectif, "%", sre_renovation_m2)
-                    sre_pourcentage_habitat_collectif = float(sre_pourcentage_habitat_collectif)
+            for option in options_sre_pourcentage:
+                if option['label'] in selected_sre_pourcentage:
+                    value = st.text_input(option['label'] + ':', value=0.0)
+                    if value != "0":
+                        validate_input_affectation(option['label'] + ":", value, option['unit'])
+                        option['value'] = float(value)
+
+            sre_pourcentage_habitat_collectif = options_sre_pourcentage[0]['value']
+            sre_pourcentage_habitat_individuel = options_sre_pourcentage[1]['value']
+            sre_pourcentage_administration = options_sre_pourcentage[2]['value']
+            sre_pourcentage_ecoles = options_sre_pourcentage[3]['value']
+            sre_pourcentage_commerce = options_sre_pourcentage[4]['value']
+            sre_pourcentage_restauration = options_sre_pourcentage[5]['value']
+            sre_pourcentage_lieux_de_rassemblement = options_sre_pourcentage[6]['value']
+            sre_pourcentage_hopitaux = options_sre_pourcentage[7]['value']
+            sre_pourcentage_industrie = options_sre_pourcentage[8]['value']
+            sre_pourcentage_depots = options_sre_pourcentage[9]['value']
+            sre_pourcentage_installations_sportives = options_sre_pourcentage[10]['value']
+            sre_pourcentage_piscines_couvertes = options_sre_pourcentage[11]['value']
+
+            # initialisation des variables
+            # sre_pourcentage_habitat_collectif = 0.0
+            # sre_pourcentage_habitat_individuel = 0.0
+            # sre_pourcentage_administration = 0.0
+            # sre_pourcentage_ecoles = 0.0
+            # sre_pourcentage_commerce = 0.0
+            # sre_pourcentage_restauration = 0.0
+            # sre_pourcentage_lieux_de_rassemblement = 0.0
+            # sre_pourcentage_hopitaux = 0.0
+            # sre_pourcentage_industrie = 0.0
+            # sre_pourcentage_depots = 0.0
+            # sre_pourcentage_installations_sportives = 0.0
+            # sre_pourcentage_piscines_couvertes = 0.0
+
+            # if "Habitat collectif (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_habitat_collectif = st.text_input("Habitat collectif (% SRE):", value=0.0)
+            #     if sre_pourcentage_habitat_collectif != "0":
+            #         validate_input_affectation("Habitat collectif:", sre_pourcentage_habitat_collectif, "%", sre_renovation_m2)
+            #         sre_pourcentage_habitat_collectif = float(sre_pourcentage_habitat_collectif)
             
-            if "Habitat individuel (%)" in selected_sre_pourcentage:
-                sre_pourcentage_habitat_individuel = st.text_input("Habitat individuel (% SRE):", value=0.0)
-                if sre_pourcentage_habitat_individuel != "0":
-                    validate_input_affectation("Habitat individuel:", sre_pourcentage_habitat_individuel, "%", sre_renovation_m2)
-                    sre_pourcentage_habitat_individuel = float(sre_pourcentage_habitat_individuel)
+            # if "Habitat individuel (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_habitat_individuel = st.text_input("Habitat individuel (% SRE):", value=0.0)
+            #     if sre_pourcentage_habitat_individuel != "0":
+            #         validate_input_affectation("Habitat individuel:", sre_pourcentage_habitat_individuel, "%", sre_renovation_m2)
+            #         sre_pourcentage_habitat_individuel = float(sre_pourcentage_habitat_individuel)
             
-            if "Administration (%)" in selected_sre_pourcentage:
-                sre_pourcentage_administration = st.text_input("Administration (% SRE):", value=0.0)
-                if sre_pourcentage_administration != "0":
-                    validate_input_affectation("Administration:", sre_pourcentage_administration, "%", sre_renovation_m2)
-                    sre_pourcentage_administration = float(sre_pourcentage_administration)
+            # if "Administration (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_administration = st.text_input("Administration (% SRE):", value=0.0)
+            #     if sre_pourcentage_administration != "0":
+            #         validate_input_affectation("Administration:", sre_pourcentage_administration, "%", sre_renovation_m2)
+            #         sre_pourcentage_administration = float(sre_pourcentage_administration)
             
-            if "Écoles (%)" in selected_sre_pourcentage:
-                sre_pourcentage_ecoles = st.text_input("Écoles (% SRE):", value=0.0)
-                if sre_pourcentage_ecoles != "0":
-                    validate_input_affectation("Écoles:", sre_pourcentage_ecoles, "%", sre_renovation_m2)
-                    sre_pourcentage_ecoles = float(sre_pourcentage_ecoles)
+            # if "Écoles (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_ecoles = st.text_input("Écoles (% SRE):", value=0.0)
+            #     if sre_pourcentage_ecoles != "0":
+            #         validate_input_affectation("Écoles:", sre_pourcentage_ecoles, "%", sre_renovation_m2)
+            #         sre_pourcentage_ecoles = float(sre_pourcentage_ecoles)
             
-            if "Commerce (%)" in selected_sre_pourcentage:
-                sre_pourcentage_commerce = st.text_input("Commerce (% SRE):", value=0.0)
-                if sre_pourcentage_commerce != "0":
-                    validate_input_affectation("Commerce:", sre_pourcentage_commerce, "%", sre_renovation_m2)
-                    sre_pourcentage_commerce = float(sre_pourcentage_commerce)
+            # if "Commerce (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_commerce = st.text_input("Commerce (% SRE):", value=0.0)
+            #     if sre_pourcentage_commerce != "0":
+            #         validate_input_affectation("Commerce:", sre_pourcentage_commerce, "%", sre_renovation_m2)
+            #         sre_pourcentage_commerce = float(sre_pourcentage_commerce)
             
-            if "Restauration (%)" in selected_sre_pourcentage:
-                sre_pourcentage_restauration = st.text_input("Restauration (% SRE):", value=0.0)
-                if sre_pourcentage_restauration != "0":
-                    validate_input_affectation("Restauration:", sre_pourcentage_restauration, "%", sre_renovation_m2)
-                    sre_pourcentage_restauration = float(sre_pourcentage_restauration)
+            # if "Restauration (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_restauration = st.text_input("Restauration (% SRE):", value=0.0)
+            #     if sre_pourcentage_restauration != "0":
+            #         validate_input_affectation("Restauration:", sre_pourcentage_restauration, "%", sre_renovation_m2)
+            #         sre_pourcentage_restauration = float(sre_pourcentage_restauration)
             
-            if "Lieux de rassemblement (%)" in selected_sre_pourcentage:
-                sre_pourcentage_lieux_de_rassemblement = st.text_input("Lieux de rassemblement (% SRE):", value=0.0)
-                if sre_pourcentage_lieux_de_rassemblement != "0":
-                    validate_input_affectation("Lieux de rassemblement:", sre_pourcentage_lieux_de_rassemblement, "%", sre_renovation_m2)
-                    sre_pourcentage_lieux_de_rassemblement = float(sre_pourcentage_lieux_de_rassemblement)
+            # if "Lieux de rassemblement (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_lieux_de_rassemblement = st.text_input("Lieux de rassemblement (% SRE):", value=0.0)
+            #     if sre_pourcentage_lieux_de_rassemblement != "0":
+            #         validate_input_affectation("Lieux de rassemblement:", sre_pourcentage_lieux_de_rassemblement, "%", sre_renovation_m2)
+            #         sre_pourcentage_lieux_de_rassemblement = float(sre_pourcentage_lieux_de_rassemblement)
             
-            if "Hôpitaux (%)" in selected_sre_pourcentage:
-                sre_pourcentage_hopitaux = st.text_input("Hôpitaux (% SRE):", value=0.0)
-                if sre_pourcentage_hopitaux != "0":
-                    validate_input_affectation("Hôpitaux:", sre_pourcentage_hopitaux, "%", sre_renovation_m2)
-                    sre_pourcentage_hopitaux = float(sre_pourcentage_hopitaux)
+            # if "Hôpitaux (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_hopitaux = st.text_input("Hôpitaux (% SRE):", value=0.0)
+            #     if sre_pourcentage_hopitaux != "0":
+            #         validate_input_affectation("Hôpitaux:", sre_pourcentage_hopitaux, "%", sre_renovation_m2)
+            #         sre_pourcentage_hopitaux = float(sre_pourcentage_hopitaux)
             
-            if "Industrie (%)" in selected_sre_pourcentage:
-                sre_pourcentage_industrie = st.text_input("Industrie (% SRE):", value=0.0)
-                if sre_pourcentage_industrie != "0":
-                    validate_input_affectation("Industrie:", sre_pourcentage_industrie, "%", sre_renovation_m2)
-                    sre_pourcentage_industrie = float(sre_pourcentage_industrie)
+            # if "Industrie (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_industrie = st.text_input("Industrie (% SRE):", value=0.0)
+            #     if sre_pourcentage_industrie != "0":
+            #         validate_input_affectation("Industrie:", sre_pourcentage_industrie, "%", sre_renovation_m2)
+            #         sre_pourcentage_industrie = float(sre_pourcentage_industrie)
             
-            if "Dépôts (%)" in selected_sre_pourcentage:
-                sre_pourcentage_depots = st.text_input("Dépôts (% SRE):", value=0.0)
-                if sre_pourcentage_depots != "0":
-                    validate_input_affectation("Dépôts:", sre_pourcentage_depots, "%", sre_renovation_m2)
-                    sre_pourcentage_depots = float(sre_pourcentage_depots)
+            # if "Dépôts (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_depots = st.text_input("Dépôts (% SRE):", value=0.0)
+            #     if sre_pourcentage_depots != "0":
+            #         validate_input_affectation("Dépôts:", sre_pourcentage_depots, "%", sre_renovation_m2)
+            #         sre_pourcentage_depots = float(sre_pourcentage_depots)
             
-            if "Installations sportives (%)" in selected_sre_pourcentage:
-                sre_pourcentage_installations_sportives = st.text_input("Installations sportives (% SRE):", value=0.0)
-                if sre_pourcentage_installations_sportives != "0":
-                    validate_input_affectation("Installations sportives:", sre_pourcentage_installations_sportives, "%", sre_renovation_m2)
-                    sre_pourcentage_installations_sportives = float(sre_pourcentage_installations_sportives)
+            # if "Installations sportives (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_installations_sportives = st.text_input("Installations sportives (% SRE):", value=0.0)
+            #     if sre_pourcentage_installations_sportives != "0":
+            #         validate_input_affectation("Installations sportives:", sre_pourcentage_installations_sportives, "%", sre_renovation_m2)
+            #         sre_pourcentage_installations_sportives = float(sre_pourcentage_installations_sportives)
             
-            if "Piscines couvertes (%)" in selected_sre_pourcentage:
-                sre_pourcentage_piscines_couvertes = st.text_input("Piscines couvertes (% SRE):", value=0.0)
-                if sre_pourcentage_piscines_couvertes != "0":
-                    validate_input_affectation("Piscines couvertes:", sre_pourcentage_piscines_couvertes, "%", sre_renovation_m2)
-                    sre_pourcentage_piscines_couvertes = float(sre_pourcentage_piscines_couvertes)
+            # if "Piscines couvertes (%)" in selected_sre_pourcentage:
+            #     sre_pourcentage_piscines_couvertes = st.text_input("Piscines couvertes (% SRE):", value=0.0)
+            #     if sre_pourcentage_piscines_couvertes != "0":
+            #         validate_input_affectation("Piscines couvertes:", sre_pourcentage_piscines_couvertes, "%", sre_renovation_m2)
+            #         sre_pourcentage_piscines_couvertes = float(sre_pourcentage_piscines_couvertes)
             
             # Somme des pourcentages
             try:
@@ -358,146 +394,6 @@ def generate_dashboard():
             agent_energetique_ef_electricite_pac_kwh = options_agent_energetique_ef[1]['value']
             agent_energetique_ef_electricite_directe_kwh = options_agent_energetique_ef[2]['value']
             agent_energetique_ef_autre_kwh = options_agent_energetique_ef[16]['value']
-
-            # options_agent_energetique_ef = ['CAD (kWh)',
-            #                                 'Electricité pour les PAC (kWh)',
-            #                                 'Electricité directe (kWh)',
-            #                                 'Gaz naturel (m³)',
-            #                                 'Gaz naturel (kWh)',
-            #                                 'Mazout (litres)',
-            #                                 'Mazout (kg)',
-            #                                 'Mazout (kWh)',
-            #                                 'Bois buches dur (stère)',
-            #                                 'Bois buches tendre (stère)',
-            #                                 'Bois buches tendre (kWh)',
-            #                                 'Pellets (m³)',
-            #                                 'Pellets (kg)',
-            #                                 'Pellets (kWh)',
-            #                                 'Plaquettes (m³)',
-            #                                 'Plaquettes (kWh)',
-            #                                 'Autre (kWh)']
-            # selected_agent_energetique_ef = st.multiselect('Agent(s) énergétique(s):', options_agent_energetique_ef)
-
-            # # initialisation des variables
-            # agent_energetique_ef_mazout_kg = 0.0
-            # agent_energetique_ef_mazout_litres = 0.0
-            # agent_energetique_ef_mazout_kwh = 0.0
-            # agent_energetique_ef_gaz_naturel_m3 = 0.0
-            # agent_energetique_ef_gaz_naturel_kwh = 0.0
-            # agent_energetique_ef_bois_buches_dur_stere = 0.0
-            # agent_energetique_ef_bois_buches_tendre_stere = 0.0
-            # agent_energetique_ef_bois_buches_tendre_kwh = 0.0
-            # agent_energetique_ef_pellets_m3 = 0.0
-            # agent_energetique_ef_pellets_kg = 0.0
-            # agent_energetique_ef_pellets_kwh = 0.0
-            # agent_energetique_ef_plaquettes_m3 = 0.0
-            # agent_energetique_ef_plaquettes_kwh = 0.0
-            # agent_energetique_ef_cad_kwh = 0.0
-            # agent_energetique_ef_electricite_pac_kwh = 0.0
-            # agent_energetique_ef_electricite_directe_kwh = 0.0
-            # agent_energetique_ef_autre_kwh = 0.0
-
-            # if 'Mazout (kg)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_mazout_kg = st.text_input('Mazout (kg):', value=0.0)
-            #     if agent_energetique_ef_mazout_kg != "0":
-            #         validate_agent_energetique_input("Mazout:", agent_energetique_ef_mazout_kg, "kg")
-            #         agent_energetique_ef_mazout_kg = float(agent_energetique_ef_mazout_kg)
-            
-            # if 'Mazout (litres)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_mazout_litres = st.text_input('Mazout (litres):', value=0.0)
-            #     if agent_energetique_ef_mazout_litres != "0":
-            #         validate_agent_energetique_input("Mazout:", agent_energetique_ef_mazout_litres, "litres")
-            #         agent_energetique_ef_mazout_litres = float(agent_energetique_ef_mazout_litres)
-            
-            # if 'Mazout (kWh)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_mazout_kwh = st.text_input('Mazout (kWh):', value=0.0)
-            #     if agent_energetique_ef_mazout_kwh != "0":
-            #         validate_agent_energetique_input("Mazout:", agent_energetique_ef_mazout_kwh, "kWh")
-            #         agent_energetique_ef_mazout_kwh = float(agent_energetique_ef_mazout_kwh)
-            
-            # if 'Gaz naturel (m³)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_gaz_naturel_m3 = st.text_input('Gaz naturel (m³):', value=0.0)
-            #     if agent_energetique_ef_gaz_naturel_m3 != "0":
-            #         validate_agent_energetique_input("Gaz naturel:", agent_energetique_ef_gaz_naturel_m3, "m³")
-            #         agent_energetique_ef_gaz_naturel_m3 = float(agent_energetique_ef_gaz_naturel_m3)
-            
-            # if 'Gaz naturel (kWh)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_gaz_naturel_kwh = st.text_input('Gaz naturel (kWh):', value=0.0)
-            #     if agent_energetique_ef_gaz_naturel_kwh != "0":
-            #         validate_agent_energetique_input("Gaz naturel:", agent_energetique_ef_gaz_naturel_kwh, "kWh")
-            #         agent_energetique_ef_gaz_naturel_kwh = float(agent_energetique_ef_gaz_naturel_kwh)
-            
-            # if 'Bois buches dur (stère)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_bois_buches_dur_stere = st.text_input('Bois buches dur (stère):', value=0.0)
-            #     if agent_energetique_ef_bois_buches_dur_stere != "0":
-            #         validate_agent_energetique_input("Bois buches dur:", agent_energetique_ef_bois_buches_dur_stere, "stère")
-            #         agent_energetique_ef_bois_buches_dur_stere = float(agent_energetique_ef_bois_buches_dur_stere)
-            
-            # if 'Bois buches tendre (stère)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_bois_buches_tendre_stere = st.text_input('Bois buches tendre (stère):', value=0.0)
-            #     if agent_energetique_ef_bois_buches_tendre_stere != "0":
-            #         validate_agent_energetique_input("Bois buches tendre:", agent_energetique_ef_bois_buches_tendre_stere, "stère")
-            #         agent_energetique_ef_bois_buches_tendre_stere = float(agent_energetique_ef_bois_buches_tendre_stere)
-            
-            # if 'Bois buches tendre (kWh)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_bois_buches_tendre_kwh = st.text_input('Bois buches tendre (kWh):', value=0.0)
-            #     if agent_energetique_ef_bois_buches_tendre_kwh != "0":
-            #         validate_agent_energetique_input("Bois buches tendre:", agent_energetique_ef_bois_buches_tendre_kwh, "kWh")
-            #         agent_energetique_ef_bois_buches_tendre_kwh = float(agent_energetique_ef_bois_buches_tendre_kwh)
-            
-            # if 'Pellets (m³)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_pellets_m3 = st.text_input('Pellets (m³):', value=0.0)
-            #     if agent_energetique_ef_pellets_m3 != "0":
-            #         validate_agent_energetique_input("Pellets:", agent_energetique_ef_pellets_m3, "m³")
-            #         agent_energetique_ef_pellets_m3 = float(agent_energetique_ef_pellets_m3)
-            
-            # if 'Pellets (kg)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_pellets_kg = st.text_input('Pellets (kg):', value=0.0)
-            #     if agent_energetique_ef_pellets_kg != "0":
-            #         validate_agent_energetique_input("Pellets:", agent_energetique_ef_pellets_kg, "kg")
-            #         agent_energetique_ef_pellets_kg = float(agent_energetique_ef_pellets_kg)
-            
-            # if 'Pellets (kWh)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_pellets_kwh = st.text_input('Pellets (kWh):', value=0.0)
-            #     if agent_energetique_ef_pellets_kwh != "0":
-            #         validate_agent_energetique_input("Pellets:", agent_energetique_ef_pellets_kwh, "kWh")
-            #         agent_energetique_ef_pellets_kwh = float(agent_energetique_ef_pellets_kwh)
-            
-            # if 'Plaquettes (m³)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_plaquettes_m3 = st.text_input('Plaquettes (m³):', value=0.0)
-            #     if agent_energetique_ef_plaquettes_m3 != "0":
-            #         validate_agent_energetique_input("Plaquettes:", agent_energetique_ef_plaquettes_m3, "m³")
-            #         agent_energetique_ef_plaquettes_m3 = float(agent_energetique_ef_plaquettes_m3)
-            
-            # if 'Plaquettes (kWh)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_plaquettes_kwh = st.text_input('Plaquettes (kWh):', value=0.0)
-            #     if agent_energetique_ef_plaquettes_kwh != "0":
-            #         validate_agent_energetique_input("Plaquettes:", agent_energetique_ef_plaquettes_kwh, "kWh")
-            #         agent_energetique_ef_plaquettes_kwh = float(agent_energetique_ef_plaquettes_kwh)
-            
-            # if 'CAD (kWh)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_cad_kwh = st.text_input('CAD (kWh):', value=0.0)
-            #     if agent_energetique_ef_cad_kwh != "0":
-            #         validate_agent_energetique_input("CAD:", agent_energetique_ef_cad_kwh, "kWh")
-            #         agent_energetique_ef_cad_kwh = float(agent_energetique_ef_cad_kwh)
-            
-            # if 'Electricité pour les PAC (kWh)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_electricite_pac_kwh = st.text_input('Electricité pour les PAC (kWh):', value=0.0)
-            #     if agent_energetique_ef_electricite_pac_kwh != "0":
-            #         validate_agent_energetique_input("Electricité pour les PAC:", agent_energetique_ef_electricite_pac_kwh, "kWh")
-            #         agent_energetique_ef_electricite_pac_kwh = float(agent_energetique_ef_electricite_pac_kwh)
-            
-            # if 'Electricité directe (kWh)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_electricite_directe_kwh = st.text_input('Electricité directe (kWh):', value=0.0)
-            #     if agent_energetique_ef_electricite_directe_kwh != "0":
-            #         validate_agent_energetique_input("Electricité directe:", agent_energetique_ef_electricite_directe_kwh, "kWh")
-            #         agent_energetique_ef_electricite_directe_kwh = float(agent_energetique_ef_electricite_directe_kwh)
-            
-            # if 'Autre (kWh)' in selected_agent_energetique_ef:
-            #     agent_energetique_ef_autre_kwh = st.text_input('Autre (kWh):', value=0.0)
-            #     if agent_energetique_ef_autre_kwh != "0":
-            #         validate_agent_energetique_input("Autre:", agent_energetique_ef_autre_kwh, "kWh")
-            #         agent_energetique_ef_autre_kwh = float(agent_energetique_ef_autre_kwh)
 
             try:
                 agent_energetique_ef_somme_avertissement = float(agent_energetique_ef_mazout_kg) + \

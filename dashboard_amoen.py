@@ -255,10 +255,6 @@ def generate_dashboard():
         # titre pour l'ordonnée Y
         plt.ylabel("[MJ/m²/an]")
 
-        del bar_data
-        del bar_data1
-        del bar_data2
-
         st.pyplot(plt.gcf())
 
         # nettoyage

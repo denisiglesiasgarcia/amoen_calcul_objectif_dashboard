@@ -306,10 +306,10 @@ def generate_dashboard():
             if selected_agent_energetique_ef:
                 for agent_energetique_ef in selected_agent_energetique_ef:
                     if agent_energetique_ef == 'Mazout (kg)':
-                        show_text_input_agent_energetique_ef_mazout_kg = st.text_input('Mazout (kg):',
+                        agent_energetique_ef_mazout_kg = st.text_input('Mazout (kg):',
                                                                                         value=0)
-                        if show_text_input_agent_energetique_ef_mazout_kg != "0":
-                            validate_input_agent_energetique("Mazout:", show_text_input_agent_energetique_ef_mazout_kg, "kg")
+                        if agent_energetique_ef_mazout_kg != "0":
+                            validate_input_agent_energetique("Mazout:", agent_energetique_ef_mazout_kg, "kg")
                     
                     elif agent_energetique_ef == 'Mazout (litres)':
                         show_text_input_agent_energetique_ef_mazout_litres = st.text_input('Mazout (litres):',

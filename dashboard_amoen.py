@@ -219,7 +219,7 @@ def generate_dashboard():
                 if option['label'] in selected_sre_pourcentage:
                     value = st.text_input(option['label'] + ':', value=0.0)
                     if value != "0":
-                        validate_input_affectation(option['label'] + ":", value, option['unit'])
+                        validate_input_affectation(option['label'] + ":", value, option['unit'], sre_renovation_m2)
                         option['value'] = float(value)
 
             sre_pourcentage_habitat_collectif = options_sre_pourcentage[0]['value']
@@ -414,7 +414,6 @@ def generate_dashboard():
                     float(agent_energetique_ef_electricite_directe_kwh) + \
                     float(agent_energetique_ef_autre_kwh)
                 if agent_energetique_ef_somme_avertissement <= 0:
-                    st.write(agent_energetique_ef_somme_avertissement)
                     st.write(f"<p style='color: red;'><strong>Veuillez renseigner une quantité d'énergie utilisée sur la période ({agent_energetique_ef_somme_avertissement})</strong></p>", unsafe_allow_html=True)
             except ValueError:
                 st.write("Problème dans la somme des agents énergétiques")

@@ -235,7 +235,7 @@ def generate_dashboard():
         plt.subplots_adjust (top=.945, bottom=.17, left=.06, right=.97, hspace=.2, wspace=.2)
 
         # date de génération du graphique
-        now = datetime.now()
+        now = datetime.datetime.now()
         date_str = str(now.strftime("%d-%m-%Y"))
         ax.text(1.0, -0.24, date_str, transform=ax.transAxes,
             ha='right', va='bottom', fontsize=8)

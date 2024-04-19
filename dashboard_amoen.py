@@ -518,6 +518,7 @@ def generate_dashboard():
                     float(agent_energetique_ef_electricite_directe_kwh) + \
                     float(agent_energetique_ef_autre_kwh)
                 if agent_energetique_ef_somme_avertissement <= 0:
+                    st.write(agent_energetique_ef_somme_avertissement)
                     st.write(f"<p style='color: red;'><strong>Veuillez renseigner une quantité d'énergie utilisée sur la période ({agent_energetique_ef_somme_avertissement})</strong></p>", unsafe_allow_html=True)
             except ValueError:
                 st.write("Problème dans la somme des agents énergétiques")

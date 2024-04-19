@@ -375,7 +375,7 @@ def generate_dashboard():
 
         with tab2_col2:
             # Agents énergétiques
-            st.subheader('Agents énergétiques utilisés pour le chauffage et l\'ECS sur la période')
+            st.subheader('Agents énergétiques utilisés')
 
             options_agent_energetique_ef = [
                 {'label': 'CAD (kWh)', 'unit': 'kWh', 'variable': 'agent_energetique_ef_cad_kwh', 'value': 0.0},

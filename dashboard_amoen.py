@@ -306,160 +306,109 @@ def generate_dashboard():
             # Agents énergétiques
             st.subheader('Agents énergétiques utilisés pour le chauffage et l\'ECS sur la période')
 
-            options_agent_energetique_ef = ['Mazout (kg)', 'Mazout (litres)', 'Mazout (kWh)', 'Gaz naturel (m³)']
-            selected_agent_energetique_ef = st.multiselect('Select agents énergétiques:', options_agent_energetique_ef)
+            options_agent_energetique_ef = ['Mazout (kg)',
+                                            'Mazout (litres)',
+                                            'Mazout (kWh)',
+                                            'Gaz naturel (m³)',
+                                            'Gaz naturel (kWh)',
+                                            'Bois buches dur (stère)',
+                                            'Bois buches tendre (stère)',
+                                            'Bois buches tendre (kWh)',
+                                            'Pellets (m³)',
+                                            'Pellets (kg)',
+                                            'Pellets (kWh)',
+                                            'Plaquettes (m³)',
+                                            'Plaquettes (kWh)',
+                                            'CAD (kWh)',
+                                            'Electricité pour les PAC (kWh)',
+                                            'Electricité directe (kWh)',
+                                            'Autre (kWh)']
+            selected_agent_energetique_ef = st.multiselect('Agent(s) énergétique(s):', options_agent_energetique_ef)
 
             if 'Mazout (kg)' in selected_agent_energetique_ef:
                 agent_energetique_ef_mazout_kg = st.text_input('Mazout (kg):', value=0)
                 if agent_energetique_ef_mazout_kg != "0":
                     validate_agent_energetique_input("Mazout:", agent_energetique_ef_mazout_kg, "kg")
-                
-                elif agent_energetique_ef == 'Mazout (litres)':
-                    agent_energetique_ef_mazout_litres = st.text_input('Mazout (litres):',
-                                                                        value=0)
-                    if agent_energetique_ef_mazout_litres != "0":
-                        validate_input_agent_energetique("Mazout:", agent_energetique_ef_mazout_litres, "litres")
-                
-                elif agent_energetique_ef == 'Mazout (kWh)':
-                    agent_energetique_ef_mazout_kwh = st.text_input('Mazout (kWh):',
-                                                                    value=0)
-                    if agent_energetique_ef_mazout_kwh != "0":
-                        validate_input_agent_energetique("Mazout:", agent_energetique_ef_mazout_kwh, "kWh")
-            # show_text_input_agent_energetique_ef_mazout_kg = st.checkbox("Mazout (kg)")
-            # if show_text_input_agent_energetique_ef_mazout_kg:
-            #     agent_energetique_ef_mazout_kg = st.text_input("Mazout (kg):", value=0, label_visibility="collapsed")
-            #     validate_input("Mazout:", agent_energetique_ef_mazout_kg, "kg")
-            #     agent_energetique_ef_mazout_kg = float(agent_energetique_ef_mazout_kg)
-            # else:
-            #     agent_energetique_ef_mazout_kg = 0.0
             
-            # show_text_input_agent_energetique_ef_mazout_litres = st.checkbox("Mazout (litres)")
-            # if show_text_input_agent_energetique_ef_mazout_litres:
-            #     agent_energetique_ef_mazout_litres = st.text_input("Mazout (litres):", value=0, label_visibility="collapsed")
-            #     validate_input("Mazout:", agent_energetique_ef_mazout_litres, "litres")
-            #     agent_energetique_ef_mazout_litres = float(agent_energetique_ef_mazout_litres)
-            # else:
-            #     agent_energetique_ef_mazout_litres = 0.0
+            if 'Mazout (litres)' in selected_agent_energetique_ef:
+                agent_energetique_ef_mazout_litres = st.text_input('Mazout (litres):', value=0)
+                if agent_energetique_ef_mazout_litres != "0":
+                    validate_agent_energetique_input("Mazout:", agent_energetique_ef_mazout_litres, "litres")
             
-            # show_text_input_agent_energetique_ef_mazout_kwh = st.checkbox("Mazout (kWh)")
-            # if show_text_input_agent_energetique_ef_mazout_kwh:
-            #     agent_energetique_ef_mazout_kwh = st.text_input("Mazout (kWh):", value=0, label_visibility="collapsed")
-            #     validate_input("Mazout:", agent_energetique_ef_mazout_kwh, "kWh")
-            #     agent_energetique_ef_mazout_kwh = float(agent_energetique_ef_mazout_kwh)
-            # else:
-            #     agent_energetique_ef_mazout_kwh = 0.0
+            if 'Mazout (kWh)' in selected_agent_energetique_ef:
+                agent_energetique_ef_mazout_kwh = st.text_input('Mazout (kWh):', value=0)
+                if agent_energetique_ef_mazout_kwh != "0":
+                    validate_agent_energetique_input("Mazout:", agent_energetique_ef_mazout_kwh, "kWh")
+
+            if 'Gaz naturel (m³)' in selected_agent_energetique_ef:
+                agent_energetique_ef_gaz_naturel_m3 = st.text_input('Gaz naturel (m³):', value=0)
+                if agent_energetique_ef_gaz_naturel_m3 != "0":
+                    validate_agent_energetique_input("Gaz naturel:", agent_energetique_ef_gaz_naturel_m3, "m³")
             
-            # show_text_input_agent_energetique_ef_gaz_naturel_m3 = st.checkbox("Gaz naturel (m³)")
-            # if show_text_input_agent_energetique_ef_gaz_naturel_m3:
-            #     agent_energetique_ef_gaz_naturel_m3 = st.text_input("Gaz naturel (m³):", value=0, label_visibility="collapsed")
-            #     validate_input("Gaz naturel:", agent_energetique_ef_gaz_naturel_m3, "m³")
-            #     agent_energetique_ef_gaz_naturel_m3 = float(agent_energetique_ef_gaz_naturel_m3)
-            # else:
-            #     agent_energetique_ef_gaz_naturel_m3 = 0.0
+            if 'Gaz naturel (kWh)' in selected_agent_energetique_ef:
+                agent_energetique_ef_gaz_naturel_kwh = st.text_input('Gaz naturel (kWh):', value=0)
+                if agent_energetique_ef_gaz_naturel_kwh != "0":
+                    validate_agent_energetique_input("Gaz naturel:", agent_energetique_ef_gaz_naturel_kwh, "kWh")
             
-            show_text_input_agent_energetique_ef_gaz_naturel_kwh = st.checkbox("Gaz naturel (kWh)")
-            if show_text_input_agent_energetique_ef_gaz_naturel_kwh:
-                agent_energetique_ef_gaz_naturel_kwh = st.text_input("Gaz naturel (kWh):", value=0, label_visibility="collapsed")
-                validate_input("Gaz naturel:", agent_energetique_ef_gaz_naturel_kwh, "kWh")
-                agent_energetique_ef_gaz_naturel_kwh = float(agent_energetique_ef_gaz_naturel_kwh)
-            else:
-                agent_energetique_ef_gaz_naturel_kwh = 0.0
+            if 'Bois buches dur (stère)' in selected_agent_energetique_ef:
+                agent_energetique_ef_bois_buches_dur_stere = st.text_input('Bois buches dur (stère):', value=0)
+                if agent_energetique_ef_bois_buches_dur_stere != "0":
+                    validate_agent_energetique_input("Bois buches dur:", agent_energetique_ef_bois_buches_dur_stere, "stère")
             
-            show_text_input_agent_energetique_ef_bois_buches_dur_stere = st.checkbox("Bois buches dur (stère)")
-            if show_text_input_agent_energetique_ef_bois_buches_dur_stere:
-                agent_energetique_ef_bois_buches_dur_stere = st.text_input("Bois buches dur (stère):", value=0, label_visibility="collapsed")
-                validate_input("Bois buches dur:", agent_energetique_ef_bois_buches_dur_stere, "stère")
-                agent_energetique_ef_bois_buches_dur_stere = float(agent_energetique_ef_bois_buches_dur_stere)
-            else:
-                agent_energetique_ef_bois_buches_dur_stere = 0.0
+            if 'Bois buches tendre (stère)' in selected_agent_energetique_ef:
+                agent_energetique_ef_bois_buches_tendre_stere = st.text_input('Bois buches tendre (stère):', value=0)
+                if agent_energetique_ef_bois_buches_tendre_stere != "0":
+                    validate_agent_energetique_input("Bois buches tendre:", agent_energetique_ef_bois_buches_tendre_stere, "stère")
             
-            show_text_input_agent_energetique_ef_bois_buches_tendre_stere = st.checkbox("Bois buches tendre (stère)")
-            if show_text_input_agent_energetique_ef_bois_buches_tendre_stere:
-                agent_energetique_ef_bois_buches_tendre_stere = st.text_input("Bois buches tendre (stère):", value=0, label_visibility="collapsed")
-                validate_input("Bois buches tendre:", agent_energetique_ef_bois_buches_tendre_stere, "stère")
-                agent_energetique_ef_bois_buches_tendre_stere = float(agent_energetique_ef_bois_buches_tendre_stere)
-            else:
-                agent_energetique_ef_bois_buches_tendre_stere = 0.0
+            if 'Bois buches tendre (kWh)' in selected_agent_energetique_ef:
+                agent_energetique_ef_bois_buches_tendre_kwh = st.text_input('Bois buches tendre (kWh):', value=0)
+                if agent_energetique_ef_bois_buches_tendre_kwh != "0":
+                    validate_agent_energetique_input("Bois buches tendre:", agent_energetique_ef_bois_buches_tendre_kwh, "kWh")
             
-            show_text_input_agent_energetique_ef_bois_buches_tendre_kwh = st.checkbox("Bois buches tendre (kWh)")
-            if show_text_input_agent_energetique_ef_bois_buches_tendre_kwh:
-                agent_energetique_ef_bois_buches_tendre_kwh = st.text_input("Bois buches tendre (kWh):", value=0, label_visibility="collapsed")
-                validate_input("Bois buches tendre:", agent_energetique_ef_bois_buches_tendre_kwh, "kWh")
-                agent_energetique_ef_bois_buches_tendre_kwh = float(agent_energetique_ef_bois_buches_tendre_kwh)
-            else:
-                agent_energetique_ef_bois_buches_tendre_kwh = 0.0
+            if 'Pellets (m³)' in selected_agent_energetique_ef:
+                agent_energetique_ef_pellets_m3 = st.text_input('Pellets (m³):', value=0)
+                if agent_energetique_ef_pellets_m3 != "0":
+                    validate_agent_energetique_input("Pellets:", agent_energetique_ef_pellets_m3, "m³")
             
-            show_text_input_agent_energetique_ef_pellets_m3 = st.checkbox("Pellets (m³)")
-            if show_text_input_agent_energetique_ef_pellets_m3:
-                agent_energetique_ef_pellets_m3 = st.text_input("Pellets (m³):", value=0, label_visibility="collapsed")
-                validate_input("Pellets:", agent_energetique_ef_pellets_m3, "m³")
-                agent_energetique_ef_pellets_m3 = float(agent_energetique_ef_pellets_m3)
-            else:
-                agent_energetique_ef_pellets_m3 = 0.0
+            if 'Pellets (kg)' in selected_agent_energetique_ef:
+                agent_energetique_ef_pellets_kg = st.text_input('Pellets (kg):', value=0)
+                if agent_energetique_ef_pellets_kg != "0":
+                    validate_agent_energetique_input("Pellets:", agent_energetique_ef_pellets_kg, "kg")
+
+            if 'Pellets (kWh)' in selected_agent_energetique_ef:
+                agent_energetique_ef_pellets_kwh = st.text_input('Pellets (kWh):', value=0)
+                if agent_energetique_ef_pellets_kwh != "0":
+                    validate_agent_energetique_input("Pellets:", agent_energetique_ef_pellets_kwh, "kWh")
             
-            show_text_input_agent_energetique_ef_pellets_kg = st.checkbox("Pellets (kg)")
-            if show_text_input_agent_energetique_ef_pellets_kg:
-                agent_energetique_ef_pellets_kg = st.text_input("Pellets (kg):", value=0, label_visibility="collapsed")
-                validate_input("Pellets:", agent_energetique_ef_pellets_kg, "kg")
-                agent_energetique_ef_pellets_kg = float(agent_energetique_ef_pellets_kg)
-            else:
-                agent_energetique_ef_pellets_kg = 0.0
+            if 'Plaquettes (m³)' in selected_agent_energetique_ef:
+                agent_energetique_ef_plaquettes_m3 = st.text_input('Plaquettes (m³):', value=0)
+                if agent_energetique_ef_plaquettes_m3 != "0":
+                    validate_agent_energetique_input("Plaquettes:", agent_energetique_ef_plaquettes_m3, "m³")
             
-            show_text_input_agent_energetique_ef_pellets_kwh = st.checkbox("Pellets (kWh)")
-            if show_text_input_agent_energetique_ef_pellets_kwh:
-                agent_energetique_ef_pellets_kwh = st.text_input("Pellets (kWh):", value=0, label_visibility="collapsed")
-                validate_input("Pellets:", agent_energetique_ef_pellets_kwh, "kWh")
-                agent_energetique_ef_pellets_kwh = float(agent_energetique_ef_pellets_kwh)
-            else:
-                agent_energetique_ef_pellets_kwh = 0.0
+            if 'Plaquettes (kWh)' in selected_agent_energetique_ef:
+                agent_energetique_ef_plaquettes_kwh = st.text_input('Plaquettes (kWh):', value=0)
+                if agent_energetique_ef_plaquettes_kwh != "0":
+                    validate_agent_energetique_input("Plaquettes:", agent_energetique_ef_plaquettes_kwh, "kWh")
             
-            show_text_input_agent_energetique_ef_plaquettes_m3 = st.checkbox("Plaquettes (m³)")
-            if show_text_input_agent_energetique_ef_plaquettes_m3:
-                agent_energetique_ef_plaquettes_m3 = st.text_input("Plaquettes (m³):", value=0, label_visibility="collapsed")
-                validate_input("Plaquettes:", agent_energetique_ef_plaquettes_m3, "m³")
-                agent_energetique_ef_plaquettes_m3 = float(agent_energetique_ef_plaquettes_m3)
-            else:
-                agent_energetique_ef_plaquettes_m3 = 0.0
+            if 'CAD (kWh)' in selected_agent_energetique_ef:
+                agent_energetique_ef_cad_kwh = st.text_input('CAD (kWh):', value=0)
+                if agent_energetique_ef_cad_kwh != "0":
+                    validate_agent_energetique_input("CAD:", agent_energetique_ef_cad_kwh, "kWh")
             
-            show_text_input_agent_energetique_ef_plaquettes_kwh = st.checkbox("Plaquettes (kWh)")
-            if show_text_input_agent_energetique_ef_plaquettes_kwh:
-                agent_energetique_ef_plaquettes_kwh = st.text_input("Plaquettes (kWh):", value=0, label_visibility="collapsed")
-                validate_input("Plaquettes:", agent_energetique_ef_plaquettes_kwh, "kWh")
-                agent_energetique_ef_plaquettes_kwh = float(agent_energetique_ef_plaquettes_kwh)
-            else:
-                agent_energetique_ef_plaquettes_kwh = 0.0
+            if 'Electricité pour les PAC (kWh)' in selected_agent_energetique_ef:
+                agent_energetique_ef_electricite_pac_kwh = st.text_input('Electricité pour les PAC (kWh):', value=0)
+                if agent_energetique_ef_electricite_pac_kwh != "0":
+                    validate_agent_energetique_input("Electricité pour les PAC:", agent_energetique_ef_electricite_pac_kwh, "kWh")
             
-            show_text_input_agent_energetique_ef_cad_kwh = st.checkbox("CAD (kWh)")
-            if show_text_input_agent_energetique_ef_cad_kwh:
-                agent_energetique_ef_cad_kwh = st.text_input("CAD (kWh):", value=0, label_visibility="collapsed")
-                validate_input("CAD:", agent_energetique_ef_cad_kwh, "kWh")
-                agent_energetique_ef_cad_kwh = float(agent_energetique_ef_cad_kwh)
-            else:
-                agent_energetique_ef_cad_kwh = 0.0
+            if 'Electricité directe (kWh)' in selected_agent_energetique_ef:
+                agent_energetique_ef_electricite_directe_kwh = st.text_input('Electricité directe (kWh):', value=0)
+                if agent_energetique_ef_electricite_directe_kwh != "0":
+                    validate_agent_energetique_input("Electricité directe:", agent_energetique_ef_electricite_directe_kwh, "kWh")
             
-            show_text_input_agent_energetique_ef_electricite_pac_kwh = st.checkbox("Electricité pour les PAC (kWh)")
-            if show_text_input_agent_energetique_ef_electricite_pac_kwh:
-                agent_energetique_ef_electricite_pac_kwh = st.text_input("Electricité pour les PAC (kWh):", value=0, label_visibility="collapsed")
-                validate_input("Electricité pour les PAC:", agent_energetique_ef_electricite_pac_kwh, "kWh")
-                agent_energetique_ef_electricite_pac_kwh = float(agent_energetique_ef_electricite_pac_kwh)
-            else:
-                agent_energetique_ef_electricite_pac_kwh = 0.0
-            
-            show_text_input_agent_energetique_ef_electricite_directe_kwh = st.checkbox("Electricité directe (kWh)")
-            if show_text_input_agent_energetique_ef_electricite_directe_kwh:
-                agent_energetique_ef_electricite_directe_kwh = st.text_input("Electricité directe (kWh):", value=0, label_visibility="collapsed")
-                validate_input("Electricité directe:", agent_energetique_ef_electricite_directe_kwh, "kWh")
-                agent_energetique_ef_electricite_directe_kwh = float(agent_energetique_ef_electricite_directe_kwh)
-            else:
-                agent_energetique_ef_electricite_directe_kwh = 0.0
-            
-            show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Autre (kWh)")
-            if show_text_input_agent_energetique_ef_autre_kwh:
-                agent_energetique_ef_autre_kwh = st.text_input("Autre (kWh):", value=0, label_visibility="collapsed")
-                validate_input("Autre:", agent_energetique_ef_autre_kwh, "kWh")
-                agent_energetique_ef_autre_kwh = float(agent_energetique_ef_autre_kwh)
-            else:
-                agent_energetique_ef_autre_kwh = 0.0
+            if 'Autre (kWh)' in selected_agent_energetique_ef:
+                agent_energetique_ef_autre_kwh = st.text_input('Autre (kWh):', value=0)
+                if agent_energetique_ef_autre_kwh != "0":
+                    validate_agent_energetique_input("Autre:", agent_energetique_ef_autre_kwh, "kWh")
             
             try:
                 agent_energetique_ef_somme_avertissement = agent_energetique_ef_mazout_kg + \

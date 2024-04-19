@@ -295,7 +295,8 @@ def generate_dashboard():
             if selected_agent_energetique_ef:
                 for agent_energetique_ef in selected_agent_energetique_ef:
                     if agent_energetique_ef == 'Mazout (kg)':
-                        agent_energetique_ef_input = st.text_input('Mazout (kg):', value=0, label_visibility="collapsed")
+                        agent_energetique_ef_input = st.text_input('Mazout (kg):',
+                                                                    value=0)
                         validate_input("Mazout:", agent_energetique_ef_input, "kg")
                         agent_energetique_ef_input = float(agent_energetique_ef_input)
                     elif agent_energetique_ef == 'Mazout (litres)':

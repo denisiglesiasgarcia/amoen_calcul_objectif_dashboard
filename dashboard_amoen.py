@@ -289,37 +289,60 @@ def generate_dashboard():
             # Agents énergétiques
             st.subheader('Agents énergétiques utilisés pour le chauffage et l\'ECS sur la période')
 
-            show_text_input_agent_energetique_ef_mazout_kg = st.checkbox("Mazout (kg)")
-            if show_text_input_agent_energetique_ef_mazout_kg:
-                agent_energetique_ef_mazout_kg = st.text_input("Mazout (kg):", value=0, label_visibility="collapsed")
-                validate_input("Mazout:", agent_energetique_ef_mazout_kg, "kg")
-                agent_energetique_ef_mazout_kg = float(agent_energetique_ef_mazout_kg)
+            options_agent_energetique_ef = ['Mazout (kg)', 'Mazout (litres)', 'Mazout (kWh)', 'Gaz naturel (m³)']
+            selected_agent_energetique_ef = st.multiselect('Select agents énergétiques:', options_agent_energetique_ef)
+
+            if selected_agent_energetique_ef:
+                for agent_energetique_ef in selected_agent_energetique_ef:
+                    if agent_energetique_ef == 'Mazout (kg)':
+                        agent_energetique_ef_input = st.text_input('Mazout (kg):', value=0, label_visibility="collapsed")
+                        validate_input("Mazout:", agent_energetique_ef_input, "kg")
+                        agent_energetique_ef_input = float(agent_energetique_ef_input)
+                    elif agent_energetique_ef == 'Mazout (litres)':
+                        agent_energetique_ef_input = st.text_input('Mazout (litres):', value=0, label_visibility="collapsed")
+                        validate_input("Mazout:", agent_energetique_ef_input, "litres")
+                        agent_energetique_ef_input = float(agent_energetique_ef_input)
+                    elif agent_energetique_ef == 'Mazout (kWh)':
+                        agent_energetique_ef_input = st.text_input('Mazout (kWh):', value=0, label_visibility="collapsed")
+                        validate_input("Mazout:", agent_energetique_ef_input, "kWh")
+                        agent_energetique_ef_input = float(agent_energetique_ef_input)
+                    elif agent_energetique_ef == 'Gaz naturel (m³)':
+                        agent_energetique_ef_input = st.text_input('Gaz naturel (m³):', value=0, label_visibility="collapsed")
+                        validate_input("Gaz naturel:", agent_energetique_ef_input, "m³")
+                        agent_energetique_ef_input = float(agent_energetique_ef_input)
             else:
-                agent_energetique_ef_mazout_kg = 0.0
+                agent_energetique_ef_input = 0.0
+            # show_text_input_agent_energetique_ef_mazout_kg = st.checkbox("Mazout (kg)")
+            # if show_text_input_agent_energetique_ef_mazout_kg:
+            #     agent_energetique_ef_mazout_kg = st.text_input("Mazout (kg):", value=0, label_visibility="collapsed")
+            #     validate_input("Mazout:", agent_energetique_ef_mazout_kg, "kg")
+            #     agent_energetique_ef_mazout_kg = float(agent_energetique_ef_mazout_kg)
+            # else:
+            #     agent_energetique_ef_mazout_kg = 0.0
             
-            show_text_input_agent_energetique_ef_mazout_litres = st.checkbox("Mazout (litres)")
-            if show_text_input_agent_energetique_ef_mazout_litres:
-                agent_energetique_ef_mazout_litres = st.text_input("Mazout (litres):", value=0, label_visibility="collapsed")
-                validate_input("Mazout:", agent_energetique_ef_mazout_litres, "litres")
-                agent_energetique_ef_mazout_litres = float(agent_energetique_ef_mazout_litres)
-            else:
-                agent_energetique_ef_mazout_litres = 0.0
+            # show_text_input_agent_energetique_ef_mazout_litres = st.checkbox("Mazout (litres)")
+            # if show_text_input_agent_energetique_ef_mazout_litres:
+            #     agent_energetique_ef_mazout_litres = st.text_input("Mazout (litres):", value=0, label_visibility="collapsed")
+            #     validate_input("Mazout:", agent_energetique_ef_mazout_litres, "litres")
+            #     agent_energetique_ef_mazout_litres = float(agent_energetique_ef_mazout_litres)
+            # else:
+            #     agent_energetique_ef_mazout_litres = 0.0
             
-            show_text_input_agent_energetique_ef_mazout_kwh = st.checkbox("Mazout (kWh)")
-            if show_text_input_agent_energetique_ef_mazout_kwh:
-                agent_energetique_ef_mazout_kwh = st.text_input("Mazout (kWh):", value=0, label_visibility="collapsed")
-                validate_input("Mazout:", agent_energetique_ef_mazout_kwh, "kWh")
-                agent_energetique_ef_mazout_kwh = float(agent_energetique_ef_mazout_kwh)
-            else:
-                agent_energetique_ef_mazout_kwh = 0.0
+            # show_text_input_agent_energetique_ef_mazout_kwh = st.checkbox("Mazout (kWh)")
+            # if show_text_input_agent_energetique_ef_mazout_kwh:
+            #     agent_energetique_ef_mazout_kwh = st.text_input("Mazout (kWh):", value=0, label_visibility="collapsed")
+            #     validate_input("Mazout:", agent_energetique_ef_mazout_kwh, "kWh")
+            #     agent_energetique_ef_mazout_kwh = float(agent_energetique_ef_mazout_kwh)
+            # else:
+            #     agent_energetique_ef_mazout_kwh = 0.0
             
-            show_text_input_agent_energetique_ef_gaz_naturel_m3 = st.checkbox("Gaz naturel (m³)")
-            if show_text_input_agent_energetique_ef_gaz_naturel_m3:
-                agent_energetique_ef_gaz_naturel_m3 = st.text_input("Gaz naturel (m³):", value=0, label_visibility="collapsed")
-                validate_input("Gaz naturel:", agent_energetique_ef_gaz_naturel_m3, "m³")
-                agent_energetique_ef_gaz_naturel_m3 = float(agent_energetique_ef_gaz_naturel_m3)
-            else:
-                agent_energetique_ef_gaz_naturel_m3 = 0.0
+            # show_text_input_agent_energetique_ef_gaz_naturel_m3 = st.checkbox("Gaz naturel (m³)")
+            # if show_text_input_agent_energetique_ef_gaz_naturel_m3:
+            #     agent_energetique_ef_gaz_naturel_m3 = st.text_input("Gaz naturel (m³):", value=0, label_visibility="collapsed")
+            #     validate_input("Gaz naturel:", agent_energetique_ef_gaz_naturel_m3, "m³")
+            #     agent_energetique_ef_gaz_naturel_m3 = float(agent_energetique_ef_gaz_naturel_m3)
+            # else:
+            #     agent_energetique_ef_gaz_naturel_m3 = 0.0
             
             show_text_input_agent_energetique_ef_gaz_naturel_kwh = st.checkbox("Gaz naturel (kWh)")
             if show_text_input_agent_energetique_ef_gaz_naturel_kwh:

@@ -142,7 +142,8 @@ def generate_dashboard():
                                             ef_avant_corr_kwh_m2,
                                             energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
                                             ef_objectif_pondere_kwh_m2,
-                                            atteinte_objectif):
+                                            atteinte_objectif,
+                                            amoen_id):
 
         # Données pour le graphique
         idc_moy_3ans_avant_MJ_m2 = ef_avant_corr_kwh_m2*3.6
@@ -242,6 +243,7 @@ def generate_dashboard():
         # date de génération du graphique
         now = datetime.datetime.now()
         date_str = str(now.strftime("%d-%m-%Y"))
+        text_amoen_date = "Généré par" + amoen_id + " le " + date_str
         ax.text(1.0, -0.24, date_str, transform=ax.transAxes,
             ha='right', va='bottom', fontsize=8)
 
@@ -297,7 +299,13 @@ def generate_dashboard():
         st.markdown("**[GitHub de la dashboard](https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard)**", unsafe_allow_html=True)
 
     with tab2:
+        # projet
+        st.subheader('Données projet')
 
+        nom_projet = st.text_input("Nom du projet")
+        adresse_projet = st.text_input("Adresse(s) du projet")
+        amoen_id = st.text_input("AMOen")
+        
         st.subheader('SRE rénovée')
         # SRE rénovée
         sre_renovation_m2 = st.text_input("SRE rénovée (m²):", value=0, help="La SRE rénovée est la partie du batiment qui a été rénovée, la surélévation/extension n'est pas incluse")
@@ -1104,20 +1112,17 @@ def generate_dashboard():
         st.subheader("Graphiques")
 
         # Graphique 1
-        site="test"
         if site and ef_avant_corr_kwh_m2 and energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 and ef_objectif_pondere_kwh_m2:
-            graphique_bars_objectif_exploitation(site,
+            graphique_bars_objectif_exploitation(nom_projet,
                                                     ef_avant_corr_kwh_m2,
                                                     energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
                                                     ef_objectif_pondere_kwh_m2,
-                                                    atteinte_objectif)
+                                                    atteinte_objectif,
+                                                    amoen_id)
+
 
     with tab6:
         st.subheader("Envoi des données à eco21/HEPIA")
-
-        nom_projet = st.text_input("Nom du projet")
-        adresse_projet = st.text_input("Adresse")
-        amoen_id = st.text_input("AMOEN")
 
         df_envoi_columns = [
             'Nom_projet', 'Adresse', 'AMOEN',

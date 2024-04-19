@@ -11,6 +11,9 @@ from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import streamlit as st
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 os.environ['USE_ARROW_extension'] = '1'
 
@@ -134,6 +137,132 @@ def generate_dashboard():
     def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):
         dj_periode = df_meteo_tre200d0[(df_meteo_tre200d0['time'] >= periode_start) & (df_meteo_tre200d0['time'] <= periode_end)]['DJ_theta0_16'].sum()
         return dj_periode
+
+    def imprimerbarsobjectif_exploitation(site,
+                                            ef_avant_corr_kwh_m2,
+                                            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
+                                            ef_objectif_pondere_kwh_m2,
+                                            atteinte_objectif):
+
+        # Données pour le graphique
+        idc_moy_3ans_avant_MJ_m2 = ef_avant_corr_kwh_m2*3.6
+        ef_objectif_pondere_MJ_m2 = ef_objectif_pondere_kwh_m2*3.6
+        ef_apres_corr_MJ_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2*3.6
+        baisse_objectif_MJ_m2 = ef_avant_corr_kwh_m2*3.6 - ef_objectif_pondere_kwh_m2*3.6
+        baisse_mesuree_MJ_m2 = ef_avant_corr_kwh_m2*3.6 - energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2*3.6
+
+        # données pour le graphique
+        bar_data1 = pd.DataFrame({
+            'Nom_projet': [site,
+                            site,
+                            site],
+            'Type': ['IDC moy 3 ans avant\n$IDC_{moy3ans}$',
+                        'Objectif\n$E_{f,obj}*f_{p}$',
+                        'Conso mesurée après\n$E_{f,après,corr}*f_{p}$'],
+            'Valeur': [idc_moy_3ans_avant_MJ_m2,
+                        ef_objectif_pondere_MJ_m2,
+                        ef_apres_corr_MJ_m2]
+        })
+
+        # Générer histogramme. taillebin est utilisé pour uniformiser le format de l'histogramme et que les axes
+        # correspondent bien à la largeur des barres (bin)
+        cm = 1 / 2.54
+        sns.set (style='white',rc={"figure.figsize":(30* cm, 14.2 * cm)})
+        # ax1 = sns.catplot(x='Nom_projet', y='Valeur', hue='Type', kind='bar', data=bar_data1)
+        
+        ax = sns.barplot (y="Valeur",x="Type",data=bar_data1,order=['IDC moy 3 ans avant\n$IDC_{moy3ans}$',"Objectif\n$E_{f,obj}*f_{p}$",'Conso mesurée après\n$E_{f,après,corr}*f_{p}$'])
+
+        sns.despine()
+
+        ax.bar_label (ax.containers[0])
+
+        height_line85 = bar_data['Valeur'][0] - bar_data['Valeur'][4]*0.85
+        text_line85 = '$(E_{f,après,corr}*f_{p})_{max→subv.}=$' + '$' + str(np.round(idc_moy_3ans_avant_MJ_m2 - baisse_objectif_MJ_m2*0.85, 1)) + ' {MJ/m}^2$'
+        ax.axhline (height_line85, xmin=0.445, xmax=0.98, color='indigo', linestyle=(0, (5, 10)), linewidth=0.7)
+        # Add text near the line.
+        offset_85 = 1
+        ax.annotate(text_line85, xy=(2, height_line85 + offset_85), xytext=(1.57, height_line85 + offset_85),
+                    horizontalalignment='right', verticalalignment='bottom', fontsize=10, color='indigo')
+
+        ####################
+
+        # première flèche
+        # find the height of the first and third bars
+        first_bar_height = idc_moy_3ans_avant_MJ_m2
+        second_bar_height = ef_objectif_pondere_MJ_m2
+        # set the x-coordinate for the third bar
+        x_coord_second_bar = 0.8  # this depends on the actual x-coordinate of the third bar
+        # text for the arrow
+        text_arrow_baisse_realisee = "Baisse\nobjectif\n"+str('{:.1f}'.format(baisse_objectif_MJ_m2)) + " MJ/m²"
+        # add text at the midpoint of the arrow
+        midpoint_height = (first_bar_height + second_bar_height) / 2
+        # plot the line (arrow without arrowheads)
+        ax.annotate("", xy=(x_coord_second_bar, second_bar_height), xytext=(x_coord_second_bar, first_bar_height),
+                    arrowprops=dict(arrowstyle="<->", color='moccasin', lw=3))  # increase lw for a thicker line
+        # add the text over the line and centered
+        u = ax.text(x_coord_second_bar, midpoint_height, text_arrow_baisse_realisee, ha='center', va='center', rotation=0,
+                bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="white", lw=2))
+
+        # deuxième flèche
+        # find the height of the first and third bars
+        third_bar_height = ef_apres_corr_MJ_m2
+        # set the x-coordinate for the third bar
+        x_coord_third_bar = 1.8  # this depends on the actual x-coordinate of the third bar
+        # text for the arrow
+        text_arrow_baisse_realisee = "Baisse\nmesurée\n"+str('{:.1f}'.format(baisse_mesuree_MJ_m2)) + " MJ/m²"
+        # add text at the midpoint of the arrow
+        midpoint_height = (first_bar_height + third_bar_height) / 2
+        # plot the line (arrow without arrowheads)
+        ax.annotate("", xy=(x_coord_third_bar, third_bar_height), xytext=(x_coord_third_bar, first_bar_height),
+                    arrowprops=dict(arrowstyle="->", color='lightgreen', lw=4))  # increase lw for a thicker line
+        # add the text over the line and centered
+        u = ax.text(x_coord_third_bar, midpoint_height, text_arrow_baisse_realisee, ha='center', va='center', rotation=0,
+                bbox=dict(boxstyle="round,pad=0.3", fc="lime", ec="lime", lw=2))
+
+        #####################
+
+        # titres
+
+        # titre de l'histogramme
+        title_text = str('{:.1f}'.format(atteinte_objectif*100)) + "% de l'objectif atteint"
+        title_color = 'darkgreen' if atteinte_objectif*100 >= 85 else 'red'
+
+        plt.title(title_text, weight='bold', color=title_color, loc='center', pad=15, fontsize=14, y=0.925)
+
+        # sous-titre
+        plt.suptitle(site, fontsize=16, x=0.515, y=0.99)
+        # Modifier l'espacement entre sous-titre et titre
+        plt.subplots_adjust (top=.945, bottom=.17, left=.06, right=.97, hspace=.2, wspace=.2)
+
+        # date de génération du graphique
+        now = datetime.now()
+        date_str = str(now.strftime("%d-%m-%Y"))
+        ax.text(1.0, -0.24, date_str, transform=ax.transAxes,
+            ha='right', va='bottom', fontsize=8)
+
+
+        # titre pour l'abscisse X
+        plt.xlabel("\nBaisse d'IDC minimum pour obtenir la subvention = 85% * " +
+                str('{:.1f}'.format(baisse_objectif_MJ_m2)) + " = " +
+                str('{:.1f}'.format(baisse_objectif_MJ_m2*0.85)) + ' MJ/m² \n$E_{f,après,corr}*f_{p}$ maximum pour obtenir la subvention ($(E_{f,après,corr}*f_{p})_{max→subv.}$) = ' +
+                str('{:.1f}'.format(idc_moy_3ans_avant_MJ_m2)) + " - " +
+                str('{:.1f}'.format(baisse_objectif_MJ_m2*0.85)) + " = " +
+                str('{:.1f}'.format(idc_moy_3ans_avant_MJ_m2 - baisse_objectif_MJ_m2*0.85)) + " MJ/m²\nPourcentage de l'objectif atteint = " +
+                str('{:.1f}'.format(baisse_mesuree_MJ_m2)) + " / " + 
+                str('{:.1f}'.format(baisse_objectif_MJ_m2))+ " * 100 = " +
+                str('{:.1f}'.format(atteinte_objectif*100)) + "%", 
+                loc='left', size=9)
+        # titre pour l'ordonnée Y
+        plt.ylabel("[MJ/m²/an]")
+
+        del bar_data
+        del bar_data1
+        del bar_data2
+
+        plt.show()
+
+        # nettoyage
+        plt.close()
 
     st.title("Outil pour calculer l'atteinte des objectifs AMOén")
 

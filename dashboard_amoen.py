@@ -102,16 +102,22 @@ def generate_dashboard():
             st.text(f"{name} doit être un chiffre")
             variable = 0
     
-    def validate_input_agent_energetique(name, variable, unite):
+    def validate_agent_energetique_input(name, value, unit):
+        if value is None or value == "":
+            st.text(f"{name} doit être un chiffre")
+            return 0
+        
         try:
-            variable = float(variable.replace(',', '.', 1))
-            if variable > 0:
-                st.text(f"{name} {variable} {unité}")
+            value = float(value.replace(',', '.', 1))
+            if value > 0:
+                st.text(f"{name} {value} {unit}")
+                return value
             else:
-                st.text(name, "doit être un chiffre positif")
+                st.text(f"{name} doit être un chiffre positif")
+                return 0
         except ValueError:
             st.text(f"{name} doit être un chiffre")
-            variable = 0
+            return 0
 
     # Calcul des degrés-jours
     def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):
@@ -303,12 +309,10 @@ def generate_dashboard():
             options_agent_energetique_ef = ['Mazout (kg)', 'Mazout (litres)', 'Mazout (kWh)', 'Gaz naturel (m³)']
             selected_agent_energetique_ef = st.multiselect('Select agents énergétiques:', options_agent_energetique_ef)
 
-            if selected_agent_energetique_ef:
-                if 'Mazout (kg)' in agent_energetique_ef:
-                    agent_energetique_ef_mazout_kg = st.text_input('Mazout (kg):',
-                                                                                    value=0)
-                    if agent_energetique_ef_mazout_kg != "0":
-                        validate_input_agent_energetique("Mazout:", agent_energetique_ef_mazout_kg, "kg")
+            if 'Mazout (kg)' in selected_agent_energetique_ef:
+                agent_energetique_ef_mazout_kg = st.text_input('Mazout (kg):', value=0)
+                if agent_energetique_ef_mazout_kg != "0":
+                    validate_agent_energetique_input("Mazout:", agent_energetique_ef_mazout_kg, "kg")
                 
                 elif agent_energetique_ef == 'Mazout (litres)':
                     agent_energetique_ef_mazout_litres = st.text_input('Mazout (litres):',

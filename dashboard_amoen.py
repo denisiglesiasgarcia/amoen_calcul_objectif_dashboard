@@ -137,7 +137,7 @@ def generate_dashboard():
 
     st.title("Outil pour calculer l'atteinte des objectifs AMOén")
 
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["0 Readme", '1 Données site', "2 Note de calcul", '3 Résultats', '4 Validation des données'])
+    tab1, tab2, tab3, tab4, tab5, tab6= st.tabs(["0 Readme", '1 Données site', "2 Note de calcul", '3 Résultats', '4 Graphiques', '5 Validation des données'])
 
     # Calcul des index selon dates
     with tab1:
@@ -971,6 +971,11 @@ def generate_dashboard():
         st.latex(formula_atteinte_objectifs_pourcent)
     
     with tab5:
+        st.subheader("Graphiques")
+
+
+
+    with tab6:
         st.subheader("Envoi des données à eco21/HEPIA")
 
         nom_projet = st.text_input("Nom du projet")

@@ -325,6 +325,25 @@ def generate_dashboard():
                                             'Autre (kWh)']
             selected_agent_energetique_ef = st.multiselect('Agent(s) énergétique(s):', options_agent_energetique_ef)
 
+            # initialisation des variables
+            agent_energetique_ef_mazout_kg = 0.0
+            agent_energetique_ef_mazout_litres = 0.0
+            agent_energetique_ef_mazout_kwh = 0.0
+            agent_energetique_ef_gaz_naturel_m3 = 0.0
+            agent_energetique_ef_gaz_naturel_kwh = 0.0
+            agent_energetique_ef_bois_buches_dur_stere = 0.0
+            agent_energetique_ef_bois_buches_tendre_stere = 0.0
+            agent_energetique_ef_bois_buches_tendre_kwh = 0.0
+            agent_energetique_ef_pellets_m3 = 0.0
+            agent_energetique_ef_pellets_kg = 0.0
+            agent_energetique_ef_pellets_kwh = 0.0
+            agent_energetique_ef_plaquettes_m3 = 0.0
+            agent_energetique_ef_plaquettes_kwh = 0.0
+            agent_energetique_ef_cad_kwh = 0.0
+            agent_energetique_ef_electricite_pac_kwh = 0.0
+            agent_energetique_ef_electricite_directe_kwh = 0.0
+            agent_energetique_ef_autre_kwh = 0.0
+
             if 'Mazout (kg)' in selected_agent_energetique_ef:
                 agent_energetique_ef_mazout_kg = st.text_input('Mazout (kg):', value=0)
                 if agent_energetique_ef_mazout_kg != "0":

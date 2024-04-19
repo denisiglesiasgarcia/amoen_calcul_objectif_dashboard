@@ -170,7 +170,11 @@ def generate_dashboard():
         sns.set (style='white',rc={"figure.figsize":(30* cm, 14.2 * cm)})
         # ax1 = sns.catplot(x='Nom_projet', y='Valeur', hue='Type', kind='bar', data=bar_data1)
         
-        ax = sns.barplot (y="Valeur",x="Type",data=bar_data1,order=['IDC moy 3 ans avant\n$IDC_{moy3ans}$',"Objectif\n$E_{f,obj}*f_{p}$",'Conso mesurée après\n$E_{f,après,corr}*f_{p}$'])
+        ax = sns.barplot (y="Valeur",
+                            x="Type",
+                            data=bar_data1,
+                            order=['IDC moy 3 ans avant\n$IDC_{moy3ans}$',"Objectif\n$E_{f,obj}*f_{p}$",'Conso mesurée après\n$E_{f,après,corr}*f_{p}$'],
+                            palette=['#1f77b4', '#ff7f0e', '#2ca02c'])
 
         sns.despine()
 

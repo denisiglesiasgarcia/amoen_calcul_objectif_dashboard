@@ -101,6 +101,17 @@ def generate_dashboard():
         except ValueError:
             st.text(f"{name} doit être un chiffre")
             variable = 0
+    
+    def validate_input_agent_energetique(name, variable, unite):
+        try:
+            variable = float(variable.replace(',', '.', 1))
+            if variable > 0:
+                st.text(f"{name} {variable} {unité}")
+            else:
+                st.text(name, "doit être un chiffre positif")
+        except ValueError:
+            st.text(f"{name} doit être un chiffre")
+            variable = 0
 
     # Calcul des degrés-jours
     def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):
@@ -297,7 +308,8 @@ def generate_dashboard():
                     if agent_energetique_ef == 'Mazout (kg)':
                         agent_energetique_ef_input = st.text_input('Mazout (kg):',
                                                                     value=0)
-                        validate_input("Mazout:", agent_energetique_ef_input, "kg")
+                        if agent_energetique_ef_input != "0":
+                            validate_input_agent_energetique("Mazout:", agent_energetique_ef_input, "kg")
                         agent_energetique_ef_input = float(agent_energetique_ef_input)
                     elif agent_energetique_ef == 'Mazout (litres)':
                         agent_energetique_ef_input = st.text_input('Mazout (litres):', value=0, label_visibility="collapsed")

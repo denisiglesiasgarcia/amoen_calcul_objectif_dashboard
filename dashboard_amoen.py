@@ -119,6 +119,17 @@ def generate_dashboard():
             st.text(f"{name} doit être un chiffre")
             return 0
 
+    def validate_energie_input(name, variable, unit1, unit2):
+        try:
+            variable = float(variable.replace(',', '.', 1))
+            if variable > 0:
+                st.text(f"{name} {variable} {unite} → {round((variable * 3.6),2)} {unit2}")
+            else:
+                st.text(f"Valeur doit être positive")
+        except ValueError:
+            st.text(f"{name} doit être un chiffre")
+            variable = 0
+
     # Calcul des degrés-jours
     def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):
         dj_periode = df_meteo_tre200d0[(df_meteo_tre200d0['time'] >= periode_start) & (df_meteo_tre200d0['time'] <= periode_end)]['DJ_theta0_16'].sum()
@@ -499,7 +510,7 @@ def generate_dashboard():
                                                  value=0,
                                                  help="Surélévation: C92 / Rénovation: C61",)
             if ef_avant_corr_kwh_m2 != "0":
-                validate_input("Ef,avant,corr:", ef_avant_corr_kwh_m2, "kWh/m²/an")
+                validate_energie_input("Ef,avant,corr:", ef_avant_corr_kwh_m2, "kWh/m²/an", "MJ/m²/an")
             ef_avant_corr_kwh_m2 = float(ef_avant_corr_kwh_m2)
             try:
                 if float(ef_avant_corr_kwh_m2) <= 0:
@@ -522,7 +533,7 @@ def generate_dashboard():
                 st.write("Problème dans Ef,obj *fp [kWh/m²/an]")
 
         delta_ef_visee_kwh_m2 = float(ef_avant_corr_kwh_m2) - float(ef_objectif_pondere_kwh_m2)
-        if delta_ef_visee_kwh_m2 > 0:
+        if ef_avant_corr_kwh_m2 > 0 and ef_objectif_pondere_kwh_m2 > 0:
             eq = r"\begin{split}"
             eq += r"\Delta E_{f,\text{visée}} = E_{f,\text{avant,corr}} - E_{f,\text{objectif}} \cdot f_p = "
             eq += f"{round(ef_avant_corr_kwh_m2, 2)} - {round(ef_objectif_pondere_kwh_m2, 2)} = {round(delta_ef_visee_kwh_m2, 2)}"

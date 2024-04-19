@@ -309,26 +309,45 @@ def generate_dashboard():
             st.subheader('Agents énergétiques utilisés pour le chauffage et l\'ECS sur la période')
 
             options_agent_energetique_ef = [
-                {'label': 'CAD (kWh)', 'unit': 'kWh'},
-                {'label': 'Electricité pour les PAC (kWh)', 'unit': 'kWh'},
-                {'label': 'Electricité directe (kWh)', 'unit': 'kWh'},
-                {'label': 'Gaz naturel (m³)', 'unit': 'm³'},
-                {'label': 'Gaz naturel (kWh)', 'unit': 'kWh'},
-                {'label': 'Mazout (litres)', 'unit': 'litres'},
-                {'label': 'Mazout (kg)', 'unit': 'kg'},
-                {'label': 'Mazout (kWh)', 'unit': 'kWh'},
-                {'label': 'Bois buches dur (stère)', 'unit': 'stère'},
-                {'label': 'Bois buches tendre (stère)', 'unit': 'stère'},
-                {'label': 'Bois buches tendre (kWh)', 'unit': 'kWh'},
-                {'label': 'Pellets (m³)', 'unit': 'm³'},
-                {'label': 'Pellets (kg)', 'unit': 'kg'},
-                {'label': 'Pellets (kWh)', 'unit': 'kWh'},
-                {'label': 'Plaquettes (m³)', 'unit': 'm³'},
-                {'label': 'Plaquettes (kWh)', 'unit': 'kWh'},
-                {'label': 'Autre (kWh)', 'unit': 'kWh'}
+                {'label': 'CAD (kWh)', 'unit': 'kWh', 'variable': 'agent_energetique_ef_cad_kwh'},
+                {'label': 'Electricité pour les PAC (kWh)', 'unit': 'kWh', 'variable': 'agent_energetique_ef_electricite_pac_kwh'},
+                {'label': 'Electricité directe (kWh)', 'unit': 'kWh', 'variable': 'agent_energetique_ef_electricite_directe_kwh'},
+                {'label': 'Gaz naturel (m³)', 'unit': 'm³', 'variable': 'agent_energetique_ef_gaz_naturel_m3'},
+                {'label': 'Gaz naturel (kWh)', 'unit': 'kWh', 'variable': 'agent_energetique_ef_gaz_naturel_kwh'},
+                {'label': 'Mazout (litres)', 'unit': 'litres', 'variable': 'agent_energetique_ef_mazout_litres'},
+                {'label': 'Mazout (kg)', 'unit': 'kg', 'variable': 'agent_energetique_ef_mazout_kg'},
+                {'label': 'Mazout (kWh)', 'unit': 'kWh', 'variable': 'agent_energetique_ef_mazout_kwh'},
+                {'label': 'Bois buches dur (stère)', 'unit': 'stère', 'variable': 'agent_energetique_ef_bois_buches_dur_stere'},
+                {'label': 'Bois buches tendre (stère)', 'unit': 'stère', 'variable': 'agent_energetique_ef_bois_buches_tendre_stere'},
+                {'label': 'Bois buches tendre (kWh)', 'unit': 'kWh', 'variable': 'agent_energetique_ef_bois_buches_tendre_kwh'},
+                {'label': 'Pellets (m³)', 'unit': 'm³', 'variable': 'agent_energetique_ef_pellets_m3'},
+                {'label': 'Pellets (kg)', 'unit': 'kg', 'variable': 'agent_energetique_ef_pellets_kg'},
+                {'label': 'Pellets (kWh)', 'unit': 'kWh', 'variable': 'agent_energetique_ef_pellets_kwh'},
+                {'label': 'Plaquettes (m³)', 'unit': 'm³', 'variable': 'agent_energetique_ef_plaquettes_m3'},
+                {'label': 'Plaquettes (kWh)', 'unit': 'kWh', 'variable': 'agent_energetique_ef_plaquettes_kwh'},
+                {'label': 'Autre (kWh)', 'unit': 'kWh', 'variable': 'agent_energetique_ef_autre_kwh'}
             ]
 
             selected_agent_energetique_ef = st.multiselect('Agent(s) énergétique(s):', [option['label'] for option in options_agent_energetique_ef])
+
+            # # initialisation des variables
+            agent_energetique_ef_mazout_kg = 0.0
+            agent_energetique_ef_mazout_litres = 0.0
+            agent_energetique_ef_mazout_kwh = 0.0
+            agent_energetique_ef_gaz_naturel_m3 = 0.0
+            agent_energetique_ef_gaz_naturel_kwh = 0.0
+            agent_energetique_ef_bois_buches_dur_stere = 0.0
+            agent_energetique_ef_bois_buches_tendre_stere = 0.0
+            agent_energetique_ef_bois_buches_tendre_kwh = 0.0
+            agent_energetique_ef_pellets_m3 = 0.0
+            agent_energetique_ef_pellets_kg = 0.0
+            agent_energetique_ef_pellets_kwh = 0.0
+            agent_energetique_ef_plaquettes_m3 = 0.0
+            agent_energetique_ef_plaquettes_kwh = 0.0
+            agent_energetique_ef_cad_kwh = 0.0
+            agent_energetique_ef_electricite_pac_kwh = 0.0
+            agent_energetique_ef_electricite_directe_kwh = 0.0
+            agent_energetique_ef_autre_kwh = 0.0
 
             agent_energetique_ef = {}
 
@@ -337,7 +356,7 @@ def generate_dashboard():
                     value = st.text_input(option['label'] + ':', value=0.0)
                     if value != "0":
                         validate_agent_energetique_input(option['label'] + ":", value, option['unit'])
-                        agent_energetique_ef[option['label']] = float(value)
+                        globals()[option['variable']] = float(value)
 
             # options_agent_energetique_ef = ['CAD (kWh)',
             #                                 'Electricité pour les PAC (kWh)',

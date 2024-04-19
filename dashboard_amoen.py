@@ -173,16 +173,51 @@ def generate_dashboard():
 
             # SRE pourcentage
             st.subheader('Affectations')
-            show_text_input_sre_pourcentage_habitat_collectif = st.checkbox("Habitat collectif (%)", value=0)
-            if show_text_input_sre_pourcentage_habitat_collectif:
-                sre_pourcentage_habitat_collectif = st.text_input("Habitat collectif (% SRE):",
-                                                                  value=0,
-                                                                  label_visibility="collapsed")
+            
+            options_sre_pourcentage = ['Habitat collectif (%)',
+                                    'Habitat individuel (%)',
+                                    'Administration (%)',
+                                    'Écoles (%)',
+                                    'Commerce (%)',
+                                    'Restauration (%)',
+                                    'Lieux de rassemblement (%)',
+                                    'Hôpitaux (%)',
+                                    'Industrie (%)',
+                                    'Dépôts (%)',
+                                    'Installations sportives (%)',
+                                    'Piscines couvertes (%)']
+            selected_sre_pourcentage = st.multiselect('Affectations:', options_sre_pourcentage)
+
+            # initialisation des variables
+            sre_pourcentage_habitat_collectif = 0.0
+            sre_pourcentage_habitat_individuel = 0.0
+            sre_pourcentage_administration = 0.0
+            sre_pourcentage_ecoles = 0.0
+            sre_pourcentage_commerce = 0.0
+            sre_pourcentage_restauration = 0.0
+            sre_pourcentage_lieux_de_rassemblement = 0.0
+            sre_pourcentage_hopitaux = 0.0
+            sre_pourcentage_industrie = 0.0
+            sre_pourcentage_depots = 0.0
+            sre_pourcentage_installations_sportives = 0.0
+            sre_pourcentage_piscines_couvertes = 0.0
+
+            if "Habitat collectif (%)" in selected_sre_pourcentage:
+                sre_pourcentage_habitat_collectif = st.text_input("Habitat collectif (% SRE):", value=0.0)
                 if sre_pourcentage_habitat_collectif != "0":
                     validate_input_affectation("Habitat collectif:", sre_pourcentage_habitat_collectif, "%", sre_renovation_m2)
-                    # sre_pourcentage_habitat_collectif = float(sre_pourcentage_habitat_collectif)
-            else:
-                sre_pourcentage_habitat_collectif = 0.0
+                    sre_pourcentage_habitat_collectif = float(sre_pourcentage_habitat_collectif)
+
+            # show_text_input_sre_pourcentage_habitat_collectif = st.checkbox("Habitat collectif (%)", value=0)
+            # if show_text_input_sre_pourcentage_habitat_collectif:
+            #     sre_pourcentage_habitat_collectif = st.text_input("Habitat collectif (% SRE):",
+            #                                                       value=0)
+            #                                                       label_visibility="collapsed")
+            #     if sre_pourcentage_habitat_collectif != "0":
+            #         validate_input_affectation("Habitat collectif:", sre_pourcentage_habitat_collectif, "%", sre_renovation_m2)
+            #         # sre_pourcentage_habitat_collectif = float(sre_pourcentage_habitat_collectif)
+            # else:
+            #     sre_pourcentage_habitat_collectif = 0.0
             
             show_text_input_sre_pourcentage_habitat_individuel = st.checkbox("Habitat individuel (%)")
             if show_text_input_sre_pourcentage_habitat_individuel:

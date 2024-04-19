@@ -312,16 +312,16 @@ def generate_dashboard():
                             validate_input_agent_energetique("Mazout:", agent_energetique_ef_mazout_kg, "kg")
                     
                     elif agent_energetique_ef == 'Mazout (litres)':
-                        show_text_input_agent_energetique_ef_mazout_litres = st.text_input('Mazout (litres):',
-                                                                                           value=0)
-                        if show_text_input_agent_energetique_ef_mazout_litres != "0":
-                            validate_input_agent_energetique("Mazout:", show_text_input_agent_energetique_ef_mazout_litres, "litres")
+                        agent_energetique_ef_mazout_litres = st.text_input('Mazout (litres):',
+                                                                            value=0)
+                        if agent_energetique_ef_mazout_litres != "0":
+                            validate_input_agent_energetique("Mazout:", agent_energetique_ef_mazout_litres, "litres")
                     
                     elif agent_energetique_ef == 'Mazout (kWh)':
-                        show_text_input_agent_energetique_ef_mazout_kwh = st.text_input('Mazout (kWh):',
-                                                                                       value=0)
-                        if show_text_input_agent_energetique_ef_mazout_kwh != "0":
-                            validate_input_agent_energetique("Mazout:", show_text_input_agent_energetique_ef_mazout_kwh, "kWh")
+                        agent_energetique_ef_mazout_kwh = st.text_input('Mazout (kWh):',
+                                                                        value=0)
+                        if agent_energetique_ef_mazout_kwh != "0":
+                            validate_input_agent_energetique("Mazout:", agent_energetique_ef_mazout_kwh, "kWh")
             # show_text_input_agent_energetique_ef_mazout_kg = st.checkbox("Mazout (kg)")
             # if show_text_input_agent_energetique_ef_mazout_kg:
             #     agent_energetique_ef_mazout_kg = st.text_input("Mazout (kg):", value=0, label_visibility="collapsed")

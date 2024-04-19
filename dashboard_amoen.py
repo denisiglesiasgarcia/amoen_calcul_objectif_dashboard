@@ -175,11 +175,11 @@ def generate_dashboard():
                             data=bar_data1,
                             order=['IDC moy 3 ans avant\n$IDC_{moy3ans}$',"Objectif\n$E_{f,obj}*f_{p}$",'Conso mesurée après\n$E_{f,après,corr}*f_{p}$'],
                             palette=['#1f77b4', '#ff7f0e', '#2ca02c'])
-
         
         sns.despine()
 
-        ax.bar_label (ax.containers[0])
+        for i, container in enumerate(ax.containers):
+            ax.bar_label(container, labels=[f"{val:.1f}" for val in bar_data1['Valeur']], label_type='edge')
 
         height_line85 = idc_moy_3ans_avant_MJ_m2 - baisse_objectif_MJ_m2*0.85
         text_line85 = '$(E_{f,après,corr}*f_{p})_{max→subv.}=$' + '$' + str(np.round(idc_moy_3ans_avant_MJ_m2 - baisse_objectif_MJ_m2*0.85, 1)) + ' {MJ/m}^2$'

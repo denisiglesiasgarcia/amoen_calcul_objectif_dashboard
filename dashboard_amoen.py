@@ -167,21 +167,22 @@ def generate_dashboard():
         st.markdown("**[GitHub de la dashboard](https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard)**", unsafe_allow_html=True)
 
     with tab2:
-        col1, col2 = st.columns(2)
-        with col1:
-            st.subheader('SRE rénovée')
-            # SRE rénovée
-            sre_renovation_m2 = st.text_input("SRE rénovée (m²):", value=0, help="La SRE rénovée est la partie du batiment qui a été rénovée, la surélévation/extension n'est pas incluse")
-            validate_input("SRE rénovée:", sre_renovation_m2, "m²")
-            sre_renovation_m2 = float(sre_renovation_m2)
+        
+        st.subheader('SRE rénovée')
+        # SRE rénovée
+        sre_renovation_m2 = st.text_input("SRE rénovée (m²):", value=0, help="La SRE rénovée est la partie du batiment qui a été rénovée, la surélévation/extension n'est pas incluse")
+        validate_input("SRE rénovée:", sre_renovation_m2, "m²")
+        sre_renovation_m2 = float(sre_renovation_m2)
 
-            try:
-                sre_renovation_m2_avertissement = sre_renovation_m2
-                if sre_renovation_m2_avertissement <= 0:
-                    st.write(f"<p style='color: red;'><strong>SRE doit être > 0 ({sre_renovation_m2_avertissement})</strong></p>", unsafe_allow_html=True)
-            except ValueError:
-                st.write("Problème dans la somme des pourcentages des affectations")
-
+        try:
+            sre_renovation_m2_avertissement = sre_renovation_m2
+            if sre_renovation_m2_avertissement <= 0:
+                st.write(f"<p style='color: red;'><strong>SRE doit être > 0 ({sre_renovation_m2_avertissement})</strong></p>", unsafe_allow_html=True)
+        except ValueError:
+            st.write("Problème dans la somme des pourcentages des affectations")
+        
+        tab2_col1, tab2_col2 = st.columns(2)
+        with tab2_col1:
             # SRE pourcentage
             st.subheader('Affectations')
             
@@ -340,7 +341,7 @@ def generate_dashboard():
             except ValueError:
                 st.write("Problème dans la somme des pourcentages des affectations")
 
-        with col2:
+        with tab2_col2:
             # Agents énergétiques
             st.subheader('Agents énergétiques utilisés pour le chauffage et l\'ECS sur la période')
 

@@ -173,9 +173,10 @@ def generate_dashboard():
         ax = sns.barplot (y="Valeur",
                             x="Type",
                             data=bar_data1,
-                            order=['IDC moy 3 ans avant\n$IDC_{moy3ans}$',"Objectif\n$E_{f,obj}*f_{p}$",'Conso mesurée après\n$E_{f,après,corr}*f_{p}$'])
+                            order=['IDC moy 3 ans avant\n$IDC_{moy3ans}$',"Objectif\n$E_{f,obj}*f_{p}$",'Conso mesurée après\n$E_{f,après,corr}*f_{p}$'],
+                            palette=['#1f77b4', '#ff7f0e', '#2ca02c'])
 
-        sns.color_palette("pastel")
+        
         sns.despine()
 
         ax.bar_label (ax.containers[0])

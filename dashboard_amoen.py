@@ -138,7 +138,7 @@ def generate_dashboard():
         dj_periode = df_meteo_tre200d0[(df_meteo_tre200d0['time'] >= periode_start) & (df_meteo_tre200d0['time'] <= periode_end)]['DJ_theta0_16'].sum()
         return dj_periode
 
-    def imprimerbarsobjectif_exploitation(site,
+    def graphique_bars_objectif_exploitation(site,
                                             ef_avant_corr_kwh_m2,
                                             energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
                                             ef_objectif_pondere_kwh_m2,
@@ -1104,11 +1104,11 @@ def generate_dashboard():
 
         # Graphique 1
         site="test"
-        imprimerbarsobjectif_exploitation(site,
-                                            ef_avant_corr_kwh_m2,
-                                            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
-                                            ef_objectif_pondere_kwh_m2)
-
+        if site and ef_avant_corr_kwh_m2 and energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 and ef_objectif_pondere_kwh_m2:
+            graphique_bars_objectif_exploitation(site,
+                                                ef_avant_corr_kwh_m2,
+                                                energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
+                                                ef_objectif_pondere_kwh_m2)
 
     with tab6:
         st.subheader("Envoi des données à eco21/HEPIA")

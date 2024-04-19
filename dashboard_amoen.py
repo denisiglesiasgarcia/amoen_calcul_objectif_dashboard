@@ -259,7 +259,7 @@ def generate_dashboard():
         del bar_data1
         del bar_data2
 
-        plt.show()
+        st.pyplot(plt.gcf())
 
         # nettoyage
         plt.close()

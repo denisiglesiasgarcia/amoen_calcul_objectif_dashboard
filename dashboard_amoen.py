@@ -1112,7 +1112,11 @@ def generate_dashboard():
         st.subheader("Graphiques")
 
         # Graphique 1
-        if site and ef_avant_corr_kwh_m2 and energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 and ef_objectif_pondere_kwh_m2:
+        if amoen_id and \
+            ef_avant_corr_kwh_m2 and \
+            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 and\
+            ef_objectif_pondere_kwh_m2:
+            
             graphique_bars_objectif_exploitation(nom_projet,
                                                     ef_avant_corr_kwh_m2,
                                                     energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,

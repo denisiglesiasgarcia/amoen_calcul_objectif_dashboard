@@ -176,7 +176,7 @@ def generate_dashboard():
 
         ax.bar_label (ax.containers[0])
 
-        height_line85 = bar_data['Valeur'][0] - bar_data['Valeur'][4]*0.85
+        height_line85 = idc_moy_3ans_avant_MJ_m2 - baisse_objectif_MJ_m2*0.85
         text_line85 = '$(E_{f,après,corr}*f_{p})_{max→subv.}=$' + '$' + str(np.round(idc_moy_3ans_avant_MJ_m2 - baisse_objectif_MJ_m2*0.85, 1)) + ' {MJ/m}^2$'
         ax.axhline (height_line85, xmin=0.445, xmax=0.98, color='indigo', linestyle=(0, (5, 10)), linewidth=0.7)
         # Add text near the line.

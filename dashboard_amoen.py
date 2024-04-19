@@ -345,7 +345,7 @@ def generate_dashboard():
             agent_energetique_ef_autre_kwh = 0.0
 
             if 'Mazout (kg)' in selected_agent_energetique_ef:
-                agent_energetique_ef_mazout_kg = st.text_input('Mazout (kg):', value=0,0)
+                agent_energetique_ef_mazout_kg = st.text_input('Mazout (kg):', value=0.0)
                 if agent_energetique_ef_mazout_kg != "0":
                     validate_agent_energetique_input("Mazout:", agent_energetique_ef_mazout_kg, "kg")
                     agent_energetique_ef_mazout_kg = float(agent_energetique_ef_mazout_kg)

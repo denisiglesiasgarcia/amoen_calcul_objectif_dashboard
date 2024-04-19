@@ -211,7 +211,7 @@ def generate_dashboard():
             #                         'Dépôts (%)',
             #                         'Installations sportives (%)',
             #                         'Piscines couvertes (%)']
-            selected_sre_pourcentage = st.multiselect('Affectations:', options_sre_pourcentage)
+            selected_sre_pourcentage = st.multiselect('Affectation(s):', [option['label'] for option in options_sre_pourcentage])
 
             sre_pourcentage = {}
 

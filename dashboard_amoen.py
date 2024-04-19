@@ -943,9 +943,9 @@ def generate_dashboard():
 
         # résultats en latex
 
-        formula_atteinte_objectif = r"Atteinte\ objectif\ [\%]= \frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}"
+        formula_atteinte_objectif = r"Atteinte\ objectif\ = \frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}"
 
-        formula_atteinte_objectif_num = r"Atteinte\ objectif\ [\%]= \frac{{{} - {}*{}}}{{{} - {}*{}}} = {}".format(
+        formula_atteinte_objectif_num = r"Atteinte\ objectif\ = \frac{{{} - {}*{}}}{{{} - {}*{}}} = {}".format(
             ef_avant_corr_kwh_m2,
             round(energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2, 4),
             facteur_ponderation_moyen,

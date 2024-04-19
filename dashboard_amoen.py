@@ -480,23 +480,23 @@ def generate_dashboard():
             #         agent_energetique_ef_autre_kwh = float(agent_energetique_ef_autre_kwh)
 
             try:
-                agent_energetique_ef_somme_avertissement = agent_energetique_ef_mazout_kg + \
-                    agent_energetique_ef_mazout_litres + \
-                    agent_energetique_ef_mazout_kwh + \
-                    agent_energetique_ef_gaz_naturel_m3 + \
-                    agent_energetique_ef_gaz_naturel_kwh + \
-                    agent_energetique_ef_bois_buches_dur_stere + \
-                    agent_energetique_ef_bois_buches_tendre_stere + \
-                    agent_energetique_ef_bois_buches_tendre_kwh + \
-                    agent_energetique_ef_pellets_m3 + \
-                    agent_energetique_ef_pellets_kg + \
-                    agent_energetique_ef_pellets_kwh + \
-                    agent_energetique_ef_plaquettes_m3 + \
-                    agent_energetique_ef_plaquettes_kwh + \
-                    agent_energetique_ef_cad_kwh + \
-                    agent_energetique_ef_electricite_pac_kwh + \
-                    agent_energetique_ef_electricite_directe_kwh + \
-                    agent_energetique_ef_autre_kwh
+                agent_energetique_ef_somme_avertissement = float(agent_energetique_ef_mazout_kg) + \
+                    float(agent_energetique_ef_mazout_litres) + \
+                    float(agent_energetique_ef_mazout_kwh) + \
+                    float(agent_energetique_ef_gaz_naturel_m3) + \
+                    float(agent_energetique_ef_gaz_naturel_kwh) + \
+                    float(agent_energetique_ef_bois_buches_dur_stere) + \
+                    float(agent_energetique_ef_bois_buches_tendre_stere) + \
+                    float(agent_energetique_ef_bois_buches_tendre_kwh) + \
+                    float(agent_energetique_ef_pellets_m3) + \
+                    float(agent_energetique_ef_pellets_kg) + \
+                    float(agent_energetique_ef_pellets_kwh) + \
+                    float(agent_energetique_ef_plaquettes_m3) + \
+                    float(agent_energetique_ef_plaquettes_kwh) + \
+                    float(agent_energetique_ef_cad_kwh) + \
+                    float(agent_energetique_ef_electricite_pac_kwh) + \
+                    float(agent_energetique_ef_electricite_directe_kwh) + \
+                    float(agent_energetique_ef_autre_kwh)
                 if agent_energetique_ef_somme_avertissement <= 0:
                     st.write(f"<p style='color: red;'><strong>Veuillez renseigner une quantité d'énergie utilisée sur la période ({agent_energetique_ef_somme_avertissement})</strong></p>", unsafe_allow_html=True)
             except ValueError:

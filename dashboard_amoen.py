@@ -1102,6 +1102,12 @@ def generate_dashboard():
     with tab5:
         st.subheader("Graphiques")
 
+        # Graphique 1
+        site="test"
+        imprimerbarsobjectif_exploitation(site,
+                                            ef_avant_corr_kwh_m2,
+                                            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
+                                            ef_objectif_pondere_kwh_m2)
 
 
     with tab6:

@@ -339,7 +339,7 @@ def generate_dashboard():
                     value = st.text_input(option['label'] + ':', value=0.0)
                     if value != "0":
                         validate_agent_energetique_input(option['label'] + ":", value, option['unit'])
-                        agent_energetique_ef[option['variable']] = float(value)
+                        option['value'] = float(value)
 
             agent_energetique_ef_mazout_kg = options_agent_energetique_ef[6]['value']
             agent_energetique_ef_mazout_litres = options_agent_energetique_ef[5]['value']

@@ -1106,9 +1106,10 @@ def generate_dashboard():
         site="test"
         if site and ef_avant_corr_kwh_m2 and energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 and ef_objectif_pondere_kwh_m2:
             graphique_bars_objectif_exploitation(site,
-                                                ef_avant_corr_kwh_m2,
-                                                energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
-                                                ef_objectif_pondere_kwh_m2)
+                                                    ef_avant_corr_kwh_m2,
+                                                    energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
+                                                    ef_objectif_pondere_kwh_m2,
+                                                    atteinte_objectif)
 
     with tab6:
         st.subheader("Envoi des données à eco21/HEPIA")

@@ -249,7 +249,7 @@ def generate_dashboard():
 
 
         # titre pour l'abscisse X
-        plt.xlabel("\nBaisse d'IDC minimum pour obtenir la subvention = 85% * " +
+        plt.xlabel("\nBaisse d'énergie finale minimum pour obtenir la subvention = 85% * " +
                 str('{:.1f}'.format(baisse_objectif_MJ_m2)) + " = " +
                 str('{:.1f}'.format(baisse_objectif_MJ_m2*0.85)) + ' MJ/m² \n$E_{f,après,corr}*f_{p}$ maximum pour obtenir la subvention ($(E_{f,après,corr}*f_{p})_{max→subv.}$) = ' +
                 str('{:.1f}'.format(idc_moy_3ans_avant_MJ_m2)) + " - " +

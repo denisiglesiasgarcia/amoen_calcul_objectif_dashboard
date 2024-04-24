@@ -1123,6 +1123,8 @@ def generate_dashboard():
                                                     ef_objectif_pondere_kwh_m2,
                                                     atteinte_objectif,
                                                     amoen_id)
+        else:
+            st.write("Veuillez compléter les informations dans '1 Données site' pour générer le graphique")
 
 
     with tab6:

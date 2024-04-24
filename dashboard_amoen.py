@@ -243,8 +243,8 @@ def generate_dashboard():
         # date de génération du graphique
         now = datetime.datetime.now()
         date_str = str(now.strftime("%d-%m-%Y"))
-        text_amoen_date = "Généré par" + amoen_id + " le " + date_str
-        ax.text(1.0, -0.24, date_str, transform=ax.transAxes,
+        text_amoen_date = "Généré par " + amoen_id + " le " + date_str
+        ax.text(1.0, -0.24, text_amoen_date, transform=ax.transAxes,
             ha='right', va='bottom', fontsize=8)
 
 

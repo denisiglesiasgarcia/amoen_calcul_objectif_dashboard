@@ -233,12 +233,12 @@ def generate_pdf(data):
     styles.add(ParagraphStyle(name='SmallCenter', alignment=1, fontSize=8))
     elements = []
 
-    elements.append(Spacer(1, 0.25*cm))
+    elements.append(Spacer(1, 0.5*cm))
 
     # Title
     title_report = f"Rapport " + data['nom_projet']
     elements.append(Paragraph(title_report, styles['Title']))
-    elements.append(Spacer(1, 0.25*cm))
+    elements.append(Spacer(1, 0.5*cm))
     
     # Project details
     project_admin = [
@@ -262,7 +262,7 @@ def generate_pdf(data):
         ('GRID', (0, 0), (-1, -1), 0.5, colors.grey)
     ]))
     elements.append(project_admin_table)
-    elements.append(Spacer(1, 0.25*cm))
+    elements.append(Spacer(1, 0.5*cm))
 
     # Surfaces
     project_surfaces = [
@@ -310,7 +310,7 @@ def generate_pdf(data):
         ('GRID', (0, 0), (-1, -1), 0.5, colors.grey)
     ]))
     elements.append(project_surfaces_table)
-    elements.append(Spacer(1, 0.25*cm))
+    elements.append(Spacer(1, 0.5*cm))
 
     # Conso énergie après travaux
     project_energie = [
@@ -369,7 +369,7 @@ def generate_pdf(data):
         ('GRID', (0, 0), (-1, -1), 0.5, colors.grey)
     ]))
     elements.append(project_energie_table)
-    elements.append(Spacer(1, 0.25*cm))
+    elements.append(Spacer(1, 0.5*cm))
 
     # Energy data table
     project_results = [
@@ -403,7 +403,7 @@ def generate_pdf(data):
         ('SPAN', (0, 0), (-1, 0)),  # Merge cells in the first row
     ]))
     elements.append(project_results_table)
-    elements.append(Spacer(1, 0.25*cm))
+    elements.append(Spacer(1, 0.5*cm))
 
     # Bar chart
     graphique_bars_rapport(data['nom_projet'],

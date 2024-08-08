@@ -1,4 +1,6 @@
-"pymongo[encryption]"==4.8.0
+pymongo==4.8.0
+pymongocrypt
+pymongo-auth-aws
 streamlit==1.37.0
 streamlit-authenticator==0.3.3
 seaborn

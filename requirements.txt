@@ -92,3 +92,4 @@ matplotlib
 seaborn
 pymongo
 streamlit-authenticator
+reportlab

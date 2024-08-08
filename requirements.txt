@@ -2,8 +2,6 @@ altair==4.2.0
 asttokens==2.1.0
 attrs==22.1.0
 backcall==0.2.0
-backports
-backports.functools_lru_cache
 blinker==1.5
 brotli==1.0.9
 brotli-bin==1.0.9

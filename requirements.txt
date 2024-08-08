@@ -93,3 +93,4 @@ seaborn
 pymongo
 streamlit-authenticator
 reportlab
+pyproj

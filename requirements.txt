@@ -3,7 +3,6 @@ asttokens==2.1.0
 attrs==22.1.0
 backcall==0.2.0
 blinker==1.5
-c-ares==1.18.1
 ca-certificates==2024.7.4
 cachetools==5.2.0
 cairo==1.16.0

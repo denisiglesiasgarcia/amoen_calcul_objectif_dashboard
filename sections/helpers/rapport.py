@@ -369,7 +369,7 @@ def generate_pdf(data):
         ('GRID', (0, 0), (-1, -1), 0.5, colors.grey)
     ]))
     elements.append(project_energie_table)
-    elements.append(Spacer(1, 1.0*cm))
+    elements.append(Spacer(1, 0.5*cm))
 
     # Energy data table
     project_results = [
@@ -403,7 +403,7 @@ def generate_pdf(data):
         ('SPAN', (0, 0), (-1, 0)),  # Merge cells in the first row
     ]))
     elements.append(project_results_table)
-    elements.append(Spacer(1, 0.5*cm))
+    elements.append(Spacer(1, 1.0*cm))
 
     # Bar chart
     graphique_bars_rapport(data['nom_projet'],

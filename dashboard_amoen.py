@@ -586,7 +586,7 @@ if st.session_state['authentication_status']:
                 
         tab2_fragment()
         
-        if st.button("Sauvegarder", use_container_width=True):
+        if st.button("Sauvegarder", use_container_width=True, type='primary'):
             st.success("Données validées")
             st.rerun()
 

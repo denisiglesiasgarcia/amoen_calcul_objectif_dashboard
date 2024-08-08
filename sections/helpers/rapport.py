@@ -233,7 +233,7 @@ def generate_pdf(data):
     styles.add(ParagraphStyle(name='SmallCenter', alignment=1, fontSize=8))
     elements = []
 
-    elements.append(Spacer(1, 0.5*cm))
+    # elements.append(Spacer(1, 0.5*cm))
 
     # Title
     title_report = f"Rapport " + data['nom_projet']

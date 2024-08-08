@@ -286,7 +286,12 @@ if st.session_state['authentication_status']:
             # st.text("Ces données se trouvent dans le tableau Excel de fixation d'objectif de performances:\n\
             # - Surélévation: C77:C81\n\
             # - Rénovation: C49:C50")
+            # Determine if the checkbox should be auto-checked
             show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Surélévation")
+            if st.session_state['data_site']['repartition_energie_finale_partie_surelevee_chauffage'] > 0:
+                show_text_input_agent_energetique_ef_autre_kwh = True
+            else:
+                show_text_input_agent_energetique_ef_autre_kwh = False
             tab2_col7, tab2_col8 = st.columns(2)
             with tab2_col7:
                 # Répartition énergie finale
@@ -302,7 +307,7 @@ if st.session_state['authentication_status']:
                                                                                             value=data_sites_db['repartition_energie_finale_partie_surelevee_chauffage'],
                                                                                             help= "C79")
                     if repartition_energie_finale_partie_surelevee_chauffage != "0":
-                        validate_input("Répartition en énergie finale - Chauffage partie surélévée:", repartition_energie_finale_partie_surelevee_chauffage, "%")
+                        validate_input("Répartition EF - Chauffage partie surélévée:", repartition_energie_finale_partie_surelevee_chauffage, "%")
                     st.session_state['data_site']['repartition_energie_finale_partie_surelevee_chauffage'] = float(repartition_energie_finale_partie_surelevee_chauffage)
 
             with tab2_col8:

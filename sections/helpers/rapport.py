@@ -316,7 +316,7 @@ def generate_pdf(data):
     project_energie = [
         [Paragraph("<b>Consommation après travaux</b>", styles['Heading3']), ''],  # Title row
         [Paragraph("", styles['Normal']), ''], # Empty row
-        [Paragraph("Période:", styles['Normal']), f"du {data['periode_start']} au {data['periode_end']}"],
+        [Paragraph("Période:", styles['Normal']), f"du {data['periode_start'].date()} au {data['periode_end'].date()}"],
     ]
     # Add conditional rows
     if data['agent_energetique_ef_mazout_kg'] > 0.0:
@@ -369,7 +369,7 @@ def generate_pdf(data):
         ('GRID', (0, 0), (-1, -1), 0.5, colors.grey)
     ]))
     elements.append(project_energie_table)
-    elements.append(Spacer(1, 0.5*cm))
+    elements.append(Spacer(1, 1.0*cm))
 
     # Energy data table
     project_results = [

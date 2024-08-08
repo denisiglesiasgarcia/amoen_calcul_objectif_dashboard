@@ -121,7 +121,7 @@ URL_INDICE_MOYENNES_3_ANS = "https://vector.sitg.ge.ch/arcgis/rest/services/Host
 MONGODB_URI = st.secrets["MONGODB_URI"]
 
 # BD mongodb
-client = MongoClient(MONGODB_URI)
+client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=5000)
 db_sites = client['amoen_ancienne_methodo']
 mycol_historique_sites = db_sites["historique"]
 mycol_authentification_site = db_sites["authentification"]

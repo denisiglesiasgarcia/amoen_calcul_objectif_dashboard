@@ -118,8 +118,7 @@ URL_INDICE_MOYENNES_3_ANS = "https://vector.sitg.ge.ch/arcgis/rest/services/Host
 # GMAIL_PASSWORD = st.secrets["GMAIL_PASSWORD"]
 # TO_ADRESS_EMAIL = st.secrets["TO_ADRESS_EMAIL"]
 
-# MONGODB_URI = st.secrets["MONGODB_URI"]
-MONGODB_URI = "mongodb+srv://streamlit:CYEpm33zdXRVsEJk@cluster0.hkkhetq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+MONGODB_URI = st.secrets["MONGODB_URI"]
 
 # BD mongodb
 client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=5000)
@@ -581,8 +580,6 @@ if st.session_state['authentication_status']:
 
                 
         tab2_fragment()
-        # TODO: remove this debug line
-        st.write("data_site:", st.session_state['data_site'])
         
         if st.button("Sauvegarder", use_container_width=True):
             st.success("Données validées")

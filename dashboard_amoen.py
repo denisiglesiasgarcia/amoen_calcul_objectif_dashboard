@@ -287,7 +287,6 @@ if st.session_state['authentication_status']:
             # - Surélévation: C77:C81\n\
             # - Rénovation: C49:C50")
             # Determine if the checkbox should be auto-checked
-            show_text_input_agent_energetique_ef_autre_kwh = st.checkbox("Surélévation")
             tab2_col7, tab2_col8 = st.columns(2)
             with tab2_col7:
                 # Répartition énergie finale
@@ -297,14 +296,13 @@ if st.session_state['authentication_status']:
                 if repartition_energie_finale_partie_renovee_chauffage != "0":
                     validate_input("Répartition EF - Chauffage partie rénovée:", repartition_energie_finale_partie_renovee_chauffage, "%")
                 st.session_state['data_site']['repartition_energie_finale_partie_renovee_chauffage'] = float(repartition_energie_finale_partie_renovee_chauffage)
-                
-                if show_text_input_agent_energetique_ef_autre_kwh:
-                    repartition_energie_finale_partie_surelevee_chauffage = st.text_input("Chauffage partie surélévée",
-                                                                                            value=data_sites_db['repartition_energie_finale_partie_surelevee_chauffage'],
-                                                                                            help= "C79")
-                    if repartition_energie_finale_partie_surelevee_chauffage != "0":
-                        validate_input("Répartition EF - Chauffage partie surélévée:", repartition_energie_finale_partie_surelevee_chauffage, "%")
-                    st.session_state['data_site']['repartition_energie_finale_partie_surelevee_chauffage'] = float(repartition_energie_finale_partie_surelevee_chauffage)
+
+                repartition_energie_finale_partie_surelevee_chauffage = st.text_input("Chauffage partie surélévée",
+                                                                                        value=data_sites_db['repartition_energie_finale_partie_surelevee_chauffage'],
+                                                                                        help= "C79")
+                if repartition_energie_finale_partie_surelevee_chauffage != "0":
+                    validate_input("Répartition EF - Chauffage partie surélévée:", repartition_energie_finale_partie_surelevee_chauffage, "%")
+                st.session_state['data_site']['repartition_energie_finale_partie_surelevee_chauffage'] = float(repartition_energie_finale_partie_surelevee_chauffage)
 
             with tab2_col8:
                 repartition_energie_finale_partie_renovee_ecs = st.text_input("ECS partie rénovée [%]",
@@ -314,16 +312,12 @@ if st.session_state['authentication_status']:
                     validate_input("Répartition EF - ECS partie rénovée:", repartition_energie_finale_partie_renovee_ecs, "%")
                 st.session_state['data_site']['repartition_energie_finale_partie_renovee_ecs'] = float(repartition_energie_finale_partie_renovee_ecs)
 
-                if show_text_input_agent_energetique_ef_autre_kwh:
-                    repartition_energie_finale_partie_surelevee_ecs = st.text_input("ECS partie surélévée [%]",
-                                                                                    value=data_sites_db['repartition_energie_finale_partie_surelevee_ecs'],
-                                                                                    help= "C80")
-                    if repartition_energie_finale_partie_surelevee_ecs != "0":
-                        validate_input("Répartition EF - ECS partie surélevée:", repartition_energie_finale_partie_surelevee_ecs, "%")
-                    st.session_state['data_site']['repartition_energie_finale_partie_surelevee_ecs'] = float(repartition_energie_finale_partie_surelevee_ecs)
-                else:
-                    st.session_state['data_site']['repartition_energie_finale_partie_surelevee_chauffage'] = 0.0
-                    st.session_state['data_site']['repartition_energie_finale_partie_surelevee_ecs'] = 0.0
+                repartition_energie_finale_partie_surelevee_ecs = st.text_input("ECS partie surélévée [%]",
+                                                                                value=data_sites_db['repartition_energie_finale_partie_surelevee_ecs'],
+                                                                                help= "C80")
+                if repartition_energie_finale_partie_surelevee_ecs != "0":
+                    validate_input("Répartition EF - ECS partie surélevée:", repartition_energie_finale_partie_surelevee_ecs, "%")
+                st.session_state['data_site']['repartition_energie_finale_partie_surelevee_ecs'] = float(repartition_energie_finale_partie_surelevee_ecs)
                 
             # Validation somme des pourcentages
             try:

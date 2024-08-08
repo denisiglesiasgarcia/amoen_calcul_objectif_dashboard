@@ -1,0 +1,7 @@
+# ignore some folders
+Archive
+secrets
+adresses_egid.db
+02_calcul_IDC.py
+03_dashboard_IDC.py
+Jupyter

@@ -118,7 +118,7 @@ URL_INDICE_MOYENNES_3_ANS = "https://vector.sitg.ge.ch/arcgis/rest/services/Host
 # GMAIL_PASSWORD = st.secrets["GMAIL_PASSWORD"]
 # TO_ADRESS_EMAIL = st.secrets["TO_ADRESS_EMAIL"]
 
-MONGODB_URI = "mongodb+srv://streamlit:CYEpm33zdXRVsEJk@cluster0.hkkhetq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+MONGODB_URI = st.secrets["MONGODB_URI"]
 
 # BD mongodb
 client = MongoClient(MONGODB_URI)

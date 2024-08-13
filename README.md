@@ -12,6 +12,7 @@
 
 - [ ] Ajouter option de renseigner ECS séparée du chauffage
 - [ ] Ajouter calcul IDC → En attente nouveau règlement/calcul IDC
+- [ ] Ajouter le formulaire pour mot de passe oublié
 
 
 ## Fait

@@ -10,11 +10,9 @@
 
 ## TODO
 
-- [ ] Ajouter graphiques dans l'onglet de résumé
 - [ ] Ajouter option de renseigner ECS séparée du chauffage
-- [ ] Ajouter calcul IDC
-- [ ] Rapport en PDF
-- [ ] Historique par site
+- [ ] Ajouter calcul IDC → En attente nouveau règlement/calcul IDC
+
 
 ## Fait
 
@@ -23,3 +21,7 @@
 - [x] Ajouter README
 - [x] Amélioration performance
 - [x] Déploiement sur streamlit
+- [x] Rapport en PDF
+- [x] Historique par site
+- [x] Ajouter graphiques dans l'onglet de résumé
+- [x] Ajouter utilisateurs avec mot de passes robustes

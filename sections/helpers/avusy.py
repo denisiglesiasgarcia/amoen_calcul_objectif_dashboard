@@ -72,7 +72,7 @@ def load_csv_in_pandas():
 
         # Define the time window around midnight
         start_time = pd.to_datetime('00:00:00').time()
-        end_time = pd.to_datetime('00:30:00').time()
+        end_time = pd.to_datetime('00:15:00').time()
         filtered_df = combined_csv[combined_csv['time'].dt.time.between(start_time, end_time)]
 
         st.write(filtered_df, combined_csv)

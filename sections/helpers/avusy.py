@@ -75,9 +75,6 @@ def load_csv_in_pandas():
         end_time = pd.to_datetime('00:30:00').time()
         filtered_df = combined_csv[combined_csv['time'].dt.time.between(start_time, end_time)]
 
-        # Keep only first day and last day of the month
-        filtered_df = filtered_df[filtered_df['time'].dt.day.isin([1, 15, 28, 30, 31])]
-
         st.write(filtered_df, combined_csv)
 
         return filtered_df

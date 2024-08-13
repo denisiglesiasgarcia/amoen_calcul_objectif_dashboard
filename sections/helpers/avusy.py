@@ -75,6 +75,10 @@ def load_csv_in_pandas():
         end_time = pd.to_datetime('00:30:00').time()
         filtered_df = combined_csv[combined_csv['time'].dt.time.between(start_time, end_time)]
 
+        # remove the last point if there is less than 30 minutes difference
+        if (filtered_df['time'].iloc[-1] - filtered_df['time'].iloc[0]).seconds < 1800:
+            filtered_df = filtered_df.iloc[:-1]
+
         # Keep only the 1st and 15th of every month
         filtered_df = filtered_df[filtered_df['time'].dt.day.isin([1, 15, 30, 31])]
 

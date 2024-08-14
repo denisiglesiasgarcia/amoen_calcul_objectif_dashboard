@@ -319,39 +319,39 @@ def generate_pdf(data):
         ]
     # Add conditional rows
     if data['agent_energetique_ef_mazout_kg'] > 0.0:
-        project_energie.append([Paragraph("Mazout (kg):", styles['Normal']), f"{data['agent_energetique_ef_mazout_kg']:.0f} kg"])
+        project_energie.append([Paragraph("Mazout (kg):", styles['Normal']), f"{data['agent_energetique_ef_mazout_kg']:.0f} kg du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_mazout_litres'] > 0.0:
-        project_energie.append([Paragraph("Mazout (litres):", styles['Normal']), f"{data['agent_energetique_ef_mazout_litres']:.0f} litres"])
+        project_energie.append([Paragraph("Mazout (litres):", styles['Normal']), f"{data['agent_energetique_ef_mazout_litres']:.0f} litres du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_mazout_kwh'] > 0.0:
-        project_energie.append([Paragraph("Mazout (kWh):", styles['Normal']), f"{data['agent_energetique_ef_mazout_kwh']:.0f} kWh"])
+        project_energie.append([Paragraph("Mazout (kWh):", styles['Normal']), f"{data['agent_energetique_ef_mazout_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_gaz_naturel_m3'] > 0.0:
-        project_energie.append([Paragraph("Gaz naturel (m³):", styles['Normal']), f"{data['agent_energetique_ef_gaz_naturel_m3']:.1f} m³"])
+        project_energie.append([Paragraph("Gaz naturel (m³):", styles['Normal']), f"{data['agent_energetique_ef_gaz_naturel_m3']:.1f} m³ du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_gaz_naturel_kwh'] > 0.0:
         project_energie.append([Paragraph("Gaz naturel (kWh):", styles['Normal']), f"{data['agent_energetique_ef_gaz_naturel_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_bois_buches_dur_stere'] > 0.0:
-        project_energie.append([Paragraph("Bois (buches dures, stères):", styles['Normal']), f"{data['agent_energetique_ef_bois_buches_dur_stere']:.1f} stères"])
+        project_energie.append([Paragraph("Bois (buches dures, stères):", styles['Normal']), f"{data['agent_energetique_ef_bois_buches_dur_stere']:.1f} stères du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_bois_buches_tendre_stere'] > 0.0:
-        project_energie.append([Paragraph("Bois (buches tendres, stères):", styles['Normal']), f"{data['agent_energetique_ef_bois_buches_tendre_stere']:.1f} stères"])
+        project_energie.append([Paragraph("Bois (buches tendres, stères):", styles['Normal']), f"{data['agent_energetique_ef_bois_buches_tendre_stere']:.1f} stères du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_bois_buches_tendre_kwh'] > 0.0:
-        project_energie.append([Paragraph("Bois (buches tendres, kWh):", styles['Normal']), f"{data['agent_energetique_ef_bois_buches_tendre_kwh']:.0f} kWh"])
+        project_energie.append([Paragraph("Bois (buches tendres, kWh):", styles['Normal']), f"{data['agent_energetique_ef_bois_buches_tendre_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_pellets_m3'] > 0.0:
-        project_energie.append([Paragraph("Pellets (m³):", styles['Normal']), f"{data['agent_energetique_ef_pellets_m3']:.0f} m³"])
+        project_energie.append([Paragraph("Pellets (m³):", styles['Normal']), f"{data['agent_energetique_ef_pellets_m3']:.0f} m³ du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_pellets_kg'] > 0.0:
-        project_energie.append([Paragraph("Pellets (kg):", styles['Normal']), f"{data['agent_energetique_ef_pellets_kg']:.0f} kg"])
+        project_energie.append([Paragraph("Pellets (kg):", styles['Normal']), f"{data['agent_energetique_ef_pellets_kg']:.0f} kg du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_pellets_kwh'] > 0.0:
-        project_energie.append([Paragraph("Pellets (kWh):", styles['Normal']), f"{data['agent_energetique_ef_pellets_kwh']:.0f} kWh"])
+        project_energie.append([Paragraph("Pellets (kWh):", styles['Normal']), f"{data['agent_energetique_ef_pellets_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_plaquettes_m3'] > 0.0:
-        project_energie.append([Paragraph("Plaquettes (m³):", styles['Normal']), f"{data['agent_energetique_ef_plaquettes_m3']:.0f} m³"])
+        project_energie.append([Paragraph("Plaquettes (m³):", styles['Normal']), f"{data['agent_energetique_ef_plaquettes_m3']:.0f} m³ du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_plaquettes_kwh'] > 0.0:
-        project_energie.append([Paragraph("Plaquettes (kWh):", styles['Normal']), f"{data['agent_energetique_ef_plaquettes_kwh']:.0f} kWh"])
+        project_energie.append([Paragraph("Plaquettes (kWh):", styles['Normal']), f"{data['agent_energetique_ef_plaquettes_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_cad_kwh'] > 0.0:
-        project_energie.append([Paragraph("CAD (kWh):", styles['Normal']), f"{data['agent_energetique_ef_cad_kwh']:.0f} kWh"])
+        project_energie.append([Paragraph("CAD (kWh):", styles['Normal']), f"{data['agent_energetique_ef_cad_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_electricite_pac_kwh'] > 0.0:
-        project_energie.append([Paragraph("Electricité PAC (kWh):", styles['Normal']), f"{data['agent_energetique_ef_electricite_pac_kwh']:.0f} kWh"])
+        project_energie.append([Paragraph("Electricité PAC (kWh):", styles['Normal']), f"{data['agent_energetique_ef_electricite_pac_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_electricite_directe_kwh'] > 0.0:
-        project_energie.append([Paragraph("Electricité directe (kWh):", styles['Normal']), f"{data['agent_energetique_ef_electricite_directe_kwh']:.0f} kWh"])
+        project_energie.append([Paragraph("Electricité directe (kWh):", styles['Normal']), f"{data['agent_energetique_ef_electricite_directe_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
     if data['agent_energetique_ef_autre_kwh'] > 0.0:
-        project_energie.append([Paragraph("Autre (kWh):", styles['Normal']), f"{data['agent_energetique_ef_autre_kwh']:.0f} kWh"])
+        project_energie.append([Paragraph("Autre (kWh):", styles['Normal']), f"{data['agent_energetique_ef_autre_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
 
     project_energie_table = Table(project_energie, colWidths=[150, 350])
     project_energie_table.setStyle(TableStyle([

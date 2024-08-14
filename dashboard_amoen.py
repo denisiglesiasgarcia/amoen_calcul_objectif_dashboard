@@ -227,6 +227,7 @@ if st.session_state['authentication_status']:
             nom_projet_db = st.selectbox("Sélectionner projet", nom_projets_liste)
 
             data_sites_db = load_project_data(nom_projet_db)
+            st.write(data_sites_db)
             tab2_col01, tab2_col02 = st.columns(2)
             with tab2_col01:
                 st.session_state['data_site']['nom_projet'] = st.text_input("Nom du projet", value=data_sites_db['nom_projet'])
@@ -1184,7 +1185,6 @@ if st.session_state['authentication_status']:
 
     with tab6:
         st.subheader("Générer rapport")
-        st.write(data_sites_db)
         st.write(st.session_state['data_site'])
         # Create a single button for generating and downloading the PDF
         def is_valid(var):

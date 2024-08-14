@@ -316,8 +316,7 @@ def generate_pdf(data):
     project_energie = [
         [Paragraph("<b>Consommation après travaux</b>", styles['Heading3']), ''],  # Title row
         [Paragraph("", styles['Normal']), ''], # Empty row
-        [Paragraph("Période:", styles['Normal']), f"du {data['periode_start'].date()} au {data['periode_end'].date()}"],
-    ]
+        ]
     # Add conditional rows
     if data['agent_energetique_ef_mazout_kg'] > 0.0:
         project_energie.append([Paragraph("Mazout (kg):", styles['Normal']), f"{data['agent_energetique_ef_mazout_kg']:.0f} kg"])
@@ -328,7 +327,7 @@ def generate_pdf(data):
     if data['agent_energetique_ef_gaz_naturel_m3'] > 0.0:
         project_energie.append([Paragraph("Gaz naturel (m³):", styles['Normal']), f"{data['agent_energetique_ef_gaz_naturel_m3']:.1f} m³"])
     if data['agent_energetique_ef_gaz_naturel_kwh'] > 0.0:
-        project_energie.append([Paragraph("Gaz naturel (kWh):", styles['Normal']), f"{data['agent_energetique_ef_gaz_naturel_kwh']:.0f} kWh"])
+        project_energie.append([Paragraph("Gaz naturel (kWh):", styles['Normal']), f"{data['agent_energetique_ef_gaz_naturel_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"]
     if data['agent_energetique_ef_bois_buches_dur_stere'] > 0.0:
         project_energie.append([Paragraph("Bois (buches dures, stères):", styles['Normal']), f"{data['agent_energetique_ef_bois_buches_dur_stere']:.1f} stères"])
     if data['agent_energetique_ef_bois_buches_tendre_stere'] > 0.0:

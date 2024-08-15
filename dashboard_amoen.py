@@ -227,7 +227,6 @@ if st.session_state['authentication_status']:
             nom_projet_db = st.selectbox("Sélectionner projet", nom_projets_liste)
 
             data_sites_db = load_project_data(nom_projet_db)
-            st.write(data_sites_db)
             tab2_col01, tab2_col02 = st.columns(2)
             with tab2_col01:
                 st.session_state['data_site']['nom_projet'] = st.text_input("Nom du projet", value=data_sites_db['nom_projet'])
@@ -576,7 +575,7 @@ if st.session_state['authentication_status']:
 
             st.session_state['data_site']['annees_calcul_idc_avant_travaux'] = data_sites_db['annees_calcul_idc_avant_travaux']
             st.session_state['data_site']['sre_extension_surelevation_m2'] = data_sites_db['sre_extension_surelevation_m2']
-                
+            st.write(st.session_state['data_site'])
         tab2_fragment()
         
         if st.button("Sauvegarder", use_container_width=True, type='primary'):

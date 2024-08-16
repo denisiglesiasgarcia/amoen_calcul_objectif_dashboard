@@ -357,11 +357,11 @@ def generate_pdf(data):
     project_results = [
         [Paragraph("<b>Atteinte de l'objectif</b>", styles['Heading3']), '', '', ''],  # Title row
         [Paragraph("<b>Variable</b>", styles['Normal']), Paragraph("<b>Dénomination</b>", styles['Normal']), Paragraph("<b>kWh/m²/an</b>", styles['Normal']), Paragraph("<b>MJ/m²/an</b>", styles['Normal'])],
-        ["IDC moyen 3 ans avant travaux", "→ (Ef,avant,corr)", f"{data['ef_avant_corr_kwh_m2']:.1f}", f"{data['ef_avant_corr_kwh_m2']*3.6:.1f}"],
-        ["EF pondéré corrigé clim. après travaux", "→ (Ef,après,corr,rénové*fp)", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']*3.6:.1f}"],
-        ["Objectif en énergie finale", "→ (Ef,obj *fp)", f"{data['ef_objectif_pondere_kwh_m2']:.1f}", f"{data['ef_objectif_pondere_kwh_m2']*3.6:.1f}"],
-        ["Baisse mesurée", "→ ∆Ef,réel", f"{data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{(data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2'])*3.6:.1f}"],
-        ["Baisse objectif", "→ ∆Ef,visée", f"{data['delta_ef_visee_kwh_m2']:.1f}", f"{data['delta_ef_visee_kwh_m2']*3.6:.1f}"]
+        ["IDC moyen 3 ans avant travaux", "Ef,avant,corr", f"{data['ef_avant_corr_kwh_m2']:.1f}", f"{data['ef_avant_corr_kwh_m2']*3.6:.1f}"],
+        ["EF pondéré corrigé clim. après travaux", "Ef,après,corr,rénové*fp", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']*3.6:.1f}"],
+        ["Objectif en énergie finale", "Ef,obj*fp", f"{data['ef_objectif_pondere_kwh_m2']:.1f}", f"{data['ef_objectif_pondere_kwh_m2']*3.6:.1f}"],
+        ["Baisse mesurée", "∆Ef,réel", f"{data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{(data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2'])*3.6:.1f}"],
+        ["Baisse objectif", "∆Ef,visée", f"{data['delta_ef_visee_kwh_m2']:.1f}", f"{data['delta_ef_visee_kwh_m2']*3.6:.1f}"]
     ]
 
     # Adjust column widths for the additional column

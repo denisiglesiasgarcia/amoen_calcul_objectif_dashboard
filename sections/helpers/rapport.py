@@ -242,7 +242,7 @@ def generate_pdf(data):
     
     # Project details
     project_admin = [
-        [Paragraph("<b>Informations administratives</b>", styles['Heading3']), ''],  # Title row
+        [Paragraph("<b>Informations administratives</b>", styles['Heading2']), ''],  # Title row
         [Paragraph("", styles['Normal']), ''], # Empty row
         [Paragraph("Adresse:", styles['Normal']), data['adresse_projet']],
         [Paragraph("AMOén:", styles['Normal']), data['amoen_id']],
@@ -270,31 +270,24 @@ def generate_pdf(data):
         [Paragraph("", styles['Normal']), ''], # Empty row
         [Paragraph("Surface rénovée (m² SRE):", styles['Normal']), f"{data['sre_renovation_m2']} m² SRE"],
     ]
-    if data['sre_pourcentage_habitat_collectif'] > 0.0:
-        project_surfaces.append([Paragraph("Habitat collectif (%):", styles['Normal']), f"{data['sre_pourcentage_habitat_collectif']} % de la surface rénovée soit {(data['sre_pourcentage_habitat_collectif']/100*data['sre_renovation_m2']):.0f} m² SRE"])
-    if data['sre_pourcentage_habitat_individuel'] > 0.0:
-        project_surfaces.append([Paragraph("Habitat individuel (%):", styles['Normal']), f"{data['sre_pourcentage_habitat_individuel']} % de la surface rénovée soit {(data['sre_pourcentage_habitat_individuel']/100*data['sre_renovation_m2']):.0f} m² SRE"])
-    if data['sre_pourcentage_administration'] > 0.0:
-        project_surfaces.append([Paragraph("Administration (%):", styles['Normal']), f"{data['sre_pourcentage_administration']} % de la surface rénovée soit {(data['sre_pourcentage_administration']/100*data['sre_renovation_m2']):.0f} m² SRE"])
-    if data['sre_pourcentage_ecoles'] > 0.0:
-        project_surfaces.append([Paragraph("Ecoles (%):", styles['Normal']), f"{data['sre_pourcentage_ecoles']} % de la surface rénovée soit {(data['sre_pourcentage_ecoles']/100*data['sre_renovation_m2']):.0f} m² SRE"])
-    if data['sre_pourcentage_commerce'] > 0.0:
-        project_surfaces.append([Paragraph("Commerce (%):", styles['Normal']), f"{data['sre_pourcentage_commerce']} % de la surface rénovée soit {(data['sre_pourcentage_commerce']/100*data['sre_renovation_m2']):.0f} m² SRE"])
-    if data['sre_pourcentage_restauration'] > 0.0:
-        project_surfaces.append([Paragraph("Restauration (%):", styles['Normal']), f"{data['sre_pourcentage_restauration']} % de la surface rénovée soit {(data['sre_pourcentage_restauration']/100*data['sre_renovation_m2']):.0f} m² SRE"])
-    if data['sre_pourcentage_lieux_de_rassemblement'] > 0.0:
-        project_surfaces.append([Paragraph("Lieux de rassemblement (%):", styles['Normal']), f"{data['sre_pourcentage_lieux_de_rassemblement']} % de la surface rénovée soit {(data['sre_pourcentage_lieux_de_rassemblement']/100*data['sre_renovation_m2']):.0f} m² SRE"])
-    if data['sre_pourcentage_hopitaux'] > 0.0:
-        project_surfaces.append([Paragraph("Hopitaux (%):", styles['Normal']), f"{data['sre_pourcentage_hopitaux']} % de la surface rénovée soit {(data['sre_pourcentage_hopitaux']/100*data['sre_renovation_m2']):.0f} m² SRE"])
-    if data['sre_pourcentage_industrie'] > 0.0:
-        project_surfaces.append([Paragraph("Industrie (%):", styles['Normal']), f"{data['sre_pourcentage_industrie']} % de la surface rénovée soit {(data['sre_pourcentage_industrie']/100*data['sre_renovation_m2']):.0f} m² SRE"])
-    if data['sre_pourcentage_depots'] > 0.0:
-        project_surfaces.append([Paragraph("Depots (%):", styles['Normal']), f"{data['sre_pourcentage_depots']} % de la surface rénovée soit {(data['sre_pourcentage_depots']/100*data['sre_renovation_m2']):.0f} m² SRE"])
-    if data['sre_pourcentage_installations_sportives'] > 0.0:
-        project_surfaces.append([Paragraph("Installations sportives (%):", styles['Normal']), f"{data['sre_pourcentage_installations_sportives']} % de la surface rénovée soit {(data['sre_pourcentage_installations_sportives']/100*data['sre_renovation_m2']):.0f} m² SRE"])
-    if data['sre_pourcentage_piscines_couvertes'] > 0.0:
-        project_surfaces.append([Paragraph("Piscines couvertes (%):", styles['Normal']), f"{data['sre_pourcentage_piscines_couvertes']} % de la surface rénovée soit {(data['sre_pourcentage_piscines_couvertes']/100*data['sre_renovation_m2']):.0f} m² SRE"])         
-    
+    # Add conditional rows for different surface types
+    for surface_type, percentage in [
+        ('Habitat collectif', data['sre_pourcentage_habitat_collectif']),
+        ('Habitat individuel', data['sre_pourcentage_habitat_individuel']),
+        ('Administration', data['sre_pourcentage_administration']),
+        ('Ecoles', data['sre_pourcentage_ecoles']),
+        ('Commerce', data['sre_pourcentage_commerce']),
+        ('Restauration', data['sre_pourcentage_restauration']),
+        ('Lieux de rassemblement', data['sre_pourcentage_lieux_de_rassemblement']),
+        ('Hopitaux', data['sre_pourcentage_hopitaux']),
+        ('Industrie', data['sre_pourcentage_industrie']),
+        ('Depots', data['sre_pourcentage_depots']),
+        ('Installations sportives', data['sre_pourcentage_installations_sportives']),
+        ('Piscines couvertes', data['sre_pourcentage_piscines_couvertes'])
+    ]:
+        if percentage > 0.0:
+            project_surfaces.append([f"{surface_type} (%):", f"{percentage} % de la surface rénovée soit {(percentage/100*data['sre_renovation_m2']):.0f} m² SRE"])
+  
     project_surfaces_table = Table(project_surfaces, colWidths=[150, 350])
     project_surfaces_table.setStyle(TableStyle([
         ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
@@ -317,41 +310,28 @@ def generate_pdf(data):
         [Paragraph("<b>Consommation après travaux</b>", styles['Heading3']), ''],  # Title row
         [Paragraph("", styles['Normal']), ''], # Empty row
         ]
-    # Add conditional rows
-    if data['agent_energetique_ef_mazout_kg'] > 0.0:
-        project_energie.append([Paragraph("Mazout (kg):", styles['Normal']), f"{data['agent_energetique_ef_mazout_kg']:.0f} kg du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_mazout_litres'] > 0.0:
-        project_energie.append([Paragraph("Mazout (litres):", styles['Normal']), f"{data['agent_energetique_ef_mazout_litres']:.0f} litres du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_mazout_kwh'] > 0.0:
-        project_energie.append([Paragraph("Mazout (kWh):", styles['Normal']), f"{data['agent_energetique_ef_mazout_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_gaz_naturel_m3'] > 0.0:
-        project_energie.append([Paragraph("Gaz naturel (m³):", styles['Normal']), f"{data['agent_energetique_ef_gaz_naturel_m3']:.1f} m³ du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_gaz_naturel_kwh'] > 0.0:
-        project_energie.append([Paragraph("Gaz naturel (kWh):", styles['Normal']), f"{data['agent_energetique_ef_gaz_naturel_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_bois_buches_dur_stere'] > 0.0:
-        project_energie.append([Paragraph("Bois (buches dures, stères):", styles['Normal']), f"{data['agent_energetique_ef_bois_buches_dur_stere']:.1f} stères du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_bois_buches_tendre_stere'] > 0.0:
-        project_energie.append([Paragraph("Bois (buches tendres, stères):", styles['Normal']), f"{data['agent_energetique_ef_bois_buches_tendre_stere']:.1f} stères du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_bois_buches_tendre_kwh'] > 0.0:
-        project_energie.append([Paragraph("Bois (buches tendres, kWh):", styles['Normal']), f"{data['agent_energetique_ef_bois_buches_tendre_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_pellets_m3'] > 0.0:
-        project_energie.append([Paragraph("Pellets (m³):", styles['Normal']), f"{data['agent_energetique_ef_pellets_m3']:.0f} m³ du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_pellets_kg'] > 0.0:
-        project_energie.append([Paragraph("Pellets (kg):", styles['Normal']), f"{data['agent_energetique_ef_pellets_kg']:.0f} kg du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_pellets_kwh'] > 0.0:
-        project_energie.append([Paragraph("Pellets (kWh):", styles['Normal']), f"{data['agent_energetique_ef_pellets_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_plaquettes_m3'] > 0.0:
-        project_energie.append([Paragraph("Plaquettes (m³):", styles['Normal']), f"{data['agent_energetique_ef_plaquettes_m3']:.0f} m³ du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_plaquettes_kwh'] > 0.0:
-        project_energie.append([Paragraph("Plaquettes (kWh):", styles['Normal']), f"{data['agent_energetique_ef_plaquettes_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_cad_kwh'] > 0.0:
-        project_energie.append([Paragraph("CAD (kWh):", styles['Normal']), f"{data['agent_energetique_ef_cad_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_electricite_pac_kwh'] > 0.0:
-        project_energie.append([Paragraph("Electricité PAC (kWh):", styles['Normal']), f"{data['agent_energetique_ef_electricite_pac_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_electricite_directe_kwh'] > 0.0:
-        project_energie.append([Paragraph("Electricité directe (kWh):", styles['Normal']), f"{data['agent_energetique_ef_electricite_directe_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
-    if data['agent_energetique_ef_autre_kwh'] > 0.0:
-        project_energie.append([Paragraph("Autre (kWh):", styles['Normal']), f"{data['agent_energetique_ef_autre_kwh']:.0f} kWh du {data['periode_start'].date()} au {data['periode_end'].date()}"])
+    # Add conditional rows for different energy types
+    for energy_type, value, unit in [
+        ('Mazout', data['agent_energetique_ef_mazout_kg'], 'kg'),
+        ('Mazout', data['agent_energetique_ef_mazout_litres'], 'litres'),
+        ('Mazout', data['agent_energetique_ef_mazout_kwh'], 'kWh'),
+        ('Gaz naturel', data['agent_energetique_ef_gaz_naturel_m3'], 'm³'),
+        ('Gaz naturel', data['agent_energetique_ef_gaz_naturel_kwh'], 'kWh'),
+        ('Bois (buches dures)', data['agent_energetique_ef_bois_buches_dur_stere'], 'stères'),
+        ('Bois (buches tendres)', data['agent_energetique_ef_bois_buches_tendre_stere'], 'stères'),
+        ('Bois (buches tendres)', data['agent_energetique_ef_bois_buches_tendre_kwh'], 'kWh'),
+        ('Pellets', data['agent_energetique_ef_pellets_m3'], 'm³'),
+        ('Pellets', data['agent_energetique_ef_pellets_kg'], 'kg'),
+        ('Pellets', data['agent_energetique_ef_pellets_kwh'], 'kWh'),
+        ('Plaquettes', data['agent_energetique_ef_plaquettes_m3'], 'm³'),
+        ('Plaquettes', data['agent_energetique_ef_plaquettes_kwh'], 'kWh'),
+        ('CAD', data['agent_energetique_ef_cad_kwh'], 'kWh'),
+        ('Electricité PAC', data['agent_energetique_ef_electricite_pac_kwh'], 'kWh'),
+        ('Electricité directe', data['agent_energetique_ef_electricite_directe_kwh'], 'kWh'),
+        ('Autre', data['agent_energetique_ef_autre_kwh'], 'kWh')
+    ]:
+        if value > 0.0:
+            project_energie.append([f"{energy_type} ({unit}):", f"{value:.1f} {unit} du {data['periode_start'].date()} au {data['periode_end'].date()}"])
 
     project_energie_table = Table(project_energie, colWidths=[150, 350])
     project_energie_table.setStyle(TableStyle([

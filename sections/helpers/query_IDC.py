@@ -49,7 +49,7 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
                 return result
             else:
                 result = [d['attributes'] for d in data_df]
-                
+
                 st.write(result)
 
                 most_recent_dict = {}
@@ -69,6 +69,7 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
                     else:
                         if most_recent_dict[key]["date_saisie"] < date_saisie:
                             most_recent_dict[key] = d
+
                 st.write(most_recent_dict)
                 filtered_list = list(most_recent_dict.values())
 

@@ -575,7 +575,6 @@ if st.session_state['authentication_status']:
 
             st.session_state['data_site']['annees_calcul_idc_avant_travaux'] = data_sites_db['annees_calcul_idc_avant_travaux']
             st.session_state['data_site']['sre_extension_surelevation_m2'] = data_sites_db['sre_extension_surelevation_m2']
-            st.write(st.session_state['data_site'])
         tab2_fragment()
         
         if st.button("Sauvegarder", use_container_width=True, type='primary'):

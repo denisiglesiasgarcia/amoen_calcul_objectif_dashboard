@@ -9,6 +9,7 @@ import pydeck as pdk
 import sqlite3
 import plotly.express as px
 from datetime import datetime
+import json
 
 @st.cache_data
 def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name: str, geometry: bool, egid: Union[int, List[int]]) -> Optional[List[Dict]]:

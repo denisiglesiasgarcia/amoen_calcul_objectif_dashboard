@@ -11,7 +11,7 @@ import plotly.express as px
 from datetime import datetime
 import json
 
-@st.cache_data
+
 def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name: str, geometry: bool, egid: Union[int, List[int]]) -> Optional[List[Dict]]:
     """
     Make an API request to retrieve data for one or multiple EGIDs and filter the most recent entries.

@@ -242,7 +242,7 @@ def generate_pdf(data):
     
     # Project details
     project_admin = [
-        [Paragraph("<b>Informations administratives</b>", styles['Heading2']), ''],  # Title row
+        [Paragraph("<b>Informations administratives</b>", styles['Heading4']), ''],  # Title row
         [Paragraph("", styles['Normal']), ''], # Empty row
         [Paragraph("Adresse:", styles['Normal']), data['adresse_projet']],
         [Paragraph("AMOén:", styles['Normal']), data['amoen_id']],

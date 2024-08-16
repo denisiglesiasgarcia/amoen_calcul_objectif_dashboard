@@ -45,16 +45,6 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
         data = response.json()
         if 'features' in data:
             data_df = data['features']
-
-            # Convert date_saisie to datetime format
-            data_df['date_saisie'] = pd.to_datetime(data_df['date_saisie'])
-
-            # Sort by 'egid', 'annee', and 'date_saisie' in descending order
-            data_df = data_df.sort_values(by=['egid', 'annee', 'date_saisie'], ascending=[True, True, False])
-
-            # Drop duplicates, keeping only the most recent 'date_saisie' for each 'egid' and 'annee'
-            data_df = data_df.drop_duplicates(subset=['egid', 'annee'], keep='first')
-
             if geometry:
                 return [{'attributes': d['attributes'], 'geometry': d['geometry']} for d in data_df]
             else:

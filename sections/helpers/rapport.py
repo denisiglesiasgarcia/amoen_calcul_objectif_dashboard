@@ -266,8 +266,13 @@ def generate_pdf(data):
     project_surfaces = [
         [Paragraph("<b>Surfaces</b>", styles['Heading3']), ''],  # Title row
         [Paragraph("", styles['Normal']), ''], # Empty row
-        [Paragraph("Surface rénovée (m² SRE):", styles['Normal']), f"{data['sre_renovation_m2']} m² SRE"],
     ]
+    if data['sre_extension_surelevation_m2'] > 0.0:
+        project_surfaces.append([
+            Paragraph("Surface surélévation (m² SRE):", styles['Normal']),
+            "{data['sre_extension_surelevation_m2']} m² SRE. La SRE surélevée n'est pas sujette à la subvention AMOén"])
+
+    project_surfaces.append([Paragraph("Surface rénovation (m² SRE):", styles['Normal']), f"{data['sre_renovation_m2']} m² SRE"])
     # Add conditional rows for different surface types
     for surface_type, percentage in [
         ('Habitat collectif', data['sre_pourcentage_habitat_collectif']),

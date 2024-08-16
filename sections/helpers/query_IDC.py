@@ -54,7 +54,7 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
             df = pd.DataFrame(result)
 
             # Convert date columns to datetime format
-            df['date_saisie'] = pd.to_datetime(df['date_saisie'], unit='ms')
+            st.write(df)
 
             # Sort by date_saisie in descending order
             df = df.sort_values(by='date_saisie', ascending=False)

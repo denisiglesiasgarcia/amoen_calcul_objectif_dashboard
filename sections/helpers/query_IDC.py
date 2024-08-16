@@ -183,16 +183,7 @@ def show_dataframe(df):
             'date_debut_periode', 'date_fin_periode', 'date_saisie',
             'indice_moy2', 'annees_concernees_moy_2', 'indice_moy3', 'annees_concernees_moy_3',
             'id_concessionnaire', 'nbre_preneur',
-            ]].sort_values(by=['egid', 'annee'])
-
-    df['date_debut_periode'] = pd.to_datetime(df['date_debut_periode'], unit='ms')
-    df['date_fin_periode'] = pd.to_datetime(df['date_fin_periode'], unit='ms')
-    df['date_saisie'] = pd.to_datetime(df['date_saisie'], unit='ms')
-
-    df['npa'] = df['npa'].astype('int64')
-    df['quantite_agent_energetique_1'] = df['quantite_agent_energetique_1'].astype('float64')
-    df['quantite_agent_energetique_2'] = df['quantite_agent_energetique_2'].astype('float64')
-    df['quantite_agent_energetique_3'] = df['quantite_agent_energetique_3'].astype('float64')
+            ]].sort_values(by=['adresse', 'annee'])
 
     st.dataframe(df)
 

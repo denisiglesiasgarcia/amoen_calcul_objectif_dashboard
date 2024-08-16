@@ -60,7 +60,7 @@ def graphique_bars_rapport(site,
     ax = sns.barplot (y="Valeur",
                         x="Type",
                         data=bar_data1,
-                        order=['IDC moy 3 ans avant\n$E_{f,avant,corr}$',"Objectif\n$E_{f,obj}*f_{p}$",'Conso mesurée après\n$E_{f,après,corr,rénové}*f_{p}$'],
+                        order=['IDC moy 3 ans avant\n$IDC_{moy3ans}$',"Objectif\n$E_{f,obj}*f_{p}$",'Conso mesurée après\n$E_{f,après,corr}*f_{p}$'],
                         palette=['#1f77b4', '#ff7f0e', '#2ca02c'])
     
     sns.despine()
@@ -150,7 +150,7 @@ def graphique_bars_rapport(site,
     u2_titre = plt.text(0.89, xlabel_level1, formula_atteinte_objectif_titre_pourcent, ha='left', va='center', transform=ax.transAxes, fontsize=18)
     u1 = plt.text(0.22, xlabel_level1, formula_atteinte_objectif, ha='left', va='center', transform=ax.transAxes, fontsize=24)
     u2 = plt.text(0.73, xlabel_level1, formula_atteinte_objectif_num, ha='left', va='center', transform=ax.transAxes, fontsize=24)
-    u3 = plt.text(0.925, xlabel_level1, formula_atteinte_objectifs_pourcent, ha='left', va='center', transform=ax.transAxes, fontsize=20)
+    u3 = plt.text(0.92, xlabel_level1, formula_atteinte_objectifs_pourcent, ha='left', va='center', transform=ax.transAxes, fontsize=20)
 
 
     # display(formula_atteinte_objectif)
@@ -240,7 +240,7 @@ def generate_pdf(data):
     
     # Project details
     project_admin = [
-        [Paragraph("<b>Informations administratives</b>", styles['Heading3']), ''],  # Title row
+        [Paragraph("<b>Informations administratives</b>", styles['Heading4']), ''],  # Title row
         [Paragraph("", styles['Normal']), ''], # Empty row
         [Paragraph("Adresse:", styles['Normal']), data['adresse_projet']],
         [Paragraph("AMOén:", styles['Normal']), data['amoen_id']],
@@ -355,8 +355,8 @@ def generate_pdf(data):
         [f"IDC moyen 3 ans avant travaux → (Ef,avant,corr)", f"{data['ef_avant_corr_kwh_m2']:.1f}", f"{data['ef_avant_corr_kwh_m2']*3.6:.1f}"],
         [f"EF pondéré corrigé clim. après travaux → (Ef,après,corr,rénové*fp)", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']*3.6:.1f}"],
         [f"Objectif en énergie finale (Ef,obj *fp)", f"{data['ef_objectif_pondere_kwh_m2']:.1f}", f"{data['ef_objectif_pondere_kwh_m2']*3.6:.1f}"],
-        [f"Baisse mesurée → ∆Ef,réel", f"{data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{(data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2'])*3.6:.1f}"],
-        [f"Baisse objectif → ∆Ef,visée", f"{data['delta_ef_visee_kwh_m2']:.1f}", f"{data['delta_ef_visee_kwh_m2']*3.6:.1f}"]
+        [f"Baisse ΔEf réalisée → ∆Ef,réel", f"{data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{(data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2'])*3.6:.1f}"],
+        [f"Baisse ΔEf visée → ∆Ef,visée", f"{data['delta_ef_visee_kwh_m2']:.1f}", f"{data['delta_ef_visee_kwh_m2']*3.6:.1f}"]
     ]
 
     project_results_table = Table(project_results, colWidths=[375, 65, 60])

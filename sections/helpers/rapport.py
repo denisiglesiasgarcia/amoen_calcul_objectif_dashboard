@@ -365,7 +365,7 @@ def generate_pdf(data):
     ]
 
     # Adjust column widths for the additional column
-    project_results_table = Table(project_results, colWidths=[255, 120, 65, 60])
+    project_results_table = Table(project_results, colWidths=[260, 115, 65, 60])
 
     # Update the table style for the additional column
     project_results_table.setStyle(TableStyle([

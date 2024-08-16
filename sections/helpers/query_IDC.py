@@ -47,11 +47,25 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
             data_df = data['features']
             if geometry:
                 result = [{'attributes': d['attributes'], 'geometry': d['geometry']} for d in data_df]
-                st.write(result)
-                return result
             else:
                 result = [d['attributes'] for d in data_df]
-                return result
+
+            # Convert to pandas DataFrame
+            df = pd.DataFrame(result)
+
+            # Convert date columns to datetime format
+            df['date_saisie'] = pd.to_datetime(df['date_saisie'], unit='ms')
+
+            # Sort by date_saisie in descending order
+            df = df.sort_values(by='date_saisie', ascending=False)
+
+            # Drop duplicates based on egid and annee, keeping only the first occurrence
+            df = df.drop_duplicates(subset=['egid', 'annee'], keep='first')
+
+            # Convert back to list of dictionaries
+            result = df.to_dict(orient='records')
+
+            return result
         else:
             logging.warning(f"{table_name} → 'features' key not found in the API response for offset {offset}")
     except requests.exceptions.RequestException as e:

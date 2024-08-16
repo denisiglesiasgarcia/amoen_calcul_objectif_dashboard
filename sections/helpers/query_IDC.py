@@ -62,7 +62,7 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
 
                     key = (annee, egid)
 
-                    if key not in most_recent_dict or date_saisie > most_recent_dict[key]["date_saisie"]:
+                    if key not in most_recent_dict or (date_saisie is not None and date_saisie > most_recent_dict.get(key, {}).get("date_saisie", 0)):
                         most_recent_dict[key] = d
 
                 filtered_list = list(most_recent_dict.values())

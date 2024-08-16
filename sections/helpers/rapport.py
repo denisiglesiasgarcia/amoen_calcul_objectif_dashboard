@@ -268,9 +268,19 @@ def generate_pdf(data):
         [Paragraph("", styles['Normal']), ''], # Empty row
     ]
     if data['sre_extension_surelevation_m2'] > 0.0:
+        # Define a custom style for italic text
+        italic_style = ParagraphStyle(
+            name="Italic",
+            parent=styles['Normal'],
+            fontName='Helvetica-Oblique',  # Use 'Helvetica-Oblique' for italic text
+            fontSize=10,  # Adjust font size as needed
+            alignment=TA_LEFT,
+        )
+
+        # Create the paragraph with mixed styles
         project_surfaces.append([
             Paragraph("Surface surélévation (m² SRE):", styles['Normal']),
-            f"{data['sre_extension_surelevation_m2']} m² SRE. La SRE surélevée n'est pas sujette à la subvention AMOén"])
+            f"{data['sre_extension_surelevation_m2']} m² SRE. <i>La SRE surélevée n'est pas sujette à la subvention AMOén</i>"])
 
     project_surfaces.append([Paragraph("Surface rénovation (m² SRE):", styles['Normal']), f"{data['sre_renovation_m2']} m² SRE"])
     # Add conditional rows for different surface types

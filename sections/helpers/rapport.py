@@ -373,7 +373,8 @@ def generate_pdf(data):
         ('BACKGROUND', (0, 1), (-1, 1), colors.white),  # Background for header row
         ('TEXTCOLOR', (0, 0), (-1, 1), colors.black),
         ('ALIGN', (0, 0), (0, -1), 'LEFT'),  # Left-align first column
-        ('ALIGN', (1, 0), (-1, -1), 'CENTER'),  # Center-align other columns
+        ('ALIGN', (1, 0), (1, -1), 'LEFT'),  # Left-align second column
+        ('ALIGN', (2, 0), (-1, -1), 'CENTER'),  # Center-align other columns
         ('FONTNAME', (0, 0), (-1, 1), 'Helvetica-Bold'),
         ('FONTSIZE', (0, 0), (-1, 0), 12),  # Font size for title row
         ('FONTSIZE', (0, 1), (-1, 1), 10),  # Font size for header row

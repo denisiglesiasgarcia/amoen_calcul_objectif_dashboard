@@ -43,9 +43,9 @@ def graphique_bars_rapport(site,
         'Nom_projet': [site,
                         site,
                         site],
-        'Type': ['IDC moy 3 ans avant\n$IDC_{moy3ans}$',
+        'Type': ['IDC moy 3 ans avant\n$E_{f,avant,corr}$',
                     'Objectif\n$E_{f,obj}*f_{p}$',
-                    'Conso mesurée après\n$E_{f,après,corr}*f_{p}$'],
+                    'Conso mesurée après\n$E_{f,après,corr,rénové}*f_{p}$'],
         'Valeur': [idc_moy_3ans_avant_MJ_m2,
                     ef_objectif_pondere_MJ_m2,
                     ef_apres_corr_MJ_m2]
@@ -60,7 +60,7 @@ def graphique_bars_rapport(site,
     ax = sns.barplot (y="Valeur",
                         x="Type",
                         data=bar_data1,
-                        order=[f'IDC moy 3 ans avant\n$E_{f,avant,corr}$',f"Objectif\n$E_{f,obj}*f_{p}$",f'Conso mesurée après\n$E_{f,après,corr,rénové}*f_{p}$'],
+                        order=['IDC moy 3 ans avant\n$E_{f,avant,corr}$',"Objectif\n$E_{f,obj}*f_{p}$",'Conso mesurée après\n$E_{f,après,corr,rénové}*f_{p}$'],
                         palette=['#1f77b4', '#ff7f0e', '#2ca02c'])
     
     sns.despine()

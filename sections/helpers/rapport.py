@@ -355,8 +355,8 @@ def generate_pdf(data):
         [f"IDC moyen 3 ans avant travaux → (Ef,avant,corr)", f"{data['ef_avant_corr_kwh_m2']:.1f}", f"{data['ef_avant_corr_kwh_m2']*3.6:.1f}"],
         [f"EF pondéré corrigé clim. après travaux → (Ef,après,corr,rénové*fp)", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']*3.6:.1f}"],
         [f"Objectif en énergie finale (Ef,obj *fp)", f"{data['ef_objectif_pondere_kwh_m2']:.1f}", f"{data['ef_objectif_pondere_kwh_m2']*3.6:.1f}"],
-        [f"Baisse ΔEf réalisée → ∆Ef,réel", f"{data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{(data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2'])*3.6:.1f}"],
-        [f"Baisse ΔEf visée → ∆Ef,visée", f"{data['delta_ef_visee_kwh_m2']:.1f}", f"{data['delta_ef_visee_kwh_m2']*3.6:.1f}"]
+        [f"Baisse mesurée → ∆Ef,réel", f"{data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{(data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2'])*3.6:.1f}"],
+        [f"Baisse objectif → ∆Ef,visée", f"{data['delta_ef_visee_kwh_m2']:.1f}", f"{data['delta_ef_visee_kwh_m2']*3.6:.1f}"]
     ]
 
     project_results_table = Table(project_results, colWidths=[375, 65, 60])

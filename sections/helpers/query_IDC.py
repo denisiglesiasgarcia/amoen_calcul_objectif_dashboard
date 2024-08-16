@@ -52,6 +52,29 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
 
                 df = pd.DataFrame(result)
 
+                df = df[[
+                        'egid', 'annee', 'indice', 'sre',
+                        'adresse', 'npa', 'commune', 'destination',
+                        'agent_energetique_1', 'quantite_agent_energetique_1', 'unite_agent_energetique_1',
+                        'agent_energetique_2', 'quantite_agent_energetique_2', 'unite_agent_energetique_2',
+                        'agent_energetique_3', 'quantite_agent_energetique_3', 'unite_agent_energetique_3',
+                        'date_debut_periode', 'date_fin_periode', 'date_saisie',
+                        'indice_moy2', 'annees_concernees_moy_2', 'indice_moy3', 'annees_concernees_moy_3',
+                        'id_concessionnaire', 'nbre_preneur',
+                        ]].sort_values(by=['egid', 'annee'])
+
+                df['date_debut_periode'] = pd.to_datetime(df['date_debut_periode'], unit='ms')
+                df['date_fin_periode'] = pd.to_datetime(df['date_fin_periode'], unit='ms')
+                df['date_saisie'] = pd.to_datetime(df['date_saisie'], unit='ms')
+
+                df['npa'] = df['npa'].astype('int64')
+                df['quantite_agent_energetique_1'] = df['quantite_agent_energetique_1'].astype('float64')
+                df['quantite_agent_energetique_2'] = df['quantite_agent_energetique_2'].astype('float64')
+                df['quantite_agent_energetique_3'] = df['quantite_agent_energetique_3'].astype('float64')
+
+                # for each pair of egid and annee, keep only the moste recent date_saisie
+                df = df.sort_values(by=['egid', 'annee', 'date_saisie'], ascending=[True, True, False]).drop_duplicates(subset=['egid', 'annee'], keep='first')
+
                 st.write(df)
 
                 # convert dataframe to list of dictionaries

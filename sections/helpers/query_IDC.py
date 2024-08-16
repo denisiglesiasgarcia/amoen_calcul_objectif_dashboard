@@ -16,7 +16,6 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
     """
     Make an API request to retrieve data for one or multiple EGIDs.
     """
-    # Construct the where clause based on whether egid is a single value or a list
     if isinstance(egid, list):
         where_clause = f"egid IN ({','.join(map(str, egid))})"
     else:
@@ -31,55 +30,38 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
         'resultRecordCount': chunk_size
     }
     
-    st.write("API Request Parameters:", params)  # Debug: Print request parameters
+    st.write("API Request Parameters:", params)
     
     try:
         response = requests.get(url, params=params)
         response.raise_for_status()
         data = response.json()
         
-        st.write("API Response:", data)  # Debug: Print raw API response
+        st.write("API Response received")
         
         if 'features' in data:
-            data_df = data['features']
-            st.write("Features data:", data_df)  # Debug: Print features data
+            features = data['features']
+            st.write(f"Number of features: {len(features)}")
             
-            if not data_df:
+            if not features:
                 st.warning(f"{table_name} → No features returned from the API.")
                 return None
             
-            # Create a dictionary to store the most recent entry for each (egid, annee) pair
-            filtered_data = {}
-            for item in data_df:
-                attributes = item['attributes']
-                egid = attributes.get('egid')
-                annee = attributes.get('annee')
-                date_saisie = attributes.get('date_saisie')
-                
-                st.write(f"Processing item: egid={egid}, annee={annee}, date_saisie={date_saisie}")  # Debug: Print each item being processed
-                
-                # Skip this item if any of the required fields are missing
-                if not all([egid, annee, date_saisie]):
-                    st.warning(f"Skipping item due to missing required field: {attributes}")
-                    continue
-                
-                key = (egid, annee)
-                
-                if key not in filtered_data or date_saisie > filtered_data[key]['attributes']['date_saisie']:
-                    filtered_data[key] = item
+            result = []
+            for item in features:
+                if geometry:
+                    result.append({
+                        'attributes': item['attributes'],
+                        'geometry': item.get('geometry')
+                    })
+                else:
+                    result.append(item['attributes'])
             
-            # Convert the filtered data back to a list
-            result = list(filtered_data.values())
-            
-            st.write("Filtered result:", result)  # Debug: Print filtered result
-            
-            if geometry:
-                return [{'attributes': d['attributes'], 'geometry': d.get('geometry')} for d in result]
-            else:
-                return [d['attributes'] for d in result]
+            st.write(f"Processed {len(result)} items")
+            return result
         else:
             st.warning(f"{table_name} → 'features' key not found in the API response for offset {offset}")
-            st.write("API response keys:", data.keys())  # Debug: Print keys in the API response
+            st.write("API response keys:", data.keys())
     except requests.exceptions.RequestException as e:
         st.error(f'{table_name} → An error occurred with offset {offset}: {e}')
     except json.JSONDecodeError:

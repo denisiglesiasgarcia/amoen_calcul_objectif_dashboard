@@ -50,9 +50,6 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
             else:
                 result = [d['attributes'] for d in data_df]
 
-            # filter result to keep only the most recent date_saisie for the same egid and annee
-            result = sorted(result, key=lambda x: (x['egid'], x['annee'], x['date_saisie']), reverse=True)
-            result = [result[0] for result in result]
 
             st.write(result)
 

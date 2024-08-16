@@ -14,7 +14,7 @@ import json
 
 def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name: str, geometry: bool, egid: Union[int, List[int]]) -> Optional[List[Dict]]:
     """
-    Make an API request to retrieve data for one or multiple EGIDs and filter the most recent entries.
+    Make an API request to retrieve data for one or multiple EGIDs and filter the results.
     """
     if isinstance(egid, list):
         where_clause = f"egid IN ({','.join(map(str, egid))})"
@@ -47,39 +47,32 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
                 st.warning(f"{table_name} → No features returned from the API.")
                 return None
             
-            # Collect all items
-            all_items = []
+            # Create a dictionary to store the most recent entry for each (egid, annee) pair
+            filtered_data = {}
             for item in features:
                 attributes = item['attributes']
-                if all(key in attributes for key in ['egid', 'annee', 'date_saisie']):
-                    all_items.append(item)
-                else:
-                    st.warning(f"Skipping item due to missing required fields: {attributes}")
+                egid = attributes.get('egid')
+                annee = attributes.get('annee')
+                date_saisie = attributes.get('date_saisie')
+                
+                if not all([egid, annee, date_saisie]):
+                    st.warning(f"Skipping item due to missing required field: {attributes}")
+                    continue
+                
+                key = (egid, annee)
+                
+                if key not in filtered_data or date_saisie > filtered_data[key]['attributes']['date_saisie']:
+                    filtered_data[key] = item
             
-            # Sort items by date_saisie (most recent first)
-            all_items.sort(key=lambda x: x['attributes']['date_saisie'], reverse=True)
+            # Convert the filtered data back to a list
+            result = list(filtered_data.values())
             
-            # Filter to keep only the most recent entry for each unique (egid, annee) combination
-            filtered_items = {}
-            for item in all_items:
-                attributes = item['attributes']
-                key = (attributes['egid'], attributes['annee'])
-                if key not in filtered_items:
-                    filtered_items[key] = item
+            st.write(f"Filtered down to {len(result)} items")
             
-            # Prepare the result
-            result = []
-            for item in filtered_items.values():
-                if geometry:
-                    result.append({
-                        'attributes': item['attributes'],
-                        'geometry': item.get('geometry')
-                    })
-                else:
-                    result.append(item['attributes'])
-            
-            st.write(f"Processed and filtered {len(result)} items")
-            return result
+            if geometry:
+                return [{'attributes': d['attributes'], 'geometry': d.get('geometry')} for d in result]
+            else:
+                return [d['attributes'] for d in result]
         else:
             st.warning(f"{table_name} → 'features' key not found in the API response for offset {offset}")
             st.write("API response keys:", data.keys())

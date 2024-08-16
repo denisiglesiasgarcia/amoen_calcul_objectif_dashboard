@@ -50,30 +50,12 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
             else:
                 result = [d['attributes'] for d in data_df]
 
-                st.write(result)
+                df = pd.DataFrame(result)
 
-                most_recent_dict = {}
+                st.write(df)
 
-                for d in result:
-                    annee = d["annee"]
-                    egid = d["egid"]
-                    date_saisie = d["date_saisie"]
-
-                    # create pairs of (annee, egid) as keys
-                    key = (annee, egid)
-
-                    # if the key is not in the dictionary, add it
-                    if key not in most_recent_dict:
-                        most_recent_dict[key] = d
-                    # if the key is in the dictionary, check if the date_saisie is more recent
-                    else:
-                        if most_recent_dict[key]["date_saisie"] < date_saisie:
-                            most_recent_dict[key] = d
-
-                st.write(most_recent_dict)
-                filtered_list = list(most_recent_dict.values())
-
-                st.write(filtered_list)
+                # convert dataframe to list of dictionaries
+                filtered_list = df.to_dict('records')
 
                 return filtered_list
         else:

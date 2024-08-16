@@ -50,20 +50,7 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
             else:
                 result = [d['attributes'] for d in data_df]
 
-            # Convert to pandas DataFrame
-            df = pd.DataFrame(result)
-
-            # Convert date columns to datetime format
-            st.write(df)
-
-            # Sort by date_saisie in descending order
-            df = df.sort_values(by='date_saisie', ascending=False)
-
-            # Drop duplicates based on egid and annee, keeping only the first occurrence
-            df = df.drop_duplicates(subset=['egid', 'annee'], keep='first')
-
-            # Convert back to list of dictionaries
-            result = df.to_dict(orient='records')
+            st.write(result)
 
             return result
         else:

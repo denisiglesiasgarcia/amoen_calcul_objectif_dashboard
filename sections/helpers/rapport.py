@@ -15,6 +15,7 @@ from reportlab.lib import colors
 from reportlab.graphics.shapes import Drawing, Line, String, Polygon
 from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.lib.units import cm
+from reportlab.lib.enums import TA_LEFT
 from reportlab.pdfgen.canvas import Canvas
 import io
 import seaborn as sns

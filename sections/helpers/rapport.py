@@ -147,10 +147,10 @@ def graphique_bars_rapport(site,
     xlabel_level2 = xlabel_level1 + xlabel_sep_y
 
     u1_titre = plt.text(0, xlabel_level1, formula_atteinte_objectif_titre, ha='left', va='center', transform=ax.transAxes, fontsize=18)
-    u2_titre = plt.text(0.88, xlabel_level1, formula_atteinte_objectif_titre_pourcent, ha='left', va='center', transform=ax.transAxes, fontsize=18)
+    u2_titre = plt.text(0.89, xlabel_level1, formula_atteinte_objectif_titre_pourcent, ha='left', va='center', transform=ax.transAxes, fontsize=18)
     u1 = plt.text(0.22, xlabel_level1, formula_atteinte_objectif, ha='left', va='center', transform=ax.transAxes, fontsize=24)
     u2 = plt.text(0.73, xlabel_level1, formula_atteinte_objectif_num, ha='left', va='center', transform=ax.transAxes, fontsize=24)
-    u3 = plt.text(0.91, xlabel_level1, formula_atteinte_objectifs_pourcent, ha='left', va='center', transform=ax.transAxes, fontsize=20)
+    u3 = plt.text(0.92, xlabel_level1, formula_atteinte_objectifs_pourcent, ha='left', va='center', transform=ax.transAxes, fontsize=20)
 
 
     # display(formula_atteinte_objectif)

@@ -231,6 +231,7 @@ def generate_pdf(data):
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name='Center', alignment=1))
     styles.add(ParagraphStyle(name='SmallCenter', alignment=1, fontSize=8))
+    styles.add(ParagraphStyle(name='SmallText', parent=styles['Normal'], fontSize=8))
     elements = []
 
     # elements.append(Spacer(1, 0.5*cm))
@@ -243,9 +244,9 @@ def generate_pdf(data):
     # Project details
     project_admin = [
         [Paragraph("<b>Informations administratives</b>", styles['Heading4']), ''],  # Title row
-        [Paragraph("", styles['Normal']), ''], # Empty row
-        [Paragraph("Adresse:", styles['Normal']), data['adresse_projet']],
-        [Paragraph("AMOén:", styles['Normal']), data['amoen_id']],
+        [Paragraph("", styles['SmallText']), ''], # Empty row
+        [Paragraph("Adresse:", styles['SmallText']), data['adresse_projet']],
+        [Paragraph("AMOén:", styles['SmallText']), data['amoen_id']],
     ]
     project_admin_table = Table(project_admin, colWidths=[150, 350])
     project_admin_table.setStyle(TableStyle([

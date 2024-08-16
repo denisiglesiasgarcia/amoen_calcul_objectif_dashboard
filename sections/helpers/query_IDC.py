@@ -60,10 +60,16 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
                     egid = d["egid"]
                     date_saisie = d["date_saisie"]
 
+                    # create pairs of (annee, egid) as keys
                     key = (annee, egid)
 
-                    if key not in most_recent_dict or (date_saisie is not None and date_saisie > most_recent_dict.get(key, {}).get("date_saisie", 0)):
+                    # if the key is not in the dictionary, add it
+                    if key not in most_recent_dict:
                         most_recent_dict[key] = d
+                    # if the key is in the dictionary, check if the date_saisie is more recent
+                    else:
+                        if most_recent_dict[key]["date_saisie"] < date_saisie:
+                            most_recent_dict[key] = d
 
                 filtered_list = list(most_recent_dict.values())
 

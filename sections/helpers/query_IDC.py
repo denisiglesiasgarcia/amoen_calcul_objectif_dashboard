@@ -31,7 +31,6 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
         where_clause = f"egid IN ({','.join(map(str, egid))})"
     else:
         where_clause = f"egid={egid}"
-
     params = {
         'where': where_clause,
         'outFields': fields,
@@ -47,10 +46,26 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
         if 'features' in data:
             data_df = data['features']
             st.write(data_df)
+            # Create a dictionary to store the most recent entry for each (egid, annee) pair
+            filtered_data = {}
+            for item in data_df:
+                attributes = item['attributes']
+                egid = attributes['egid']
+                annee = attributes['annee']
+                date_saisie = attributes['date_saisie']
+               
+                key = (egid, annee)
+               
+                if key not in filtered_data or date_saisie > filtered_data[key]['attributes']['date_saisie']:
+                    filtered_data[key] = item
+            
+            # Convert the filtered data back to a list
+            result = list(filtered_data.values())
+            
             if geometry:
-                return [{'attributes': d['attributes'], 'geometry': d['geometry']} for d in data_df]
+                return [{'attributes': d['attributes'], 'geometry': d['geometry']} for d in result]
             else:
-                return [d['attributes'] for d in data_df]
+                return [d['attributes'] for d in result]
         else:
             logging.warning(f"{table_name} → 'features' key not found in the API response for offset {offset}")
     except requests.exceptions.RequestException as e:

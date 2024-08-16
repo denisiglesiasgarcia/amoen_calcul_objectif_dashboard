@@ -45,16 +45,22 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
         data = response.json()
         if 'features' in data:
             data_df = data['features']
+            st.write(data_df)
+            
             # Create a dictionary to store the most recent entry for each (egid, annee) pair
             filtered_data = {}
             for item in data_df:
                 attributes = item['attributes']
-                egid = attributes['egid']
-                annee = attributes['annee']
-                date_saisie = attributes['date_saisie']
-               
+                egid = attributes.get('egid')
+                annee = attributes.get('annee')
+                date_saisie = attributes.get('date_saisie')
+                
+                # Skip this item if any of the required fields are missing
+                if not all([egid, annee, date_saisie]):
+                    continue
+                
                 key = (egid, annee)
-               
+                
                 if key not in filtered_data or date_saisie > filtered_data[key]['attributes']['date_saisie']:
                     filtered_data[key] = item
             
@@ -62,7 +68,7 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
             result = list(filtered_data.values())
             
             if geometry:
-                return [{'attributes': d['attributes'], 'geometry': d['geometry']} for d in result]
+                return [{'attributes': d['attributes'], 'geometry': d.get('geometry')} for d in result]
             else:
                 return [d['attributes'] for d in result]
         else:

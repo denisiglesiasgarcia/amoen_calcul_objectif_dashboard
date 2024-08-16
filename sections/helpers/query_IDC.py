@@ -47,28 +47,29 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
             data_df = data['features']
             if geometry:
                 result = [{'attributes': d['attributes'], 'geometry': d['geometry']} for d in data_df]
+                return result
             else:
                 result = [d['attributes'] for d in data_df]
+                
+                st.write(result)
 
-            st.write(result)
+                most_recent_dict = {}
 
-            most_recent_dict = {}
+                for d in result:
+                    annee = d["attributes"]["annee"]
+                    egid = d["attributes"]["egid"]
+                    date_saisie = d["attributes"]["date_saisie"]
 
-            for d in result:
-                annee = d["attributes"]["annee"]
-                egid = d["attributes"]["egid"]
-                date_saisie = d["attributes"]["date_saisie"]
+                    key = (annee, egid)
 
-                key = (annee, egid)
+                    if key not in most_recent_dict or date_saisie > most_recent_dict[key]["attributes"]["date_saisie"]:
+                        most_recent_dict[key] = d
 
-                if key not in most_recent_dict or date_saisie > most_recent_dict[key]["attributes"]["date_saisie"]:
-                    most_recent_dict[key] = d
+                filtered_list = list(most_recent_dict.values())
 
-            filtered_list = list(most_recent_dict.values())
+                st.write(filtered_list)
 
-            st.write(filtered_list)
-
-            return filtered_list
+                return filtered_list
         else:
             logging.warning(f"{table_name} → 'features' key not found in the API response for offset {offset}")
     except requests.exceptions.RequestException as e:

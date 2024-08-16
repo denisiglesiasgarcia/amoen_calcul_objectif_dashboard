@@ -57,14 +57,14 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
 
                 for d in result:
                     st.write(d)
-                    # annee = d["attributes"]["annee"]
-                    # egid = d["attributes"]["egid"]
-                    # date_saisie = d["attributes"]["date_saisie"]
+                    annee = d["annee"]
+                    egid = d["egid"]
+                    date_saisie = d["date_saisie"]
 
-                    # key = (annee, egid)
+                    key = (annee, egid)
 
-                    # if key not in most_recent_dict or date_saisie > most_recent_dict[key]["attributes"]["date_saisie"]:
-                    #     most_recent_dict[key] = d
+                    if key not in most_recent_dict or date_saisie > most_recent_dict[key]["date_saisie"]:
+                        most_recent_dict[key] = d
 
                 filtered_list = list(most_recent_dict.values())
 

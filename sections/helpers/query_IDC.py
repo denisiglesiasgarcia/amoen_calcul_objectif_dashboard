@@ -11,10 +11,10 @@ import plotly.express as px
 from datetime import datetime
 import json
 
-# @st.cache_data
+@st.cache_data
 def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name: str, geometry: bool, egid: Union[int, List[int]]) -> Optional[List[Dict]]:
     """
-    Make an API request to retrieve data for one or multiple EGIDs.
+    Make an API request to retrieve data for one or multiple EGIDs and filter the most recent entries.
     """
     if isinstance(egid, list):
         where_clause = f"egid IN ({','.join(map(str, egid))})"
@@ -47,8 +47,29 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
                 st.warning(f"{table_name} → No features returned from the API.")
                 return None
             
-            result = []
+            # Collect all items
+            all_items = []
             for item in features:
+                attributes = item['attributes']
+                if all(key in attributes for key in ['egid', 'annee', 'date_saisie']):
+                    all_items.append(item)
+                else:
+                    st.warning(f"Skipping item due to missing required fields: {attributes}")
+            
+            # Sort items by date_saisie (most recent first)
+            all_items.sort(key=lambda x: x['attributes']['date_saisie'], reverse=True)
+            
+            # Filter to keep only the most recent entry for each unique (egid, annee) combination
+            filtered_items = {}
+            for item in all_items:
+                attributes = item['attributes']
+                key = (attributes['egid'], attributes['annee'])
+                if key not in filtered_items:
+                    filtered_items[key] = item
+            
+            # Prepare the result
+            result = []
+            for item in filtered_items.values():
                 if geometry:
                     result.append({
                         'attributes': item['attributes'],
@@ -57,7 +78,7 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
                 else:
                     result.append(item['attributes'])
             
-            st.write(f"Processed {len(result)} items")
+            st.write(f"Processed and filtered {len(result)} items")
             return result
         else:
             st.warning(f"{table_name} → 'features' key not found in the API response for offset {offset}")

@@ -194,7 +194,7 @@ if st.session_state['authentication_status']:
     with tab1:
         st.subheader('Différences entre méthodologie et calcul IDC:')
         st.write("L'énergie finale pondérée après travaux (Ef,après,corr) représente la quantité d'énergie finale pondérée et climatiquement corrigée consommée par le bâtiment.\
-                    L'IDC et l'Ef,après,corr ne sont pas comparables à cause des points suivants:)
+            L'IDC et l'Ef,après,corr ne sont pas comparables à cause des points suivants:)
         tab1_col1, tab1_col2 = st.columns(2)
         with tab1_col1:
             st.write("Méthodologie")

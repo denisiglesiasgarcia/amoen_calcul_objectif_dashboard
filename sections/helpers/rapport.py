@@ -353,37 +353,42 @@ def generate_pdf(data):
     elements.append(project_energie_table)
     elements.append(Spacer(1, 0.5*cm))
 
-    # Energy data table
+    # Energy data table with an additional "Dénomination" column
     project_results = [
-        [Paragraph("<b>Atteinte de l'objectif</b>", styles['Heading3'])],  # Title row
-        [Paragraph("<b>Variable</b>", styles['Normal']), Paragraph("<b>kWh/m²/an</b>", styles['Normal']), Paragraph("<b>MJ/m²/an</b>", styles['Normal'])],
-        [f"IDC moyen 3 ans avant travaux → (Ef,avant,corr)", f"{data['ef_avant_corr_kwh_m2']:.1f}", f"{data['ef_avant_corr_kwh_m2']*3.6:.1f}"],
-        [f"EF pondéré corrigé clim. après travaux → (Ef,après,corr,rénové*fp)", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']*3.6:.1f}"],
-        [f"Objectif en énergie finale (Ef,obj *fp)", f"{data['ef_objectif_pondere_kwh_m2']:.1f}", f"{data['ef_objectif_pondere_kwh_m2']*3.6:.1f}"],
-        [f"Baisse mesurée → ∆Ef,réel", f"{data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{(data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2'])*3.6:.1f}"],
-        [f"Baisse objectif → ∆Ef,visée", f"{data['delta_ef_visee_kwh_m2']:.1f}", f"{data['delta_ef_visee_kwh_m2']*3.6:.1f}"]
+        [Paragraph("<b>Atteinte de l'objectif</b>", styles['Heading3']), '', '', ''],  # Title row
+        [Paragraph("<b>Variable</b>", styles['Normal']), Paragraph("<b>Dénomination</b>", styles['Normal']), Paragraph("<b>kWh/m²/an</b>", styles['Normal']), Paragraph("<b>MJ/m²/an</b>", styles['Normal'])],
+        ["IDC moyen 3 ans avant travaux", "→ (Ef,avant,corr)", f"{data['ef_avant_corr_kwh_m2']:.1f}", f"{data['ef_avant_corr_kwh_m2']*3.6:.1f}"],
+        ["EF pondéré corrigé clim. après travaux", "→ (Ef,après,corr,rénové*fp)", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']*3.6:.1f}"],
+        ["Objectif en énergie finale", "→ (Ef,obj *fp)", f"{data['ef_objectif_pondere_kwh_m2']:.1f}", f"{data['ef_objectif_pondere_kwh_m2']*3.6:.1f}"],
+        ["Baisse mesurée", "→ ∆Ef,réel", f"{data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}", f"{(data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2'])*3.6:.1f}"],
+        ["Baisse objectif", "→ ∆Ef,visée", f"{data['delta_ef_visee_kwh_m2']:.1f}", f"{data['delta_ef_visee_kwh_m2']*3.6:.1f}"]
     ]
 
-    project_results_table = Table(project_results, colWidths=[375, 65, 60])
+    # Adjust column widths for the additional column
+    project_results_table = Table(project_results, colWidths=[255, 120, 65, 60])
+
+    # Update the table style for the additional column
     project_results_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
-        ('BACKGROUND', (0, 1), (-1, 1), colors.white),  # Add background to the second row
+        ('BACKGROUND', (0, 1), (-1, 1), colors.white),  # Background for header row
         ('TEXTCOLOR', (0, 0), (-1, 1), colors.black),
-        ('ALIGN', (0, 0), (0, -1), 'LEFT'),  # Left-align the first column
-        ('ALIGN', (1, 0), (-1, -1), 'CENTER'),  # Center-align the other columns
+        ('ALIGN', (0, 0), (0, -1), 'LEFT'),  # Left-align first column
+        ('ALIGN', (1, 0), (-1, -1), 'CENTER'),  # Center-align other columns
         ('FONTNAME', (0, 0), (-1, 1), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 12),
-        ('FONTSIZE', (0, 1), (-1, 1), 10),  # Adjust font size for the second row
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 2), (-1, -1), colors.white),
-        ('TEXTCOLOR', (0, 2), (-1, -1), colors.black),
-        ('FONTNAME', (0, 2), (-1, -1), 'Helvetica'),
-        ('FONTSIZE', (0, 2), (-1, -1), 10),
-        ('TOPPADDING', (0, 0), (-1, -1), 3),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),  # Font size for title row
+        ('FONTSIZE', (0, 1), (-1, 1), 10),  # Font size for header row
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),  # Padding for title row
+        ('BACKGROUND', (0, 2), (-1, -1), colors.white),  # Background for data rows
+        ('TEXTCOLOR', (0, 2), (-1, -1), colors.black),  # Text color for data rows
+        ('FONTNAME', (0, 2), (-1, -1), 'Helvetica'),  # Font for data rows
+        ('FONTSIZE', (0, 2), (-1, -1), 10),  # Font size for data rows
+        ('TOPPADDING', (0, 0), (-1, -1), 3),  # Padding adjustments
         ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
-        ('SPAN', (0, 0), (-1, 0)),  # Merge cells in the first row
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),  # Table grid
+        ('SPAN', (0, 0), (-1, 0)),  # Merge cells in title row
     ]))
+
+    # Add the table to the document
     elements.append(project_results_table)
     elements.append(Spacer(1, 1.0*cm))
 

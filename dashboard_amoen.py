@@ -192,9 +192,10 @@ if st.session_state['authentication_status']:
 
     # Calcul des index selon dates
     with tab1:
-        st.subheader('Différences entre méthodologie et calcul IDC:')
-        st.write("L'énergie finale pondérée après travaux (Ef,après,corr) représente la quantité d'énergie finale pondérée et climatiquement corrigée consommée par le bâtiment.\
-                    L'IDC et l'Ef,après,corr ne sont pas comparables à cause des points suivants:")
+        st.subheader('Différences entre méthodologie et calcul IDC')
+        st.write("Selon la méthodologie AMOén, l'énergie finale pondérée après travaux (Ef,après,corr) représente la quantité d'énergie finale pondérée et climatiquement corrigée consommée par le bâtiment.\
+                    L'IDC est utilisé à Genève pour mesurer la performance des bâtiments de plus de 5 preneurs de chaleur, l'IDC est aussi pondéré et corrigé climatiquement.\
+                    Malgré que l'IDC et l'Ef,après,corr ont pour but de mesurer les performances des bâtiments, ils ne sont pas comparables à cause des points suivants:")
         tab1_col1, tab1_col2 = st.columns(2)
         with tab1_col1:
             st.write("Méthodologie")
@@ -212,8 +213,6 @@ if st.session_state['authentication_status']:
             st.write("- Météo: Le tableau Excel IDC ne précise pas les données météo exactes utilisées.")
             st.write("- Répartition ECS/chauffage: Le règlement IDC se base sur consommation normalisé de ECS (Eww), par exemple 128 MJ/m²\
                      pour du logement collectif. Tout le reste de l'énergie est pour le chauffage donc soumis a correction climatique.")
-
-        st.write("Le fait que les unités soient des MJ/m² pour les deux peux porter à confusion. Il est important de comprendre leurs spécificités.")
 
         st.subheader('Limitations du calcul')
         st.write("La période minimale recommandée de calcul est de 6 mois de données.")

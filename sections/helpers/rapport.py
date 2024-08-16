@@ -56,7 +56,7 @@ def graphique_bars_rapport(site,
     cm = 1 / 2.54
     sns.set (style='white',rc={"figure.figsize":(30* cm, 14.2 * cm)})
     # ax1 = sns.catplot(x='Nom_projet', y='Valeur', hue='Type', kind='bar', data=bar_data1)
-    Ef,avant,corr
+
     ax = sns.barplot (y="Valeur",
                         x="Type",
                         data=bar_data1,

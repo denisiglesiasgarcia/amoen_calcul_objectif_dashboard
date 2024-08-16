@@ -11,26 +11,17 @@ import plotly.express as px
 from datetime import datetime
 import json
 
-@st.cache_data
+# @st.cache_data
 def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name: str, geometry: bool, egid: Union[int, List[int]]) -> Optional[List[Dict]]:
     """
     Make an API request to retrieve data for one or multiple EGIDs.
-    Args:
-        offset (int): The offset for the data to retrieve.
-        fields (str): The fields to include in the response.
-        url (str): The API endpoint URL.
-        chunk_size (int): The number of records to retrieve in each request.
-        table_name (str): The name of the table being processed.
-        geometry (bool): Whether to include geometry data in the response.
-        egid (Union[int, List[int]]): A single EGID or a list of EGIDs to query.
-    Returns:
-        Optional[List[Dict]]: A list of dictionaries containing the retrieved data, or None if an error occurred.
     """
     # Construct the where clause based on whether egid is a single value or a list
     if isinstance(egid, list):
         where_clause = f"egid IN ({','.join(map(str, egid))})"
     else:
         where_clause = f"egid={egid}"
+    
     params = {
         'where': where_clause,
         'outFields': fields,
@@ -39,13 +30,23 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
         'resultOffset': offset,
         'resultRecordCount': chunk_size
     }
+    
+    st.write("API Request Parameters:", params)  # Debug: Print request parameters
+    
     try:
         response = requests.get(url, params=params)
         response.raise_for_status()
         data = response.json()
+        
+        st.write("API Response:", data)  # Debug: Print raw API response
+        
         if 'features' in data:
             data_df = data['features']
-            st.write(data_df)
+            st.write("Features data:", data_df)  # Debug: Print features data
+            
+            if not data_df:
+                st.warning(f"{table_name} → No features returned from the API.")
+                return None
             
             # Create a dictionary to store the most recent entry for each (egid, annee) pair
             filtered_data = {}
@@ -55,8 +56,11 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
                 annee = attributes.get('annee')
                 date_saisie = attributes.get('date_saisie')
                 
+                st.write(f"Processing item: egid={egid}, annee={annee}, date_saisie={date_saisie}")  # Debug: Print each item being processed
+                
                 # Skip this item if any of the required fields are missing
                 if not all([egid, annee, date_saisie]):
+                    st.warning(f"Skipping item due to missing required field: {attributes}")
                     continue
                 
                 key = (egid, annee)
@@ -67,16 +71,22 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
             # Convert the filtered data back to a list
             result = list(filtered_data.values())
             
+            st.write("Filtered result:", result)  # Debug: Print filtered result
+            
             if geometry:
                 return [{'attributes': d['attributes'], 'geometry': d.get('geometry')} for d in result]
             else:
                 return [d['attributes'] for d in result]
         else:
-            logging.warning(f"{table_name} → 'features' key not found in the API response for offset {offset}")
+            st.warning(f"{table_name} → 'features' key not found in the API response for offset {offset}")
+            st.write("API response keys:", data.keys())  # Debug: Print keys in the API response
     except requests.exceptions.RequestException as e:
-        logging.error(f'{table_name} → An error occurred with {offset}: {e}')
+        st.error(f'{table_name} → An error occurred with offset {offset}: {e}')
     except json.JSONDecodeError:
-        logging.error(f'{table_name} → An error occurred with {offset}, retrying later...')
+        st.error(f'{table_name} → JSON decode error occurred with offset {offset}, retrying later...')
+    except Exception as e:
+        st.error(f'{table_name} → Unexpected error occurred: {str(e)}')
+    
     return None
 
 @st.cache_data

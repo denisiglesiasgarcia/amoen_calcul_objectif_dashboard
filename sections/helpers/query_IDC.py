@@ -45,6 +45,22 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
         data = response.json()
         if 'features' in data:
             data_df = data['features']
+
+            # Convert list of dictionaries to a DataFrame
+            df = pd.DataFrame(data_df)
+
+            # Convert date_saisie from milliseconds to datetime
+            df['date_saisie'] = pd.to_datetime(df['date_saisie'], unit='ms')
+
+            # Sort by egid, annee, and date_saisie in descending order
+            df = df.sort_values(by=['egid', 'annee', 'date_saisie'], ascending=[True, True, False])
+
+            # Drop duplicates, keeping only the most recent date_saisie for the same egid and annee
+            df = df.drop_duplicates(subset=['egid', 'annee'])
+
+            # Convert the filtered DataFrame back to a list of dictionaries (if needed)
+            data_df = df.to_dict(orient='records')
+
             if geometry:
                 return [{'attributes': d['attributes'], 'geometry': d['geometry']} for d in data_df]
             else:

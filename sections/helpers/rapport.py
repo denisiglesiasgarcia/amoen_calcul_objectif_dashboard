@@ -125,7 +125,7 @@ def graphique_bars_rapport(site,
     #         loc='left', size=18)
     
     
-    formula_atteinte_objectif_titre = r"$Atteinte\ objectif \ [-]=$"
+    formula_atteinte_objectif_titre = r"$Atteinte\ objectif=$"
     formula_atteinte_objectif_titre_pourcent = r"$=$"
 
     formula_atteinte_objectif = r"$\frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}=$"
@@ -147,9 +147,9 @@ def graphique_bars_rapport(site,
     xlabel_level2 = xlabel_level1 + xlabel_sep_y
 
     u1_titre = plt.text(0, xlabel_level1, formula_atteinte_objectif_titre, ha='left', va='center', transform=ax.transAxes, fontsize=18)
-    u2_titre = plt.text(0.95, xlabel_level1, formula_atteinte_objectif_titre_pourcent, ha='left', va='center', transform=ax.transAxes, fontsize=18)
-    u1 = plt.text(0.27, xlabel_level1, formula_atteinte_objectif, ha='left', va='center', transform=ax.transAxes, fontsize=24)
-    u2 = plt.text(0.78, xlabel_level1, formula_atteinte_objectif_num, ha='left', va='center', transform=ax.transAxes, fontsize=24)
+    u2_titre = plt.text(0.90, xlabel_level1, formula_atteinte_objectif_titre_pourcent, ha='left', va='center', transform=ax.transAxes, fontsize=18)
+    u1 = plt.text(0.20, xlabel_level1, formula_atteinte_objectif, ha='left', va='center', transform=ax.transAxes, fontsize=24)
+    u2 = plt.text(0.70, xlabel_level1, formula_atteinte_objectif_num, ha='left', va='center', transform=ax.transAxes, fontsize=24)
     u3 = plt.text(0.95, xlabel_level1, formula_atteinte_objectifs_pourcent, ha='left', va='center', transform=ax.transAxes, fontsize=20)
 
 

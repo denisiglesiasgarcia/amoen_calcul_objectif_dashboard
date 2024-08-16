@@ -270,7 +270,7 @@ def generate_pdf(data):
     if data['sre_extension_surelevation_m2'] > 0.0:
         project_surfaces.append([
             Paragraph("Surface surélévation (m² SRE):", styles['Normal']),
-            "{data['sre_extension_surelevation_m2']} m² SRE. La SRE surélevée n'est pas sujette à la subvention AMOén"])
+            f"{data['sre_extension_surelevation_m2']} m² SRE. La SRE surélevée n'est pas sujette à la subvention AMOén"])
 
     project_surfaces.append([Paragraph("Surface rénovation (m² SRE):", styles['Normal']), f"{data['sre_renovation_m2']} m² SRE"])
     # Add conditional rows for different surface types

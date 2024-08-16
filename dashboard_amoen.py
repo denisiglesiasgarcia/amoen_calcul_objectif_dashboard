@@ -193,9 +193,10 @@ if st.session_state['authentication_status']:
     # Calcul des index selon dates
     with tab1:
         st.subheader('Différences entre méthodologie et calcul IDC')
-        st.write("Selon la méthodologie AMOén, l'énergie finale pondérée après travaux (Ef,après,corr) représente la quantité d'énergie finale pondérée et climatiquement corrigée consommée par le bâtiment.\
-                    L'IDC est utilisé à Genève pour mesurer la performance des bâtiments de plus de 5 preneurs de chaleur, l'IDC est aussi pondéré et corrigé climatiquement.\
-                    Malgré que l'IDC et l'Ef,après,corr ont pour but de mesurer les performances des bâtiments, ils ne sont pas comparables à cause des points suivants:")
+        st.write("Selon la méthodologie AMOén, l'énergie finale pondérée après travaux (Ef,après,corr) représente la quantité d'énergie finale pondérée et climatiquement corrigée consommée par le bâtiment.")
+        st.write("L'IDC est utilisé à Genève pour mesurer la performance des bâtiments de plus de 5 preneurs de chaleur, l'IDC est aussi pondéré et corrigé climatiquement.")
+        st.write("l'IDC et l'Ef,après,corr ont le même but, c'est à dire de mesurer les performances des bâtiments, mais ils ne sont pas calculés de la même manière.\
+             Les pincipales différences sont détaillées ci-dessous:")
         tab1_col1, tab1_col2 = st.columns(2)
         with tab1_col1:
             st.write("Méthodologie")

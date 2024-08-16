@@ -1119,7 +1119,7 @@ if st.session_state['authentication_status']:
             # get data
             data_geometry = make_request(0, FIELDS, URL_INDICE_MOYENNES_3_ANS, 1000, "SCANE_INDICE_MOYENNES_3_ANS", True, egids)
             data_df = make_request(0, FIELDS, URL_INDICE_MOYENNES_3_ANS, 1000, "SCANE_INDICE_MOYENNES_3_ANS", False, egids)
-
+            st.write(data_df)
             if data_geometry and data_df:
                 # show map
                 if st.checkbox("Afficher la carte"):

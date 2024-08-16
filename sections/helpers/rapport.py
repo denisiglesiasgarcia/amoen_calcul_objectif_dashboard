@@ -281,7 +281,7 @@ def generate_pdf(data):
         # Create the paragraph with mixed styles
         project_surfaces.append([
             Paragraph("Surface surélévation (m² SRE):", styles['Normal']),
-            f"{data['sre_extension_surelevation_m2']} m² SRE. <i>La SRE surélevée n'est pas sujette à la subvention AMOén</i>"])
+            Paragraph(f"{data['sre_extension_surelevation_m2']} m² SRE. <i>La SRE surélevée n'est pas sujette à la subvention AMOén</i>")])
 
     project_surfaces.append([Paragraph("Surface rénovation (m² SRE):", styles['Normal']), f"{data['sre_renovation_m2']} m² SRE"])
     # Add conditional rows for different surface types

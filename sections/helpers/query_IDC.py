@@ -50,6 +50,8 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
             else:
                 result = [d['attributes'] for d in data_df]
 
+            st.write(result)
+
             most_recent_dict = {}
 
             for d in result:

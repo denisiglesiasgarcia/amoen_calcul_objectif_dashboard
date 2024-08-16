@@ -45,7 +45,6 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
         data = response.json()
         if 'features' in data:
             data_df = data['features']
-            st.write(data_df)
             # Create a dictionary to store the most recent entry for each (egid, annee) pair
             filtered_data = {}
             for item in data_df:

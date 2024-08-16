@@ -56,7 +56,6 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
                 most_recent_dict = {}
 
                 for d in result:
-                    st.write(d)
                     annee = d["annee"]
                     egid = d["egid"]
                     date_saisie = d["date_saisie"]

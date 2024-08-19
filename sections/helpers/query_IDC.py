@@ -157,10 +157,8 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         get_tooltip=lambda f: {
             "html": f"""
                 <div>
-                    <h5>{f['properties']['egid']}</h5>
-                    <p>Adresse: {f['properties']['adresse']}</p>
-                    <!-- Add more fields as needed -->
-                    {"".join([f"<p>{key}: {value}</p>" for key, value in f['properties'].items() if key not in ['egid', 'adresse']])}
+                    <h5>{data['features'][0]['properties']['egid']}</h5>
+                    <p>Adresse: {data['features'][0]['properties']['adresse']}</p>
                 </div>
             """,
             "style": {

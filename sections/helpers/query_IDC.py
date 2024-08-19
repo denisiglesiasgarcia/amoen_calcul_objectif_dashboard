@@ -10,6 +10,9 @@ import sqlite3
 import plotly.express as px
 from datetime import datetime
 import json
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name: str, geometry: bool, egid: Union[int, List[int]]) -> Optional[List[Dict]]:
     """
@@ -136,6 +139,9 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
     """
     Display a map with the given data and centroid.
     """
+    logging.debug("Data: %s", data)
+    logging.debug("Centroid: %s", centroid)
+
     # Create a PyDeck layer
     layer = pdk.Layer(
         "GeoJsonLayer",
@@ -148,7 +154,7 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         get_elevation="properties.indice * 10",  # Adjust this multiplier as needed
         get_fill_color=[255, 0, 0, 200],
         get_line_color=[0, 0, 0],
-                get_tooltip=lambda f: {
+        get_tooltip=lambda f: {
             "html": f"""
                 <div>
                     <h5>{f['properties']['egid']}</h5>
@@ -165,6 +171,8 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         },
     )
 
+    logging.debug("Layer: %s", layer)
+
     # Set the initial view state using the calculated centroid
     view_state = pdk.ViewState(
         latitude=centroid[1],  # Latitude
@@ -173,12 +181,16 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         pitch=45,
     )
 
+    logging.debug("View State: %s", view_state)
+
     # Create the deck
     deck = pdk.Deck(
         layers=[layer],
         initial_view_state=view_state,
         map_style="mapbox://styles/mapbox/light-v9",
     )
+
+    logging.debug("Deck: %s", deck)
 
     # Display the map in Streamlit
     st.pydeck_chart(deck)

@@ -151,7 +151,7 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         filled=True,
         extruded=True,
         wireframe=True,
-        get_elevation="properties.indice * 50",  # Adjust this multiplier for more pronounced 3D effect
+        get_elevation="properties.indice * 10",  # Adjust this multiplier for more pronounced 3D effect
         get_fill_color=color_scale,
         get_line_color=[255, 255, 255],
         get_line_width=2,

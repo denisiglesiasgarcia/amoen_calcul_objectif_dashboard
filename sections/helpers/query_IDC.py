@@ -151,7 +151,7 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         filled=True,
         extruded=True,
         wireframe=True,
-        get_elevation="properties.indice * 10",  # Adjust this multiplier for more pronounced 3D effect
+        get_elevation="properties.indice * 1",  # Adjust this multiplier for more pronounced 3D effect
         get_fill_color=color_scale,
         get_line_color=[255, 255, 255],
         get_line_width=2,
@@ -176,9 +176,9 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         tooltip={
             "html": """
                 <div style="background-color: rgba(0, 0, 0, 0.7); color: white; padding: 10px; border-radius: 5px;">
-                    <h3 style="margin-top: 0;">{properties.egid}</h3>
-                    <p><b>Adresse:</b> {properties.adresse}</p>
-                    <p><b>SRE:</b> {properties.sre} m²</p>
+                    <h3 style="margin-top: 0;">{egid}</h3>
+                    <p><b>Adresse:</b> {adresse}</p>
+                    <p><b>SRE:</b> {sre} m²</p>
                 </div>
             """,
         }

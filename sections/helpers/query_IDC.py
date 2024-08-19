@@ -11,7 +11,6 @@ import plotly.express as px
 from datetime import datetime
 import json
 import logging
-import random
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -140,85 +139,48 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
     """
     Display a map with the given data and centroid.
     """
-    # Generate a unique color for each EGID
-    color_map = generate_color_map(data)
-
+    
     # Create a PyDeck layer
     layer = pdk.Layer(
         "GeoJsonLayer",
         data,
         opacity=0.8,
-        stroked=True,
+        stroked=False,
         filled=True,
         extruded=False,
         wireframe=False,
-        get_fill_color=f"color_map[properties.egid]",
+        get_elevation="properties.indice * 10",  # Adjust this multiplier as needed
+        get_fill_color=[255, 0, 0, 200],
         get_line_color=[0, 0, 0],
-        get_line_width=2,
         pickable=True,
         auto_highlight=True,
+        get_tooltip=["properties.egid", "properties.adresse"],
     )
-
-    # Create a legend layer
-    legend_data = create_legend_data(color_map)
-    legend_layer = pdk.Layer(
-        "TextLayer",
-        legend_data,
-        get_position="position",
-        get_text="text",
-        get_color=[255, 255, 255],
-        get_size=14,
-        get_alignment_baseline="'bottom'",
-    )
-
+    
     # Set the initial view state using the calculated centroid
     view_state = pdk.ViewState(
-        latitude=centroid[1],
-        longitude=centroid[0],
-        zoom=17,
+        latitude=centroid[1],  # Latitude
+        longitude=centroid[0],  # Longitude
+        zoom=17,  # You might need to adjust this depending on the scale of your data
         pitch=45,
     )
-
+    
     # Create the deck
     deck = pdk.Deck(
-        layers=[layer, legend_layer],
+        layers=[layer],
         initial_view_state=view_state,
-        map_style="mapbox://styles/mapbox/dark-v10",
+        map_style="mapbox://styles/mapbox/light-v9",
         tooltip={
-            "html": "<b>EGID:</b> {properties.egid}<br/><b>Adresse:</b> {properties.adresse}<br/><b>SRE:</b> {properties.sre} m²",
+            "html": "<b>EGID:</b> {egid}<br/><b>Adresse:</b> {adresse}<br/><b>SRE:</b> {sre} m",
             "style": {
-                "backgroundColor": "rgba(0, 0, 0, 0.7)",
-                "color": "white",
-                "borderRadius": "5px",
-                "padding": "10px",
+                "backgroundColor": "steelblue",
+                "color": "white"
             }
         }
     )
-
+    
     # Display the map in Streamlit
     st.pydeck_chart(deck)
-
-def generate_color_map(data):
-    color_map = {}
-    for feature in data['features']:
-        egid = feature['properties']['egid']
-        if egid not in color_map:
-            color_map[egid] = [
-                random.randint(50, 255),
-                random.randint(50, 255),
-                random.randint(50, 255),
-                200
-            ]
-    return color_map
-
-def create_legend_data(color_map):
-    legend_data = []
-    for i, (egid, color) in enumerate(color_map.items()):
-        legend_data.append({
-            "position": [-122.4, 37.7 + i * 0.001],  # Adjust these coordinates based on your map's location
-            "text": f"EGID: {egid}",
-        })
-    return legend_data
 
 @st.cache_data
 def show_dataframe(df):

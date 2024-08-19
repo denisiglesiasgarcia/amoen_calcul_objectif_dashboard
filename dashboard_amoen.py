@@ -1123,8 +1123,8 @@ if st.session_state['authentication_status']:
             if data_geometry and data_df:
                 # show map
                 if st.checkbox("Afficher la carte"):
-                    st.write(geojson_data)
                     geojson_data, centroid = convert_geometry_for_streamlit(data_geometry)
+                    st.write(geojson_data)
                     show_map(geojson_data, centroid)
                 
                 st.subheader("Historique IDC")

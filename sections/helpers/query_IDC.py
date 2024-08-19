@@ -177,7 +177,7 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         initial_view_state=view_state,
         map_style="mapbox://styles/mapbox/light-v9",
         tooltip={
-            "html": "<b>EGID:</b> {properties.egid}<br/><b>Adresse:</b> {properties.adresse}",
+            "html": "<b>EGID:</b> {egid}<br/><b>Adresse:</b> {adresse}",
             "style": {
                 "backgroundColor": "steelblue",
                 "color": "white"

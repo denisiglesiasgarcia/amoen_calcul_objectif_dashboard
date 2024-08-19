@@ -141,7 +141,7 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
     """
     logging.debug("Data: %s", data)
     logging.debug("Centroid: %s", centroid)
-
+    
     # Create a PyDeck layer
     layer = pdk.Layer(
         "GeoJsonLayer",
@@ -154,24 +154,13 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         get_elevation="properties.indice * 10",  # Adjust this multiplier as needed
         get_fill_color=[255, 0, 0, 200],
         get_line_color=[0, 0, 0],
-        get_tooltip=lambda f: {
-            "html": f"""
-                <div>
-                    <h5>{data['features'][0]['properties']['egid']}</h5>
-                    <p>Adresse: {data['features'][0]['properties']['adresse']}</p>
-                </div>
-            """,
-            "style": {
-                "color": "white",
-                "background": "rgba(0, 0, 0, 0.8)",
-                "padding": "10px",
-                "borderRadius": "5px",
-            },
-        },
+        pickable=True,
+        auto_highlight=True,
+        get_tooltip=["properties.egid", "properties.adresse"],
     )
-
+    
     logging.debug("Layer: %s", layer)
-
+    
     # Set the initial view state using the calculated centroid
     view_state = pdk.ViewState(
         latitude=centroid[1],  # Latitude
@@ -179,18 +168,25 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         zoom=17,  # You might need to adjust this depending on the scale of your data
         pitch=45,
     )
-
+    
     logging.debug("View State: %s", view_state)
-
+    
     # Create the deck
     deck = pdk.Deck(
         layers=[layer],
         initial_view_state=view_state,
         map_style="mapbox://styles/mapbox/light-v9",
+        tooltip={
+            "html": "<b>EGID:</b> {properties.egid}<br/><b>Adresse:</b> {properties.adresse}",
+            "style": {
+                "backgroundColor": "steelblue",
+                "color": "white"
+            }
+        }
     )
-
+    
     logging.debug("Deck: %s", deck)
-
+    
     # Display the map in Streamlit
     st.pydeck_chart(deck)
 

@@ -148,8 +148,7 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         get_elevation="properties.indice * 10",  # Adjust this multiplier as needed
         get_fill_color=[255, 0, 0, 200],
         get_line_color=[0, 0, 0],
-        get_tooltip="{'html': '<b>EGID:</b> {properties.egid}
-                        <b>Adresse:</b> {properties.adresse}'}",
+        get_tooltip="{'html': '<b>EGID:</b> {properties.egid} <b>Adresse:</b> {properties.adresse}'}",
     )
 
     # Set the initial view state using the calculated centroid

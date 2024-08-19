@@ -76,8 +76,6 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
                 df = df.sort_values(by=['egid', 'annee', 'date_saisie'], ascending=[True, True, False])
                 df = df.drop_duplicates(subset=['egid', 'annee'], keep='first')
 
-                st.write(df)
-
                 # convert dataframe to list of dictionaries
                 filtered_list = df.to_dict('records')
 

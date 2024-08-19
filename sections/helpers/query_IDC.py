@@ -73,8 +73,8 @@ def make_request(offset: int, fields: str, url: str, chunk_size: int, table_name
                 df['quantite_agent_energetique_3'] = df['quantite_agent_energetique_3'].astype('float64')
 
                 # for each pair of egid and annee, keep only the moste recent date_saisie
-                df = df.sort_values(by=['adresse', 'annee', 'date_saisie'], ascending=[True, True, False])
-                df = df.drop_duplicates(subset=['adresse', 'annee'], keep='first')
+                df = df.sort_values(by=['egid', 'annee', 'date_saisie'], ascending=[True, True, False])
+                df = df.drop_duplicates(subset=['egid', 'annee'], keep='first')
 
                 st.write(df)
 
@@ -183,7 +183,7 @@ def show_dataframe(df):
             'date_debut_periode', 'date_fin_periode', 'date_saisie',
             'indice_moy2', 'annees_concernees_moy_2', 'indice_moy3', 'annees_concernees_moy_3',
             'id_concessionnaire', 'nbre_preneur',
-            ]].sort_values(by=['adresse', 'annee'])
+            ]].sort_values(by=['egid', 'annee'])
 
     st.dataframe(df)
 

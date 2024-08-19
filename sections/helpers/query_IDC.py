@@ -197,37 +197,40 @@ def get_adresses_egid():
 @st.cache_data
 def create_barplot(data_df):
     df_barplot = pd.DataFrame(data_df)
-    df_barplot = df_barplot[['adresse', 'annee', 'indice']].sort_values(by=['adresse', 'annee'])
+    df_barplot = df_barplot[['adresse', 'egid', 'annee', 'indice']].sort_values(by=['annee', 'adresse', 'egid'])
     
     # Check if annee has all the years between 2011 and current year
     current_year = datetime.now().year
     years = list(range(2011, current_year + 1))
-    adresses = df_barplot['adresse'].unique()
+    adresses_egid = df_barplot[['adresse', 'egid']].drop_duplicates().values.tolist()
     
     # Create a list to store new rows
     new_rows = []
     
-    for adresse in adresses:
+    for adresse, egid in adresses_egid:
         for year in years:
-            if year not in df_barplot[df_barplot['adresse'] == adresse]['annee'].unique():
-                new_rows.append({'adresse': adresse, 'annee': year, 'indice': 0})
+            if year not in df_barplot[(df_barplot['adresse'] == adresse) & (df_barplot['egid'] == egid)]['annee'].unique():
+                new_rows.append({'adresse': adresse, 'egid': egid, 'annee': year, 'indice': 0})
     
     # Use concat to add new rows
     if new_rows:
         df_new_rows = pd.DataFrame(new_rows)
         df_barplot = pd.concat([df_barplot, df_new_rows], ignore_index=True)
     
-    df_barplot = df_barplot.sort_values(by=['adresse', 'annee'])
+    df_barplot = df_barplot.sort_values(by=['annee', 'adresse', 'egid'])
     
-    fig = px.bar(df_barplot, x='annee', y='indice', color='adresse', barmode='group',
-                 labels={'annee': 'Année', 'indice': 'Indice [MJ/m²]', 'adresse': 'Adresse'},
+    # Create a new column for legend
+    df_barplot['adresse_egid'] = df_barplot.apply(lambda row: f"{row['adresse']} - {row['egid']}", axis=1)
+    
+    fig = px.bar(df_barplot, x='annee', y='indice', color='adresse_egid', barmode='group',
+                 labels={'annee': 'Année', 'indice': 'Indice [MJ/m²]'},
                  title='Indice par Année et Adresse')
     
     # Customize the layout
     fig.update_layout(
         xaxis_title='Année',
         yaxis_title='Indice [MJ/m²]',
-        legend_title='Adresse',
+        legend_title='Adresse - EGID',
         xaxis={'type': 'category'}  # Treat year as categorical
     )
     

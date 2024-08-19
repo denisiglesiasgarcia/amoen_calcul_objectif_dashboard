@@ -139,8 +139,6 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
     """
     Display a map with the given data and centroid.
     """
-    logging.debug("Data: %s", data)
-    logging.debug("Centroid: %s", centroid)
     
     # Create a PyDeck layer
     layer = pdk.Layer(
@@ -159,8 +157,6 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         get_tooltip=["properties.egid", "properties.adresse"],
     )
     
-    logging.debug("Layer: %s", layer)
-    
     # Set the initial view state using the calculated centroid
     view_state = pdk.ViewState(
         latitude=centroid[1],  # Latitude
@@ -168,8 +164,6 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
         zoom=17,  # You might need to adjust this depending on the scale of your data
         pitch=45,
     )
-    
-    logging.debug("View State: %s", view_state)
     
     # Create the deck
     deck = pdk.Deck(
@@ -184,8 +178,6 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
             }
         }
     )
-    
-    logging.debug("Deck: %s", deck)
     
     # Display the map in Streamlit
     st.pydeck_chart(deck)

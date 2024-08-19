@@ -11,6 +11,7 @@ import plotly.express as px
 from datetime import datetime
 import json
 import logging
+import random
 
 logging.basicConfig(level=logging.DEBUG)
 

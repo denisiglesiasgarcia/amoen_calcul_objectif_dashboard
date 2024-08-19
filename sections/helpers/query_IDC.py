@@ -139,79 +139,56 @@ def show_map(data: List[Dict], centroid: Tuple[float, float]) -> None:
     """
     Display a map with the given data and centroid.
     """
-    # Calculate color scale based on 'indice'
-    color_scale = get_color_scale(data)
-
+    logging.debug("Data: %s", data)
+    logging.debug("Centroid: %s", centroid)
+    
     # Create a PyDeck layer
     layer = pdk.Layer(
         "GeoJsonLayer",
         data,
         opacity=0.8,
-        stroked=True,
+        stroked=False,
         filled=True,
-        extruded=True,
-        wireframe=True,
-        get_fill_color=color_scale,
-        get_line_color=[255, 255, 255],
-        get_line_width=2,
+        extruded=False,
+        wireframe=False,
+        get_elevation="properties.indice * 10",  # Adjust this multiplier as needed
+        get_fill_color=[255, 0, 0, 200],
+        get_line_color=[0, 0, 0],
         pickable=True,
         auto_highlight=True,
+        get_tooltip=["properties.egid", "properties.adresse"],
     )
-
-    # Set the initial view state
+    
+    logging.debug("Layer: %s", layer)
+    
+    # Set the initial view state using the calculated centroid
     view_state = pdk.ViewState(
-        latitude=centroid[1],
-        longitude=centroid[0],
-        zoom=16,
+        latitude=centroid[1],  # Latitude
+        longitude=centroid[0],  # Longitude
+        zoom=17,  # You might need to adjust this depending on the scale of your data
         pitch=45,
-        bearing=0
     )
-
+    
+    logging.debug("View State: %s", view_state)
+    
     # Create the deck
     deck = pdk.Deck(
         layers=[layer],
         initial_view_state=view_state,
-        map_style="mapbox://styles/mapbox/light-v10",
+        map_style="mapbox://styles/mapbox/light-v9",
         tooltip={
-            "html": """
-                <div style="background-color: rgba(0, 0, 0, 0.7); color: white; padding: 10px; border-radius: 5px;">
-                    <h3 style="margin-top: 0;">{egid}</h3>
-                    <p><b>Adresse:</b> {adresse}</p>
-                    <p><b>SRE:</b> {sre} m²</p>
-                </div>
-            """,
+            "html": "<b>EGID:</b> {egid}<br/><b>Adresse:</b> {adresse}<br/><b>SRE:</b> {adresse}",
+            "style": {
+                "backgroundColor": "steelblue",
+                "color": "white"
+            }
         }
     )
-
-    # Add a title to the map
-    st.title("Building Map")
-
+    
+    logging.debug("Deck: %s", deck)
+    
     # Display the map in Streamlit
     st.pydeck_chart(deck)
-
-    # Add a legend below the map
-    add_legend(color_scale)
-
-def get_color_scale(data):
-    # Extract 'indice' values
-    indices = [feature['properties']['indice'] for feature in data['features']]
-    min_indice, max_indice = min(indices), max(indices)
-
-    return f"[255 * ({max_indice} - properties.indice) / {max_indice - min_indice}, " \
-           f"255 * (properties.indice - {min_indice}) / {max_indice - min_indice}, 50]"
-
-def add_legend(color_scale):
-    st.markdown("### Legend")
-    legend_html = f"""
-    <div style="display: flex; align-items: center; margin-bottom: 5px;">
-        <div style="width: 200px; height: 20px; background: linear-gradient(to right, rgb(255,0,50), rgb(0,255,50)); margin-right: 10px;"></div>
-    </div>
-    <div style="display: flex; justify-content: space-between; width: 200px;">
-        <span>Low Indice</span>
-        <span>High Indice</span>
-    </div>
-    """
-    st.markdown(legend_html, unsafe_allow_html=True)
 
 @st.cache_data
 def show_dataframe(df):

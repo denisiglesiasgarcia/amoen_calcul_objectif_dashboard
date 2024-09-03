@@ -22,11 +22,14 @@ st.set_page_config(page_title="AMOEN Dashboard", page_icon=":bar_chart:", layout
 import seaborn as sns
 import tempfile
 from datetime import date
+
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 import matplotlib
 
 matplotlib.use("Agg")
+import plotly.express as px
+
 from pymongo import MongoClient
 from bson import ObjectId
 
@@ -2530,7 +2533,7 @@ if st.session_state["authentication_status"]:
             # data
             data_admin = load_projets_admin()
             df = pd.DataFrame(data_admin)
-            
+
             # chiffres clés
             st.subheader("Chiffres-clés")
 
@@ -2539,9 +2542,6 @@ if st.session_state["authentication_status"]:
 
             st.write("Date du dernier rapport par projet")
             st.write(df_date)
-
-
-
 
             st.subheader("Données")
 
@@ -2591,7 +2591,6 @@ if st.session_state["authentication_status"]:
             )
 
             st.plotly_chart(fig)
-
 
 
 elif st.session_state["authentication_status"] is False:

@@ -2573,8 +2573,6 @@ if st.session_state["authentication_status"]:
 
             # Prepare data for the bar plot
             df_barplot = df_filtre.sort_values("date_rapport", ascending=False)
-            df_barplot = df_barplot.groupby("nom_projet").first().reset_index()
-            df_barplot = df_barplot.sort_values("atteinte_objectif", ascending=False)
 
             # Create the grouped bar plot
             fig = px.bar(

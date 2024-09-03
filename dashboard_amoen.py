@@ -2542,6 +2542,8 @@ if st.session_state["authentication_status"]:
                     "sre_pourcentage_piscines_couvertes",
                 ]
             )
+            st.selectbox("Nom du projet", df["nom_projet"].unique())
+            st.selectbox("AMOén", df["amoen_id"].unique())
             st.write(df)
 
             # Add your content for the admin tab here

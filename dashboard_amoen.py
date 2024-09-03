@@ -2587,7 +2587,7 @@ if st.session_state["authentication_status"]:
                     "nom_projet": "Projet",
                 },
                 text="atteinte_objectif",  # Display the values on the bars
-                hover_data=["date_rapport", "amoen_id"],  # Add more info on hover
+                hover_data=["periode_start", "periode_end"],  # Add more info on hover
             )
 
             # Customize the layout

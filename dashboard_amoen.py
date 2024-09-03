@@ -136,7 +136,7 @@ def load_project_data(project_name):
 
 @st.cache_data
 def load_projets_liste(project_name):
-    if project_name == "all":
+    if username_login == "admin":
         nom_projets_liste = mycol_historique_sites.distinct("nom_projet")
     else:
         nom_projets_liste = mycol_historique_sites.distinct(
@@ -203,7 +203,7 @@ if st.session_state["authentication_status"]:
 
     # dashboard
     st.title("Calcul de l'atteinte des objectifs AMOén selon méthodologie")
-    st.write(username_login)
+
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
         [
             "0 Readme",

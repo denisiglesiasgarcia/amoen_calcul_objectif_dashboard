@@ -2533,18 +2533,13 @@ if st.session_state["authentication_status"]:
             # data
             data_admin = load_projets_admin()
             df = pd.DataFrame(data_admin)
-
             # chiffres clés
             st.subheader("Chiffres-clés")
-
             # date dernier rapport par projet
             df_date = df.groupby("nom_projet")["date_rapport"].max().reset_index()
-
             st.write("Date du dernier rapport par projet")
             st.write(df_date)
-
             st.subheader("Données")
-
             # Drop unnecessary columns
             df_filtre = df.drop(
                 columns=[
@@ -2557,13 +2552,10 @@ if st.session_state["authentication_status"]:
                     "sre_pourcentage_piscines_couvertes",
                 ]
             )
-
             # Filtres
             all_projets = df_filtre["nom_projet"].unique()
             all_amoen = df_filtre["amoen_id"].unique()
-
             filtre_amoen = st.multiselect("AMOén", all_amoen, default=all_amoen)
-
             filtre_projets = st.multiselect(
                 "Projet",
                 all_projets,
@@ -2571,25 +2563,36 @@ if st.session_state["authentication_status"]:
                     "nom_projet"
                 ].unique(),
             )
-
             # Apply the final filter to the DataFrame
             df_filtre = df_filtre[
                 (df_filtre["nom_projet"].isin(filtre_projets))
                 & (df_filtre["amoen_id"].isin(filtre_amoen))
             ]
-
             # Display the filtered DataFrame
             st.write(df_filtre)
 
-            # make a plotly barplot wit columns nom_projet, atteinte_objectif
+            # Aggregate data for the bar plot
+            df_barplot = (
+                df_filtre.groupby("nom_projet")["atteinte_objectif"].mean().reset_index()
+            )
+            df_barplot = df_barplot.sort_values("atteinte_objectif", ascending=False)
+
+            # Create the grouped bar plot
             fig = px.bar(
-                df_filtre,
+                df_barplot,
                 x="nom_projet",
                 y="atteinte_objectif",
                 title="Atteinte objectif par projet",
-                labels={"atteinte_objectif": "Atteinte objectif [%]"},
+                labels={
+                    "atteinte_objectif": "Atteinte objectif [%]",
+                    "nom_projet": "Projet",
+                },
             )
 
+            # Customize the layout to ensure bars are not stacked
+            fig.update_layout(barmode="group")
+
+            # Display the plot
             st.plotly_chart(fig)
 
 

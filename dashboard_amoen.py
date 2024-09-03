@@ -2522,7 +2522,7 @@ if st.session_state["authentication_status"]:
     if username == "admin":
         with tab7:
             st.subheader("Administration")
-
+            st.write(nom_projet_db)
             # Add your content for the admin tab here
 
 

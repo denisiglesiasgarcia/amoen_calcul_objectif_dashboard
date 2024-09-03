@@ -145,6 +145,12 @@ def load_projets_liste(project_name):
     return nom_projets_liste
 
 
+def load_projets_admin():
+    # Retrieve all documents from the collection
+    data = list(mycol_historique_sites.find({}))
+    return data
+
+
 # Mise à jour météo
 now = datetime.datetime.now()
 if (now - last_update_time_meteo).days > 1:
@@ -2522,7 +2528,8 @@ if st.session_state["authentication_status"]:
     if username == "admin":
         with tab7:
             st.subheader("Administration")
-            st.write(nom_projet_db)
+            data_admin = load_data_admin()
+            st.write(data_admin)
             # Add your content for the admin tab here
 
 

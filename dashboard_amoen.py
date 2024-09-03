@@ -2585,6 +2585,7 @@ if st.session_state["authentication_status"]:
                 x="nom_projet",
                 y="atteinte_objectif",
                 color="periode",
+                barmode="group",
                 title="Atteinte objectif par projet (dernier rapport)",
                 labels={
                     "atteinte_objectif": "Atteinte objectif [%]",

@@ -2574,6 +2574,9 @@ if st.session_state["authentication_status"]:
             # Prepare data for the bar plot
             df_barplot = df_filtre.sort_values("date_rapport", ascending=False)
             df_barplot["atteinte_objectif"] = df_barplot["atteinte_objectif"] * 100
+            df_barplot["periode"] = str(df_barplot["periode_start"]) + " - " + str(
+                df_barplot["periode_end"]
+            )
             st.dataframe(df_barplot)
 
             # Create the grouped bar plot
@@ -2581,6 +2584,7 @@ if st.session_state["authentication_status"]:
                 df_barplot,
                 x="nom_projet",
                 y="atteinte_objectif",
+                color="periode",
                 title="Atteinte objectif par projet (dernier rapport)",
                 labels={
                     "atteinte_objectif": "Atteinte objectif [%]",

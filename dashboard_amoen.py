@@ -2574,8 +2574,8 @@ if st.session_state["authentication_status"]:
             # Prepare data for the bar plot
             df_barplot = df_filtre.sort_values("date_rapport", ascending=False)
             df_barplot["atteinte_objectif"] = df_barplot["atteinte_objectif"] * 100
-            df_barplot["periode"] = str(df_barplot["periode_start"]) + " - " + str(
-                df_barplot["periode_end"]
+            df_barplot["periode"] = str(df_barplot["periode_start"].date()) + " - " + str(
+                df_barplot["periode_end"].date()
             )
             st.dataframe(df_barplot)
 

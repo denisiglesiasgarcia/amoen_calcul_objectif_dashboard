@@ -2530,7 +2530,8 @@ if st.session_state["authentication_status"]:
             st.subheader("Administration")
             data_admin = load_projets_admin()
             df = pd.DataFrame(data_admin)
-            st.write(df.columns)
+
+            # Drop unnecessary columns
             df = df.drop(
                 columns=[
                     "_id",
@@ -2542,19 +2543,36 @@ if st.session_state["authentication_status"]:
                     "sre_pourcentage_piscines_couvertes",
                 ]
             )
+
+            # First, get the unique values for both filters
+            all_projets = df["nom_projet"].unique()
+            all_amoen = df["amoen_id"].unique()
+
+            # Filter options based on the current selections
             filtre_projets = st.multiselect(
-                "Nom du projet",
-                df["nom_projet"].unique(),
-                default=df["nom_projet"].unique(),
+                "Nom du projet", options=all_projets, default=all_projets
             )
-            filtre_amoen = st.multiselect("AMOén", df["amoen_id"].unique(),default=df["amoen_id"].unique())
+            filtre_amoen = st.multiselect(
+                "AMOén",
+                options=df[df["nom_projet"].isin(filtre_projets)]["amoen_id"].unique(),
+                default=all_amoen,
+            )
+
+            # Update the project filter options based on the selected AMOén
+            filtre_projets = st.multiselect(
+                "Nom du projet (update)",
+                options=df[df["amoen_id"].isin(filtre_amoen)]["nom_projet"].unique(),
+                default=filtre_projets,
+            )
+
+            # Apply the final filter to the DataFrame
             df_filtre = df[
                 (df["nom_projet"].isin(filtre_projets))
                 & (df["amoen_id"].isin(filtre_amoen))
             ]
-            st.write(df_filtre)
 
-            # Add your content for the admin tab here
+            # Display the filtered DataFrame
+            st.write(df_filtre)
 
 
 elif st.session_state["authentication_status"] is False:

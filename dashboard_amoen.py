@@ -147,7 +147,7 @@ def load_projets_liste(project_name):
 
 def load_projets_admin():
     # Retrieve all documents from the collection
-    data = list(mycol_historique_sites.find({}))
+    data = mycol_historique_sites.distinct("nom_projet")
     return data
 
 
@@ -2528,7 +2528,7 @@ if st.session_state["authentication_status"]:
     if username == "admin":
         with tab7:
             st.subheader("Administration")
-            data_admin = load_data_admin()
+            data_admin = load_projets_admin()
             st.write(data_admin)
             # Add your content for the admin tab here
 

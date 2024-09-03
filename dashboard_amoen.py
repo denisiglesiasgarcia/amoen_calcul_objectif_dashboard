@@ -147,7 +147,7 @@ def load_projets_liste(project_name):
 
 def load_projets_admin():
     # Retrieve all documents from the collection
-    data = mycol_historique_sites.distinct("nom_projet")
+    data = list(mycol_historique_sites.find({}))
     return data
 
 

@@ -2531,7 +2531,17 @@ if st.session_state["authentication_status"]:
             data_admin = load_projets_admin()
             df = pd.DataFrame(data_admin)
             st.write(df.columns)
-            df = df.drop(columns=["_id"])
+            df = df.drop(
+                columns=[
+                    "_id",
+                    "sre_pourcentage_lieux_de_rassemblement",
+                    "sre_pourcentage_hopitaux",
+                    "sre_pourcentage_industrie",
+                    "sre_pourcentage_depots",
+                    "sre_pourcentage_installations_sportives",
+                    "sre_pourcentage_piscines_couvertes",
+                ]
+            )
             st.write(df)
 
             # Add your content for the admin tab here

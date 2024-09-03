@@ -2581,6 +2581,18 @@ if st.session_state["authentication_status"]:
             # Display the filtered DataFrame
             st.write(df_filtre)
 
+            # make a plotly barplot wit columns nom_projet, atteinte_objectif
+            fig = px.bar(
+                df_filtre,
+                x="nom_projet",
+                y="atteinte_objectif",
+                title="Atteinte objectif par projet",
+                labels={"atteinte_objectif": "Atteinte objectif [%]"},
+            )
+
+            st.plotly_chart(fig)
+
+
 
 elif st.session_state["authentication_status"] is False:
     st.error("Username/password is incorrect")

@@ -2572,7 +2572,7 @@ if st.session_state["authentication_status"]:
             st.write(df_filtre)
 
             # Prepare data for the bar plot
-            df_barplot = df_filtre.sort_values("date_rapport", ascending=False)
+            df_barplot = df_filtre.sort_values("date_rapport", ascending=True)
             df_barplot["atteinte_objectif"] = df_barplot["atteinte_objectif"] * 100
             df_barplot["periode_start"] = pd.to_datetime(df_barplot["periode_start"], errors='coerce')
             df_barplot["periode_end"] = pd.to_datetime(df_barplot["periode_end"], errors='coerce')

@@ -2527,12 +2527,26 @@ if st.session_state["authentication_status"]:
 
     if username_login == "admin":
         with tab7:
-            st.subheader("Administration")
+            # data
             data_admin = load_projets_admin()
             df = pd.DataFrame(data_admin)
+            
+            # chiffres clés
+            st.subheader("Chiffres-clés")
+
+            # date dernier rapport par projet
+            df_date = df.groupby("nom_projet")["date_rapport"].max().reset_index()
+
+            st.write("Date du dernier rapport par projet")
+            st.write(df_date)
+
+
+
+
+            st.subheader("Données")
 
             # Drop unnecessary columns
-            df = df.drop(
+            df_filtre = df.drop(
                 columns=[
                     "_id",
                     "sre_pourcentage_lieux_de_rassemblement",
@@ -2544,22 +2558,24 @@ if st.session_state["authentication_status"]:
                 ]
             )
 
-            # Initialize filter options
-            all_projets = df["nom_projet"].unique()
-            all_amoen = df["amoen_id"].unique()
+            # Filtres
+            all_projets = df_filtre["nom_projet"].unique()
+            all_amoen = df_filtre["amoen_id"].unique()
 
             filtre_amoen = st.multiselect("AMOén", all_amoen, default=all_amoen)
 
             filtre_projets = st.multiselect(
                 "Projet",
                 all_projets,
-                default=df[df["amoen_id"].isin(filtre_amoen)]["nom_projet"].unique(),
+                default=df_filtre[df_filtre["amoen_id"].isin(filtre_amoen)][
+                    "nom_projet"
+                ].unique(),
             )
 
             # Apply the final filter to the DataFrame
-            df_filtre = df[
-                (df["nom_projet"].isin(filtre_projets))
-                & (df["amoen_id"].isin(filtre_amoen))
+            df_filtre = df_filtre[
+                (df_filtre["nom_projet"].isin(filtre_projets))
+                & (df_filtre["amoen_id"].isin(filtre_amoen))
             ]
 
             # Display the filtered DataFrame

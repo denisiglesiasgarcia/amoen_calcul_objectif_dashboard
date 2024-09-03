@@ -2614,6 +2614,7 @@ if st.session_state["authentication_status"]:
                 xaxis_title=None,  # Remove x-axis title as it's redundant
                 yaxis_title="Atteinte objectif [%]",
                 bargap=0.2,  # Adjust the gap between bars
+                showlegend=False,  # Remove the legend
             )
 
             # Display the plot

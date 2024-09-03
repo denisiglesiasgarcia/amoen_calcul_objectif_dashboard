@@ -2525,7 +2525,7 @@ if st.session_state["authentication_status"]:
             )
             st.warning("Veuillez compléter l'onglet '1 Données site'.")
 
-    if username == "admin":
+    if username_login == "admin":
         with tab7:
             st.subheader("Administration")
             data_admin = load_projets_admin()

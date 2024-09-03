@@ -2544,25 +2544,41 @@ if st.session_state["authentication_status"]:
                 ]
             )
 
-            # First, get the unique values for both filters
+            # Initialize filter options
             all_projets = df["nom_projet"].unique()
             all_amoen = df["amoen_id"].unique()
 
-            # Filter options based on the current selections
+            # Apply the first filter for projects
             filtre_projets = st.multiselect(
                 "Nom du projet", options=all_projets, default=all_projets
             )
+
+            # Dynamically update the AMOén filter options based on selected projects
+            filtered_amoen_options = df[df["nom_projet"].isin(filtre_projets)][
+                "amoen_id"
+            ].unique()
+
             filtre_amoen = st.multiselect(
                 "AMOén",
-                options=df[df["nom_projet"].isin(filtre_projets)]["amoen_id"].unique(),
-                default=all_amoen,
+                options=filtered_amoen_options,
+                default=[
+                    amoen for amoen in all_amoen if amoen in filtered_amoen_options
+                ],  # Ensure default values are valid
             )
 
             # Update the project filter options based on the selected AMOén
+            filtered_projet_options = df[df["amoen_id"].isin(filtre_amoen)][
+                "nom_projet"
+            ].unique()
+
             filtre_projets = st.multiselect(
                 "Nom du projet (update)",
-                options=df[df["amoen_id"].isin(filtre_amoen)]["nom_projet"].unique(),
-                default=filtre_projets,
+                options=filtered_projet_options,
+                default=[
+                    projet
+                    for projet in filtre_projets
+                    if projet in filtered_projet_options
+                ],  # Ensure default values are valid
             )
 
             # Apply the final filter to the DataFrame

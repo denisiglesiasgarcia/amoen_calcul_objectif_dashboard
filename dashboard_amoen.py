@@ -2571,10 +2571,9 @@ if st.session_state["authentication_status"]:
             # Display the filtered DataFrame
             st.write(df_filtre)
 
-            # Aggregate data for the bar plot
-            df_barplot = (
-                df_filtre.groupby("nom_projet")["atteinte_objectif"].mean().reset_index()
-            )
+            # Prepare data for the bar plot
+            df_barplot = df_filtre.sort_values("date_rapport", ascending=False)
+            df_barplot = df_barplot.groupby("nom_projet").first().reset_index()
             df_barplot = df_barplot.sort_values("atteinte_objectif", ascending=False)
 
             # Create the grouped bar plot
@@ -2582,18 +2581,34 @@ if st.session_state["authentication_status"]:
                 df_barplot,
                 x="nom_projet",
                 y="atteinte_objectif",
-                title="Atteinte objectif par projet",
+                title="Atteinte objectif par projet (dernier rapport)",
                 labels={
                     "atteinte_objectif": "Atteinte objectif [%]",
                     "nom_projet": "Projet",
                 },
+                text="atteinte_objectif",  # Display the values on the bars
+                hover_data=["date_rapport", "amoen_id"],  # Add more info on hover
             )
 
-            # Customize the layout to ensure bars are not stacked
-            fig.update_layout(barmode="group")
+            # Customize the layout
+            fig.update_traces(texttemplate="%{text:.1f}%", textposition="outside")
+            fig.update_layout(
+                uniformtext_minsize=8,
+                uniformtext_mode="hide",
+                xaxis_tickangle=-45,
+                xaxis_title=None,  # Remove x-axis title as it's redundant
+                yaxis_title="Atteinte objectif [%]",
+                bargap=0.2,  # Adjust the gap between bars
+            )
 
             # Display the plot
             st.plotly_chart(fig)
+
+            # Add a table with the detailed information
+            st.subheader("Détails des derniers rapports par projet")
+            st.dataframe(
+                df_barplot[["nom_projet", "date_rapport", "atteinte_objectif", "amoen_id"]]
+            )
 
 
 elif st.session_state["authentication_status"] is False:

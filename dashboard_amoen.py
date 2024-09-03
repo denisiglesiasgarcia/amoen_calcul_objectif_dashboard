@@ -215,11 +215,11 @@ if st.session_state["authentication_status"]:
     ]
 
     # Add an extra tab for admin
-    if username == "admin":
+    if username_login == "admin":
         tabs.append("6 Admin")
-
-    # Create the tabs
-    tab1, tab2, tab3, tab4, tab5, tab6, *optional_tabs = st.tabs(tabs)
+        tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(tabs)
+    else:
+        tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(tabs)
 
     # Calcul des index selon dates
     with tab1:
@@ -2520,8 +2520,11 @@ if st.session_state["authentication_status"]:
             st.warning("Veuillez compléter l'onglet '1 Données site'.")
 
     if username == "admin":
-        tab7 = optional_tabs[0]
-        # Add your content for the admin tab here
+        with tab7:
+            st.subheader("Administration")
+
+            # Add your content for the admin tab here
+
 
 elif st.session_state["authentication_status"] is False:
     st.error("Username/password is incorrect")

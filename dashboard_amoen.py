@@ -2530,6 +2530,8 @@ if st.session_state["authentication_status"]:
             st.subheader("Administration")
             data_admin = load_projets_admin()
             df = pd.DataFrame(data_admin)
+            st.write(df.columns)
+            df = df.drop(columns=["_id"])
             st.write(df)
 
             # Add your content for the admin tab here

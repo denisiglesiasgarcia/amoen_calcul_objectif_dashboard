@@ -204,16 +204,22 @@ if st.session_state["authentication_status"]:
     # dashboard
     st.title("Calcul de l'atteinte des objectifs AMOén selon méthodologie")
 
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
-        [
-            "0 Readme",
-            "1 Données site",
-            "2 Note de calcul",
-            "3 Résultats",
-            "4 Historique",
-            "5 Générer Rapport",
-        ]
-    )
+    # Define the default tabs
+    tabs = [
+        "0 Readme",
+        "1 Données site",
+        "2 Note de calcul",
+        "3 Résultats",
+        "4 Historique",
+        "5 Générer Rapport",
+    ]
+
+    # Add an extra tab for admin
+    if username == "admin":
+        tabs.append("6 Admin")
+
+    # Create the tabs
+    tab1, tab2, tab3, tab4, tab5, tab6, *optional_tabs = st.tabs(tabs)
 
     # Calcul des index selon dates
     with tab1:
@@ -2512,6 +2518,10 @@ if st.session_state["authentication_status"]:
                 "Toutes les informations nécessaires ne sont pas disponibles pour générer le PDF."
             )
             st.warning("Veuillez compléter l'onglet '1 Données site'.")
+
+    if username == "admin":
+        tab7 = optional_tabs[0]
+        # Add your content for the admin tab here
 
 elif st.session_state["authentication_status"] is False:
     st.error("Username/password is incorrect")

@@ -2619,8 +2619,8 @@ if st.session_state["authentication_status"]:
                 alt.Chart(df_barplot)
                 .mark_bar()
                 .encode(
-                    x=alt.X("nom_projet:N", axis=alt.Axis(title='', labels=False)),  # Remove labels and title
-                    y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif"),
+                    x=alt.X("nom_projet:N", axis=alt.Axis(title='', labels=True)),  # Remove labels and title
+                    y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),
                     xOffset="periode_rank:N",
                     color="periode:N"
                 )

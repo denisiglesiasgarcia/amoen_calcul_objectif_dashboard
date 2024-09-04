@@ -2638,7 +2638,6 @@ if st.session_state["authentication_status"]:
                         "atteinte_objectif:Q", format=".0f"
                     ),  # format as decimal value
                     xOffset="periode_rank:N",
-                    color="periode:N",
                 )
             )
 

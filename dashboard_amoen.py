@@ -2624,11 +2624,15 @@ if st.session_state["authentication_status"]:
                     "nom_projet": "Projet",
                 },
                 text="atteinte_objectif",  # Display the values on the bars
-                hover_data=["periode_start", "periode_end"],  # Add more info on hover
+                hover_data=["periode_start", "periode_end", "date_rapport"],  # Add more info on hover
             )
 
             # Customize the layout
-            fig.update_traces(texttemplate="%{text:.1f}%", textposition="outside")
+            fig.update_traces(
+                texttemplate="%{text:.1f}%",
+                textposition="outside",
+                width=0.35,  # Increase bar width
+            )
             fig.update_layout(
                 uniformtext_minsize=10,
                 # uniformtext_mode="hide",
@@ -2636,12 +2640,17 @@ if st.session_state["authentication_status"]:
                 xaxis_title=None,  # Remove x-axis title as it's redundant
                 yaxis_title="Atteinte objectif [%]",
                 showlegend=False,  # Remove the legend
+                bargap=0.15,  # Adjust space between bar groups
+                bargroupgap=0.05,  # Adjust space between bars within a group
             )
 
-            # add filter for atteinte_objectif, éviter les trucs vides
+            # Filter out empty values
+            fig.update_layout(
+                yaxis_range=[0, max(df_barplot['atteinte_objectif'].dropna()) * 1.1]  # Set y-axis range with 10% headroom
+            )
 
             # Display the plot
-            st.plotly_chart(fig)
+            st.plotly_chart(fig, use_container_width=True)
 
 elif st.session_state["authentication_status"] is False:
     st.error("Username/password is incorrect")

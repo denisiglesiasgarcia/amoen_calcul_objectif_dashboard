@@ -29,6 +29,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import plotly.express as px
+import altair as alt
 
 from pymongo import MongoClient
 from bson import ObjectId

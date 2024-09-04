@@ -2639,7 +2639,7 @@ if st.session_state["authentication_status"]:
                 xaxis_title=None,  # Remove x-axis title as it's redundant
                 yaxis_title="Atteinte objectif [%]",
                 showlegend=False,  # Remove the legend
-                bargap=0.50,  # Adjust space between bar groups
+                bargap=0,  # Adjust space between bar groups
                 bargroupgap=0,  # Adjust space between bars within a group
             )
 

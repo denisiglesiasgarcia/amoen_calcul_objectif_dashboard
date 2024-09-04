@@ -2575,6 +2575,7 @@ if st.session_state["authentication_status"]:
             df_barplot = df_filtre.sort_values(
                 ["nom_projet", "date_rapport"], ascending=[True, True]
             )
+            # df_barplot = df_barplot[df_barplot["date_rapport"]]
             df_barplot["atteinte_objectif"] = df_barplot["atteinte_objectif"] * 100
             df_barplot["periode_start"] = pd.to_datetime(
                 df_barplot["periode_start"], errors="coerce"
@@ -2587,7 +2588,7 @@ if st.session_state["authentication_status"]:
                 + " - "
                 + df_barplot["periode_end"].dt.strftime("%Y-%m-%d")
             )
-            st.dataframe(df_barplot)
+            st.dataframe(df_barplot.columns)
 
             # Create the grouped bar plot
             fig = px.bar(
@@ -2616,6 +2617,8 @@ if st.session_state["authentication_status"]:
                 bargap=0.2,  # Adjust the gap between bars
                 showlegend=False,  # Remove the legend
             )
+
+            # add filter for atteinte_objectif, éviter les trucs vides
 
             # Display the plot
             st.plotly_chart(fig)

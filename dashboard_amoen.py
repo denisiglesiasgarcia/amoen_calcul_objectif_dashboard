@@ -2622,8 +2622,8 @@ if st.session_state["authentication_status"]:
                 .encode(
                     x="nom_projet:N",
                     y="atteinte_objectif:Q",
-                    xOffset="periode:N",
-                    color="periode_rank:N",
+                    xOffset="periode_rank:N",
+                    color="periode:N",
                 )
             )
 

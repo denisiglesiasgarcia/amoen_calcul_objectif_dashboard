@@ -2573,7 +2573,7 @@ if st.session_state["authentication_status"]:
             st.write(df_filtre)
 
             # Sort the dataframe by 'nom_projet' and 'periode_start'
-            df_barplot = df_barplot.sort_values(by=["nom_projet", "periode_start"])
+            df_barplot = df_filtre.sort_values(by=["nom_projet", "periode_start"])
 
             # Filtrer les atteinte_projets sans agents énergétiques
             df_barplot = df_barplot[

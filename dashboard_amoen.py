@@ -2628,41 +2628,7 @@ if st.session_state["authentication_status"]:
                 height=600,  # Increase height of the figure
                 width=1200,  # Increase width of the figure
             )
-
-            # Customize the layout with further adjustments
-            fig.update_traces(
-                texttemplate="%{text:.1f}%",
-                textposition="outside",
-                width=0.08,  # Further reduce bar width to prevent overlap
-            )
-
-            fig.update_layout(
-                uniformtext_minsize=12,
-                xaxis_tickangle=-45,
-                xaxis_title=None,
-                yaxis_title="Atteinte objectif [%]",
-                showlegend=False,
-                bargap=0.45,  # Further increase space between bar groups
-                bargroupgap=0.25,  # Further increase space between bars within a group
-            )
-
-            # Set y-axis range with extra headroom for labels
-            max_value = max(df_barplot['atteinte_objectif'].dropna())
-            fig.update_layout(yaxis_range=[0, max_value * 1.2])
-
-            # Improve x-axis labels
-            fig.update_xaxes(
-                tickmode='array',
-                tickvals=list(range(len(df_barplot['nom_projet'].unique()))),
-                ticktext=df_barplot['nom_projet'].unique(),
-                tickangle=-45,
-                tickfont=dict(size=12)  # Slightly increase font size for readability
-            )
-
-            # Display the plot
-            st.plotly_chart(fig, use_container_width=True)
-
-
+            st.bar_chart(df_barplot, x="nom_projet", y="atteinte_objectif")
 
 
 elif st.session_state["authentication_status"] is False:

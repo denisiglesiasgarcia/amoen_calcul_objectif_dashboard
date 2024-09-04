@@ -2538,27 +2538,7 @@ if st.session_state["authentication_status"]:
             st.subheader("Chiffres-clés")
             # Filtrer les atteinte_projets sans agents énergétiques
             df_date = df.copy()
-            df_date = df_date[
-                (
-                    df_date["agent_energetique_ef_mazout_litres"]
-                    + df_date["agent_energetique_ef_mazout_kwh"]
-                    + df_date["agent_energetique_ef_gaz_naturel_m3"]
-                    + df_date["agent_energetique_ef_gaz_naturel_kwh"]
-                    + df_date["agent_energetique_ef_bois_buches_dur_stere"]
-                    + df_date["agent_energetique_ef_bois_buches_tendre_stere"]
-                    + df_date["agent_energetique_ef_bois_buches_tendre_kwh"]
-                    + df_date["agent_energetique_ef_pellets_m3"]
-                    + df_date["agent_energetique_ef_pellets_kg"]
-                    + df_date["agent_energetique_ef_pellets_kwh"]
-                    + df_date["agent_energetique_ef_plaquettes_m3"]
-                    + df_date["agent_energetique_ef_plaquettes_kwh"]
-                    + df_date["agent_energetique_ef_cad_kwh"]
-                    + df_date["agent_energetique_ef_electricite_pac_kwh"]
-                    + df_date["agent_energetique_ef_electricite_directe_kwh"]
-                    + df_date["agent_energetique_ef_autre_kwh"]
-                )
-                > 0
-            ]
+            df_date = df_date[df_date['periode_start'].notnull()]
             # date dernier rapport par projet
             df_date = df.groupby("nom_projet")["date_rapport"].max().reset_index()
             st.write("Date dernier calcul atteinte objectif par projet")

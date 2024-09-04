@@ -2635,7 +2635,7 @@ if st.session_state["authentication_status"]:
                 alt.Chart(df_barplot)
                 .mark_text(align="left",
                                 baseline="bottom",
-                                dx=-2,
+                                dx=-4,
                                 fontSize=12,
                                 color="black")
                 .encode(

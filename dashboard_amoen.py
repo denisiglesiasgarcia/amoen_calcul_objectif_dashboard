@@ -2572,10 +2572,9 @@ if st.session_state["authentication_status"]:
             # Display the filtered DataFrame
             st.write(df_filtre)
 
-            # Prepare data for the bar plot
-            df_barplot = df_filtre.sort_values(
-                ["nom_projet", "date_rapport"], ascending=[True, True]
-            )
+            # Sort the dataframe by 'nom_projet' and 'periode_start'
+            df_barplot = df_barplot.sort_values(by=["nom_projet", "periode_start"])
+
             # Filtrer les atteinte_projets sans agents énergétiques
             df_barplot = df_barplot[
                 (
@@ -2611,6 +2610,9 @@ if st.session_state["authentication_status"]:
                 + " - "
                 + df_barplot["periode_end"].dt.strftime("%Y-%m-%d")
             )
+
+            # Add a new column that assigns a rank based on the order of the periods within each project
+            df_barplot["periode_rank"] = df_barplot.groupby("nom_projet").cumcount()
 
             # Increase the figure size to provide more space for each group
             st.write(df_barplot)

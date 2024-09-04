@@ -2631,7 +2631,7 @@ if st.session_state["authentication_status"]:
             fig.update_traces(
                 texttemplate="%{text:.1f}%",
                 textposition="outside",
-                width=0.35,  # Increase bar width
+                width=0.2,  # Increase bar width
             )
             fig.update_layout(
                 uniformtext_minsize=10,

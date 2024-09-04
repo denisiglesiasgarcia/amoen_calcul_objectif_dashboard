@@ -2611,7 +2611,7 @@ if st.session_state["authentication_status"]:
                 + df_barplot["periode_end"].dt.strftime("%Y-%m-%d")
             )
 
-            # Create the grouped bar plot
+            # Increase the figure size to provide more space for each group
             fig = px.bar(
                 df_barplot,
                 x="nom_projet",
@@ -2623,24 +2623,27 @@ if st.session_state["authentication_status"]:
                     "atteinte_objectif": "Atteinte objectif [%]",
                     "nom_projet": "Projet",
                 },
-                text="atteinte_objectif",  # Display the values on the bars
-                hover_data=["periode_start", "periode_end", "date_rapport"],  # Add more info on hover
+                text="atteinte_objectif",
+                hover_data=["periode_start", "periode_end", "date_rapport"],
+                height=600,  # Increase height of the figure
+                width=1200,  # Increase width of the figure
             )
 
-            # Customize the layout
+            # Customize the layout with further adjustments
             fig.update_traces(
                 texttemplate="%{text:.1f}%",
                 textposition="outside",
-                width=0.1,  # Further reduce bar width to prevent overlap
+                width=0.08,  # Further reduce bar width to prevent overlap
             )
+
             fig.update_layout(
-                uniformtext_minsize=10,
+                uniformtext_minsize=12,
                 xaxis_tickangle=-45,
-                xaxis_title=None,  # Remove x-axis title as it's redundant
+                xaxis_title=None,
                 yaxis_title="Atteinte objectif [%]",
-                showlegend=False,  # Show legend to help distinguish between periods
-                bargap=0.35,  # Increase space between bar groups
-                bargroupgap=0.15,  # Increase space between bars within a group
+                showlegend=False,
+                bargap=0.45,  # Further increase space between bar groups
+                bargroupgap=0.25,  # Further increase space between bars within a group
             )
 
             # Set y-axis range with extra headroom for labels
@@ -2653,11 +2656,12 @@ if st.session_state["authentication_status"]:
                 tickvals=list(range(len(df_barplot['nom_projet'].unique()))),
                 ticktext=df_barplot['nom_projet'].unique(),
                 tickangle=-45,
-                tickfont=dict(size=10)
+                tickfont=dict(size=12)  # Slightly increase font size for readability
             )
 
             # Display the plot
             st.plotly_chart(fig, use_container_width=True)
+
 
 
 

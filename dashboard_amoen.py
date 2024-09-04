@@ -2612,23 +2612,19 @@ if st.session_state["authentication_status"]:
             )
 
             # Increase the figure size to provide more space for each group
-            fig = px.bar(
-                df_barplot,
-                x="nom_projet",
-                y="atteinte_objectif",
-                color="periode",
-                barmode="group",
-                title="Atteinte objectif par projet",
-                labels={
-                    "atteinte_objectif": "Atteinte objectif [%]",
-                    "nom_projet": "Projet",
-                },
-                text="atteinte_objectif",
-                hover_data=["periode_start", "periode_end", "date_rapport"],
-                height=600,  # Increase height of the figure
-                width=1200,  # Increase width of the figure
+
+            fig = (
+                alt.Chart(df_barplot)
+                .mark_bar()
+                .encode(
+                    x="nom_projet:N",
+                    y="atteinte_objectif:Q",
+                    xOffset="periode:N",
+                    color="nom_projet:N",
+                )
             )
-            st.bar_chart(df_barplot, x="nom_projet", y="atteinte_objectif", stack="center")
+
+            st.altair_chart(fig, use_container_width=True)
 
 
 elif st.session_state["authentication_status"] is False:

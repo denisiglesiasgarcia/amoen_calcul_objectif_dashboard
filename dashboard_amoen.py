@@ -2631,16 +2631,16 @@ if st.session_state["authentication_status"]:
             fig.update_traces(
                 texttemplate="%{text:.1f}%",
                 textposition="outside",
-                width=0.15,  # Adjust bar width to prevent overlap
+                width=0.1,  # Further reduce bar width to prevent overlap
             )
             fig.update_layout(
                 uniformtext_minsize=10,
                 xaxis_tickangle=-45,
                 xaxis_title=None,  # Remove x-axis title as it's redundant
                 yaxis_title="Atteinte objectif [%]",
-                showlegend=False,  # Remove the legend if not needed
-                bargap=0.15,  # Adjust space between bar groups
-                bargroupgap=0.05,  # Adjust space between bars within a group
+                showlegend=True,  # Show legend to help distinguish between periods
+                bargap=0.35,  # Increase space between bar groups
+                bargroupgap=0.15,  # Increase space between bars within a group
             )
 
             # Set y-axis range with extra headroom for labels
@@ -2658,6 +2658,7 @@ if st.session_state["authentication_status"]:
 
             # Display the plot
             st.plotly_chart(fig, use_container_width=True)
+
 
 
 elif st.session_state["authentication_status"] is False:

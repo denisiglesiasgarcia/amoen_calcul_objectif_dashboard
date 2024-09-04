@@ -2630,7 +2630,7 @@ if st.session_state["authentication_status"]:
             # Add text labels on top of the bars
             text = (
                 alt.Chart(df_barplot)
-                .mark_text(dy=-5, dx=5, fontSize=14)  # adjust font size and position
+                .mark_text(dy=-5, dx=5, fontSize=14, color="black")
                 .encode(
                     x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
                     y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),

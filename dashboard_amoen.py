@@ -2635,7 +2635,7 @@ if st.session_state["authentication_status"]:
                     x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
                     y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),
                     text=alt.Text(
-                        "atteinte_objectif:Q", format=".0f"
+                        "atteinte_objectif:Q", format=".0f%"
                     ),  # format as decimal value
                     xOffset="periode_rank:N",
                 )

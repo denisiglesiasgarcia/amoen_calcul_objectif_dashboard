@@ -2632,10 +2632,9 @@ if st.session_state["authentication_status"]:
             fig.update_layout(
                 uniformtext_minsize=8,
                 uniformtext_mode="hide",
-                xaxis_tickangle=-45,
+                xaxis_tickangle=-90,
                 xaxis_title=None,  # Remove x-axis title as it's redundant
                 yaxis_title="Atteinte objectif [%]",
-                # bargap=0.9,  # Adjust the gap between bars
                 showlegend=False,  # Remove the legend
             )
 

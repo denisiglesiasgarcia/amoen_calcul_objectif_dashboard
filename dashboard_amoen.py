@@ -2633,8 +2633,8 @@ if st.session_state["authentication_status"]:
                         alt.Tooltip("periode:N", title="Période"),
                         alt.Tooltip(
                             "atteinte_objectif:Q",
-                            title="Atteinte Objectif",
-                            format=":.2f%",
+                            title="Atteinte Objectif [%]",
+                            format=".2f",
                         ),
                     ],
                 )

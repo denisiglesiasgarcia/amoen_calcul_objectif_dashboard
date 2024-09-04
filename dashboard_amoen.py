@@ -2618,7 +2618,7 @@ if st.session_state["authentication_status"]:
                 y="atteinte_objectif",
                 color="periode",
                 barmode="group",
-                title="Atteinte objectif par projet (dernier rapport)",
+                title="Atteinte objectif par projet",
                 labels={
                     "atteinte_objectif": "Atteinte objectif [%]",
                     "nom_projet": "Projet",
@@ -2635,7 +2635,7 @@ if st.session_state["authentication_status"]:
                 xaxis_tickangle=-45,
                 xaxis_title=None,  # Remove x-axis title as it's redundant
                 yaxis_title="Atteinte objectif [%]",
-                bargap=0.2,  # Adjust the gap between bars
+                bargap=0.5,  # Adjust the gap between bars
                 showlegend=False,  # Remove the legend
             )
 

@@ -2623,7 +2623,7 @@ if st.session_state["authentication_status"]:
                     x="nom_projet:N",
                     y="atteinte_objectif:Q",
                     xOffset="periode:N",
-                    color="periode:N",
+                    color="periode_rank:N",
                 )
             )
 

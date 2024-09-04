@@ -2613,7 +2613,7 @@ if st.session_state["authentication_status"]:
             )
 
             # Increase the figure size to provide more space for each group
-
+            st.write(df_barplot)
             fig = (
                 alt.Chart(df_barplot)
                 .mark_bar()

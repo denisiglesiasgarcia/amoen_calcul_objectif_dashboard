@@ -2630,8 +2630,12 @@ if st.session_state["authentication_status"]:
                     color="periode:N",
                     tooltip=[
                         alt.Tooltip("nom_projet:N", title="Project"),
-                        alt.Tooltip("periode:N", title="Period"),
-                        alt.Tooltip("atteinte_objectif:Q", title="Atteinte Objectif"),
+                        alt.Tooltip("periode:N", title="Période"),
+                        alt.Tooltip(
+                            "atteinte_objectif:Q",
+                            title="Atteinte Objectif",
+                            format=f"{x:.2f}%",
+                        ),
                     ],
                 )
                 .properties(width=600, title="Atteinte Objectif by Project and Period")

@@ -2614,9 +2614,8 @@ if st.session_state["authentication_status"]:
             # Add a new column that assigns a rank based on the order of the periods within each project
             df_barplot["periode_rank"] = df_barplot.groupby("nom_projet").cumcount()
 
-            # Define custom formatting function
-            def format_percentage(value):
-                return f"{value:.0f}%"
+            # Add a new column with formatted percentage values
+            df_barplot['atteinte_objectif_formatted'] = df_barplot['atteinte_objectif'].apply(lambda x: f"{x:.0f}%")
 
             # Create the chart
             fig = (
@@ -2638,7 +2637,7 @@ if st.session_state["authentication_status"]:
                 .encode(
                     x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
                     y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),
-                    text=alt.Text("atteinte_objectif:Q", format=format_percentage),  # Use custom formatting
+                    text="atteinte_objectif_formatted:N",  # Use the new formatted column
                     xOffset="periode_rank:N",
                 )
             )

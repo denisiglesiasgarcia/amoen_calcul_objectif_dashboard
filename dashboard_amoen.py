@@ -2639,10 +2639,8 @@ if st.session_state["authentication_status"]:
                 xaxis_title=None,  # Remove x-axis title as it's redundant
                 yaxis_title="Atteinte objectif [%]",
                 showlegend=False,  # Remove the legend
-                bargap=0.35,  # Adjust space between bar groups
-                bargroupgap=0.35,  # Adjust space between bars within a group
-                height=600,  # Increase overall height of the chart
-                margin=dict(t=100, b=100),  # Add more margin at top and bottom
+                bargap=0.05,  # Adjust space between bar groups
+                bargroupgap=0,  # Adjust space between bars within a group
             )
 
             # Set y-axis range with extra headroom for labels

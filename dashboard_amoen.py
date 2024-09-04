@@ -2635,7 +2635,7 @@ if st.session_state["authentication_status"]:
                 xaxis_tickangle=-45,
                 xaxis_title=None,  # Remove x-axis title as it's redundant
                 yaxis_title="Atteinte objectif [%]",
-                bargap=2,  # Adjust the gap between bars
+                bargap=0.9,  # Adjust the gap between bars
                 showlegend=False,  # Remove the legend
             )
 

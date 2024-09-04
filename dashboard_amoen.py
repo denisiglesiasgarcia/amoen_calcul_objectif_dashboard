@@ -2564,12 +2564,17 @@ if st.session_state["authentication_status"]:
             df_date_sorted["date_rapport"] = pd.to_datetime(
                 df_date_sorted["date_rapport"], format="%Y-%m-%d"
             )
+            df_date_sorted["date_rapport"] = df_date_sorted["date_rapport"].astype(str)
             df_date_sorted["periode_start"] = pd.to_datetime(
                 df_date_sorted["periode_start"], format="%Y-%m-%d"
+            )
+            df_date_sorted["periode_start"] = df_date_sorted["periode_start"].astype(
+                str
             )
             df_date_sorted["periode_end"] = pd.to_datetime(
                 df_date_sorted["periode_end"], format="%Y-%m-%d"
             )
+            df_date_sorted["periode_end"] = df_date_sorted["periode_end"].astype(str)
             df_date_sorted["atteinte_objectif"] = (
                 df_date_sorted["atteinte_objectif"] * 100
             )

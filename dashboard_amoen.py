@@ -2615,7 +2615,9 @@ if st.session_state["authentication_status"]:
             df_barplot["periode_rank"] = df_barplot.groupby("nom_projet").cumcount()
 
             # Add a new column with formatted percentage values
-            df_barplot['atteinte_objectif_formatted'] = df_barplot['atteinte_objectif'].apply(lambda x: f"{x:.0f}%")
+            df_barplot["atteinte_objectif_formatted"] = df_barplot[
+                "atteinte_objectif"
+            ].apply(lambda x: f"{x:.0f}%")
 
             # Create the chart
             fig = (
@@ -2626,6 +2628,11 @@ if st.session_state["authentication_status"]:
                     y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),
                     xOffset="periode_rank:N",
                     color="periode:N",
+                    tooltip=[
+                        alt.Tooltip("nom_projet:N", title="Project"),
+                        alt.Tooltip("periode:N", title="Period"),
+                        alt.Tooltip("atteinte_objectif:Q", title="Atteinte Objectif"),
+                    ],
                 )
                 .properties(width=600, title="Atteinte Objectif by Project and Period")
             )
@@ -2633,11 +2640,9 @@ if st.session_state["authentication_status"]:
             # Add text labels on top of the bars with percentage symbol
             text = (
                 alt.Chart(df_barplot)
-                .mark_text(align="left",
-                                baseline="bottom",
-                                dx=-4,
-                                fontSize=12,
-                                color="black")
+                .mark_text(
+                    align="left", baseline="bottom", dx=-4, fontSize=12, color="black"
+                )
                 .encode(
                     x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
                     y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),

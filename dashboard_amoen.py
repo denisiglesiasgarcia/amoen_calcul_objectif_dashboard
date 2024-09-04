@@ -2575,7 +2575,7 @@ if st.session_state["authentication_status"]:
             df_date = df_date_sorted.loc[
                 idx, ["nom_projet", "date_rapport", "periode_start", "periode_end", "atteinte_objectif"]
             ]
-            st.write("Date dernier calcul atteinte objectif par projet")
+            st.dataframe("Date dernier calcul atteinte objectif par projet")
             st.write(df_date)
             st.subheader("Données")
             # Drop unnecessary columns

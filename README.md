@@ -14,8 +14,10 @@
   - [ ] Ajouter pour les surélévations, le total énergie finale ainsi que la répartition
 
 - Non prioritaire
-  - [ ] Ajouter calcul IDC → En attente nouveau règlement/calcul IDC
-  - [ ] Ajouter option de renseigner ECS séparée du chauffage  
+  - [ ] Ajouter option de renseigner ECS séparée du chauffage
+
+- En attente
+  - [ ] Ajouter calcul IDC → En attente nouveau règlement/calcul IDC  
 
 ## Fait
 

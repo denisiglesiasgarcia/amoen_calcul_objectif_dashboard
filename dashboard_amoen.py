@@ -2615,7 +2615,6 @@ if st.session_state["authentication_status"]:
             df_barplot["periode_rank"] = df_barplot.groupby("nom_projet").cumcount()
 
             # Increase the figure size to provide more space for each group
-            st.write(df_barplot)
             fig = (
                 alt.Chart(df_barplot)
                 .mark_bar()

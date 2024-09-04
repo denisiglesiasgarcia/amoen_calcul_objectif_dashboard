@@ -2561,10 +2561,19 @@ if st.session_state["authentication_status"]:
             ]
             # date dernier rapport par projet
             df_date_sorted = df_date.sort_values(["nom_projet", "date_rapport"])
-            df_date_sorted["date_rapport"] = df_date_sorted["date_rapport"].date()
+            df_date_sorted["date_rapport"] = pd.to_datetime(
+                df_date_sorted["date_rapport"], format="%Y-%m-%d")
+            df_date_sorted["periode_start"] = pd.to_datetime(
+                df_date_sorted["periode_start"], format="%Y-%m-%d")
+            df_date_sorted["periode_end"] = pd.to_datetime(
+                df_date_sorted["periode_end"], format="%Y-%m-%d")
+            df_date_sorted["atteinte_objectif"] = df_date_sorted["atteinte_objectif"] * 100
+            df_date_sorted["atteinte_objectif"] = (
+                df_date_sorted["atteinte_objectif"].apply(lambda x: f"{x:.2f}%")
+            )
             idx = df_date_sorted.groupby("nom_projet")["date_rapport"].idxmax()
             df_date = df_date_sorted.loc[
-                idx, ["nom_projet", "date_rapport", "periode_start", "periode_end"]
+                idx, ["nom_projet", "date_rapport", "periode_start", "periode_end", "atteinte_objectif"]
             ]
             st.write("Date dernier calcul atteinte objectif par projet")
             st.write(df_date)

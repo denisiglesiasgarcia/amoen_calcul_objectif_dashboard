@@ -2640,7 +2640,7 @@ if st.session_state["authentication_status"]:
                 yaxis_title="Atteinte objectif [%]",
                 showlegend=False,  # Remove the legend
                 bargap=0.15,  # Adjust space between bar groups
-                bargroupgap=0.05,  # Adjust space between bars within a group
+                bargroupgap=0.2,  # Adjust space between bars within a group
                 height=600,  # Increase overall height of the chart
                 margin=dict(t=100, b=100),  # Add more margin at top and bottom
             )

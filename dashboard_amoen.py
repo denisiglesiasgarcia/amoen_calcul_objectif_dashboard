@@ -2614,18 +2614,32 @@ if st.session_state["authentication_status"]:
             # Add a new column that assigns a rank based on the order of the periods within each project
             df_barplot["periode_rank"] = df_barplot.groupby("nom_projet").cumcount()
 
-            # Increase the figure size to provide more space for each group
+            # Create the chart
             fig = (
                 alt.Chart(df_barplot)
                 .mark_bar()
                 .encode(
-                    x="nom_projet:N",
-                    y="atteinte_objectif:Q",
+                    x=alt.X("nom_projet:N", axis=alt.Axis(title='', labels=False)),  # Remove labels and title
+                    y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif"),
                     xOffset="periode_rank:N",
-                    color="periode:N",
+                    color="periode:N"
+                )
+                .properties(
+                    width=600,  # Adjust the width if needed
+                    title="Atteinte Objectif by Project and Period"
                 )
             )
 
+            # Customize the X-Axis
+            fig = fig.configure_axisX(
+                labelAngle=-45,  # Rotate labels for better readability
+                labelFontSize=12,  # Adjust font size
+            )
+
+            # Remove the legend
+            fig = fig.configure_legend(disable=True)
+
+            # Display the chart
             st.altair_chart(fig, use_container_width=True)
 
 

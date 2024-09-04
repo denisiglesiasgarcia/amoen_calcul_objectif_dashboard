@@ -2617,29 +2617,28 @@ if st.session_state["authentication_status"]:
             # Create the chart
             fig = (
                 alt.Chart(df_barplot)
-            .mark_bar()
-            .encode(
-                    x=alt.X("nom_projet:N", axis=alt.Axis(title='', labels=True)),  
+                .mark_bar()
+                .encode(
+                    x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
                     y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),
                     xOffset="periode_rank:N",
-                    color="periode:N"
+                    color="periode:N",
                 )
-            .properties(
-                    width=600,  
-                    title="Atteinte Objectif by Project and Period"
-                )
+                .properties(width=600, title="Atteinte Objectif by Project and Period")
             )
 
             # Add text labels on top of the bars
             text = (
                 alt.Chart(df_barplot)
-            .mark_text(dy=-5,dx=5, fontSize=14)  # adjust font size and position
-            .encode(
-                    x=alt.X("nom_projet:N", axis=alt.Axis(title='', labels=True)),  
+                .mark_text(dy=-5, dx=5, fontSize=14)  # adjust font size and position
+                .encode(
+                    x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
                     y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),
-                    text=alt.Text("atteinte_objectif:Q", format=".2f"),  # format as decimal value
+                    text=alt.Text(
+                        "atteinte_objectif:Q", format=".0f"
+                    ),  # format as decimal value
                     xOffset="periode_rank:N",
-                    color="periode:N"
+                    color="periode:N",
                 )
             )
 
@@ -2648,8 +2647,8 @@ if st.session_state["authentication_status"]:
 
             # Customize the X-Axis
             fig = fig.configure_axisX(
-                labelAngle=-45,  
-                labelFontSize=12,  
+                labelAngle=-45,
+                labelFontSize=12,
             )
 
             # Remove the legend

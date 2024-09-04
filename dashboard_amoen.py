@@ -2620,7 +2620,7 @@ if st.session_state["authentication_status"]:
                 .encode(
                     x="nom_projet:N",
                     y="atteinte_objectif:Q",
-                    xOffset="periode:N",
+                    column="nom_projet:N",
                     color="nom_projet:N",
                 )
             )

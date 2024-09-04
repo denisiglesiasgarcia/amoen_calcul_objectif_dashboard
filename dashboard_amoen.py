@@ -2629,16 +2629,18 @@ if st.session_state["authentication_status"]:
                     xOffset="periode_rank:N",
                     color="periode:N",
                     tooltip=[
-                        alt.Tooltip("nom_projet:N", title="Project"),
+                        alt.Tooltip("nom_projet:N", title="Site"),
+                        alt.Tooltip("amoen_id:N", title="AMOén"),
                         alt.Tooltip("periode:N", title="Période"),
                         alt.Tooltip(
                             "atteinte_objectif:Q",
                             title="Atteinte Objectif [%]",
                             format=".2f",
+                        
                         ),
                     ],
                 )
-                .properties(width=600, title="Atteinte Objectif by Project and Period")
+                .properties(width=600, title="Atteinte Objectif par Site")
             )
 
             # Add text labels on top of the bars with percentage symbol

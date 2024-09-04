@@ -2560,7 +2560,11 @@ if st.session_state["authentication_status"]:
                 > 0
             ]
             # date dernier rapport par projet
-            df_date = df_date.groupby("nom_projet")["date_rapport"].max().reset_index()
+            df_date_sorted = df_date.sort_values(["nom_projet", "date_rapport"])
+            idx = df_date_sorted.groupby("nom_projet")["date_rapport"].idxmax()
+            df_date = df_sorted.loc[
+                idx, ["nom_projet", "date_rapport", "periode_start", "periode_end"]
+            ]
             st.write("Date dernier calcul atteinte objectif par projet")
             st.write(df_date)
             st.subheader("Données")

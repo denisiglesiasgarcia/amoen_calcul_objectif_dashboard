@@ -2635,18 +2635,27 @@ if st.session_state["authentication_status"]:
             )
             fig.update_layout(
                 uniformtext_minsize=10,
-                # uniformtext_mode="hide",
                 xaxis_tickangle=-45,
                 xaxis_title=None,  # Remove x-axis title as it's redundant
                 yaxis_title="Atteinte objectif [%]",
                 showlegend=False,  # Remove the legend
                 bargap=0.15,  # Adjust space between bar groups
                 bargroupgap=0.05,  # Adjust space between bars within a group
+                height=600,  # Increase overall height of the chart
+                margin=dict(t=100, b=100),  # Add more margin at top and bottom
             )
 
-            # Filter out empty values
-            fig.update_layout(
-                yaxis_range=[0, max(df_barplot['atteinte_objectif'].dropna()) * 1.1]  # Set y-axis range with 10% headroom
+            # Set y-axis range with extra headroom for labels
+            max_value = max(df_barplot['atteinte_objectif'].dropna())
+            fig.update_layout(yaxis_range=[0, max_value * 1.2])
+
+            # Improve x-axis labels
+            fig.update_xaxes(
+                tickmode='array',
+                tickvals=list(range(len(df_barplot['nom_projet'].unique()))),
+                ticktext=df_barplot['nom_projet'].unique(),
+                tickangle=-45,
+                tickfont=dict(size=10)
             )
 
             # Display the plot

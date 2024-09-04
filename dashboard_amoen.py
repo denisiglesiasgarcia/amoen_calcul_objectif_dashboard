@@ -2575,7 +2575,29 @@ if st.session_state["authentication_status"]:
             df_barplot = df_filtre.sort_values(
                 ["nom_projet", "date_rapport"], ascending=[True, True]
             )
-            # df_barplot = df_barplot[df_barplot["date_rapport"]]
+            # Filtrer les atteinte_projets sans agents énergétiques
+            df_barplot = df_barplot[
+                (
+                    df_barplot["agent_energetique_ef_mazout_litres"]
+                    + df_barplot["agent_energetique_ef_mazout_kwh"]
+                    + df_barplot["agent_energetique_ef_gaz_naturel_m3"]
+                    + df_barplot["agent_energetique_ef_gaz_naturel_kwh"]
+                    + df_barplot["agent_energetique_ef_bois_buches_dur_stere"]
+                    + df_barplot["agent_energetique_ef_bois_buches_tendre_stere"]
+                    + df_barplot["agent_energetique_ef_bois_buches_tendre_kwh"]
+                    + df_barplot["agent_energetique_ef_pellets_m3"]
+                    + df_barplot["agent_energetique_ef_pellets_kg"]
+                    + df_barplot["agent_energetique_ef_pellets_kwh"]
+                    + df_barplot["agent_energetique_ef_plaquettes_m3"]
+                    + df_barplot["agent_energetique_ef_plaquettes_kwh"]
+                    + df_barplot["agent_energetique_ef_cad_kwh"]
+                    + df_barplot["agent_energetique_ef_electricite_pac_kwh"]
+                    + df_barplot["agent_energetique_ef_electricite_directe_kwh"]
+                    + df_barplot["agent_energetique_ef_autre_kwh"]
+                )
+                > 0
+            ]
+
             df_barplot["atteinte_objectif"] = df_barplot["atteinte_objectif"] * 100
             df_barplot["periode_start"] = pd.to_datetime(
                 df_barplot["periode_start"], errors="coerce"
@@ -2588,7 +2610,6 @@ if st.session_state["authentication_status"]:
                 + " - "
                 + df_barplot["periode_end"].dt.strftime("%Y-%m-%d")
             )
-            st.dataframe(df_barplot.columns)
 
             # Create the grouped bar plot
             fig = px.bar(

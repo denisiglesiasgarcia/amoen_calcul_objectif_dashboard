@@ -2618,10 +2618,10 @@ if st.session_state["authentication_status"]:
                 alt.Chart(df_barplot)
                 .mark_bar()
                 .encode(
-                    x="periode:N",
+                    x="nom_projet:N",
                     y="atteinte_objectif:Q",
-                    color="nom_projet:N",
-                    column="nom_projet:N",
+                    xOffset="periode:N",
+                    color="periode:N",
                 )
             )
 

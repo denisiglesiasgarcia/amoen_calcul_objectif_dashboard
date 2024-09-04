@@ -2628,7 +2628,7 @@ if st.session_state["authentication_status"]:
                 height=600,  # Increase height of the figure
                 width=1200,  # Increase width of the figure
             )
-            st.bar_chart(df_barplot, x="nom_projet", y="atteinte_objectif")
+            st.bar_chart(df_barplot, x="nom_projet", y="atteinte_objectif", stack="layered")
 
 
 elif st.session_state["authentication_status"] is False:

@@ -297,16 +297,19 @@ def repartition_renove_sureleve(
     energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
 ):
     cm = 1 / 2.54
+    figsize_a = 21 * cm
+    figsize_b = 14.2 * cm
+    ratio_figsize = figsize_a / figsize_b
     fig, (ax1, ax2) = plt.subplots(
         1,
         2,
-        figsize=(30 * cm, 14.2 * cm),
+        figsize=(figsize_a, figsize_b),
         dpi=100,
-        gridspec_kw={"width_ratios": [1, 1.5]},
+        layout="tight",
     )
 
     # Define the reduced building dimensions
-    building_width_reno = 1  # Smaller width
+    building_width_reno = 3  # Smaller width
     building_height_reno = 2  # Smaller height
     building_width_sur = building_width_reno
     building_height_sur = 1
@@ -391,16 +394,16 @@ def repartition_renove_sureleve(
         texte_alignement_droite,  # Additional text
         building_height_reno - texte_hauteur_texte_info,
         r"$SRE_{renovation} = $"
-        f"${sre_renovation_m2}\ m²$"
+        f"${sre_renovation_m2:.1f}\ m²$"
         "\n"
         r"$E_{f,avant,corr} = $"
-        f"${ef_avant_corr_kwh_m2*3.6}\ MJ/m²$"
+        f"${ef_avant_corr_kwh_m2*3.6:.1f}\ MJ/m²$"
         "\n"
         r"$E_{f,obj} * f_p = $"
-        f"${ef_objectif_pondere_kwh_m2*3.6}\ MJ/m²$"
+        f"${ef_objectif_pondere_kwh_m2*3.6:.1f}\ MJ/m²$"
         "\n"
         r"$E_{f,après,corr,rénové} * f_p = $"
-        f"${energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2*3.6}\ MJ/m²$"
+        f"${energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2*3.6:.1f}\ MJ/m²$"
         "\n",
         rotation=0,
         verticalalignment="top",
@@ -422,7 +425,7 @@ def repartition_renove_sureleve(
     ax2.text(
         texte_alignement_droite,  # Additional text
         building_height_reno + building_height_sur - texte_hauteur_texte_info,
-        r"$SRE_{surelevation} = $" + f"${sre_extension_surelevation_m2}\ m²$",
+        r"$SRE_{surelevation} = $" + f"${sre_extension_surelevation_m2:.1f}\ m²$",
         rotation=0,
         verticalalignment="top",
         fontsize=12,
@@ -435,6 +438,8 @@ def repartition_renove_sureleve(
 
     # Remove axes
     ax2.axis("off")
+
+    ##########################################################################################
 
     # Sankey diagram
     ax1.axis("off")
@@ -515,10 +520,11 @@ def repartition_renove_sureleve(
         fontweight="bold",
     )
 
+    ##########################################################################################
     # Texts
 
     fig.text(
-        0.63,
+        0.72,
         -0.04,
         "Subvention bonus AMOén applicable\n" + "uniquement à la partie rénovée.",
         horizontalalignment="center",
@@ -538,8 +544,8 @@ def repartition_renove_sureleve(
     )
 
     fig.text(
-        0.07,
-        -0.55,
+        0.02,
+        -0.45,
         "Il est important de noter que la subvention ne concerne que la partie rénovée du bâtiment,\n"
         + "excluant ainsi toute extension ou surélévation.\n"
         + "\n"
@@ -561,13 +567,18 @@ def repartition_renove_sureleve(
         fontsize=10,
     )
 
+    # ax2.margins(0)
+    # ax1.margins(0)
+
     plt.tight_layout()
 
     # sauvegarder graphique
-    plt.savefig("02_reno_sur.png", dpi=600, bbox_inches="tight")
+    plt.savefig("02_reno_sur.png", dpi=600, bbox_inches="tight", pad_inches=0)
 
     # nettoyage
     plt.close()
+
+    return ratio_figsize
 
 
 def header(canvas, doc):
@@ -962,7 +973,7 @@ def generate_pdf(data):
     if data["sre_extension_surelevation_m2"] > 0.0:
         elements.append(PageBreak())
         elements.append(Spacer(1, 0.5 * cm))
-        repartition_renove_sureleve(
+        ratio_figsize_rep_reno_sur = repartition_renove_sureleve(
             data["sre_renovation_m2"],
             data["sre_extension_surelevation_m2"],
             data["repartition_energie_finale_partie_renovee_chauffage"],
@@ -980,7 +991,7 @@ def generate_pdf(data):
             Image(
                 "02_reno_sur.png",
                 width=width_02_reno_sur,
-                height=(2 / 3) * width_02_reno_sur,
+                height=(ratio_figsize_rep_reno_sur) * width_02_reno_sur,
             )
         )
     # elements.append(PageBreak())

@@ -518,7 +518,7 @@ def repartition_renove_sureleve(
 
     fig.suptitle(
         "Application de la méthodologie AMOén aux surélévations",
-        fontsize=16,
+        fontsize=14,
         fontweight="bold",
     )
 

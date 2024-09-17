@@ -957,6 +957,7 @@ def generate_pdf(data):
         data["amoen_id"],
     )
     elements.append(Image("01_bar_chart.png", width=510, height=280))
+    elements.append(Spacer(1, 0.5 * cm))
 
     if data["sre_extension_surelevation_m2"] > 0.0:
         elements.append(PageBreak())
@@ -974,7 +975,7 @@ def generate_pdf(data):
                 "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
             ],
         )
-        elements.append(Image("02_reno_sur.png", width=510, height=280))
+        elements.append(Image("02_reno_sur.png", width=510, height=510))
     # elements.append(PageBreak())
     # elements.append(Spacer(1, 0.5*cm))
 

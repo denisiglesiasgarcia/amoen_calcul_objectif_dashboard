@@ -453,7 +453,7 @@ def repartition_renove_sureleve(
         radius=0.1,
         unit="%",
         format="%.1f",
-        offset=0.5,
+        offset=0.45,
     )
 
     trunk_length0 = 0.50
@@ -480,7 +480,6 @@ def repartition_renove_sureleve(
         labels=["Energie\nfinale", None, None],
         orientations=[0, -1, 1],
         trunklength=trunk_length0,
-        pathlengths=0.4,
         rotation=0,
         fc="salmon",
         color="salmon",
@@ -518,7 +517,7 @@ def repartition_renove_sureleve(
     sankey.finish()
 
     fig.suptitle(
-        "Répartition entre partie rénovée et surélevée",
+        "Application de la méthodologie AMOén aux surélévations",
         fontsize=16,
         fontweight="bold",
     )
@@ -536,10 +535,10 @@ def repartition_renove_sureleve(
         bbox=dict(boxstyle="round,pad=0.3", edgecolor=color_reno, facecolor="none"),
     )
 
-    title_sankey = f"{repartition_energie_finale_partie_renovee}% de l'énergie finale\n est dédiée à la rénovation"
+    title_sankey = f"{repartition_energie_finale_partie_renovee:.1f}% de l'énergie finale\n est dédiée à la rénovation"
     fig.text(
         0.27,
-        0.03,
+        -0.04,
         title_sankey,
         horizontalalignment="center",
         fontsize=10,

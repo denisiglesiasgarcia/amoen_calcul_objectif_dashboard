@@ -975,7 +975,7 @@ def generate_pdf(data):
                 "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
             ],
         )
-        width_02_reno_sur = 600
+        width_02_reno_sur = 800
         elements.append(
             Image(
                 "02_reno_sur.png",

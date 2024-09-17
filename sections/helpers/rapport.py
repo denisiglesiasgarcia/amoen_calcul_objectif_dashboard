@@ -407,7 +407,7 @@ def repartition_renove_sureleve(
         "\n",
         rotation=0,
         verticalalignment="top",
-        fontsize=12,
+        fontsize=11,
         color=color_txt_reno,
     )
 
@@ -428,7 +428,7 @@ def repartition_renove_sureleve(
         r"$SRE_{surelevation} = $" + f"${sre_extension_surelevation_m2:.1f}\ m²$",
         rotation=0,
         verticalalignment="top",
-        fontsize=12,
+        fontsize=11,
         color=color_txt_sur,
     )
 
@@ -453,7 +453,7 @@ def repartition_renove_sureleve(
         radius=0.1,
         unit="%",
         format="%.1f",
-        offset=0.4,
+        offset=0.5,
     )
 
     trunk_length0 = 0.50

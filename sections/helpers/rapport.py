@@ -299,7 +299,7 @@ def repartition_renove_sureleve(
     cm = 1 / 2.54
     figsize_a = 21 * cm
     figsize_b = 14.2 * cm
-    ratio_figsize = figsize_a / figsize_b
+    ratio_figsize = figsize_b / figsize_a
     fig, (ax1, ax2) = plt.subplots(
         1,
         2,

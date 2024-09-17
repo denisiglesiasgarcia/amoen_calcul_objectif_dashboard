@@ -332,7 +332,7 @@ def repartition_renove_sureleve(
     building_y = 0
 
     # Text
-    texte_alignement_droite = 0.05
+    texte_alignement_droite = 0.10
     texte_hauteur_sous_titre = 0.15
     texte_hauteur_texte_info = 0.30
 
@@ -480,10 +480,11 @@ def repartition_renove_sureleve(
         labels=["Energie\nfinale", None, None],
         orientations=[0, -1, 1],
         trunklength=trunk_length0,
+        pathlengths=0.4,
         rotation=0,
         fc="salmon",
         color="salmon",
-        alpha=0.5,
+        alpha=0.3,
     )
 
     # Surélévation subflow
@@ -494,6 +495,7 @@ def repartition_renove_sureleve(
         prior=0,
         connect=(2, 0),
         trunklength=trunk_length1,
+        pathlengths=0.5,
         fc=color_sur,
         color=color_sur,
         alpha=0.5,
@@ -507,6 +509,7 @@ def repartition_renove_sureleve(
         prior=0,
         connect=(1, 0),
         trunklength=trunk_length2,
+        pathlengths=0.5,
         fc=color_reno,
         color=color_reno,
         alpha=0.5,
@@ -524,7 +527,7 @@ def repartition_renove_sureleve(
     # Texts
 
     fig.text(
-        0.72,
+        0.715,
         -0.04,
         "Subvention bonus AMOén applicable\n" + "uniquement à la partie rénovée.",
         horizontalalignment="center",
@@ -535,8 +538,8 @@ def repartition_renove_sureleve(
 
     title_sankey = f"{repartition_energie_finale_partie_renovee}% de l'énergie finale\n est dédiée à la rénovation"
     fig.text(
-        0.20,
-        -0.01,
+        0.27,
+        0.03,
         title_sankey,
         horizontalalignment="center",
         fontsize=10,
@@ -544,31 +547,42 @@ def repartition_renove_sureleve(
     )
 
     fig.text(
-        0.02,
-        -0.45,
-        "Il est important de noter que la subvention ne concerne que la partie rénovée du bâtiment,\n"
-        + "excluant ainsi toute extension ou surélévation.\n"
+        0.08,
+        -0.87,
+        "Il est important de noter que la subvention bonus AMOén ne concerne que la partie rénovée du\n"
+        + "bâtiment, excluant ainsi toute extension ou surélévation.\n"
+        + "\n"
+        + "L'énergie finale est l'énergie disponible pour les consommateurs après les étapes de production,\n"
+        + "transformation et transport. Par exemple, l'électricité ou le gaz qui arrive dans un immeuble.\n"
+        + "\n"
+        + "L'énergie finale est répartie entre l'eau chaude sanitaire (ECS) et le chauffage. La consommation liée\n"
+        + "au chauffage est ajustée en fonction du climat pour tenir compte des variations de température. En\n"
+        + "revanche, l'énergie utilisée pour l'ECS n'est pas soumise à cette correction climatique. Ce procédé\n"
+        + "permet de comparer les consommations d'énergie d'une année à l'autre de manière plus juste.\n"
         + "\n"
         + "L'énergie finale après travaux climatiquement corrigée pondérée ("
         + r"$E_{f,après,corr,rénové} * f_p$"
         + ") représente\n"
         + "selon la méthodologie AMOén la quantité d'énergie finale consommée par la partie rénovée.\n"
-        + r"$E_{f,après,corr,rénové} * f_p$"
-        + " est essentiel pour vérifier le pourcentage d'atteinte de l'objectif de performance énergétique.\n"
-        + "\n"
-        + "L'IDC déclaré par le/la concessionaire va prendre en compte la totalité du bâtiment (partie rénovée \n"
-        + "et surélévation/extension). Cela représente donc 100% de l'énergie finale et toute la SRE du bâtiment.\n"
+        + "La répartition entre chauffage et ECS se trouve indiquée dans le schéma ci-dessus.\n"
         + "\n"
         + "L'IDC et "
         + r"$E_{f,après,corr,rénové} * f_p$"
-        + " seront donc différents car ils ne prennent pas en compte les mêmes SRE\n"
-        + "ni la même quantité d'énergie finale.",
+        + " ne sont pas équivalents car ils ne mesurent pas de la même manière\n"
+        + "l'énergie consommée par le bâtiment. Les principales différences sont les suivantes:\n"
+        + "\n"
+        + "- SRE: l'IDC prend en compte toute la SRE du bâtiment, alors que la méthodologie AMOén ne prend en\n"
+        + "  compte que la SRE de la partie rénovée.\n"
+        + "\n"
+        + "- Energie finale: l'IDC prend en compte toute l'énergie finale consommée par le bâtiment, alors que\n"
+        + "  la méthodologie AMOén ne prend en compte que l'énergie finale consommée par la partie rénovée.\n"
+        + "\n"
+        + "- Répartition chauffage/ECS: l'IDC part du principe que pour un logement collectif 128 MJ/m² sont\n"
+        + "  dédiés à l'ECS et tout le reste est dédié au chauffage. La méthodologie AMOén prend en compte la\n"
+        + "  répartition théorique (besoins de chauffage et ECS) pour répartir le chauffage et ECS.",
         horizontalalignment="left",
         fontsize=10,
     )
-
-    # ax2.margins(0)
-    # ax1.margins(0)
 
     plt.tight_layout()
 

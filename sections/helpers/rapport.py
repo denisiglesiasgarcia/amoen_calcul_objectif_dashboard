@@ -459,14 +459,14 @@ def repartition_renove_sureleve(
 
     sankey = Sankey(
         ax=ax1,
-        scale=1.05 / INPUT,
+        scale=1.2 / INPUT,
         head_angle=125,
         shoulder=0,
         gap=0.2,
         radius=0.1,
         unit="%",
         format="%.1f",
-        offset=0.3,
+        offset=0.35,
     )
 
     trunk_length0 = 1.00

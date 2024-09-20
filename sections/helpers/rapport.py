@@ -337,15 +337,27 @@ def repartition_renove_sureleve(
     texte_hauteur_texte_info = 0.30
 
     # Rénovation
-    floors_reno_rectangle = patches.Rectangle(
+    floors_reno_fill = patches.Rectangle(
         (building_x, building_y),
         building_width_reno,
         building_height_reno,
         facecolor=cmap_reno(0.3),
+        edgecolor="none",
+        alpha=0.2,
+    )
+
+    floors_reno_edge = patches.Rectangle(
+        (building_x, building_y),
+        building_width_reno,
+        building_height_reno,
+        facecolor="none",  # No fill color for the edge
         edgecolor=color_reno,
         linewidth=2,
     )
-    ax2.add_patch(floors_reno_rectangle)
+
+    # Add both patches to the axis
+    ax2.add_patch(floors_reno_fill)
+    ax2.add_patch(floors_reno_edge)
 
     # Surélévation
     added_part = patches.Rectangle(
@@ -355,6 +367,7 @@ def repartition_renove_sureleve(
         facecolor=cmap_sur(0.3),
         edgecolor=color_sur,
         linewidth=2,
+        alpha=0.2,
     )
     ax2.add_patch(added_part)
 
@@ -453,6 +466,7 @@ def repartition_renove_sureleve(
         radius=0.1,
         unit="%",
         format="%.1f",
+        offset=0.3,
     )
 
     trunk_length0 = 1.00

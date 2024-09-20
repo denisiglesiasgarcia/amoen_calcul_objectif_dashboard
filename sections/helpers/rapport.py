@@ -446,17 +446,16 @@ def repartition_renove_sureleve(
 
     sankey = Sankey(
         ax=ax1,
-        scale=1 / INPUT,
-        head_angle=180,
+        scale=1.05 / INPUT,
+        head_angle=125,
         shoulder=0,
         gap=0.2,
         radius=0.1,
         unit="%",
         format="%.1f",
-        offset=0.45,
     )
 
-    trunk_length0 = 0.50
+    trunk_length0 = 1.00
     trunk_length1 = 0.50
     trunk_length2 = trunk_length1
 
@@ -483,7 +482,7 @@ def repartition_renove_sureleve(
         rotation=0,
         fc="salmon",
         color="salmon",
-        alpha=0.3,
+        alpha=0.2,
     )
 
     # Surélévation subflow
@@ -497,7 +496,7 @@ def repartition_renove_sureleve(
         pathlengths=0.5,
         fc=color_sur,
         color=color_sur,
-        alpha=0.5,
+        alpha=0.2,
     )
 
     # Rénovation subflow
@@ -511,10 +510,25 @@ def repartition_renove_sureleve(
         pathlengths=0.5,
         fc=color_reno,
         color=color_reno,
-        alpha=0.5,
+        alpha=0.2,
     )
 
     sankey.finish()
+
+    # Set the font size of the Sankey labels (this works after sankey.finish())
+    for text in ax1.texts:
+        label_text = text.get_text()
+
+        # Apply bold if the label contains "Rénovation" or "Surélévation"
+        if "Rénovation" in label_text:
+            text.set_fontsize(10)
+            text.set_fontweight("bold")
+        else:  # Apply normal font weight for other labels
+            text.set_fontsize(10)
+            text.set_fontweight("normal")
+
+    ##########################################################################################
+    # Texts
 
     fig.suptitle(
         "Application de la méthodologie AMOén aux surélévations",
@@ -522,32 +536,19 @@ def repartition_renove_sureleve(
         fontweight="bold",
     )
 
-    ##########################################################################################
-    # Texts
-
     fig.text(
-        0.715,
-        -0.04,
-        "Subvention bonus AMOén applicable\n" + "uniquement à la partie rénovée.",
+        0.5,
+        0,
+        "Subvention bonus AMOén applicable uniquement à la partie rénovée.",
         horizontalalignment="center",
         fontsize=11,
         fontweight="bold",
         bbox=dict(boxstyle="round,pad=0.3", edgecolor=color_reno, facecolor="none"),
     )
 
-    title_sankey = f"{repartition_energie_finale_partie_renovee:.1f}% de l'énergie finale\n est dédiée à la rénovation"
-    fig.text(
-        0.27,
-        -0.04,
-        title_sankey,
-        horizontalalignment="center",
-        fontsize=10,
-        fontweight="bold",
-    )
-
     fig.text(
         0.08,
-        -0.87,
+        -0.83,
         "Il est important de noter que la subvention bonus AMOén ne concerne que la partie rénovée du\n"
         + "bâtiment, excluant ainsi toute extension ou surélévation.\n"
         + "\n"

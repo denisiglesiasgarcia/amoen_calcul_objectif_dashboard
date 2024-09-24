@@ -11,8 +11,7 @@
 ## TODO
 
 - Prioritaire
-  - [ ] Ajouter pour les surélévations, le total énergie finale ainsi que la répartition
-  - [ ] Gérer les cas ou l'atteinte de l'objectif est négative
+  - [ ] Faire la documentation
 
 - Non prioritaire
   - [ ] Ajouter option de renseigner ECS séparée du chauffage
@@ -33,3 +32,5 @@
 - [x] Ajouter utilisateurs avec mot de passes robustes
 - [x] Ajouter le formulaire pour mot de passe oublié
 - [X] Ajouter utilisateur administrateur
+- [X] Ajouter pour les surélévations, le total énergie finale ainsi que la répartition
+- [X] Gérer les cas ou l'atteinte de l'objectif est négative

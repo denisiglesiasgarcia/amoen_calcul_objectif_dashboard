@@ -2422,12 +2422,6 @@ if st.session_state["authentication_status"]:
                 if not is_valid(st.session_state["data_site"].get(field)):
                     invalid_fields.append(field)
 
-            if (
-                "atteinte_objectif" in st.session_state["data_site"]
-                and st.session_state["data_site"]["atteinte_objectif"] <= 0.1
-            ):
-                invalid_fields.append("atteinte_objectif (value <= 0.1)")
-
             return invalid_fields
 
         # Generate the PDF report

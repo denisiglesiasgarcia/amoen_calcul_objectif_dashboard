@@ -2187,43 +2187,46 @@ if st.session_state["authentication_status"]:
 
         # résultats en latex
 
-        formula_atteinte_objectif = r"Atteinte\ objectif \ [\%]= \frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}"
+        if st.session_state["data_site"]["facteur_ponderation_moyen"] > 0:
+            formula_atteinte_objectif = r"Atteinte\ objectif \ [\%]= \frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}"
 
-        formula_atteinte_objectif_num = r"Atteinte\ objectif \ [\%]= \frac{{{} - {}*{}}}{{{} - {}*{}}} = {}".format(
-            round(st.session_state["data_site"]["ef_avant_corr_kwh_m2"], 4),
-            round(
-                st.session_state["data_site"][
-                    "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
-                ],
-                4,
+            formula_atteinte_objectif_num = r"Atteinte\ objectif \ [\%]= \frac{{{} - {}*{}}}{{{} - {}*{}}} = {}".format(
+                round(st.session_state["data_site"]["ef_avant_corr_kwh_m2"], 4),
+                round(
+                    st.session_state["data_site"][
+                        "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
+                    ],
+                    4,
+                )
+                / round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
+                round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
+                round(st.session_state["data_site"]["ef_avant_corr_kwh_m2"], 4),
+                round(st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"], 4)
+                / round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
+                round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
+                round(st.session_state["data_site"]["atteinte_objectif"], 3),
             )
-            / round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
-            round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
-            round(st.session_state["data_site"]["ef_avant_corr_kwh_m2"], 4),
-            round(st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"], 4)
-            / round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
-            round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
-            round(st.session_state["data_site"]["atteinte_objectif"], 3),
-        )
 
-        formula_atteinte_objectifs_pourcent = r"Atteinte\ objectif\ [\%]= {} \%".format(
-            round(st.session_state["data_site"]["atteinte_objectif"] * 100, 2)
-        )
-
-        # latex color
-        if st.session_state["data_site"]["atteinte_objectif"] >= 0.85:
             formula_atteinte_objectifs_pourcent = (
-                r"\textcolor{green}{" + formula_atteinte_objectifs_pourcent + "}"
-            )
-        else:
-            formula_atteinte_objectifs_pourcent = (
-                r"\textcolor{red}{" + formula_atteinte_objectifs_pourcent + "}"
+                r"Atteinte\ objectif\ [\%]= {} \%".format(
+                    round(st.session_state["data_site"]["atteinte_objectif"] * 100, 2)
+                )
             )
 
-        # Render the formula in LaTeX
-        st.latex(formula_atteinte_objectif)
-        st.latex(formula_atteinte_objectif_num)
-        st.latex(formula_atteinte_objectifs_pourcent)
+            # latex color
+            if st.session_state["data_site"]["atteinte_objectif"] >= 0.85:
+                formula_atteinte_objectifs_pourcent = (
+                    r"\textcolor{green}{" + formula_atteinte_objectifs_pourcent + "}"
+                )
+            else:
+                formula_atteinte_objectifs_pourcent = (
+                    r"\textcolor{red}{" + formula_atteinte_objectifs_pourcent + "}"
+                )
+
+            # Render the formula in LaTeX
+            st.latex(formula_atteinte_objectif)
+            st.latex(formula_atteinte_objectif_num)
+            st.latex(formula_atteinte_objectifs_pourcent)
 
         st.subheader("Graphiques")
 

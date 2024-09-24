@@ -2448,11 +2448,7 @@ if st.session_state["authentication_status"]:
                     st.error("Champs manquants ou invalides:")
                     for field in missing_fields:
                         st.error(f"- {field}")
-                
-                if not atteinte_objectif_valid:
-                    st.error("Le champ 'atteinte_objectif' doit être supérieur à 0.1")
 
-                st.info("Veuillez remplir tous les champs requis et vous assurer que 'atteinte_objectif' est supérieur à 0.1 pour pouvoir générer le rapport PDF.")
 
     if username_login == "admin":
         with tab7:

@@ -2362,172 +2362,97 @@ if st.session_state["authentication_status"]:
                 st.error("Pas de données historiques disponibles")
 
     with tab6:
-        st.subheader("Générer rapport")
+            st.subheader("Générer rapport")
 
-        # Create a single button for generating and downloading the PDF
-        def is_valid(var):
-            return var is not None
+            # Create a single button for generating and downloading the PDF
+            def is_valid(var):
+                return var is not None
 
-        if all(
-            [
-                is_valid(st.session_state["data_site"]["nom_projet"]),
-                is_valid(st.session_state["data_site"]["adresse_projet"]),
-                is_valid(st.session_state["data_site"]["amoen_id"]),
-                is_valid(st.session_state["data_site"]["sre_renovation_m2"]),
-                is_valid(
-                    st.session_state["data_site"]["sre_pourcentage_habitat_collectif"]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["sre_pourcentage_habitat_individuel"]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["sre_pourcentage_administration"]
-                ),
-                is_valid(st.session_state["data_site"]["sre_pourcentage_ecoles"]),
-                is_valid(st.session_state["data_site"]["sre_pourcentage_commerce"]),
-                is_valid(st.session_state["data_site"]["sre_pourcentage_restauration"]),
-                is_valid(
-                    st.session_state["data_site"][
-                        "sre_pourcentage_lieux_de_rassemblement"
-                    ]
-                ),
-                is_valid(st.session_state["data_site"]["sre_pourcentage_hopitaux"]),
-                is_valid(st.session_state["data_site"]["sre_pourcentage_industrie"]),
-                is_valid(st.session_state["data_site"]["sre_pourcentage_depots"]),
-                is_valid(
-                    st.session_state["data_site"][
-                        "sre_pourcentage_installations_sportives"
-                    ]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["sre_pourcentage_piscines_couvertes"]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["agent_energetique_ef_mazout_kg"]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["agent_energetique_ef_mazout_litres"]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["agent_energetique_ef_mazout_kwh"]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["agent_energetique_ef_gaz_naturel_m3"]
-                ),
-                is_valid(
-                    st.session_state["data_site"][
-                        "agent_energetique_ef_gaz_naturel_kwh"
-                    ]
-                ),
-                is_valid(
-                    st.session_state["data_site"][
-                        "agent_energetique_ef_bois_buches_dur_stere"
-                    ]
-                ),
-                is_valid(
-                    st.session_state["data_site"][
-                        "agent_energetique_ef_bois_buches_tendre_stere"
-                    ]
-                ),
-                is_valid(
-                    st.session_state["data_site"][
-                        "agent_energetique_ef_bois_buches_tendre_kwh"
-                    ]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["agent_energetique_ef_pellets_m3"]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["agent_energetique_ef_pellets_kg"]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["agent_energetique_ef_pellets_kwh"]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["agent_energetique_ef_plaquettes_m3"]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["agent_energetique_ef_plaquettes_kwh"]
-                ),
-                is_valid(st.session_state["data_site"]["agent_energetique_ef_cad_kwh"]),
-                is_valid(
-                    st.session_state["data_site"][
-                        "agent_energetique_ef_electricite_pac_kwh"
-                    ]
-                ),
-                is_valid(
-                    st.session_state["data_site"][
-                        "agent_energetique_ef_electricite_directe_kwh"
-                    ]
-                ),
-                is_valid(
-                    st.session_state["data_site"]["agent_energetique_ef_autre_kwh"]
-                ),
-                is_valid(st.session_state["data_site"]["periode_start"]),
-                is_valid(st.session_state["data_site"]["periode_end"]),
-                is_valid(st.session_state["data_site"]["ef_avant_corr_kwh_m2"]),
-                is_valid(st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"]),
-                is_valid(
-                    st.session_state["data_site"][
-                        "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
-                    ]
-                ),
-                is_valid(st.session_state["data_site"]["delta_ef_visee_kwh_m2"]),
-                is_valid(st.session_state["data_site"]["facteur_ponderation_moyen"]),
-                is_valid(st.session_state["data_site"]["atteinte_objectif"]),
-                st.session_state["data_site"]["atteinte_objectif"] > 0.1,
-                is_valid(
-                    st.session_state["data_site"][
-                        "repartition_energie_finale_partie_renovee_chauffage"
-                    ]
-                ),
-                is_valid(
-                    st.session_state["data_site"][
-                        "repartition_energie_finale_partie_renovee_ecs"
-                    ]
-                ),
-                is_valid(
-                    st.session_state["data_site"][
-                        "repartition_energie_finale_partie_surelevee_chauffage"
-                    ]
-                ),
-                is_valid(
-                    st.session_state["data_site"][
-                        "repartition_energie_finale_partie_surelevee_ecs"
-                    ]
-                ),
+            required_fields = [
+                "nom_projet",
+                "adresse_projet",
+                "amoen_id",
+                "sre_renovation_m2",
+                "sre_pourcentage_habitat_collectif",
+                "sre_pourcentage_habitat_individuel",
+                "sre_pourcentage_administration",
+                "sre_pourcentage_ecoles",
+                "sre_pourcentage_commerce",
+                "sre_pourcentage_restauration",
+                "sre_pourcentage_lieux_de_rassemblement",
+                "sre_pourcentage_hopitaux",
+                "sre_pourcentage_industrie",
+                "sre_pourcentage_depots",
+                "sre_pourcentage_installations_sportives",
+                "sre_pourcentage_piscines_couvertes",
+                "agent_energetique_ef_mazout_kg",
+                "agent_energetique_ef_mazout_litres",
+                "agent_energetique_ef_mazout_kwh",
+                "agent_energetique_ef_gaz_naturel_m3",
+                "agent_energetique_ef_gaz_naturel_kwh",
+                "agent_energetique_ef_bois_buches_dur_stere",
+                "agent_energetique_ef_bois_buches_tendre_stere",
+                "agent_energetique_ef_bois_buches_tendre_kwh",
+                "agent_energetique_ef_pellets_m3",
+                "agent_energetique_ef_pellets_kg",
+                "agent_energetique_ef_pellets_kwh",
+                "agent_energetique_ef_plaquettes_m3",
+                "agent_energetique_ef_plaquettes_kwh",
+                "agent_energetique_ef_cad_kwh",
+                "agent_energetique_ef_electricite_pac_kwh",
+                "agent_energetique_ef_electricite_directe_kwh",
+                "agent_energetique_ef_autre_kwh",
+                "periode_start",
+                "periode_end",
+                "ef_avant_corr_kwh_m2",
+                "ef_objectif_pondere_kwh_m2",
+                "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2",
+                "delta_ef_visee_kwh_m2",
+                "facteur_ponderation_moyen",
+                "atteinte_objectif",
+                "repartition_energie_finale_partie_renovee_chauffage",
+                "repartition_energie_finale_partie_renovee_ecs",
+                "repartition_energie_finale_partie_surelevee_chauffage",
+                "repartition_energie_finale_partie_surelevee_ecs",
             ]
-        ):
-            if st.button("Générer le rapport PDF"):
-                # pdf_data = generate_pdf(data_rapport)
-                pdf_data, file_name = generate_pdf(st.session_state["data_site"])
-                st.download_button(
-                    label="Cliquez ici pour télécharger le PDF",
-                    data=pdf_data,
-                    file_name=file_name,
-                    mime="application/pdf",
-                )
-                st.success(
-                    f"Rapport PDF '{file_name}' généré avec succès! Cliquez sur le bouton ci-dessus pour le télécharger."
-                )
 
-                # add date to data_rapport
-                st.session_state["data_site"][
-                    "date_rapport"
-                ] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            missing_fields = [field for field in required_fields if not is_valid(st.session_state["data_site"].get(field))]
+            atteinte_objectif_valid = st.session_state["data_site"].get("atteinte_objectif", 0) > 0.1
 
-                # Remove the _id field if it exists to ensure MongoDB generates a new one
-                if "_id" in st.session_state["data_site"]:
-                    del st.session_state["data_site"]["_id"]
+            if not missing_fields and atteinte_objectif_valid:
+                if st.button("Générer le rapport PDF"):
+                    pdf_data, file_name = generate_pdf(st.session_state["data_site"])
+                    st.download_button(
+                        label="Cliquez ici pour télécharger le PDF",
+                        data=pdf_data,
+                        file_name=file_name,
+                        mime="application/pdf",
+                    )
+                    st.success(
+                        f"Rapport PDF '{file_name}' généré avec succès! Cliquez sur le bouton ci-dessus pour le télécharger."
+                    )
 
-                # Send data_site to MongoDB
-                # x = mycol_historique_sites.insert_one(st.session_state['data_site'])
+                    st.session_state["data_site"]["date_rapport"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        else:
-            st.warning(
-                "Toutes les informations nécessaires ne sont pas disponibles pour générer le PDF."
-            )
-            st.warning("Veuillez compléter l'onglet '1 Données site'.")
+                    if "_id" in st.session_state["data_site"]:
+                        del st.session_state["data_site"]["_id"]
+
+                    # Uncomment the following line when ready to insert into MongoDB
+                    # x = mycol_historique_sites.insert_one(st.session_state['data_site'])
+
+            else:
+                st.warning("Toutes les informations nécessaires ne sont pas disponibles pour générer le PDF.")
+                st.warning("Veuillez compléter l'onglet '1 Données site'.")
+                
+                if missing_fields:
+                    st.error("Champs manquants ou invalides:")
+                    for field in missing_fields:
+                        st.error(f"- {field}")
+                
+                if not atteinte_objectif_valid:
+                    st.error("Le champ 'atteinte_objectif' doit être supérieur à 0.1")
+
+                st.info("Veuillez remplir tous les champs requis et vous assurer que 'atteinte_objectif' est supérieur à 0.1 pour pouvoir générer le rapport PDF.")
 
     if username_login == "admin":
         with tab7:

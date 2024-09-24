@@ -2196,10 +2196,12 @@ if st.session_state["authentication_status"]:
                     "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
                 ],
                 4,
-            ),
+            )
+            / round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
             round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
             round(st.session_state["data_site"]["ef_avant_corr_kwh_m2"], 4),
-            round(st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"], 4),
+            round(st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"], 4)
+            / round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
             round(st.session_state["data_site"]["facteur_ponderation_moyen"], 4),
             round(st.session_state["data_site"]["atteinte_objectif"], 3),
         )

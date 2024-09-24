@@ -34,6 +34,10 @@ TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'ut
 3) Onglet *"3 Résultats"* : Vérifier les résultats du calcul de l'atteinte de l'objectif.
 4) Onglet *"5 Générer rapport"* : Générer un rapport PDF avec les résultats du calcul.
 
+
+https://github.com/user-attachments/assets/9b8e56dc-d415-4c36-9d92-0b03a72ec0a4
+
+
 ![Utilisation de l'outil](00_tldr.mp4)
 
 <video width="320" height="240" controls>

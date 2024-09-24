@@ -25,14 +25,14 @@ Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-c
 TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'utilisation de l'outil.
 
 1) Se connecter à l'[outil de calcul](https://amoen-calcul.streamlit.app/) avec un nom d'utilisateur et un mot de passe.
-2) Onglet *1 Données du site*:
+2) Onglet *"1 Données du site"* :
     - Sélectionner un projet.
     - Renseigner les dates de début et fin de la période de calcul.
     - Renseigner les affectations.
     - Renseigner les agents énergétiques utilisés et les quantités.
     - **Cliquer sur le bouton *Sauvegarder*.**
-3) Onglet *3 Résultats*: Vérifier les résultats du calcul de l'atteinte de l'objectif.
-4) Onglet *5 Générer rapport*: Générer un rapport PDF avec les résultats du calcul.
+3) Onglet *"3 Résultats"* : Vérifier les résultats du calcul de l'atteinte de l'objectif.
+4) Onglet *"5 Générer rapport"* : Générer un rapport PDF avec les résultats du calcul.
 
 ![Utilisation de l'outil](00_tldr.mp4)
 

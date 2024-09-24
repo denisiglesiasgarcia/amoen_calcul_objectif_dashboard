@@ -1,6 +1,6 @@
 # Documentation
 
-Cette documentation a pour but de présenter l'outil de calcul de la méthodologie AMOén et de décrire comment l'utiliser.
+Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-calcul.streamlit.app/) de la méthodologie AMOén et de décrire comment l'utiliser.
 
 ## Table of Contents
 
@@ -24,7 +24,17 @@ Cette documentation a pour but de présenter l'outil de calcul de la méthodolog
 
 TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'utilisation de l'outil.
 
-![Utilisation de l'outil](00_tldr.webp)
+1) Se connecter à l'[outil de calcul](https://amoen-calcul.streamlit.app/) avec un nom d'utilisateur et un mot de passe.
+2) Onglet *1 Données du site*:
+    - Sélectionner un projet.
+    - Renseigner les dates de début et fin de la période de calcul.
+    - Renseigner les affectations.
+    - Renseigner les agents énergétiques utilisés et les quantités.
+    - **Cliquer sur le bouton *Sauvegarder*.**
+3) Onglet *3 Résultats*: Vérifier les résultats du calcul de l'atteinte de l'objectif.
+4) Onglet *5 Générer rapport*: Générer un rapport PDF avec les résultats du calcul.
+
+![Utilisation de l'outil](00_tldr.webm)
 
 ## Introduction
 
@@ -74,9 +84,9 @@ L'image ci-dessous permet d'avoir un aperçu des données à renseigner.
 
 ![Données à renseigner](04_donnees_site1.png)
 
-*Sélectionner un projet* permet de voir une liste des projets et d'en sélectionner un. Les données de tous les champs sont alors automatiquement renseignées. Par exemple dans l'image ci-dessous, le projet "Avusy 10-10A" a été sélectionné.
+*Sélectionner projet* permet de voir une liste des projets et d'en sélectionner un. Les données de tous les champs sont alors automatiquement renseignées. Par exemple dans l'image ci-dessous, le projet "Avusy 10-10A" a été sélectionné.
 
-![Sélectionner un projet -exemple](05_donnees_site2.png)
+![Sélectionner un projet - exemple](05_donnees_site2.png)
 
 #### Elements à renseigner
 

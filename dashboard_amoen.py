@@ -2362,13 +2362,15 @@ if st.session_state["authentication_status"]:
                 st.error("Pas de données historiques disponibles")
 
     with tab6:
-            st.subheader("Générer rapport")
+        st.subheader("Générer rapport")
 
-            # Create a single button for generating and downloading the PDF
-            def is_valid(var):
-                return var is not None
+        # Check if all fields are valid
+        def is_valid(var):
+            return var is not None and var != ""
 
-            required_fields = [
+        def check_validity():
+            invalid_fields = []
+            fields_to_check = [
                 "nom_projet",
                 "adresse_projet",
                 "amoen_id",
@@ -2416,39 +2418,51 @@ if st.session_state["authentication_status"]:
                 "repartition_energie_finale_partie_surelevee_ecs",
             ]
 
-            missing_fields = [field for field in required_fields if not is_valid(st.session_state["data_site"].get(field))]
-            atteinte_objectif_valid = st.session_state["data_site"].get("atteinte_objectif", 0) > 0.1
+            for field in fields_to_check:
+                if not is_valid(st.session_state["data_site"].get(field)):
+                    invalid_fields.append(field)
 
-            if not missing_fields and atteinte_objectif_valid:
-                if st.button("Générer le rapport PDF"):
-                    pdf_data, file_name = generate_pdf(st.session_state["data_site"])
-                    st.download_button(
-                        label="Cliquez ici pour télécharger le PDF",
-                        data=pdf_data,
-                        file_name=file_name,
-                        mime="application/pdf",
-                    )
-                    st.success(
-                        f"Rapport PDF '{file_name}' généré avec succès! Cliquez sur le bouton ci-dessus pour le télécharger."
-                    )
+            if (
+                "atteinte_objectif" in st.session_state["data_site"]
+                and st.session_state["data_site"]["atteinte_objectif"] <= 0.1
+            ):
+                invalid_fields.append("atteinte_objectif (value <= 0.1)")
 
-                    st.session_state["data_site"]["date_rapport"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            return invalid_fields
 
-                    if "_id" in st.session_state["data_site"]:
-                        del st.session_state["data_site"]["_id"]
+        # Generate the PDF report
+        invalid_fields = check_validity()
+        if not invalid_fields:
+            if st.button("Générer le rapport PDF"):
+                pdf_data, file_name = generate_pdf(st.session_state["data_site"])
+                st.download_button(
+                    label="Cliquez ici pour télécharger le PDF",
+                    data=pdf_data,
+                    file_name=file_name,
+                    mime="application/pdf",
+                )
+                st.success(
+                    f"Rapport PDF '{file_name}' généré avec succès! Cliquez sur le bouton ci-dessus pour le télécharger."
+                )
 
-                    # Uncomment the following line when ready to insert into MongoDB
-                    # x = mycol_historique_sites.insert_one(st.session_state['data_site'])
+                # add date to data_rapport
+                st.session_state["data_site"][
+                    "date_rapport"
+                ] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-            else:
-                st.warning("Toutes les informations nécessaires ne sont pas disponibles pour générer le PDF.")
-                st.warning("Veuillez compléter l'onglet '1 Données site'.")
-                
-                if missing_fields:
-                    st.error("Champs manquants ou invalides:")
-                    for field in missing_fields:
-                        st.error(f"- {field}")
+                # Remove the _id field if it exists to ensure MongoDB generates a new one
+                if "_id" in st.session_state["data_site"]:
+                    del st.session_state["data_site"]["_id"]
 
+                # Send data_site to MongoDB
+                # x = mycol_historique_sites.insert_one(st.session_state['data_site'])
+        else:
+            st.warning(
+                "Toutes les informations nécessaires ne sont pas disponibles pour générer le PDF."
+            )
+            st.warning("The following fields are invalid or missing:")
+            for field in invalid_fields:
+                st.warning(f"- {field}")
 
     if username_login == "admin":
         with tab7:

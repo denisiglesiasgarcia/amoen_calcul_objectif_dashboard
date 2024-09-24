@@ -19,6 +19,11 @@ Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-c
       - [Historique IDC](#historique-idc)
       - [Historique résultats méthodologie AMOén](#historique-résultats-méthodologie-amoén)
     - [5 Générer rapport](#5-générer-rapport)
+- [FAQ](#faq)
+    - [Site zzz](#site-zzz)
+    - [Comment changer le mot de passe?](#comment-changer-le-mot-de-passe)
+    - [Changer le mode sombre/clair](#changer-le-mode-sombreclair)
+    
 
 ## TLDR
 
@@ -174,12 +179,38 @@ Cet onglet permet de générer un rapport PDF avec les résultats du calcul de l
 
 ## FAQ
 
-1) Le site montre ce message:
+### Site zzz
+    
+Le site montre ce message:
 
-    ![app-state-zzzz](https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard/assets/71026758/5f276733-7539-4e34-a0b1-f8ecc200961c)
+![app-state-zzzz](https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard/assets/71026758/5f276733-7539-4e34-a0b1-f8ecc200961c)
 
-    Veuillez appuyer sur le bouton pour redémarrer le site. Celui-ci se met état de veille pour économiser de l'énergie s'il n'y a pas a eu d'activité depuis quelques jours. Le site se remet en marche au bout de 2-3 minutes.
+Veuillez appuyer sur le bouton pour redémarrer le site. Celui-ci se met état de veille pour économiser de l'énergie s'il n'y a pas a eu d'activité depuis quelques jours. Le site se remet en marche au bout de 2-3 minutes.
 
-2) Comment changer le mot de passe?
+### Comment changer le mot de passe?
 
+Le menu à gauche de l'écran permet de changer de mot de passe. Il suffit de cliquer sur le bouton *Change password*.
+
+![change password](50_change_password1.png)
+
+Une fenêtre s'ouvre pour renseigner l'ancien mot de passe et le nouveau mot de passe.
+
+![change password2](51_change_password2.png)
+
+Certaines règles sont à respecter pour le mot de passe:
+
+- Entre 8 et 20 caractères
+- Au moins une lettre majuscule
+- Un chiffre
+- Un caractère spécial [@$!%*?&]
+
+### Changer le mode sombre/clair
+
+Il est possible de changer le mode de l'outil de calcul en mode sombre. Pour cela, il suffit de cliquer sur les trois petits points en haut à droite de l'écran.
+
+![Dark mode](52_dark_mode.png)
+
+Appuyez sur *Settings* et sélectionnez le mode souhaité.
+
+![select dark mode](53_dark_light_mode.png)
 

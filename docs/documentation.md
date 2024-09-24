@@ -80,7 +80,7 @@ Cet onglet contient:
 
 ### 1 Données du site
 
-Cet onglet contient les informations nécessaires au calcul de l'atteinte de l'objectif. 
+Cet onglet contient les informations nécessaires au calcul de l'atteinte de l'objectif.
 
 #### Chargement des données de base du projet
 
@@ -179,7 +179,7 @@ Cet onglet permet de générer un rapport PDF avec les résultats du calcul de l
 ## FAQ
 
 ### Site zzz
-    
+
 Le site montre ce message:
 
 ![app-state-zzzz](https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard/assets/71026758/5f276733-7539-4e34-a0b1-f8ecc200961c)
@@ -213,3 +213,4 @@ Appuyez sur *Settings* et sélectionnez le mode souhaité.
 
 ![select dark mode](53_dark_light_mode.png)
 
+TODO:ajouter comment ajouter un nouveau projet

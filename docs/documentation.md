@@ -24,7 +24,7 @@ Cette documentation a pour but de présenter l'outil de calcul de la méthodolog
 
 TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'utilisation de l'outil.
 
-![Utilisation de l'outil](docs/00_tldr.gif)
+![Utilisation de l'outil](00_tldr.webp)
 
 ## Introduction
 

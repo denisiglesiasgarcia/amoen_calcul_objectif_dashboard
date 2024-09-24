@@ -36,17 +36,9 @@ TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'ut
 
 ![Utilisation de l'outil](00_tldr.mp4)
 
-
-```markdown
-## Video Guide
-
-Pour une démonstration visuelle de l'utilisation de l'outil, veuillez regarder la vidéo ci-dessous:
-
-<video width="600" controls>
-    <source src="00_tldr.mp4" type="video/mp4">
-    Your browser does not support the video tag.
+<video width="320" height="240" controls>
+  <source src="00_tldr.mp4" type="video/mp4">
 </video>
-```
 
 
 ## Introduction

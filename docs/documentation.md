@@ -20,10 +20,9 @@ Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-c
       - [Historique résultats méthodologie AMOén](#historique-résultats-méthodologie-amoén)
     - [5 Générer rapport](#5-générer-rapport)
 - [FAQ](#faq)
-    - [Site zzz](#site-zzz)
-    - [Comment changer le mot de passe?](#comment-changer-le-mot-de-passe)
-    - [Changer le mode sombre/clair](#changer-le-mode-sombreclair)
-    
+  - [Site zzz](#site-zzz)
+  - [Comment changer le mot de passe?](#comment-changer-le-mot-de-passe)
+  - [Changer le mode sombre/clair](#changer-le-mode-sombreclair)
 
 ## TLDR
 

@@ -36,6 +36,19 @@ TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'ut
 
 ![Utilisation de l'outil](00_tldr.mp4)
 
+
+```markdown
+## Video Guide
+
+Pour une démonstration visuelle de l'utilisation de l'outil, veuillez regarder la vidéo ci-dessous:
+
+<video width="600" controls>
+    <source src="00_tldr.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+```
+
+
 ## Introduction
 
 L'écran d'accueil de l'[outil de calcul](https://amoen-calcul.streamlit.app/) permet de se connecter à l'outil. Pour cela, il faut renseigner un nom d'utilisateur et un mot de passe. Vous devriez avoir reçu ces informations par courriel.

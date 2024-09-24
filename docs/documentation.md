@@ -20,6 +20,12 @@ Cette documentation a pour but de présenter l'outil de calcul de la méthodolog
       - [Historique résultats méthodologie AMOén](#historique-résultats-méthodologie-amoén)
     - [5 Générer rapport](#5-générer-rapport)
 
+## TLDR
+
+TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'utilisation de l'outil.
+
+![alt text](docs/00_tldr.gif)
+
 ## Introduction
 
 L'écran d'accueil de l'[outil de calcul](https://amoen-calcul.streamlit.app/) permet de se connecter à l'outil. Pour cela, il faut renseigner un nom d'utilisateur et un mot de passe. Vous devriez avoir reçu ces informations par courriel.

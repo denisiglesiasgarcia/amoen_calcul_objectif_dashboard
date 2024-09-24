@@ -12,6 +12,7 @@
 
 - Prioritaire
   - [ ] Ajouter pour les surélévations, le total énergie finale ainsi que la répartition
+  - [ ] Gérer les cas ou l'atteinte de l'objectif est négative
 
 - Non prioritaire
   - [ ] Ajouter option de renseigner ECS séparée du chauffage

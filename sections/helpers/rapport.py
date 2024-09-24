@@ -403,26 +403,26 @@ def repartition_renove_sureleve(
         fontweight="bold",
         color=color_txt_reno,
     )
-    ax2.text(
-        texte_alignement_droite,  # Additional text
-        building_height_reno - texte_hauteur_texte_info,
-        r"$SRE_{renovation} = $"
-        f"${sre_renovation_m2:.1f}\ m²$"
-        "\n"
-        r"$E_{f,avant,corr} = $"
-        f"${ef_avant_corr_kwh_m2*3.6:.1f}\ MJ/m²$"
-        "\n"
-        r"$E_{f,obj} * f_p = $"
-        f"${ef_objectif_pondere_kwh_m2*3.6:.1f}\ MJ/m²$"
-        "\n"
-        r"$E_{f,après,corr,rénové} * f_p = $"
-        f"${energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2*3.6:.1f}\ MJ/m²$"
-        "\n",
-        rotation=0,
-        verticalalignment="top",
-        fontsize=11,
-        color=color_txt_reno,
-    )
+    # ax2.text(
+    #     texte_alignement_droite,  # Additional text
+    #     building_height_reno - texte_hauteur_texte_info,
+    #     r"$SRE_{renovation} = $"
+    #     f"${sre_renovation_m2:.1f}\ m²$"
+    #     "\n"
+    #     r"$E_{f,avant,corr} = $"
+    #     f"${ef_avant_corr_kwh_m2*3.6:.1f}\ MJ/m²$"
+    #     "\n"
+    #     r"$E_{f,obj} * f_p = $"
+    #     f"${ef_objectif_pondere_kwh_m2*3.6:.1f}\ MJ/m²$"
+    #     "\n"
+    #     r"$E_{f,après,corr,rénové} * f_p = $"
+    #     f"${energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2*3.6:.1f}\ MJ/m²$"
+    #     "\n",
+    #     rotation=0,
+    #     verticalalignment="top",
+    #     fontsize=11,
+    #     color=color_txt_reno,
+    # )
 
     # Text on the right for Surélévation
     ax2.text(
@@ -434,16 +434,17 @@ def repartition_renove_sureleve(
         fontsize=12,
         fontweight="bold",
         color=color_txt_sur,
+        alpha=0.6,
     )
-    ax2.text(
-        texte_alignement_droite,  # Additional text
-        building_height_reno + building_height_sur - texte_hauteur_texte_info,
-        r"$SRE_{surelevation} = $" + f"${sre_extension_surelevation_m2:.1f}\ m²$",
-        rotation=0,
-        verticalalignment="top",
-        fontsize=11,
-        color=color_txt_sur,
-    )
+    # ax2.text(
+    #     texte_alignement_droite,  # Additional text
+    #     building_height_reno + building_height_sur - texte_hauteur_texte_info,
+    #     r"$SRE_{surelevation} = $" + f"${sre_extension_surelevation_m2:.1f}\ m²$",
+    #     rotation=0,
+    #     verticalalignment="top",
+    #     fontsize=11,
+    #     color=color_txt_sur,
+    # )
 
     # Adjust the plot limits to accommodate the text
     ax2.set_xlim(-0.1, building_width_reno + 0.5)
@@ -459,7 +460,7 @@ def repartition_renove_sureleve(
 
     sankey = Sankey(
         ax=ax1,
-        scale=1.3 / INPUT,
+        scale=1.2 / INPUT,
         head_angle=125,
         shoulder=0,
         gap=0.2,
@@ -490,7 +491,7 @@ def repartition_renove_sureleve(
     # Main flow
     s0 = sankey.add(
         flows=flows_s1,
-        labels=["Energie\nfinale", None, None],
+        labels=["Energie\nfinale\nclimatiquement\ncorrigée\net pondérée", None, None],
         orientations=[0, -1, 1],
         trunklength=trunk_length0,
         rotation=0,
@@ -516,7 +517,11 @@ def repartition_renove_sureleve(
     # Rénovation subflow
     s2 = sankey.add(
         flows=[repartition_energie_finale_partie_renovee] + flows_renovation,
-        labels=["Rénovation", "ECS", "Chauffage"],
+        labels=[
+            "Rénovation",
+            "ECS",
+            "Chauffage",
+        ],
         orientations=[0, 1, 1],
         prior=0,
         connect=(1, 0),
@@ -571,19 +576,19 @@ def repartition_renove_sureleve(
         + "\n"
         + "L'énergie finale est répartie entre l'eau chaude sanitaire (ECS) et le chauffage. La consommation liée\n"
         + "au chauffage est ajustée en fonction du climat pour tenir compte des variations de température. En\n"
-        + "revanche, l'énergie utilisée pour l'ECS n'est pas soumise à cette correction climatique. Ce procédé\n"
-        + "permet de comparer les consommations d'énergie d'une année à l'autre de manière plus juste.\n"
+        + "revanche, l'énergie utilisée pour l'ECS n'est pas soumise à cette correction climatique.\n"
+        + "L'énergie finale est aussi pondérée selon les agents énergétiques utilisés.\n"
+        + "Finalement nous obtenons de l'énergie finale qui est corrigée climatiquement et pondérée.\n"
         + "\n"
-        + "L'énergie finale après travaux climatiquement corrigée pondérée ("
+        + "L'IDC et l'"
         + r"$E_{f,après,corr,rénové} * f_p$"
-        + ") représente\n"
-        + "selon la méthodologie AMOén la quantité d'énergie finale consommée par la partie rénovée.\n"
-        + "La répartition entre chauffage et ECS se trouve indiquée dans le schéma ci-dessus.\n"
+        + " se basent sur ce principe pour comparer l'énergie consommée\n"
+        + "par les bâtiments d'année en année. Ils ne sont pas équivalents car ils utilisent des approches\n"
+        + "significativement différentes (méthodologie).\n"
         + "\n"
-        + "L'IDC et "
+        + "Les principales disparités entre l'IDC et l'"
         + r"$E_{f,après,corr,rénové} * f_p$"
-        + " ne sont pas équivalents car ils ne mesurent pas de la même manière\n"
-        + "l'énergie consommée par le bâtiment. Les principales différences sont les suivantes:\n"
+        + " sont les suivantes:\n"
         + "\n"
         + "- SRE: l'IDC prend en compte toute la SRE du bâtiment, alors que la méthodologie AMOén ne prend en\n"
         + "  compte que la SRE de la partie rénovée.\n"
@@ -591,7 +596,7 @@ def repartition_renove_sureleve(
         + "- Energie finale: l'IDC prend en compte toute l'énergie finale consommée par le bâtiment, alors que\n"
         + "  la méthodologie AMOén ne prend en compte que l'énergie finale consommée par la partie rénovée.\n"
         + "\n"
-        + "- Répartition chauffage/ECS: l'IDC part du principe que pour un logement collectif 128 MJ/m² sont\n"
+        + "- Répartition chauffage/ECS: l'IDC part du principe que pour un logement collectif, 128 MJ/m² sont\n"
         + "  dédiés à l'ECS et tout le reste est dédié au chauffage. La méthodologie AMOén prend en compte la\n"
         + "  répartition théorique (besoins de chauffage et ECS) pour répartir le chauffage et ECS.",
         horizontalalignment="left",

@@ -198,10 +198,16 @@ Si ce pourcentage est inférieur à 85%, l'objectif n'est pas atteint.
 La deuxième section *Graphiques* contient le graphique qui résume les résultats
 du calcul.
 
-![Graphique résultats](09_resultats_graphique.png)
-
 Il est possible de sauvegarder ce graphique en faisant clic sur le bouton droit
 de la souris et en sélectionnant *Enregistrer l'image sous...*.
+
+<details>
+
+<summary>Cliquer pour voir un example</summary>
+
+![Graphique résultats](09_resultats_graphique.png)
+
+</details>
 
 ---
 

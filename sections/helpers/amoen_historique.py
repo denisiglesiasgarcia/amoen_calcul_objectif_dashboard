@@ -5,6 +5,17 @@ import streamlit as st
 
 @st.cache_data
 def create_barplot_historique_amoen(data_df):
+    """
+    Creates a bar plot to visualize the historical achievement of objectives for a given project.
+    Parameters:
+    data_df (pandas.DataFrame): DataFrame containing the following columns:
+        - 'nom_projet': Name of the project.
+        - 'periode_start': Start date of the period (datetime).
+        - 'periode_end': End date of the period (datetime).
+        - 'atteinte_objectif': Achievement of the objective (float, should be between 0 and 1).
+    Returns:
+    plotly.graph_objs._figure.Figure: A Plotly figure object representing the bar plot.
+    """
     df_barplot = data_df.copy()
     df_barplot = df_barplot[['nom_projet', 'periode_start', 'periode_end', 'atteinte_objectif']].sort_values(by=['periode_start'])
     df_barplot['periode'] = df_barplot['periode_start'].dt.strftime('%Y-%m-%d') + ' → ' + df_barplot['periode_end'].dt.strftime('%Y-%m-%d')

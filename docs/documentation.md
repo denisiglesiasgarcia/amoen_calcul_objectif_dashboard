@@ -159,7 +159,13 @@ les spécificités des surélévations.
 
 Cet onglet contient le détail de tous les calculs réalisés.
 
+<details>
+
+<summary>Cliquer pour voir un example</summary>
+
 ![alt text](07_note_calcul1.png)
+
+</details>
 
 Cet onglet est divisé en plusieurs sections:
 

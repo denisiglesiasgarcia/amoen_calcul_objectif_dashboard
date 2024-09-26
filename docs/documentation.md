@@ -95,7 +95,7 @@ Cet onglet contient les informations nécessaires au calcul de l'atteinte de l'o
 
 Le GIF ci-dessous permet d'avoir un aperçu des données à renseigner.
 
-![Données à renseigner](04_donnees_site1.gif)
+![Données à renseigner](04_donnees_site.gif)
 
 `Sélectionner projet` permet de voir une liste des projets assignés et d'en sélectionner un. Les données de tous les champs de cette partie sont alors automatiquement renseignées. Par exemple, dans le GIF ci-dessus, le projet "Avusy 10-10A" a été sélectionné.
 

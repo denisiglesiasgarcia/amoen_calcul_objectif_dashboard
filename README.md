@@ -1,12 +1,8 @@
 # Calcul d'atteinte de l'objectif pour le programme AMOén de SIG/OCEN
 
-## Q&A
+## Documentation
 
-  1) Le site montre ce message:
-
-  ![app-state-zzzz](https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard/assets/71026758/5f276733-7539-4e34-a0b1-f8ecc200961c)
-  
-  Veuillez appuyer sur le bouton pour redémarrer le site. Celui-ci se met état de veille pour économiser de l'énergie s'il n'y a pas a eu d'activité depuis quelques jours. Le site se remet en marche au bout de 2-3 minutes.
+La documentation est disponible [ici](docs/documentation.md)
 
 ## TODO
 

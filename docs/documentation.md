@@ -157,17 +157,8 @@ les spécificités des surélévations.
 
 ### 2 Note de calcul
 
-Cet onglet contient le détail de tous les calculs réalisés.
-
-<details>
-
-<summary>Cliquer pour voir un example</summary>
-
-![alt text](07_note_calcul1.png)
-
-</details>
-
-Cet onglet est divisé en plusieurs sections:
+Cet onglet contient le détail de tous les calculs réalisés. Il est divisé
+en plusieurs sections:
 
 - Période sélectionnée: Celle-ci indique le début et la fin de la période de calcul.
 
@@ -179,6 +170,14 @@ avec le détail du calcul du facteur de pondération utilisé.
 
 - Données météo station Genève-Cointrin pour la période sélectionnée: données
 météo utilisées pour le calcul des degrés-jours.
+
+<details>
+
+<summary>Cliquer pour voir un example</summary>
+
+![alt text](07_note_calcul1.png)
+
+</details>
 
 ---
 

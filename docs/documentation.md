@@ -123,8 +123,8 @@ automatiquement renseignées. Par exemple, dans la vidéo ci-dessous, le projet
 #### Elements à renseigner
 
 > [!IMPORTANT]  
-> **Il est nécessaire de renseigner tous les champs dans cette section pour
-pouvoir continuer.**
+> **Il est nécessaire de renseigner tous les champs pour pouvoir
+réaliser le calcul.**
 
 <https://github.com/user-attachments/assets/899db28c-006b-4cf7-8921-cdfab82a973c>
 
@@ -187,11 +187,17 @@ Cet onglet contient les résultats du calcul de l'atteinte de l'objectif.
 
 #### Synthèse des résultats
 
-![Synthèse des résultats](08_resultats_synthèse.png)
-
 La première section *Synthèse des résultats* indique le pourcentage d'atteinte
 de l'objectif. Si ce pourcentage est supérieur ou égal à 85%, l'objectif est atteint.
 Si ce pourcentage est inférieur à 85%, l'objectif n'est pas atteint.
+
+<details>
+
+<summary>Cliquer pour voir un example</summary>
+
+![Synthèse des résultats](08_resultats_synthèse.png)
+
+</details>
 
 #### Graphiques
 

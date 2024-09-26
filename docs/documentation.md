@@ -1,9 +1,10 @@
-# Documentation
+# Documentation  de l'outil de calcul AMOén
 
 Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-calcul.streamlit.app/) de la méthodologie AMOén et de décrire comment l'utiliser.
 
 ## Table of Contents
 
+- [TLDR](#tldr)
 - [Introduction](#introduction)
 - [Onglets](#onglets)
   - [0 Readme](#0-readme)
@@ -24,6 +25,10 @@ Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-c
   - [Comment changer le mot de passe?](#comment-changer-le-mot-de-passe)
   - [Changer le mode sombre/clair](#changer-le-mode-sombreclair)
   - [Comment ajouter un nouveau projet?](#comment-ajouter-un-nouveau-projet)
+- [Données](#données)
+  - [Données météo](#données-météo)
+  - [Données IDC](#données-idc)
+  - [Données des projets](#données-des-projets)
 
 ## TLDR
 
@@ -79,23 +84,23 @@ Cet onglet contient:
 - la recommendation d'avoir au moins 6 mois de données pour le calcul de l'atteinte de l'objectif
 - le lien vers le Github de l'outil est également disponible
 
+---
+
 ### 1 Données du site
 
-Cet onglet contient les informations nécessaires au calcul de l'atteinte de l'objectif.
+Cet onglet contient les informations nécessaires au calcul de l'atteinte de l'objectif. La première partie est préremplie lors de la sélection du projet et la deuxième partie est à compléter par l'AMOén.
 
 #### Chargement des données de base du projet
 
-L'image ci-dessous permet d'avoir un aperçu des données à renseigner.
+Le GIF ci-dessous permet d'avoir un aperçu des données à renseigner.
 
-![Données à renseigner](04_donnees_site1.png)
+![Données à renseigner](04_donnees_site1.gif)
 
-*Sélectionner projet* permet de voir une liste des projets et d'en sélectionner un. Les données de tous les champs sont alors automatiquement renseignées. Par exemple dans l'image ci-dessous, le projet "Avusy 10-10A" a été sélectionné.
-
-![Sélectionner un projet - exemple](05_donnees_site2.png)
+`Sélectionner projet` permet de voir une liste des projets assignés et d'en sélectionner un. Les données de tous les champs de cette partie sont alors automatiquement renseignées. Par exemple, dans le GIF ci-dessus, le projet "Avusy 10-10A" a été sélectionné.
 
 #### Elements à renseigner
 
-**Il est nécessaire de renseigner tous les champs dans cette section pour pouvoir continuer.**
+> **Il est nécessaire de renseigner tous les champs dans cette section pour pouvoir continuer.**
 
 ![Elements à renseigner](06_donnes_site3.png)
 
@@ -107,7 +112,9 @@ Comme on peut le voir dans l'image ci-dessus, il faut renseigner les données su
 
 - Agents énergétiques utilisés et quantités
 
-**Le bouton *Sauvegarder* permet de valider les données renseignées. Sans cela les données renseignées sont perdues.**
+> **Le bouton *Sauvegarder* permet de valider les données renseignées. Sans cela les données renseignées sont perdues.**
+
+---
 
 ### 2 Note de calcul
 
@@ -124,6 +131,8 @@ Il contient plusieurs sections:
 - Agents énergétiques: Liste des agents énergétiques utilisés pour le calcul avec le détail du calcul du facteur de pondération utilisé.
 
 - Données météo station Genève-Cointrin pour la période sélectionnée: données météo utilisées pour le calcul des degrés-jours.
+
+---
 
 ### 3 Résultats
 
@@ -143,13 +152,15 @@ La deuxième section *Graphiques* contient le graphique qui résume les résulta
 
 Il est possible de sauvegarder ce graphique en faisant clic sur le bouton droit de la souris et en sélectionnant *Enregistrer l'image sous...*.
 
+---
+
 ### 4 Historique
 
 Cet onglet contient l'historique des résultats obtenus et l'IDC pour le site sélectionné.
 
 #### Plan
 
-Si l'on sélectionne la case *Afficher la carte*, on peut voir le plan de situation du site.
+Si l'on sélectionne la case `Afficher la carte`, on peut voir le plan de situation du site.
 
 ![Plan de situation](10_historique_plan.png)
 
@@ -161,7 +172,7 @@ Cette section contient un historique des IDC pour le site sélectionné.
 
 ![Historique IDC](11_historique_idc.gif)
 
-Si l'on coche la case *Afficher les données IDC*, on peut voir les données utilisées pour ce graphique.
+Si l'on coche la case `Afficher les données IDC`, on peut voir les données utilisées pour ce graphique.
 
 #### Historique résultats méthodologie AMOén
 
@@ -169,7 +180,9 @@ Cette section contient un historique de l'atteinte de l'objectif pour le site s�
 
 ![Historique atteinte objectifs AMOén](12_historique_resultats_amoen.png)
 
-Si l'on coche la case *Afficher les données historiques*, on peut voir les toutes les données utilisées pour le calcul de l'atteinte des objectifs pour chaque période.
+Si l'on coche la case `Afficher les données historiques`, on peut voir toutes les données utilisées pour le calcul de l'atteinte des objectifs pour chaque période.
+
+---
 
 ### 5 Générer rapport
 
@@ -197,7 +210,7 @@ Une fenêtre s'ouvre pour renseigner l'ancien mot de passe et le nouveau mot de 
 
 ![change password2](51_change_password2.png)
 
-Certaines règles sont à respecter pour le mot de passe:
+Les nouveaux mots de passe doivent respecter les critères suivants:
 
 - Entre 8 et 20 caractères
 - Au moins une lettre majuscule
@@ -218,3 +231,23 @@ Appuyez sur *Settings* et sélectionnez le mode souhaité.
 
 Pour l'instant il n'y a pas de manière automatisée pour ajouter un nouveau projet. Il faut contacter l'administrateur de l'outil pour ajouter un nouveau projet.
 
+## Données
+
+Cette section décrit la provenance des données utilisées dans l'outil de calcul.
+
+### Données météo
+
+Les données météo utilisées sont fournies par MétéoSuisse. Elles sont téléchargées automatiquement depuis les liens suivants:
+
+- Historiques des données pour Genève-Cointrin: <https://data.geo.admin.ch/ch.meteoschweiz.klima/nbcn-tageswerte/nbcn-daily_GVE_previous.csv>
+- Données pour l'année actuelle Genève-Cointrin: <https://data.geo.admin.ch/ch.meteoschweiz.klima/nbcn-tageswerte/nbcn-daily_GVE_current.csv>
+
+L'outil utilise les données `tre200d0` qui correspondent à la température moyenne journalière à 2 mètres au dessus du sol.
+
+### Données IDC
+
+Les données IDC sont fournies par l'OCEN via SITG. Elles sont téléchargées automatiquement depuis <https://ge.ch/sitg/fiche/2177>
+
+### Données des projets
+
+Les données des projets AMOén viennent du tableau Excel qui fixe l'atteinte des objectifs pour chaque site.

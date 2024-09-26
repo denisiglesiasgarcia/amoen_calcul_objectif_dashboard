@@ -4,8 +4,8 @@ Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-c
 
 ## Table des matières
 
-- [TLDR](#🚀-tldr)
-- [Glossaire](#📚-glossaire)
+- [TLDR](#tldr)
+- [Glossaire](#glossaire)
 - [Introduction](#introduction)
 - [Onglets](#onglets)
   - [0 Readme](#0-readme)
@@ -32,7 +32,7 @@ Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-c
   - [Données IDC](#données-idc)
   - [Données des projets](#données-des-projets)
 
-## 🚀 TLDR
+## TLDR
 
 TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'utilisation de l'outil.
 
@@ -48,9 +48,9 @@ TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'ut
 
 <https://github.com/user-attachments/assets/9b8e56dc-d415-4c36-9d92-0b03a72ec0a4>
 
-## 📚 Glossaire
+## Glossaire
 
-- **AMOén**: Assistant à Maîtrise d'Ouvrage énergie
+- **AMOén**: Assistant à Maîtrise d'Ouvrage énergie qui participe au programme AMOén de SIG-éco21/OCEN
 - **IDC**: Indice de Dépense de Chaleur
 - **OCEN**: Office Cantonal de l'Energie
 

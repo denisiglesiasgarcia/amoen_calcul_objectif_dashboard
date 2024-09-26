@@ -359,7 +359,6 @@ if st.session_state["authentication_status"]:
                     st.warning("Problème dans Ef,avant,corr [kWh/m²/an]")
 
             with tab2_col6:
-                # st.write('Objectif en énergie finale (Ef,obj *fp [kWh/m²/an])')
                 ef_objectif_pondere_kwh_m2 = st.text_input(
                     "Ef,obj * fp [kWh/m²/an]:",
                     value=data_sites_db["ef_objectif_pondere_kwh_m2"],

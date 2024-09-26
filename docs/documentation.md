@@ -10,10 +10,18 @@ Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-c
 - [Onglets](#onglets)
   - [0 Readme](#0-readme)
   - [1 Données du site](#1-données-du-site)
+    - [Chargement des données de base du projet](#chargement-des-données-de-base-du-projet)
+    - [Elements à renseigner](#elements-à-renseigner)
   - [2 Note de calcul](#2-note-de-calcul)
   - [3 Résultats](#3-résultats)
+    - [Synthèse des résultats](#synthèse-des-résultats)
+    - [Graphiques](#graphiques)
   - [4 Historique](#4-historique)
+    - [Plan](#plan)
+    - [Historique IDC](#historique-idc)
+    - [Historique résultats méthodologie AMOén](#historique-résultats-méthodologie-amoén)
   - [5 Générer rapport](#5-générer-rapport)
+
 - [FAQ](#faq)
 - [Données](#données)
 
@@ -21,15 +29,28 @@ Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-c
 
 TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'utilisation de l'outil.
 
-1) Se connecter à l'[outil de calcul](https://amoen-calcul.streamlit.app/) avec un nom d'utilisateur et un mot de passe.
-2) Onglet *"1 Données du site"* :
+1. Login
+
+    - Se connecter à l'[outil de calcul](https://amoen-calcul.streamlit.app/) avec un nom d'utilisateur et un mot de passe.
+
+2. Renseigner projet
+
+    - Aller à l'onglet *"1 Données du site"* :
     - Sélectionner un projet.
     - Renseigner les dates de début et fin de la période de calcul.
     - Renseigner les affectations.
     - Renseigner les agents énergétiques utilisés et les quantités.
-    - **Cliquer sur le bouton *Sauvegarder*.**
-3) Onglet *"3 Résultats"* : Vérifier les résultats du calcul de l'atteinte de l'objectif.
-4) Onglet *"5 Générer rapport"* : Générer un rapport PDF avec les résultats du calcul.
+    - **Cliquer sur le bouton `Sauvegarder`, sinon les données sont perdues**
+
+3. Vérifier résultats calcul
+
+    - Aller à l'onglet *"3 Résultats"*.
+    - Vérifier les résultats du calcul de l'atteinte de l'objectif.
+
+4. Rapport en PDF
+
+    - Aller à l'onglet onglet *"5 Générer rapport"*
+    - Cliquer sur le bouton `Générer rapport PDF` pour générer le rapport PDF.
 
 <https://github.com/user-attachments/assets/9b8e56dc-d415-4c36-9d92-0b03a72ec0a4>
 
@@ -188,6 +209,39 @@ Cet onglet permet de générer un rapport PDF avec les résultats du calcul de l
 
 ![Générer rapport PDF](13_generer_rapport_pdf.png)
 
+## Surélévations
+
+Cette section décrit les spécificités des surélévations.
+
+Le tableau ci-dessous regroupe les remarques concernant l'onglet *1 Données du site*.
+
+| Section | Menu concerné | Commentaire | Renseigné automatiquement |
+|---------|---------------|-------------|---------------------------|
+| Chargement données de base du projet | SRE rénovée (m²) | Seulment la SRE de la partie rénovée. La SRE de la surélévation est exclue. | oui |
+| Chargement données de base du projet | Ef,obj * fp [kWh/m²/an] | Concerne seulement la partie rénovée | oui |
+| Chargement données de base du projet | Chauffage partie surélévée/ECS partie surélévée [%] | Répartition énergie finale pour la surélévation | oui |
+| Eléments à renseigner | Affectations | Affectations de tout le bâtiment | Souvent |
+| Eléments à renseigner | Agents énergétiques | Agents énergétiques de tout le bâtiment | non |
+
+Le rapport inclus
+
+<details>
+
+<summary>Tips for collapsed sections</summary>
+
+### You can add a header
+
+You can add text within a collapsed section. 
+
+You can add an image or a code block, too.
+
+```ruby
+   puts "Hello World"
+```
+
+</details>
+
+
 ## FAQ
 
 ### Site zzz
@@ -249,4 +303,3 @@ Les données IDC sont fournies par l'OCEN via SITG. Elles sont téléchargées a
 ### Données des projets
 
 Les données des projets AMOén viennent du tableau Excel qui fixe l'atteinte des objectifs pour chaque site.
-

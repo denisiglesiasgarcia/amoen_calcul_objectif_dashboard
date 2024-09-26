@@ -102,9 +102,10 @@ Le GIF ci-dessous permet d'avoir un aperçu des données à renseigner.
 
 > **Il est nécessaire de renseigner tous les champs dans cette section pour pouvoir continuer.**
 
-![Elements à renseigner](06_donnes_site3.png)
 
-Comme on peut le voir dans l'image ci-dessus, il faut renseigner les données suivantes:
+https://github.com/user-attachments/assets/899db28c-006b-4cf7-8921-cdfab82a973c
+
+Comme on peut le voir dans la vidéo ci-dessus, il faut renseigner les données suivantes:
 
 - Dates de début et fin de la période de calcul
 
@@ -113,6 +114,10 @@ Comme on peut le voir dans l'image ci-dessus, il faut renseigner les données su
 - Agents énergétiques utilisés et quantités
 
 > **Le bouton *Sauvegarder* permet de valider les données renseignées. Sans cela les données renseignées sont perdues.**
+
+##### Note pour les surélévations
+
+Pour les surélévations, il faut bien renseigner la consommation de *tout* le bâtiment inclus la surélévation.
 
 ---
 

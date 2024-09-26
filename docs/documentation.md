@@ -121,7 +121,8 @@ Pour valider les sélections, il faut soit appuyer sur `Enter ↵` soit cliquer 
 
 ##### Note pour les surélévations
 
-Pour les surélévations, il faut bien renseigner la consommation de *tout* le bâtiment inclus la surélévation.
+> [!NOTE]  
+> Pour les surélévations, il faut bien renseigner la consommation de *tout* le bâtiment inclus la surélévation.
 
 ---
 

@@ -223,7 +223,13 @@ Cette option est désactivée par défaut pour des raisons de performance.
 
 Cette section contient un historique des IDC pour le site sélectionné.
 
+<details>
+
+<summary>Cliquer pour voir un example</summary>
+
 ![Historique IDC](11_historique_idc.gif)
+
+</details>
 
 Si l'on coche la case `Afficher les données IDC`, on peut voir les données
 utilisées pour ce graphique.
@@ -233,7 +239,13 @@ utilisées pour ce graphique.
 Cette section contient un historique de l'atteinte de l'objectif pour le site sélectionné.
 Les résultats sont classés par date de calcul.
 
+<details>
+
+<summary>Cliquer pour voir un example</summary>
+
 ![Historique atteinte objectifs AMOén](12_historique_resultats_amoen.png)
+
+</details>
 
 Si l'on coche la case `Afficher les données historiques`, on peut voir toutes les
 données utilisées pour le calcul de l'atteinte des objectifs pour chaque période.

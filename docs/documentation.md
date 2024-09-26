@@ -314,6 +314,10 @@ quelques jours. Le site se remet en marche au bout de 2-3 minutes.
 
 ### Comment changer le mot de passe?
 
+<details>
+
+<summary>Cliquer pour voir la solution</summary>
+
 Le menu à gauche de l'écran permet de changer de mot de passe. Il suffit de
 cliquer sur le bouton *Change password*.
 
@@ -330,7 +334,13 @@ Les nouveaux mots de passe doivent respecter les critères suivants:
 - Un chiffre
 - Un caractère spécial [@$!%*?&]
 
+</details>
+
 ### Changer le mode sombre/clair
+
+<details>
+
+<summary>Cliquer pour voir la solution</summary>
 
 Il est possible de changer le mode de l'outil de calcul en mode sombre. Pour cela,
 il suffit de cliquer sur les trois petits points en haut à droite de l'écran.
@@ -340,6 +350,8 @@ il suffit de cliquer sur les trois petits points en haut à droite de l'écran.
 Appuyez sur *Settings* et sélectionnez le mode souhaité.
 
 ![select dark mode](53_dark_light_mode.png)
+
+</details>
 
 ### Comment ajouter un nouveau projet?
 

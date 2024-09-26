@@ -102,7 +102,7 @@ Cet onglet contient les informations nécessaires au calcul de l'atteinte de l'o
 #### Elements à renseigner
 
 > [!IMPORTANT]  
-> Il est nécessaire de renseigner tous les champs dans cette section pour pouvoir continuer.
+> **Il est nécessaire de renseigner tous les champs dans cette section pour pouvoir continuer.**
 
 <https://github.com/user-attachments/assets/899db28c-006b-4cf7-8921-cdfab82a973c>
 
@@ -116,6 +116,7 @@ Comme on peut le voir dans la vidéo ci-dessus, il faut renseigner les données 
 
 Pour valider les sélections, il faut soit appuyer sur `Enter ↵` soit cliquer en dehors de la cellule.
 
+> [!WARNING]  
 > **Le bouton `Sauvegarder` permet de valider les données renseignées. Sans cela, les données renseignées sont perdues.**
 
 ##### Note pour les surélévations

@@ -107,13 +107,15 @@ Le GIF ci-dessous permet d'avoir un aperçu des données à renseigner.
 
 Comme on peut le voir dans la vidéo ci-dessus, il faut renseigner les données suivantes:
 
-- Dates de début et fin de la période de calcul
+- Dates de début et fin de la période de calcul. Il est recommandé d'avoir au moins 6 mois de données pour le calcul de l'atteinte de l'objectif. Les dates peuvent être remplies manuellement ou en utilisant le calendrier.
 
-- Affectations (souvent rempli automatiquement)
+- Affectations (souvent rempli automatiquement). Les affectations peuvent être sélectionnés dans la liste déroulante. Il est possible de renseigner plusieurs affectations. La somme des affectations doit être égale à 100%.
 
-- Agents énergétiques utilisés et quantités
+- Agents énergétiques utilisés et quantités.
 
-> **Le bouton *Sauvegarder* permet de valider les données renseignées. Sans cela les données renseignées sont perdues.**
+Pour valider les sélections, il faut soit appuyer sur `Enter ↵` soit cliquer en dehors de la cellule.
+
+> **Le bouton `Sauvegarder` permet de valider les données renseignées. Sans cela, les données renseignées sont perdues.**
 
 ##### Note pour les surélévations
 

@@ -2,9 +2,10 @@
 
 Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-calcul.streamlit.app/) de la méthodologie AMOén et de décrire comment l'utiliser.
 
-## Table of Contents
+## Table des matières
 
-- [TLDR](#tldr)
+- [TLDR](#🚀-tldr)
+- [Glossaire](#📚-glossaire)
 - [Introduction](#introduction)
 - [Onglets](#onglets)
   - [0 Readme](#0-readme)
@@ -31,7 +32,7 @@ Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-c
   - [Données IDC](#données-idc)
   - [Données des projets](#données-des-projets)
 
-## TLDR
+## 🚀 TLDR
 
 TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'utilisation de l'outil.
 
@@ -46,6 +47,12 @@ TLDR (Too Long Didn't Read) est une section qui résume les points clés de l'ut
 4) Onglet *"5 Générer rapport"* : Générer un rapport PDF avec les résultats du calcul.
 
 <https://github.com/user-attachments/assets/9b8e56dc-d415-4c36-9d92-0b03a72ec0a4>
+
+## 📚 Glossaire
+
+- **AMOén**: Assistant à Maîtrise d'Ouvrage énergie
+- **IDC**: Indice de Dépense de Chaleur
+- **OCEN**: Office Cantonal de l'Energie
 
 ## Introduction
 
@@ -132,7 +139,7 @@ Cet onglet contient le détail de tous les calculs réalisés.
 
 ![alt text](07_note_calcul1.png)
 
-Il contient plusieurs sections:
+Cet onglet est divisé en plusieurs sections:
 
 - Période sélectionnée: Celle-ci indique le début et la fin de la période de calcul.
 

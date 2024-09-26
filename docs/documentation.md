@@ -266,9 +266,9 @@ données utilisées pour le calcul de l'atteinte des objectifs pour chaque péri
 ### 5 Générer rapport
 
 Cet onglet permet de générer un rapport PDF avec les résultats du calcul de
-l'atteinte de l'objectif.
+l'atteinte de l'objectif. La vidéo ci-dessous détaille le processus.
 
-![Générer rapport PDF](13_generer_rapport_pdf.png)
+https://github.com/user-attachments/assets/225a7075-a524-4613-9449-c69f31b88f1f
 
 ## Surélévations
 

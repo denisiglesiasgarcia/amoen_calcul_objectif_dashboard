@@ -134,12 +134,36 @@ if "data_site" not in st.session_state:
 
 @st.cache_data
 def load_project_data(project_name):
+    """
+    Load project data from the database.
+
+    This function retrieves data for a given project from the 'mycol_historique_sites' collection
+    in the database. The project is identified by its name.
+
+    Args:
+        project_name (str): The name of the project to retrieve data for.
+
+    Returns:
+        dict: A dictionary containing the project data if found, otherwise None.
+    """
     data = mycol_historique_sites.find_one({"nom_projet": project_name})
     return data
 
 
 @st.cache_data
 def load_projets_liste(project_name):
+    """
+    Retrieves a list of distinct project names from the 'mycol_historique_sites' collection.
+
+    If the logged-in user is 'admin', it returns all distinct project names.
+    Otherwise, it returns distinct project names filtered by the user's 'amoen_id'.
+
+    Args:
+        project_name (str): The name of the project to load (not used in the current implementation).
+
+    Returns:
+        list: A list of distinct project names.
+    """
     if username_login == "admin":
         nom_projets_liste = mycol_historique_sites.distinct("nom_projet")
     else:
@@ -150,7 +174,15 @@ def load_projets_liste(project_name):
 
 
 def load_projets_admin():
-    # Retrieve all documents from the collection
+    """
+    Retrieve all documents from the 'mycol_historique_sites' collection.
+
+    This function connects to the MongoDB collection 'mycol_historique_sites' and retrieves all documents
+    present in the collection. The documents are returned as a list.
+
+    Returns:
+        list: A list of documents retrieved from the 'mycol_historique_sites' collection.
+    """
     data = list(mycol_historique_sites.find({}))
     return data
 
@@ -2370,9 +2402,30 @@ if st.session_state["authentication_status"]:
 
         # Check if all fields are valid
         def is_valid(var):
+            """
+            Check if a variable is valid.
+
+            A variable is considered valid if it is not None and not an empty string.
+
+            Args:
+                var: The variable to check.
+
+            Returns:
+                bool: True if the variable is valid, False otherwise.
+            """
             return var is not None and var != ""
 
         def check_validity():
+            """
+            Checks the validity of various fields in the session state data.
+
+            This function iterates over a predefined list of fields and checks if each field
+            in the session state data is valid. If a field is found to be invalid, it is added
+            to a list of invalid fields.
+
+            Returns:
+                list: A list of field names that are invalid.
+            """
             invalid_fields = []
             fields_to_check = [
                 "nom_projet",

@@ -216,31 +216,22 @@ Cette section décrit les spécificités des surélévations.
 Le tableau ci-dessous regroupe les remarques concernant l'onglet *1 Données du site*.
 
 | Section | Menu concerné | Commentaire | Renseigné automatiquement |
-|---------|---------------|-------------|---------------------------|
+| ------- | ------------- | ----------- | ------------------------- |
 | Chargement données de base du projet | SRE rénovée (m²) | Seulment la SRE de la partie rénovée. La SRE de la surélévation est exclue. | oui |
 | Chargement données de base du projet | Ef,obj * fp [kWh/m²/an] | Concerne seulement la partie rénovée | oui |
 | Chargement données de base du projet | Chauffage partie surélévée/ECS partie surélévée [%] | Répartition énergie finale pour la surélévation | oui |
 | Eléments à renseigner | Affectations | Affectations de tout le bâtiment | Souvent |
 | Eléments à renseigner | Agents énergétiques | Agents énergétiques de tout le bâtiment | non |
 
-Le rapport inclus
+Le rapport inclus une deuxième page avec des informations spécifiques aux surélévations.
 
 <details>
 
-<summary>Tips for collapsed sections</summary>
+<summary>Cliquer pour voir un example</summary>
 
-### You can add a header
-
-You can add text within a collapsed section. 
-
-You can add an image or a code block, too.
-
-```ruby
-   puts "Hello World"
-```
+![Rapport surélévation](20_rapport_pdf_surelevation1.jpg)
 
 </details>
-
 
 ## FAQ
 

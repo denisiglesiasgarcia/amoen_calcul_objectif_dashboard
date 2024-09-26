@@ -93,11 +93,9 @@ Cet onglet contient les informations nécessaires au calcul de l'atteinte de l'o
 
 #### Chargement des données de base du projet
 
-La vidéo ci-dessous permet d'avoir un aperçu des données à renseigner.
+`Sélectionner projet` permet de voir une liste des projets assignés et d'en sélectionner un. Les données de tous les champs de cette partie sont alors automatiquement renseignées. Par exemple, dans la vidéo ci-dessous, le projet "Avusy 10-10A" a été sélectionné.
 
-https://github.com/user-attachments/assets/8d9f3a86-1e47-4c49-8336-4938cf1569cf
-
-`Sélectionner projet` permet de voir une liste des projets assignés et d'en sélectionner un. Les données de tous les champs de cette partie sont alors automatiquement renseignées. Par exemple, dans la vidéo ci-dessus, le projet "Avusy 10-10A" a été sélectionné.
+<https://github.com/user-attachments/assets/8d9f3a86-1e47-4c49-8336-4938cf1569cf>
 
 #### Elements à renseigner
 

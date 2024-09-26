@@ -24,7 +24,14 @@ de la méthodologie AMOén et de décrire comment l'utiliser.
   - [5 Générer rapport](#5-générer-rapport)
 - [Surélévations](#surélévations)
 - [FAQ](#faq)
+  - [Site zzz](#site-zzz)
+  - [Comment changer le mot de passe?](#comment-changer-le-mot-de-passe)
+  - [Changer le mode sombre/clair](#changer-le-mode-sombreclair)
+  - [Comment ajouter un nouveau projet?](#comment-ajouter-un-nouveau-projet)
 - [Données](#données)
+  - [Météo](#météo)
+  - [IDC](#idc)
+  - [Projets](#projets)
 
 ## TLDR
 
@@ -368,7 +375,7 @@ Il faut contacter l'administrateur de l'outil pour ajouter un nouveau projet.
 
 Cette section décrit la provenance des données utilisées dans l'outil de calcul.
 
-### Données météo
+### Météo
 
 Les données météo utilisées sont fournies par MétéoSuisse. Elles sont
 téléchargées automatiquement depuis les liens suivants:
@@ -381,12 +388,12 @@ Genève-Cointrin
 L'outil utilise les données `tre200d0` qui correspondent à la température
 moyenne journalière à 2 mètres au dessus du sol.
 
-### Données IDC
+### IDC
 
 Les données IDC sont fournies par l'OCEN via SITG. Le descriptif détaillé des
 données se trouve [ici](https://ge.ch/sitg/fiche/2177)
 
-### Données des projets
+### Projets
 
 Les données des projets AMOén viennent du tableau Excel qui fixe
 l'atteinte des objectifs pour chaque site.

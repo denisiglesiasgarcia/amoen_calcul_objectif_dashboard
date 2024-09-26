@@ -209,7 +209,13 @@ Cet onglet contient l'historique des résultats obtenus et l'IDC pour le site s�
 Si l'on sélectionne la case `Afficher la carte`, on peut voir le plan de
 situation du site.
 
+<details>
+
+<summary>Cliquer pour voir un example</summary>
+
 ![Plan de situation](10_historique_plan.png)
+
+</details>
 
 Cette option est désactivée par défaut pour des raisons de performance.
 

@@ -75,6 +75,8 @@ Celui-ci est composé de plusieurs onglets:
 
 ![Onglets](03_onglets.png)
 
+---
+
 ## Onglets
 
 ### 0 Readme
@@ -99,7 +101,8 @@ Cet onglet contient les informations nécessaires au calcul de l'atteinte de l'o
 
 #### Elements à renseigner
 
-> **Il est nécessaire de renseigner tous les champs dans cette section pour pouvoir continuer.**
+> [!IMPORTANT]  
+> Il est nécessaire de renseigner tous les champs dans cette section pour pouvoir continuer.
 
 <https://github.com/user-attachments/assets/899db28c-006b-4cf7-8921-cdfab82a973c>
 

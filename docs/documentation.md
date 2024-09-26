@@ -23,6 +23,7 @@ Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-c
   - [Site zzz](#site-zzz)
   - [Comment changer le mot de passe?](#comment-changer-le-mot-de-passe)
   - [Changer le mode sombre/clair](#changer-le-mode-sombreclair)
+  - [Comment ajouter un nouveau projet?](#comment-ajouter-un-nouveau-projet)
 
 ## TLDR
 
@@ -213,4 +214,7 @@ Appuyez sur *Settings* et sélectionnez le mode souhaité.
 
 ![select dark mode](53_dark_light_mode.png)
 
-TODO:ajouter comment ajouter un nouveau projet
+### Comment ajouter un nouveau projet?
+
+Pour l'instant il n'y a pas de manière automatisée pour ajouter un nouveau projet. Il faut contacter l'administrateur de l'outil pour ajouter un nouveau projet.
+

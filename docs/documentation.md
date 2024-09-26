@@ -51,21 +51,17 @@ Une fois connecté, vous arrivez sur l'écran principal de l'outil.
 
 Celui-ci est composé de plusieurs onglets:
 
-- **0 Readme**: Rappel des différences entre la méthodologie AMOén et le calcul IDC. Recommendation de 6 mois de donneés minimium pour le calcul de l'atteinte de l'objectif. Lien vers le Github de l'outil.
-
-- **1 Données du site**: Données concernant le site ou l'on souhaite calculer l'atteinte de l'objectif.
-
-- **2 Note de calcul**: Détail de tous les calculs réalisés.
-
-- **3 Résultats**: Résultats du calcul de l'atteinte de l'objectif.
-
-- **4 Historique**: Historique IDC pour le site sélectionné. Historique des calculs de l'atteinte de l'objectif précédents.
-
-- **5 Générer rapport**: Génération du rapport PDF.
-
-- **6 Admin**: Vue réservée aux administrateurs de l'outil.
-
 ![Onglets](03_onglets.png)
+
+| Onglet | Objectif |
+|--------|----------|
+| 0 Readme | Rappel des différences entre la méthodologie AMOén et le calcul IDC. Recommendation de 6 mois de donneés minimium pour le calcul de l'atteinte de l'objectif. Lien vers le Github de l'outil. |
+| 1 Données du site | Données concernant le site ou l'on souhaite calculer l'atteinte de l'objectif. |
+| 2 Note de calcul | Détail de tous les calculs réalisés. |
+| 3 Résultats | Résultats du calcul de l'atteinte de l'objectif. |
+| 4 Historique | Historique IDC pour le site sélectionné. Historique des calculs de l'atteinte de l'objectif précédents. |
+| 5 Générer rapport | Génération du rapport PDF. |
+| 6 Admin | Vue réservée aux administrateurs de l'outil. |
 
 ---
 
@@ -253,3 +249,4 @@ Les données IDC sont fournies par l'OCEN via SITG. Elles sont téléchargées a
 ### Données des projets
 
 Les données des projets AMOén viennent du tableau Excel qui fixe l'atteinte des objectifs pour chaque site.
+

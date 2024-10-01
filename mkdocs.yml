@@ -1,0 +1,31 @@
+site_name: Documentation  de l'outil de calcul AMOén
+docs_dir: docs
+site_dir: site
+site_url: https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard
+repo_url: https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard
+theme:
+  name: material
+  highlightjs: true
+  language: fr
+  features:
+  - search.suggest
+  - header.autohide
+  - navigation.instant
+  - navigation.indexes
+plugins:
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - glightbox
+markdown_extensions:
+  - toc:
+      toc_depth: 3
+  - admonition
+  - attr_list
+  - md_in_html
+nav:
+    - Accueil: 'index.md'
+    - TLDR: 'sections/TLDR.md'
+    - Onglets: 'sections/onglets.md'
+    - Surélévations: 'sections/surelevations.md'
+    - FAQ: 'sections/faq.md'
+    - Données: 'sections/donnees.md'

@@ -1,17 +1,18 @@
-# Welcome to MkDocs
+---
+title: Lorem ipsum dolor sit amet
+---
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+# Documentation  de l'outil de calcul AMOén
 
-## Commands
+Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-calcul.streamlit.app/)
+de la méthodologie AMOén et de décrire comment l'utiliser.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+La documentation est organisée en plusieurs sections:
 
-## Project layout
+- [TLDR](sections/TLDR.md) (Too Long Didn't Read) résume les points clés de
+l'utilisation de l'outil.
+- [Onglets](sections/onglets.md) décrit les différents onglets de l'outil.
+- [Surélévations](sections/surelevations.md) décrit les spécificités des surélévations.
+- [FAQ](sections/faq.md) répond aux questions fréquemment posées.
+- [Données](sections/donnees.md) décrit la provenance des données utilisées.
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.

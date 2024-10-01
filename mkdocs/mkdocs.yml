@@ -1,0 +1,4 @@
+site_name: Documentation  de l'outil de calcul AMOén
+site_url: https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/
+theme:
+  name: material

@@ -12,13 +12,30 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: 3.x
-      - run: pip install mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
-      - run: |
+      - name: Install dependencies
+        run: |
+          pip install mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
+          pip list
+      - name: Debug Info
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Directory contents:"
+          ls -R
+      - name: Build MkDocs
+        run: |
           cd mkdocs
-          mkdocs build
+          mkdocs build --verbose
+          echo "Build directory contents:"
+          ls -R site
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./mkdocs/site
           force_orphan: true
+      - name: Check deployment
+        run: |
+          echo "Checking gh-pages branch"
+          git checkout gh-pages
+          ls -R

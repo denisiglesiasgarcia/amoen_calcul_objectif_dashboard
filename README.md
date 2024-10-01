@@ -7,7 +7,8 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 ## TODO
 
 - Prioritaire
-  - [ ] Faire la documentation
+  - [ ] Améliorer la documentation
+  - [ ] Nettoyer code
 
 - Non prioritaire
   - [ ] Ajouter option de renseigner ECS séparée du chauffage
@@ -30,3 +31,4 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 - [X] Ajouter utilisateur administrateur
 - [X] Ajouter pour les surélévations, le total énergie finale ainsi que la répartition
 - [X] Gérer les cas ou l'atteinte de l'objectif est négative
+- [X] Première version documentation avec mkdocs

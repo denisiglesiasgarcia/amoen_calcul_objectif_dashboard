@@ -4,95 +4,434 @@ import streamlit as st
 from calcul_dj import calcul_dj_periode
 
 
-def repartition_energie_finale_partie_renovee_somme(repartition_energie_finale_partie_renovee_chauffage, repartition_energie_finale_partie_renovee_ecs):
-    return repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_renovee_ecs
+def repartition_energie_finale_partie_renovee_somme(
+    repartition_energie_finale_partie_renovee_chauffage,
+    repartition_energie_finale_partie_renovee_ecs,
+):
+    """
+    Calculate the sum of the final energy distribution for the renovated part.
+
+    This function takes the final energy distribution for heating and the final energy distribution for domestic hot water (ECS)
+    in the renovated part of a building and returns their sum.
+
+    Args:
+        repartition_energie_finale_partie_renovee_chauffage (float): The final energy distribution for heating in the renovated part.
+        repartition_energie_finale_partie_renovee_ecs (float): The final energy distribution for domestic hot water (ECS) in the renovated part.
+
+    Returns:
+        float: The sum of the final energy distributions for heating and ECS in the renovated part.
+    """
+    return (
+        repartition_energie_finale_partie_renovee_chauffage
+        + repartition_energie_finale_partie_renovee_ecs
+    )
+
 
 def estimation_ecs_annuel(periode_nb_jours):
-    return periode_nb_jours/365
+    """
+    Estimate the annual ECS (Energy Consumption System) based on a given period in days.
+
+    Args:
+        periode_nb_jours (int): The number of days in the period.
+
+    Returns:
+        float: The estimated annual ECS as a fraction of the year.
+    """
+    return periode_nb_jours / 365
+
 
 def estimation_part_chauffage_periode_sur_annuel(dj_periode, DJ_REF_ANNUELS):
+    """
+    Estimates the heating part of a period over an annual reference.
+
+    Args:
+        dj_periode (float): Degree days for the specific period.
+        DJ_REF_ANNUELS (float): Annual reference degree days.
+
+    Returns:
+        float: The ratio of the period's degree days to the annual reference degree days.
+    """
     dj_periode = float(calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end))
     return float(dj_periode / DJ_REF_ANNUELS)
 
-def estimation_energie_finale_periode_sur_annuel(estimation_ecs_annuel,
-                                                    repartition_energie_finale_partie_renovee_ecs,
-                                                    repartition_energie_finale_partie_surelevee_ecs,
-                                                    estimation_part_chauffage_periode_sur_annuel,
-                                                    repartition_energie_finale_partie_renovee_chauffage,
-                                                    repartition_energie_finale_partie_surelevee_chauffage):
-    return (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + repartition_energie_finale_partie_surelevee_ecs)) + (estimation_part_chauffage_periode_sur_annuel * (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage))
 
-def part_ecs_periode_comptage(estimation_ecs_annuel, repartition_energie_finale_partie_renovee_ecs, repartition_energie_finale_partie_surelevee_ecs, estimation_energie_finale_periode_sur_annuel):
+def estimation_energie_finale_periode_sur_annuel(
+    estimation_ecs_annuel,
+    repartition_energie_finale_partie_renovee_ecs,
+    repartition_energie_finale_partie_surelevee_ecs,
+    estimation_part_chauffage_periode_sur_annuel,
+    repartition_energie_finale_partie_renovee_chauffage,
+    repartition_energie_finale_partie_surelevee_chauffage,
+):
+    """
+    Estimate the final energy consumption for a period on an annual basis.
+
+    This function calculates the final energy consumption by combining the
+    estimated annual energy consumption for domestic hot water (ECS) and
+    the estimated energy consumption for heating over a period, taking into
+    account the energy distribution for renovated and elevated parts.
+
+    Parameters:
+    estimation_ecs_annuel (float): The estimated annual energy consumption for ECS.
+    repartition_energie_finale_partie_renovee_ecs (float): The energy distribution for the renovated part for ECS.
+    repartition_energie_finale_partie_surelevee_ecs (float): The energy distribution for the elevated part for ECS.
+    estimation_part_chauffage_periode_sur_annuel (float): The estimated energy consumption for heating over a period.
+    repartition_energie_finale_partie_renovee_chauffage (float): The energy distribution for the renovated part for heating.
+    repartition_energie_finale_partie_surelevee_chauffage (float): The energy distribution for the elevated part for heating.
+
+    Returns:
+    float: The estimated final energy consumption for the period on an annual basis.
+    """
+    return (
+        estimation_ecs_annuel
+        * (
+            repartition_energie_finale_partie_renovee_ecs
+            + repartition_energie_finale_partie_surelevee_ecs
+        )
+    ) + (
+        estimation_part_chauffage_periode_sur_annuel
+        * (
+            repartition_energie_finale_partie_renovee_chauffage
+            + repartition_energie_finale_partie_surelevee_chauffage
+        )
+    )
+
+
+def part_ecs_periode_comptage(
+    estimation_ecs_annuel,
+    repartition_energie_finale_partie_renovee_ecs,
+    repartition_energie_finale_partie_surelevee_ecs,
+    estimation_energie_finale_periode_sur_annuel,
+):
+    """
+    Calculate the part of ECS (Eau Chaude Sanitaire) for a given period based on annual estimation and energy repartition.
+
+    Args:
+        estimation_ecs_annuel (float): Annual estimation of ECS.
+        repartition_energie_finale_partie_renovee_ecs (float): Energy repartition for the renovated part of ECS.
+        repartition_energie_finale_partie_surelevee_ecs (float): Energy repartition for the elevated part of ECS.
+        estimation_energie_finale_periode_sur_annuel (float): Final energy estimation for the period over the year.
+
+    Returns:
+        float: The calculated part of ECS for the given period. Returns 0.0 if the final energy estimation for the period is zero or if a ZeroDivisionError occurs.
+    """
     try:
         if estimation_energie_finale_periode_sur_annuel != 0:
-            return (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + repartition_energie_finale_partie_surelevee_ecs)) / estimation_energie_finale_periode_sur_annuel
+            return (
+                estimation_ecs_annuel
+                * (
+                    repartition_energie_finale_partie_renovee_ecs
+                    + repartition_energie_finale_partie_surelevee_ecs
+                )
+            ) / estimation_energie_finale_periode_sur_annuel
         else:
             return 0.0
     except ZeroDivisionError:
         return 0.0
 
-def part_chauffage_periode_comptage(estimation_energie_finale_periode_sur_annuel, estimation_part_chauffage_periode_sur_annuel, repartition_energie_finale_partie_renovee_chauffage, repartition_energie_finale_partie_surelevee_chauffage):
+
+def part_chauffage_periode_comptage(
+    estimation_energie_finale_periode_sur_annuel,
+    estimation_part_chauffage_periode_sur_annuel,
+    repartition_energie_finale_partie_renovee_chauffage,
+    repartition_energie_finale_partie_surelevee_chauffage,
+):
+    """
+    Calculate the heating part for a given period based on annual estimates and energy repartition.
+
+    Args:
+        estimation_energie_finale_periode_sur_annuel (float): Annual estimate of final energy for the period.
+        estimation_part_chauffage_periode_sur_annuel (float): Annual estimate of the heating part for the period.
+        repartition_energie_finale_partie_renovee_chauffage (float): Energy repartition for the renovated part for heating.
+        repartition_energie_finale_partie_surelevee_chauffage (float): Energy repartition for the elevated part for heating.
+
+    Returns:
+        float: The calculated heating part for the given period. Returns 0.0 if the annual estimate of final energy for the period is zero or if a ZeroDivisionError occurs.
+    """
     try:
         if estimation_energie_finale_periode_sur_annuel != 0:
-            return (estimation_part_chauffage_periode_sur_annuel * (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage)) / estimation_energie_finale_periode_sur_annuel
+            return (
+                estimation_part_chauffage_periode_sur_annuel
+                * (
+                    repartition_energie_finale_partie_renovee_chauffage
+                    + repartition_energie_finale_partie_surelevee_chauffage
+                )
+            ) / estimation_energie_finale_periode_sur_annuel
         else:
             return 0.0
     except ZeroDivisionError:
         return 0.0
+
 
 def correction_ecs(periode_nb_jours):
-    return 365/periode_nb_jours
+    """
+    Calculate the correction factor for ECS (Energy Correction System) based on the number of days in a period.
 
-def agent_energetique_ef_somme_kwh(agent_energetique_ef_mazout_kg, agent_energetique_ef_mazout_litres, agent_energetique_ef_mazout_kwh, agent_energetique_ef_gaz_naturel_m3, agent_energetique_ef_gaz_naturel_kwh, agent_energetique_ef_bois_buches_dur_stere, agent_energetique_ef_bois_buches_tendre_stere, agent_energetique_ef_bois_buches_tendre_kwh, agent_energetique_ef_pellets_m3, agent_energetique_ef_pellets_kg, agent_energetique_ef_pellets_kwh, agent_energetique_ef_plaquettes_m3, agent_energetique_ef_plaquettes_kwh, agent_energetique_ef_cad_kwh, agent_energetique_ef_electricite_pac_kwh, agent_energetique_ef_electricite_directe_kwh, agent_energetique_ef_autre_kwh):
-    agent_energetique_ef_mazout_somme_mj = (agent_energetique_ef_mazout_kg * CONVERSION_MAZOUT_KG_MJ + agent_energetique_ef_mazout_litres * CONVERSION_MAZOUT_LITRES_MJ + agent_energetique_ef_mazout_kwh * CONVERSION_MAZOUT_KWH_MJ)
-    agent_energetique_ef_gaz_naturel_somme_mj = (agent_energetique_ef_gaz_naturel_m3 * CONVERSION_GAZ_NATUREL_M3_MJ + agent_energetique_ef_gaz_naturel_kwh * CONVERSION_GAZ_NATUREL_KWH_MJ)
-    agent_energetique_ef_bois_buches_dur_somme_mj = (agent_energetique_ef_bois_buches_dur_stere * CONVERSION_BOIS_BUCHES_DUR_STERE_MJ)
-    agent_energetique_ef_bois_buches_tendre_somme_mj = (agent_energetique_ef_bois_buches_tendre_stere * CONVERSION_BOIS_BUCHES_TENDRE_STERE_MJ + agent_energetique_ef_bois_buches_tendre_kwh * CONVERSION_BOIS_BUCHES_TENDRE_KWH_MJ)
-    agent_energetique_ef_pellets_somme_mj = (agent_energetique_ef_pellets_m3 * CONVERSION_PELLETS_M3_MJ + agent_energetique_ef_pellets_kg * CONVERSION_PELLETS_KG_MJ + agent_energetique_ef_pellets_kwh * CONVERSION_PELLETS_KWH_MJ)
-    agent_energetique_ef_plaquettes_somme_mj = (agent_energetique_ef_plaquettes_m3 * CONVERSION_PLAQUETTES_M3_MJ + agent_energetique_ef_plaquettes_kwh * CONVERSION_PLAQUETTES_KWH_MJ)
-    agent_energetique_ef_cad_somme_mj = (agent_energetique_ef_cad_kwh * CONVERSION_CAD_KWH_MJ)
-    agent_energetique_ef_electricite_pac_somme_mj = (agent_energetique_ef_electricite_pac_kwh * CONVERSION_ELECTRICITE_PAC_KWH_MJ)
-    agent_energetique_ef_electricite_directe_somme_mj = (agent_energetique_ef_electricite_directe_kwh * CONVERSION_ELECTRICITE_DIRECTE_KWH_MJ)
-    agent_energetique_ef_autre_somme_mj = (agent_energetique_ef_autre_kwh * CONVERSION_AUTRE_KWH_MJ)
+    Args:
+        periode_nb_jours (int): The number of days in the period.
 
-    agent_energetique_ef_somme_kwh = (agent_energetique_ef_mazout_somme_mj + \
-                                agent_energetique_ef_gaz_naturel_somme_mj + \
-                                    agent_energetique_ef_bois_buches_dur_somme_mj + \
-                                    agent_energetique_ef_bois_buches_tendre_somme_mj + \
-                                    agent_energetique_ef_pellets_somme_mj + \
-                                    agent_energetique_ef_plaquettes_somme_mj + \
-                                    agent_energetique_ef_cad_somme_mj +\
-                                    agent_energetique_ef_electricite_pac_somme_mj + \
-                                    agent_energetique_ef_electricite_directe_somme_mj + \
-                                    agent_energetique_ef_autre_somme_mj) / 3.6
+    Returns:
+        float: The correction factor calculated as 365 divided by the number of days in the period.
+    """
+    return 365 / periode_nb_jours
+
+
+def agent_energetique_ef_somme_kwh(
+    agent_energetique_ef_mazout_kg,
+    agent_energetique_ef_mazout_litres,
+    agent_energetique_ef_mazout_kwh,
+    agent_energetique_ef_gaz_naturel_m3,
+    agent_energetique_ef_gaz_naturel_kwh,
+    agent_energetique_ef_bois_buches_dur_stere,
+    agent_energetique_ef_bois_buches_tendre_stere,
+    agent_energetique_ef_bois_buches_tendre_kwh,
+    agent_energetique_ef_pellets_m3,
+    agent_energetique_ef_pellets_kg,
+    agent_energetique_ef_pellets_kwh,
+    agent_energetique_ef_plaquettes_m3,
+    agent_energetique_ef_plaquettes_kwh,
+    agent_energetique_ef_cad_kwh,
+    agent_energetique_ef_electricite_pac_kwh,
+    agent_energetique_ef_electricite_directe_kwh,
+    agent_energetique_ef_autre_kwh,
+):
+    """
+    Calculate the total energy consumption in kWh from various energy sources.
+
+    This function converts different energy sources into their equivalent energy
+    in megajoules (MJ), sums them up, and then converts the total energy from MJ
+    to kWh.
+
+    Parameters:
+    - agent_energetique_ef_mazout_kg (float): Energy from mazout in kilograms.
+    - agent_energetique_ef_mazout_litres (float): Energy from mazout in litres.
+    - agent_energetique_ef_mazout_kwh (float): Energy from mazout in kWh.
+    - agent_energetique_ef_gaz_naturel_m3 (float): Energy from natural gas in cubic meters.
+    - agent_energetique_ef_gaz_naturel_kwh (float): Energy from natural gas in kWh.
+    - agent_energetique_ef_bois_buches_dur_stere (float): Energy from hard wood logs in stere.
+    - agent_energetique_ef_bois_buches_tendre_stere (float): Energy from soft wood logs in stere.
+    - agent_energetique_ef_bois_buches_tendre_kwh (float): Energy from soft wood logs in kWh.
+    - agent_energetique_ef_pellets_m3 (float): Energy from pellets in cubic meters.
+    - agent_energetique_ef_pellets_kg (float): Energy from pellets in kilograms.
+    - agent_energetique_ef_pellets_kwh (float): Energy from pellets in kWh.
+    - agent_energetique_ef_plaquettes_m3 (float): Energy from wood chips in cubic meters.
+    - agent_energetique_ef_plaquettes_kwh (float): Energy from wood chips in kWh.
+    - agent_energetique_ef_cad_kwh (float): Energy from district heating in kWh.
+    - agent_energetique_ef_electricite_pac_kwh (float): Energy from heat pump electricity in kWh.
+    - agent_energetique_ef_electricite_directe_kwh (float): Energy from direct electricity in kWh.
+    - agent_energetique_ef_autre_kwh (float): Energy from other sources in kWh.
+
+    Returns:
+    - float: Total energy consumption in kWh.
+    """
+    agent_energetique_ef_mazout_somme_mj = (
+        agent_energetique_ef_mazout_kg * CONVERSION_MAZOUT_KG_MJ
+        + agent_energetique_ef_mazout_litres * CONVERSION_MAZOUT_LITRES_MJ
+        + agent_energetique_ef_mazout_kwh * CONVERSION_MAZOUT_KWH_MJ
+    )
+    agent_energetique_ef_gaz_naturel_somme_mj = (
+        agent_energetique_ef_gaz_naturel_m3 * CONVERSION_GAZ_NATUREL_M3_MJ
+        + agent_energetique_ef_gaz_naturel_kwh * CONVERSION_GAZ_NATUREL_KWH_MJ
+    )
+    agent_energetique_ef_bois_buches_dur_somme_mj = (
+        agent_energetique_ef_bois_buches_dur_stere * CONVERSION_BOIS_BUCHES_DUR_STERE_MJ
+    )
+    agent_energetique_ef_bois_buches_tendre_somme_mj = (
+        agent_energetique_ef_bois_buches_tendre_stere
+        * CONVERSION_BOIS_BUCHES_TENDRE_STERE_MJ
+        + agent_energetique_ef_bois_buches_tendre_kwh
+        * CONVERSION_BOIS_BUCHES_TENDRE_KWH_MJ
+    )
+    agent_energetique_ef_pellets_somme_mj = (
+        agent_energetique_ef_pellets_m3 * CONVERSION_PELLETS_M3_MJ
+        + agent_energetique_ef_pellets_kg * CONVERSION_PELLETS_KG_MJ
+        + agent_energetique_ef_pellets_kwh * CONVERSION_PELLETS_KWH_MJ
+    )
+    agent_energetique_ef_plaquettes_somme_mj = (
+        agent_energetique_ef_plaquettes_m3 * CONVERSION_PLAQUETTES_M3_MJ
+        + agent_energetique_ef_plaquettes_kwh * CONVERSION_PLAQUETTES_KWH_MJ
+    )
+    agent_energetique_ef_cad_somme_mj = (
+        agent_energetique_ef_cad_kwh * CONVERSION_CAD_KWH_MJ
+    )
+    agent_energetique_ef_electricite_pac_somme_mj = (
+        agent_energetique_ef_electricite_pac_kwh * CONVERSION_ELECTRICITE_PAC_KWH_MJ
+    )
+    agent_energetique_ef_electricite_directe_somme_mj = (
+        agent_energetique_ef_electricite_directe_kwh
+        * CONVERSION_ELECTRICITE_DIRECTE_KWH_MJ
+    )
+    agent_energetique_ef_autre_somme_mj = (
+        agent_energetique_ef_autre_kwh * CONVERSION_AUTRE_KWH_MJ
+    )
+
+    agent_energetique_ef_somme_kwh = (
+        agent_energetique_ef_mazout_somme_mj
+        + agent_energetique_ef_gaz_naturel_somme_mj
+        + agent_energetique_ef_bois_buches_dur_somme_mj
+        + agent_energetique_ef_bois_buches_tendre_somme_mj
+        + agent_energetique_ef_pellets_somme_mj
+        + agent_energetique_ef_plaquettes_somme_mj
+        + agent_energetique_ef_cad_somme_mj
+        + agent_energetique_ef_electricite_pac_somme_mj
+        + agent_energetique_ef_electricite_directe_somme_mj
+        + agent_energetique_ef_autre_somme_mj
+    ) / 3.6
     return agent_energetique_ef_somme_kwh
 
 
 data_periode = {
-        'Début période': {'Valeur': periode_start, 'Unité': '-', 'Commentaire': 'Date de début de la période', 'Excel': 'C65', 'Variable/Formule': 'periode_start'},
-        'Fin période': {'Valeur': periode_end, 'Unité': '-', 'Commentaire': 'Date de fin de la période', 'Excel': 'C66', 'Variable/Formule': 'periode_end'},
+    "Début période": {
+        "Valeur": periode_start,
+        "Unité": "-",
+        "Commentaire": "Date de début de la période",
+        "Excel": "C65",
+        "Variable/Formule": "periode_start",
+    },
+    "Fin période": {
+        "Valeur": periode_end,
+        "Unité": "-",
+        "Commentaire": "Date de fin de la période",
+        "Excel": "C66",
+        "Variable/Formule": "periode_end",
+    },
 }
 
 data_calculs = {
-    'Nombre de jour(s)': {'Valeur': periode_nb_jours, 'Unité': 'jour(s)', 'Commentaire': 'Nombre de jour(s) dans la période', 'Excel': 'C67', 'Variable/Formule': 'periode_nb_jours'},
-    'Répartition en énergie finale (chauffage) pour la partie rénové': {'Valeur': repartition_energie_finale_partie_renovee_chauffage, 'Unité': '%', 'Commentaire': '', 'Excel': 'C86', 'Variable/Formule': "repartition_energie_finale_partie_renovee_chauffage"},
-    'Répartition en énergie finale (ECS) pour la partie rénové': {'Valeur': repartition_energie_finale_partie_renovee_ecs, 'Unité': '%', 'Commentaire': '', 'Excel': 'C87', 'Variable/Formule': "repartition_energie_finale_partie_renovee_ecs"},
-    'Répartition en énergie finale (chauffage) pour la partie surélévée': {'Valeur': repartition_energie_finale_partie_surelevee_chauffage, 'Unité': '%', 'Commentaire': "0 if no surélévation", 'Excel': 'C88', 'Variable/Formule': "repartition_energie_finale_partie_surelevee_chauffage"},
-    'Répartition en énergie finale - ECS partie surélévée': {'Valeur': repartition_energie_finale_partie_surelevee_ecs, 'Unité': '%', 'Commentaire': "Part d'énergie finale (ECS) pour la partie surélévée. 0 s'il n'y a pas de surélévation", 'Excel': 'C89', 'Variable/Formule': "repartition_energie_finale_partie_surelevee_ecs"},
-    'Part EF pour partie rénové (Chauffage + ECS)': {'Valeur': repartition_energie_finale_partie_renovee_somme(repartition_energie_finale_partie_renovee_chauffage, repartition_energie_finale_partie_renovee_ecs), 'Unité': '%', 'Commentaire': "Part d'énergie finale (Chauffage + ECS) pour la partie rénové. 100% si pas de surélévation", 'Excel': 'C91', 'Variable/Formule': "repartition_energie_finale_partie_renovee_somme = repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_renovee_ecs"},
-    'Est. ECS/ECS annuelle': {'Valeur': estimation_ecs_annuel(periode_nb_jours), 'Unité': '-', 'Commentaire': 'Estimation de la part ECS sur une année', 'Excel': 'C92', 'Variable/Formule': 'estimation_ecs_annuel = periode_nb_jours/365'},
-    'Est. Chauffage/Chauffage annuel prévisible': {'Valeur': estimation_part_chauffage_periode_sur_annuel(dj_periode, DJ_REF_ANNUELS)*100, 'Unité': '%', 'Commentaire': 'Est. Chauffage/Chauffage annuel prévisible → dj_periode (C101) / DJ_REF_ANNUELS (C102)', 'Excel': 'C93', 'Variable/Formule': 'estimation_part_chauffage_periode_sur_annuel = dj_periode / DJ_REF_ANNUELS'},
-    'Est. EF période / EF année': {'Valeur': estimation_energie_finale_periode_sur_annuel(estimation_ecs_annuel,repartition_energie_finale_partie_renovee_ecs,repartition_energie_finale_partie_surelevee_ecs,estimation_part_chauffage_periode_sur_annuel,repartition_energie_finale_partie_renovee_chauffage,repartition_energie_finale_partie_surelevee_chauffage), 'Unité': '%', 'Commentaire': 'Estimation en énergie finale sur la période / énergie finale sur une année', 'Excel': 'C94', 'Variable/Formule': 'estimation_energie_finale_periode_sur_annuel = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + repartition_energie_finale_partie_surelevee_ecs)) + (estimation_part_chauffage_periode_sur_annuel * (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage))'},
-    'Est. Part ECS période comptage': {'Valeur': part_ecs_periode_comptage(estimation_ecs_annuel, repartition_energie_finale_partie_renovee_ecs, repartition_energie_finale_partie_surelevee_ecs, estimation_energie_finale_periode_sur_annuel)*100, 'Unité': '%', 'Commentaire': '', 'Excel': 'C95', 'Variable/Formule': 'part_ecs_periode_comptage = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + repartition_energie_finale_partie_surelevee_ecs)) / estimation_energie_finale_periode_sur_annuel'},
-    'Est. Part Chauffage période comptage': {'Valeur': part_chauffage_periode_comptage(estimation_energie_finale_periode_sur_annuel, estimation_part_chauffage_periode_sur_annuel, repartition_energie_finale_partie_renovee_chauffage, repartition_energie_finale_partie_surelevee_chauffage)*100, 'Unité': '%', 'Commentaire': '', 'Excel': 'C96', 'Variable/Formule': 'part_chauffage_periode_comptage = (estimation_part_chauffage_periode_sur_annuel * (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage)) / estimation_energie_finale_periode_sur_annuel'},
-    'Correction ECS': {'Valeur': correction_ecs(periode_nb_jours), 'Unité': '-', 'Commentaire': '', 'Excel': 'C97', 'Variable/Formule': 'correction_ecs = 365/periode_nb_jours'},
-    'Energie finale indiqué par le(s) compteur(s)': {'Valeur': agent_energetique_ef_somme_kwh(agent_energetique_ef_mazout_kg, agent_energetique_ef_mazout_litres, agent_energetique_ef_mazout_kwh, agent_energetique_ef_gaz_naturel_m3, agent_energetique_ef_gaz_naturel_kwh, agent_energetique_ef_bois_buches_dur_stere, agent_energetique_ef_bois_buches_tendre_stere, agent_energetique_ef_bois_buches_tendre_kwh, agent_energetique_ef_pellets_m3, agent_energetique_ef_pellets_kg, agent_energetique_ef_pellets_kwh, agent_energetique_ef_plaquettes_m3, agent_energetique_ef_plaquettes_kwh, agent_energetique_ef_cad_kwh, agent_energetique_ef_electricite_pac_kwh, agent_energetique_ef_electricite_directe_kwh, agent_energetique_ef_autre_kwh), 'Unité': 'kWh', 'Commentaire': '', 'Excel': 'C98', 'Variable/Formule': 'agent_energetique_ef_somme_kwh = (agent_energetique_ef_mazout_somme_mj + agent_energetique_ef_gaz_naturel_somme_mj + agent_energetique_ef_bois_buches_dur_somme_mj + agent_energetique_ef_bois_buches_tendre_somme_mj + agent_energetique_ef_pellets_somme_mj + agent_energetique_ef_plaquettes_somme_mj + agent_energetique_ef_cad_somme_mj + agent_energetique_ef_electricite_pac_somme_mj + agent_energetique_ef_electricite_directe_somme_mj + agent_energetique_ef_autre_somme_mj) / 3.6'}
-    
-
-
-
-
-
+    "Nombre de jour(s)": {
+        "Valeur": periode_nb_jours,
+        "Unité": "jour(s)",
+        "Commentaire": "Nombre de jour(s) dans la période",
+        "Excel": "C67",
+        "Variable/Formule": "periode_nb_jours",
+    },
+    "Répartition en énergie finale (chauffage) pour la partie rénové": {
+        "Valeur": repartition_energie_finale_partie_renovee_chauffage,
+        "Unité": "%",
+        "Commentaire": "",
+        "Excel": "C86",
+        "Variable/Formule": "repartition_energie_finale_partie_renovee_chauffage",
+    },
+    "Répartition en énergie finale (ECS) pour la partie rénové": {
+        "Valeur": repartition_energie_finale_partie_renovee_ecs,
+        "Unité": "%",
+        "Commentaire": "",
+        "Excel": "C87",
+        "Variable/Formule": "repartition_energie_finale_partie_renovee_ecs",
+    },
+    "Répartition en énergie finale (chauffage) pour la partie surélévée": {
+        "Valeur": repartition_energie_finale_partie_surelevee_chauffage,
+        "Unité": "%",
+        "Commentaire": "0 if no surélévation",
+        "Excel": "C88",
+        "Variable/Formule": "repartition_energie_finale_partie_surelevee_chauffage",
+    },
+    "Répartition en énergie finale - ECS partie surélévée": {
+        "Valeur": repartition_energie_finale_partie_surelevee_ecs,
+        "Unité": "%",
+        "Commentaire": "Part d'énergie finale (ECS) pour la partie surélévée. 0 s'il n'y a pas de surélévation",
+        "Excel": "C89",
+        "Variable/Formule": "repartition_energie_finale_partie_surelevee_ecs",
+    },
+    "Part EF pour partie rénové (Chauffage + ECS)": {
+        "Valeur": repartition_energie_finale_partie_renovee_somme(
+            repartition_energie_finale_partie_renovee_chauffage,
+            repartition_energie_finale_partie_renovee_ecs,
+        ),
+        "Unité": "%",
+        "Commentaire": "Part d'énergie finale (Chauffage + ECS) pour la partie rénové. 100% si pas de surélévation",
+        "Excel": "C91",
+        "Variable/Formule": "repartition_energie_finale_partie_renovee_somme = repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_renovee_ecs",
+    },
+    "Est. ECS/ECS annuelle": {
+        "Valeur": estimation_ecs_annuel(periode_nb_jours),
+        "Unité": "-",
+        "Commentaire": "Estimation de la part ECS sur une année",
+        "Excel": "C92",
+        "Variable/Formule": "estimation_ecs_annuel = periode_nb_jours/365",
+    },
+    "Est. Chauffage/Chauffage annuel prévisible": {
+        "Valeur": estimation_part_chauffage_periode_sur_annuel(
+            dj_periode, DJ_REF_ANNUELS
+        )
+        * 100,
+        "Unité": "%",
+        "Commentaire": "Est. Chauffage/Chauffage annuel prévisible → dj_periode (C101) / DJ_REF_ANNUELS (C102)",
+        "Excel": "C93",
+        "Variable/Formule": "estimation_part_chauffage_periode_sur_annuel = dj_periode / DJ_REF_ANNUELS",
+    },
+    "Est. EF période / EF année": {
+        "Valeur": estimation_energie_finale_periode_sur_annuel(
+            estimation_ecs_annuel,
+            repartition_energie_finale_partie_renovee_ecs,
+            repartition_energie_finale_partie_surelevee_ecs,
+            estimation_part_chauffage_periode_sur_annuel,
+            repartition_energie_finale_partie_renovee_chauffage,
+            repartition_energie_finale_partie_surelevee_chauffage,
+        ),
+        "Unité": "%",
+        "Commentaire": "Estimation en énergie finale sur la période / énergie finale sur une année",
+        "Excel": "C94",
+        "Variable/Formule": "estimation_energie_finale_periode_sur_annuel = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + repartition_energie_finale_partie_surelevee_ecs)) + (estimation_part_chauffage_periode_sur_annuel * (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage))",
+    },
+    "Est. Part ECS période comptage": {
+        "Valeur": part_ecs_periode_comptage(
+            estimation_ecs_annuel,
+            repartition_energie_finale_partie_renovee_ecs,
+            repartition_energie_finale_partie_surelevee_ecs,
+            estimation_energie_finale_periode_sur_annuel,
+        )
+        * 100,
+        "Unité": "%",
+        "Commentaire": "",
+        "Excel": "C95",
+        "Variable/Formule": "part_ecs_periode_comptage = (estimation_ecs_annuel * (repartition_energie_finale_partie_renovee_ecs + repartition_energie_finale_partie_surelevee_ecs)) / estimation_energie_finale_periode_sur_annuel",
+    },
+    "Est. Part Chauffage période comptage": {
+        "Valeur": part_chauffage_periode_comptage(
+            estimation_energie_finale_periode_sur_annuel,
+            estimation_part_chauffage_periode_sur_annuel,
+            repartition_energie_finale_partie_renovee_chauffage,
+            repartition_energie_finale_partie_surelevee_chauffage,
+        )
+        * 100,
+        "Unité": "%",
+        "Commentaire": "",
+        "Excel": "C96",
+        "Variable/Formule": "part_chauffage_periode_comptage = (estimation_part_chauffage_periode_sur_annuel * (repartition_energie_finale_partie_renovee_chauffage + repartition_energie_finale_partie_surelevee_chauffage)) / estimation_energie_finale_periode_sur_annuel",
+    },
+    "Correction ECS": {
+        "Valeur": correction_ecs(periode_nb_jours),
+        "Unité": "-",
+        "Commentaire": "",
+        "Excel": "C97",
+        "Variable/Formule": "correction_ecs = 365/periode_nb_jours",
+    },
+    "Energie finale indiqué par le(s) compteur(s)": {
+        "Valeur": agent_energetique_ef_somme_kwh(
+            agent_energetique_ef_mazout_kg,
+            agent_energetique_ef_mazout_litres,
+            agent_energetique_ef_mazout_kwh,
+            agent_energetique_ef_gaz_naturel_m3,
+            agent_energetique_ef_gaz_naturel_kwh,
+            agent_energetique_ef_bois_buches_dur_stere,
+            agent_energetique_ef_bois_buches_tendre_stere,
+            agent_energetique_ef_bois_buches_tendre_kwh,
+            agent_energetique_ef_pellets_m3,
+            agent_energetique_ef_pellets_kg,
+            agent_energetique_ef_pellets_kwh,
+            agent_energetique_ef_plaquettes_m3,
+            agent_energetique_ef_plaquettes_kwh,
+            agent_energetique_ef_cad_kwh,
+            agent_energetique_ef_electricite_pac_kwh,
+            agent_energetique_ef_electricite_directe_kwh,
+            agent_energetique_ef_autre_kwh,
+        ),
+        "Unité": "kWh",
+        "Commentaire": "",
+        "Excel": "C98",
+        "Variable/Formule": "agent_energetique_ef_somme_kwh = (agent_energetique_ef_mazout_somme_mj + agent_energetique_ef_gaz_naturel_somme_mj + agent_energetique_ef_bois_buches_dur_somme_mj + agent_energetique_ef_bois_buches_tendre_somme_mj + agent_energetique_ef_pellets_somme_mj + agent_energetique_ef_plaquettes_somme_mj + agent_energetique_ef_cad_somme_mj + agent_energetique_ef_electricite_pac_somme_mj + agent_energetique_ef_electricite_directe_somme_mj + agent_energetique_ef_autre_somme_mj) / 3.6",
+    },
 }
 
 # # C65 → Début période
@@ -262,213 +601,318 @@ data_calculs = {
 # })
 
 # C98 → Energie finale indiqué par le(s) compteur(s)
-agent_energetique_ef_mazout_somme_mj = (agent_energetique_ef_mazout_kg * CONVERSION_MAZOUT_KG_MJ + agent_energetique_ef_mazout_litres * CONVERSION_MAZOUT_LITRES_MJ + agent_energetique_ef_mazout_kwh * CONVERSION_MAZOUT_KWH_MJ)
-agent_energetique_ef_gaz_naturel_somme_mj = (agent_energetique_ef_gaz_naturel_m3 * CONVERSION_GAZ_NATUREL_M3_MJ + agent_energetique_ef_gaz_naturel_kwh * CONVERSION_GAZ_NATUREL_KWH_MJ)
-agent_energetique_ef_bois_buches_dur_somme_mj = (agent_energetique_ef_bois_buches_dur_stere * CONVERSION_BOIS_BUCHES_DUR_STERE_MJ)
-agent_energetique_ef_bois_buches_tendre_somme_mj = (agent_energetique_ef_bois_buches_tendre_stere * CONVERSION_BOIS_BUCHES_TENDRE_STERE_MJ + agent_energetique_ef_bois_buches_tendre_kwh * CONVERSION_BOIS_BUCHES_TENDRE_KWH_MJ)
-agent_energetique_ef_pellets_somme_mj = (agent_energetique_ef_pellets_m3 * CONVERSION_PELLETS_M3_MJ + agent_energetique_ef_pellets_kg * CONVERSION_PELLETS_KG_MJ + agent_energetique_ef_pellets_kwh * CONVERSION_PELLETS_KWH_MJ)
-agent_energetique_ef_plaquettes_somme_mj = (agent_energetique_ef_plaquettes_m3 * CONVERSION_PLAQUETTES_M3_MJ + agent_energetique_ef_plaquettes_kwh * CONVERSION_PLAQUETTES_KWH_MJ)
-agent_energetique_ef_cad_somme_mj = (agent_energetique_ef_cad_kwh * CONVERSION_CAD_KWH_MJ)
-agent_energetique_ef_electricite_pac_somme_mj = (agent_energetique_ef_electricite_pac_kwh * CONVERSION_ELECTRICITE_PAC_KWH_MJ)
-agent_energetique_ef_electricite_directe_somme_mj = (agent_energetique_ef_electricite_directe_kwh * CONVERSION_ELECTRICITE_DIRECTE_KWH_MJ)
-agent_energetique_ef_autre_somme_mj = (agent_energetique_ef_autre_kwh * CONVERSION_AUTRE_KWH_MJ)
+agent_energetique_ef_mazout_somme_mj = (
+    agent_energetique_ef_mazout_kg * CONVERSION_MAZOUT_KG_MJ
+    + agent_energetique_ef_mazout_litres * CONVERSION_MAZOUT_LITRES_MJ
+    + agent_energetique_ef_mazout_kwh * CONVERSION_MAZOUT_KWH_MJ
+)
+agent_energetique_ef_gaz_naturel_somme_mj = (
+    agent_energetique_ef_gaz_naturel_m3 * CONVERSION_GAZ_NATUREL_M3_MJ
+    + agent_energetique_ef_gaz_naturel_kwh * CONVERSION_GAZ_NATUREL_KWH_MJ
+)
+agent_energetique_ef_bois_buches_dur_somme_mj = (
+    agent_energetique_ef_bois_buches_dur_stere * CONVERSION_BOIS_BUCHES_DUR_STERE_MJ
+)
+agent_energetique_ef_bois_buches_tendre_somme_mj = (
+    agent_energetique_ef_bois_buches_tendre_stere
+    * CONVERSION_BOIS_BUCHES_TENDRE_STERE_MJ
+    + agent_energetique_ef_bois_buches_tendre_kwh * CONVERSION_BOIS_BUCHES_TENDRE_KWH_MJ
+)
+agent_energetique_ef_pellets_somme_mj = (
+    agent_energetique_ef_pellets_m3 * CONVERSION_PELLETS_M3_MJ
+    + agent_energetique_ef_pellets_kg * CONVERSION_PELLETS_KG_MJ
+    + agent_energetique_ef_pellets_kwh * CONVERSION_PELLETS_KWH_MJ
+)
+agent_energetique_ef_plaquettes_somme_mj = (
+    agent_energetique_ef_plaquettes_m3 * CONVERSION_PLAQUETTES_M3_MJ
+    + agent_energetique_ef_plaquettes_kwh * CONVERSION_PLAQUETTES_KWH_MJ
+)
+agent_energetique_ef_cad_somme_mj = agent_energetique_ef_cad_kwh * CONVERSION_CAD_KWH_MJ
+agent_energetique_ef_electricite_pac_somme_mj = (
+    agent_energetique_ef_electricite_pac_kwh * CONVERSION_ELECTRICITE_PAC_KWH_MJ
+)
+agent_energetique_ef_electricite_directe_somme_mj = (
+    agent_energetique_ef_electricite_directe_kwh * CONVERSION_ELECTRICITE_DIRECTE_KWH_MJ
+)
+agent_energetique_ef_autre_somme_mj = (
+    agent_energetique_ef_autre_kwh * CONVERSION_AUTRE_KWH_MJ
+)
 
-agent_energetique_ef_somme_kwh = (agent_energetique_ef_mazout_somme_mj + \
-                            agent_energetique_ef_gaz_naturel_somme_mj + \
-                                agent_energetique_ef_bois_buches_dur_somme_mj + \
-                                agent_energetique_ef_bois_buches_tendre_somme_mj + \
-                                agent_energetique_ef_pellets_somme_mj + \
-                                agent_energetique_ef_plaquettes_somme_mj + \
-                                agent_energetique_ef_cad_somme_mj +\
-                                agent_energetique_ef_electricite_pac_somme_mj + \
-                                agent_energetique_ef_electricite_directe_somme_mj + \
-                                agent_energetique_ef_autre_somme_mj) / 3.6
-df_list.append({
-    'Dénomination': 'Energie finale indiqué par le(s) compteur(s)',
-    'Valeur': agent_energetique_ef_somme_kwh(agent_energetique_ef_mazout_kg, agent_energetique_ef_mazout_litres, agent_energetique_ef_mazout_kwh, agent_energetique_ef_gaz_naturel_m3, agent_energetique_ef_gaz_naturel_kwh, agent_energetique_ef_bois_buches_dur_stere, agent_energetique_ef_bois_buches_tendre_stere, agent_energetique_ef_bois_buches_tendre_kwh, agent_energetique_ef_pellets_m3, agent_energetique_ef_pellets_kg, agent_energetique_ef_pellets_kwh, agent_energetique_ef_plaquettes_m3, agent_energetique_ef_plaquettes_kwh, agent_energetique_ef_cad_kwh, agent_energetique_ef_electricite_pac_kwh, agent_energetique_ef_electricite_directe_kwh, agent_energetique_ef_autre_kwh),
-    'Unité': 'kWh',
-    'Commentaire': "Somme de l'énergie finale indiqué par le(s) compteur(s) en kWh",
-    'Excel': 'C98',
-    'Variable/Formule': 'agent_energetique_ef_somme_kwh'
-})
+agent_energetique_ef_somme_kwh = (
+    agent_energetique_ef_mazout_somme_mj
+    + agent_energetique_ef_gaz_naturel_somme_mj
+    + agent_energetique_ef_bois_buches_dur_somme_mj
+    + agent_energetique_ef_bois_buches_tendre_somme_mj
+    + agent_energetique_ef_pellets_somme_mj
+    + agent_energetique_ef_plaquettes_somme_mj
+    + agent_energetique_ef_cad_somme_mj
+    + agent_energetique_ef_electricite_pac_somme_mj
+    + agent_energetique_ef_electricite_directe_somme_mj
+    + agent_energetique_ef_autre_somme_mj
+) / 3.6
+df_list.append(
+    {
+        "Dénomination": "Energie finale indiqué par le(s) compteur(s)",
+        "Valeur": agent_energetique_ef_somme_kwh(
+            agent_energetique_ef_mazout_kg,
+            agent_energetique_ef_mazout_litres,
+            agent_energetique_ef_mazout_kwh,
+            agent_energetique_ef_gaz_naturel_m3,
+            agent_energetique_ef_gaz_naturel_kwh,
+            agent_energetique_ef_bois_buches_dur_stere,
+            agent_energetique_ef_bois_buches_tendre_stere,
+            agent_energetique_ef_bois_buches_tendre_kwh,
+            agent_energetique_ef_pellets_m3,
+            agent_energetique_ef_pellets_kg,
+            agent_energetique_ef_pellets_kwh,
+            agent_energetique_ef_plaquettes_m3,
+            agent_energetique_ef_plaquettes_kwh,
+            agent_energetique_ef_cad_kwh,
+            agent_energetique_ef_electricite_pac_kwh,
+            agent_energetique_ef_electricite_directe_kwh,
+            agent_energetique_ef_autre_kwh,
+        ),
+        "Unité": "kWh",
+        "Commentaire": "Somme de l'énergie finale indiqué par le(s) compteur(s) en kWh",
+        "Excel": "C98",
+        "Variable/Formule": "agent_energetique_ef_somme_kwh",
+    }
+)
 
 # C99 → Methodo_Bww → Part de ECS en énergie finale sur la période
 methodo_b_ww_kwh = (agent_energetique_ef_somme_kwh) * part_ecs_periode_comptage
-df_list.append({
-    'Dénomination': 'Methodo_Bww',
-    'Valeur': methodo_b_ww_kwh,
-    'Unité': 'kWh',
-    'Commentaire': '',
-    'Excel': 'C99',
-    'Variable/Formule': 'methodo_b_ww_kwh'
-})
+df_list.append(
+    {
+        "Dénomination": "Methodo_Bww",
+        "Valeur": methodo_b_ww_kwh,
+        "Unité": "kWh",
+        "Commentaire": "",
+        "Excel": "C99",
+        "Variable/Formule": "methodo_b_ww_kwh",
+    }
+)
 
 # C100 → Methodo_Eww
 try:
     if sre_renovation_m2 != 0 and periode_nb_jours != 0:
-        methodo_e_ww_kwh = (methodo_b_ww_kwh / sre_renovation_m2) * (365 / periode_nb_jours)
+        methodo_e_ww_kwh = (methodo_b_ww_kwh / sre_renovation_m2) * (
+            365 / periode_nb_jours
+        )
     else:
         methodo_e_ww_kwh = 0.0
 except ZeroDivisionError:
     methodo_e_ww_kwh = 0.0
-df_list.append({
-    'Dénomination': 'Methodo_Eww',
-    'Valeur': methodo_e_ww_kwh,
-    'Unité': 'kWh',
-    'Commentaire': '',
-    'Excel': 'C100',
-    'Variable/Formule': 'Methodo_Eww'
-})
+df_list.append(
+    {
+        "Dénomination": "Methodo_Eww",
+        "Valeur": methodo_e_ww_kwh,
+        "Unité": "kWh",
+        "Commentaire": "",
+        "Excel": "C100",
+        "Variable/Formule": "Methodo_Eww",
+    }
+)
 
 # C101 → DJ ref annuels
-df_list.append({
-    'Dénomination': 'DJ ref annuels',
-    'Valeur': DJ_REF_ANNUELS,
-    'Unité': 'Degré-jour',
-    'Commentaire': 'Degré-jour 20/16 avec les températures extérieures de référence pour Genève-Cointrin selon SIA 2028:2008',
-    'Excel': 'C101',
-    'Variable/Formule': 'DJ_REF_ANNUELS'
-})
+df_list.append(
+    {
+        "Dénomination": "DJ ref annuels",
+        "Valeur": DJ_REF_ANNUELS,
+        "Unité": "Degré-jour",
+        "Commentaire": "Degré-jour 20/16 avec les températures extérieures de référence pour Genève-Cointrin selon SIA 2028:2008",
+        "Excel": "C101",
+        "Variable/Formule": "DJ_REF_ANNUELS",
+    }
+)
 
 # C102 → DJ période comptage
-df_list.append({
-    'Dénomination': 'DJ période comptage',
-    'Valeur': dj_periode,
-    'Unité': 'Degré-jour',
-    'Commentaire': 'Degré-jour 20/16 avec les températures extérieures (tre200d0) pour Genève-Cointrin relevée par MétéoSuisse',
-    'Excel': 'C102',
-    'Variable/Formule': 'dj_periode'
-})
+df_list.append(
+    {
+        "Dénomination": "DJ période comptage",
+        "Valeur": dj_periode,
+        "Unité": "Degré-jour",
+        "Commentaire": "Degré-jour 20/16 avec les températures extérieures (tre200d0) pour Genève-Cointrin relevée par MétéoSuisse",
+        "Excel": "C102",
+        "Variable/Formule": "dj_periode",
+    }
+)
 
 # C103 → Methodo_Bh → Part de chauffage en énergie finale sur la période
 methodo_b_h_kwh = agent_energetique_ef_somme_kwh * part_chauffage_periode_comptage
-df_list.append({
-    'Dénomination': 'Methodo_Bh',
-    'Valeur': methodo_b_h_kwh,
-    'Unité': 'kWh',
-    'Commentaire': 'Part de chauffage en énergie finale sur la période',
-    'Excel': 'C103',
-    'Variable/Formule': 'methodo_b_h_kwh = agent_energetique_ef_somme_kwh * part_chauffage_periode_comptage'
-})
+df_list.append(
+    {
+        "Dénomination": "Methodo_Bh",
+        "Valeur": methodo_b_h_kwh,
+        "Unité": "kWh",
+        "Commentaire": "Part de chauffage en énergie finale sur la période",
+        "Excel": "C103",
+        "Variable/Formule": "methodo_b_h_kwh = agent_energetique_ef_somme_kwh * part_chauffage_periode_comptage",
+    }
+)
 
 # C104 → Methodo_Eh
 try:
     if sre_renovation_m2 != 0 and dj_periode != 0:
-        methodo_e_h_kwh = (methodo_b_h_kwh / sre_renovation_m2) * (DJ_REF_ANNUELS / dj_periode)
+        methodo_e_h_kwh = (methodo_b_h_kwh / sre_renovation_m2) * (
+            DJ_REF_ANNUELS / dj_periode
+        )
     else:
         methodo_e_h_kwh = 0.0
 except ZeroDivisionError:
     methodo_e_h_kwh = 0.0
-df_list.append({
-    'Dénomination': 'Methodo_Eh',
-    'Valeur': methodo_e_h_kwh,
-    'Unité': 'kWh/m²',
-    'Commentaire': 'Energie finale par unité de surface pour le chauffage sur la période climatiquement corrigée',
-    'Excel': 'C104',
-    'Variable/Formule': 'methodo_e_h_kwh = (methodo_b_h_kwh / sre_renovation_m2) * (DJ_REF_ANNUELS / dj_periode)'
-})
+df_list.append(
+    {
+        "Dénomination": "Methodo_Eh",
+        "Valeur": methodo_e_h_kwh,
+        "Unité": "kWh/m²",
+        "Commentaire": "Energie finale par unité de surface pour le chauffage sur la période climatiquement corrigée",
+        "Excel": "C104",
+        "Variable/Formule": "methodo_e_h_kwh = (methodo_b_h_kwh / sre_renovation_m2) * (DJ_REF_ANNUELS / dj_periode)",
+    }
+)
 
 # C105 → Ef,après,corr → Methodo_Eww + Methodo_Eh
-energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = methodo_e_ww_kwh + methodo_e_h_kwh
-df_list.append({
-    'Dénomination': 'Ef,après,corr (inclus surélévation)',
-    'Valeur': energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2,
-    'Unité': 'kWh/m²',
-    'Commentaire': "Energie finale par unité de surface pour le chauffage climatiquement corrigée et l'ECS sur la période (inclus surélévation)",
-    'Excel': 'C105',
-    'Variable/Formule': 'energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = methodo_e_ww_kwh + methodo_e_h_kwh'
-})
+energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
+    methodo_e_ww_kwh + methodo_e_h_kwh
+)
+df_list.append(
+    {
+        "Dénomination": "Ef,après,corr (inclus surélévation)",
+        "Valeur": energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2,
+        "Unité": "kWh/m²",
+        "Commentaire": "Energie finale par unité de surface pour le chauffage climatiquement corrigée et l'ECS sur la période (inclus surélévation)",
+        "Excel": "C105",
+        "Variable/Formule": "energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = methodo_e_ww_kwh + methodo_e_h_kwh",
+    }
+)
 
 # C106 → Part de l'énergie finale théorique dédiée à la partie rénovée (ECS+Ch.)
-df_list.append({
-    'Dénomination': "Part de l'énergie finale théorique dédiée à la partie rénovée (ECS+Ch.)",
-    'Valeur': repartition_energie_finale_partie_renovee_somme,
-    'Unité': '%',
-    'Commentaire': "Part de l'énergie finale théorique dédiée à la partie rénovée (ECS+Ch.)",
-    'Excel': 'C106',
-    'Variable/Formule': 'repartition_energie_finale_partie_renovee_somme'
-})
+df_list.append(
+    {
+        "Dénomination": "Part de l'énergie finale théorique dédiée à la partie rénovée (ECS+Ch.)",
+        "Valeur": repartition_energie_finale_partie_renovee_somme,
+        "Unité": "%",
+        "Commentaire": "Part de l'énergie finale théorique dédiée à la partie rénovée (ECS+Ch.)",
+        "Excel": "C106",
+        "Variable/Formule": "repartition_energie_finale_partie_renovee_somme",
+    }
+)
 
 # C107 → Ef,après,corr,rénové →Total en énergie finale (Eww+Eh) pour la partie rénovée
-energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 = energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 * (repartition_energie_finale_partie_renovee_somme / 100)
-df_list.append({
-    'Dénomination': 'Ef,après,corr,rénové',
-    'Valeur': energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2,
-    'Unité': 'kWh/m²',
-    'Commentaire': "Energie finale par unité de surface pour le chauffage et l'ECS sur la période climatiquement corrigée pour la partie rénovée",
-    'Excel': 'C107',
-    'Variable/Formule': 'energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 = energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 * (repartition_energie_finale_partie_renovee_somme / 100)'
-})
+energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 = (
+    energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2
+    * (repartition_energie_finale_partie_renovee_somme / 100)
+)
+df_list.append(
+    {
+        "Dénomination": "Ef,après,corr,rénové",
+        "Valeur": energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2,
+        "Unité": "kWh/m²",
+        "Commentaire": "Energie finale par unité de surface pour le chauffage et l'ECS sur la période climatiquement corrigée pour la partie rénovée",
+        "Excel": "C107",
+        "Variable/Formule": "energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 = energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 * (repartition_energie_finale_partie_renovee_somme / 100)",
+    }
+)
 
 # C108 → fp → facteur de pondération moyen
 try:
     if agent_energetique_ef_somme_kwh:
-        facteur_ponderation_moyen = (agent_energetique_ef_mazout_somme_mj * FACTEUR_PONDERATION_MAZOUT + \
-                            agent_energetique_ef_gaz_naturel_somme_mj * FACTEUR_PONDERATION_GAZ_NATUREL + \
-                            agent_energetique_ef_bois_buches_dur_somme_mj * FACTEUR_PONDERATION_BOIS_BUCHES_DUR + \
-                            agent_energetique_ef_bois_buches_tendre_somme_mj * FACTEUR_PONDERATION_BOIS_BUCHES_TENDRE + \
-                            agent_energetique_ef_pellets_somme_mj * FACTEUR_PONDERATION_PELLETS + \
-                            agent_energetique_ef_plaquettes_somme_mj * FACTEUR_PONDERATION_PLAQUETTES + \
-                            agent_energetique_ef_cad_somme_mj * FACTEUR_PONDERATION_CAD + \
-                            agent_energetique_ef_electricite_pac_somme_mj * FACTEUR_PONDERATION_ELECTRICITE_PAC + \
-                            agent_energetique_ef_electricite_directe_somme_mj * FACTEUR_PONDERATION_ELECTRICITE_DIRECTE + \
-                            agent_energetique_ef_autre_somme_mj * FACTEUR_PONDERATION_AUTRE) / (agent_energetique_ef_somme_kwh * 3.6)
+        facteur_ponderation_moyen = (
+            agent_energetique_ef_mazout_somme_mj * FACTEUR_PONDERATION_MAZOUT
+            + agent_energetique_ef_gaz_naturel_somme_mj
+            * FACTEUR_PONDERATION_GAZ_NATUREL
+            + agent_energetique_ef_bois_buches_dur_somme_mj
+            * FACTEUR_PONDERATION_BOIS_BUCHES_DUR
+            + agent_energetique_ef_bois_buches_tendre_somme_mj
+            * FACTEUR_PONDERATION_BOIS_BUCHES_TENDRE
+            + agent_energetique_ef_pellets_somme_mj * FACTEUR_PONDERATION_PELLETS
+            + agent_energetique_ef_plaquettes_somme_mj * FACTEUR_PONDERATION_PLAQUETTES
+            + agent_energetique_ef_cad_somme_mj * FACTEUR_PONDERATION_CAD
+            + agent_energetique_ef_electricite_pac_somme_mj
+            * FACTEUR_PONDERATION_ELECTRICITE_PAC
+            + agent_energetique_ef_electricite_directe_somme_mj
+            * FACTEUR_PONDERATION_ELECTRICITE_DIRECTE
+            + agent_energetique_ef_autre_somme_mj * FACTEUR_PONDERATION_AUTRE
+        ) / (agent_energetique_ef_somme_kwh * 3.6)
     else:
         facteur_ponderation_moyen = 0
 except ZeroDivisionError:
     facteur_ponderation_moyen = 0
-df_list.append({
-    'Dénomination': 'Facteur de pondération des agents énergétiques',
-    'Valeur': facteur_ponderation_moyen,
-    'Unité': '-',
-    'Commentaire': 'Facteur de pondération moyen des agents énergétiques',
-    'Excel': 'C108',
-    'Variable/Formule': 'facteur_ponderation_moyen'
-})
+df_list.append(
+    {
+        "Dénomination": "Facteur de pondération des agents énergétiques",
+        "Valeur": facteur_ponderation_moyen,
+        "Unité": "-",
+        "Commentaire": "Facteur de pondération moyen des agents énergétiques",
+        "Excel": "C108",
+        "Variable/Formule": "facteur_ponderation_moyen",
+    }
+)
 
 # C109 → Methodo_Eww*fp
-methodo_e_ww_renovee_pondere_kwh_m2 = methodo_e_ww_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)
-df_list.append({
-    'Dénomination': 'Methodo_Eww*fp',
-    'Valeur': methodo_e_ww_renovee_pondere_kwh_m2,
-    'Unité': 'kWh/m²',
-    'Commentaire': '',
-    'Excel': 'C109',
-    'Variable/Formule': 'methodo_e_ww_renovee_pondere_kwh_m2 = methodo_e_ww_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)'
-})
+methodo_e_ww_renovee_pondere_kwh_m2 = (
+    methodo_e_ww_kwh
+    * facteur_ponderation_moyen
+    * (repartition_energie_finale_partie_renovee_somme / 100)
+)
+df_list.append(
+    {
+        "Dénomination": "Methodo_Eww*fp",
+        "Valeur": methodo_e_ww_renovee_pondere_kwh_m2,
+        "Unité": "kWh/m²",
+        "Commentaire": "",
+        "Excel": "C109",
+        "Variable/Formule": "methodo_e_ww_renovee_pondere_kwh_m2 = methodo_e_ww_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)",
+    }
+)
 
 # C110 → Methodo_Eh*fp
-methodo_e_h_renovee_pondere_kwh_m2 = methodo_e_h_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)
-df_list.append({
-    'Dénomination': 'Methodo_Eh*fp',
-    'Valeur':methodo_e_h_renovee_pondere_kwh_m2,
-    'Unité': 'kWh/m²',
-    'Commentaire': '',
-    'Excel': 'C110',
-    'Variable/Formule': 'methodo_e_h_renovee_pondere_kwh_m2 = methodo_e_h_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)'
-})
+methodo_e_h_renovee_pondere_kwh_m2 = (
+    methodo_e_h_kwh
+    * facteur_ponderation_moyen
+    * (repartition_energie_finale_partie_renovee_somme / 100)
+)
+df_list.append(
+    {
+        "Dénomination": "Methodo_Eh*fp",
+        "Valeur": methodo_e_h_renovee_pondere_kwh_m2,
+        "Unité": "kWh/m²",
+        "Commentaire": "",
+        "Excel": "C110",
+        "Variable/Formule": "methodo_e_h_renovee_pondere_kwh_m2 = methodo_e_h_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)",
+    }
+)
 
 # C113 → Ef,après,corr,rénové*fp
-energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 * facteur_ponderation_moyen
-df_list.append({
-    'Dénomination': 'Ef,après,corr,rénové*fp',
-    'Valeur': energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
-    'Unité': 'kWh/m²',
-    'Commentaire': '',
-    'Excel': 'C113',
-    'Variable/Formule': 'energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 * facteur_ponderation_moyen'
-})
+energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = (
+    energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2
+    * facteur_ponderation_moyen
+)
+df_list.append(
+    {
+        "Dénomination": "Ef,après,corr,rénové*fp",
+        "Valeur": energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
+        "Unité": "kWh/m²",
+        "Commentaire": "",
+        "Excel": "C113",
+        "Variable/Formule": "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 * facteur_ponderation_moyen",
+    }
+)
 
 # C114 → Ef,après,corr,rénové*fp
-energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 * 3.6
-df_list.append({
-    'Dénomination': 'Ef,après,corr,rénové*fp',
-    'Valeur': energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2,
-    'Unité': 'MJ/m²',
-    'Commentaire': '',
-    'Excel': 'C114',
-    'Variable/Formule': 'energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 * 3.6'
-})
+energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = (
+    energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 * 3.6
+)
+df_list.append(
+    {
+        "Dénomination": "Ef,après,corr,rénové*fp",
+        "Valeur": energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2,
+        "Unité": "MJ/m²",
+        "Commentaire": "",
+        "Excel": "C114",
+        "Variable/Formule": "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 * 3.6",
+    }
+)
 
 
 # Autres dataframe
@@ -477,4 +921,7 @@ df_periode = pd.DataFrame(df_periode_list, columns=columns)
 df = pd.DataFrame(df_list, columns=columns)
 
 
-df_meteo_note_calcul = df_meteo_tre200d0[(df_meteo_tre200d0['time'] >= periode_start) & (df_meteo_tre200d0['time'] <= periode_end)][['time', 'tre200d0', 'DJ_theta0_16']]
+df_meteo_note_calcul = df_meteo_tre200d0[
+    (df_meteo_tre200d0["time"] >= periode_start)
+    & (df_meteo_tre200d0["time"] <= periode_end)
+][["time", "tre200d0", "DJ_theta0_16"]]

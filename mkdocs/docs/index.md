@@ -1,7 +1,3 @@
----
-title: Lorem ipsum dolor sit amet
----
-
 # Documentation  de l'outil de calcul AMOén
 
 Cette documentation a pour but de présenter l'[outil de calcul](https://amoen-calcul.streamlit.app/)
@@ -15,4 +11,3 @@ l'utilisation de l'outil.
 - [Surélévations](sections/surelevations.md) décrit les spécificités des surélévations.
 - [FAQ](sections/faq.md) répond aux questions fréquemment posées.
 - [Données](sections/donnees.md) décrit la provenance des données utilisées.
-

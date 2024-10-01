@@ -14,7 +14,7 @@ jobs:
           python-version: 3.x
       - name: Install dependencies
         run: |
-          pip install mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
+          pip install mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox 'mkdocs[i18n]' mkdocs-get-deps mkdocs-material-extensions
           pip list
       - name: Debug Info
         run: |

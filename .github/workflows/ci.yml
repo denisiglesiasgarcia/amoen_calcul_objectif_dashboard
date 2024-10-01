@@ -24,7 +24,7 @@ jobs:
           ls -R
       - name: Build MkDocs
         run: |
-          cd mkdocs
+          cd docs
           mkdocs build --verbose
           echo "Build directory contents:"
           ls -R site

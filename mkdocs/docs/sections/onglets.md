@@ -23,11 +23,11 @@ Celui-ci est composé de plusieurs onglets:
 | Onglet | Objectif |
 | ------ | -------- |
 | [0 Readme](#0-readme) | Rappel des différences entre la méthodologie AMOén et le calcul IDC. Recommendation de 6 mois de donneés minimium pour le calcul de l'atteinte de l'objectif. Lien vers le Github de l'outil. |
-| [1 Données du site](#1-données-du-site) | Données concernant le site ou l'on souhaite calculer l'atteinte de l'objectif. |
+| [1 Données du site](#1-donnees-du-site) | Données concernant le site ou l'on souhaite calculer l'atteinte de l'objectif. |
 | [2 Note de calcul](#2-note-de-calcul) | Détail de tous les calculs réalisés. |
-| [3 Résultats](#3-résultats) | Résultats du calcul de l'atteinte de l'objectif. |
+| [3 Résultats](#3-resultats) | Résultats du calcul de l'atteinte de l'objectif. |
 | [4 Historique](#4-historique) | Historique IDC pour le site sélectionné. Historique des calculs de l'atteinte de l'objectif précédents. |
-| [5 Générer rapport](#5-générer-rapport) | Génération du rapport PDF. |
+| [5 Générer rapport](#5-generer-rapport) | Génération du rapport PDF. |
 | 6 Admin | Vue réservée aux administrateurs de l'outil. |
 
 ---
@@ -43,7 +43,7 @@ l'atteinte de l'objectif
 
 ---
 
-## 1 Données du site
+## 1 Donnees du site
 
 Cet onglet contient les informations nécessaires au calcul de l'atteinte de
 l'objectif. La première partie est préremplie lors de la sélection du projet et
@@ -91,7 +91,7 @@ en dehors de la cellule.
 ### Surélévations
 
 !!! note
-    Voir la section [Surélévations](sections/surelevation.md) pour plus d'informations sur
+    Voir la section [Surélévations](surelevations.md) pour plus d'informations sur
     les spécificités des surélévations.
 
 ---
@@ -121,7 +121,7 @@ météo utilisées pour le calcul des degrés-jours.
 
 ---
 
-## 3 Résultats
+## 3 Resultats
 
 Cet onglet contient les résultats du calcul de l'atteinte de l'objectif.
 
@@ -209,7 +209,7 @@ données utilisées pour le calcul de l'atteinte des objectifs pour chaque péri
 
 ---
 
-## 5 Générer rapport
+## 5 Generer rapport
 
 Cet onglet permet de générer un rapport PDF avec les résultats du calcul de
 l'atteinte de l'objectif. La vidéo ci-dessous détaille le processus.

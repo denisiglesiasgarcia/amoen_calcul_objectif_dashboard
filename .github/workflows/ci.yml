@@ -3,46 +3,21 @@ on:
   push:
     branches:
       - main  # or master, depending on your default branch name
-  pull_request:
-    branches:
-      - main  # or master, depending on your default branch name
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: 3.x
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
-
-      - name: Debug information
-        run: |
-          echo "GitHub workspace: $GITHUB_WORKSPACE"
-          echo "Contents of workspace:"
-          ls -R
-
-      - name: Deploy MkDocs
-        run: |
+      - run: pip install mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
+      - run: |
           cd mkdocs
-          mkdocs gh-deploy --force --verbose
-
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          mkdocs build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./mkdocs/site

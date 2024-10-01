@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main  # or master, depending on your default branch name
+  pull_request:
+    branches:
+      - main  # or master, depending on your default branch name
 
 jobs:
   deploy:
@@ -10,23 +13,36 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # fetch all history for .GitInfo and .Lastmod
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.x
 
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
-          pip install mkdocs-material
-          pip install mkdocs-git-revision-date-localized-plugin
-          pip install mkdocs-glightbox
+          python -m pip install --upgrade pip
+          pip install mkdocs-material mkdocs-git-revision-date-localized-plugin mkdocs-glightbox
+
+      - name: Debug information
+        run: |
+          echo "GitHub workspace: $GITHUB_WORKSPACE"
+          echo "Contents of workspace:"
+          ls -R
 
       - name: Deploy MkDocs
         run: |
           cd mkdocs
-          mkdocs gh-deploy --force
+          mkdocs gh-deploy --force --verbose
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

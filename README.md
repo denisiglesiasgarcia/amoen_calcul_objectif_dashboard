@@ -2,7 +2,7 @@
 
 ## Documentation
 
-La documentation est disponible [ici](docs/documentation.md)
+La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/)
 
 ## TODO
 

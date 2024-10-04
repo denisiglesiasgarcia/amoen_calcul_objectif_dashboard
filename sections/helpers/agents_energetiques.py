@@ -1,133 +1,106 @@
-# sections/helpers/agents_energetiques.py
-
 import streamlit as st
-from typing import List, Dict
-import time
 import numpy as np
-
-# Import necessary functions
+from typing import List, Dict
 from sections.helpers.avusy import avusy_consommation_energie_elec_periode
 
-ENERGY_AGENTS = [
-    {
-        "label": "CAD (kWh)",
-        "unit": "kWh",
-        "variable": "agent_energetique_ef_cad_kwh",
-        "index": 0,
-    },
+# Define energy agent options
+OPTIONS_AGENT_ENERGETIQUE_EF = [
+    {"label": "CAD (kWh)", "unit": "kWh", "variable": "agent_energetique_ef_cad_kwh"},
     {
         "label": "Electricité pour les PAC (kWh)",
         "unit": "kWh",
         "variable": "agent_energetique_ef_electricite_pac_kwh",
-        "index": 1,
     },
     {
         "label": "Electricité directe (kWh)",
         "unit": "kWh",
         "variable": "agent_energetique_ef_electricite_directe_kwh",
-        "index": 2,
     },
     {
         "label": "Gaz naturel (m³)",
         "unit": "m³",
         "variable": "agent_energetique_ef_gaz_naturel_m3",
-        "index": 3,
     },
     {
         "label": "Gaz naturel (kWh)",
         "unit": "kWh",
         "variable": "agent_energetique_ef_gaz_naturel_kwh",
-        "index": 4,
     },
     {
         "label": "Mazout (litres)",
         "unit": "litres",
         "variable": "agent_energetique_ef_mazout_litres",
-        "index": 5,
     },
     {
         "label": "Mazout (kg)",
         "unit": "kg",
         "variable": "agent_energetique_ef_mazout_kg",
-        "index": 6,
     },
     {
         "label": "Mazout (kWh)",
         "unit": "kWh",
         "variable": "agent_energetique_ef_mazout_kwh",
-        "index": 7,
     },
     {
         "label": "Bois buches dur (stère)",
         "unit": "stère",
         "variable": "agent_energetique_ef_bois_buches_dur_stere",
-        "index": 8,
     },
     {
         "label": "Bois buches tendre (stère)",
         "unit": "stère",
         "variable": "agent_energetique_ef_bois_buches_tendre_stere",
-        "index": 9,
     },
     {
         "label": "Bois buches tendre (kWh)",
         "unit": "kWh",
         "variable": "agent_energetique_ef_bois_buches_tendre_kwh",
-        "index": 10,
     },
     {
         "label": "Pellets (m³)",
         "unit": "m³",
         "variable": "agent_energetique_ef_pellets_m3",
-        "index": 11,
     },
     {
         "label": "Pellets (kg)",
         "unit": "kg",
         "variable": "agent_energetique_ef_pellets_kg",
-        "index": 12,
     },
     {
         "label": "Pellets (kWh)",
         "unit": "kWh",
         "variable": "agent_energetique_ef_pellets_kwh",
-        "index": 13,
     },
     {
         "label": "Plaquettes (m³)",
         "unit": "m³",
         "variable": "agent_energetique_ef_plaquettes_m3",
-        "index": 14,
     },
     {
         "label": "Plaquettes (kWh)",
         "unit": "kWh",
         "variable": "agent_energetique_ef_plaquettes_kwh",
-        "index": 15,
     },
     {
         "label": "Autre (kWh)",
         "unit": "kWh",
         "variable": "agent_energetique_ef_autre_kwh",
-        "index": 16,
     },
 ]
 
 
-def get_selected_energy_agents(data_sites_db: Dict) -> List[str]:
-    """Return list of selected energy agents based on database values."""
-    return (
-        [
-            option["label"]
-            for option in ENERGY_AGENTS
-            if data_sites_db.get(option["variable"], 0) > 0
-        ]
-        if data_sites_db
-        else []
-    )
-
-
 def validate_agent_energetique_input(label: str, value: str, unit: str) -> float:
+    """
+    Validate and convert the input value for an energy agent.
+
+    Args:
+    label (str): The label of the energy agent.
+    value (str): The input value to validate.
+    unit (str): The unit of measurement.
+
+    Returns:
+    float: The validated and converted value, or 0 if invalid.
+    """
     if value is None or value == "":
         st.error(f"{label} doit être un chiffre")
         return 0
@@ -149,8 +122,113 @@ def validate_agent_energetique_input(label: str, value: str, unit: str) -> float
         return 0
 
 
+def get_selected_agents(data_sites_db: Dict) -> List[str]:
+    """
+    Get the list of selected energy agents based on the database values.
+
+    Args:
+    data_sites_db (Dict): The database containing energy agent values.
+
+    Returns:
+    List[str]: A list of selected energy agent labels.
+    """
+    return [
+        option["label"]
+        for option in OPTIONS_AGENT_ENERGETIQUE_EF
+        if data_sites_db.get(option["variable"], 0) > 0
+    ]
+
+
+def update_data_site(data_site: Dict, options: List[Dict]) -> Dict:
+    """
+    Update the data_site dictionary with energy agent values.
+
+    Args:
+    data_site (Dict): The dictionary to update.
+    options (List[Dict]): The list of energy agent options.
+
+    Returns:
+    Dict: The updated data_site dictionary.
+    """
+    for option in options:
+        data_site[option["variable"]] = option.get("value", 0)
+    return data_site
+
+
+def calculate_total_energy(data_site: Dict) -> float:
+    """
+    Calculate the total energy from all energy agents.
+
+    Args:
+    data_site (Dict): The dictionary containing energy agent values.
+
+    Returns:
+    float: The total energy sum.
+    """
+    return sum(
+        float(data_site[option["variable"]]) for option in OPTIONS_AGENT_ENERGETIQUE_EF
+    )
+
+
+def display_energy_agents(
+    data_site: Dict, data_sites_db: Dict, mycol_historique_index_avusy
+):
+    """
+    Display energy agents inputs and handle user interactions.
+
+    Args:
+    data_site (Dict): The current site data.
+    data_sites_db (Dict): The database containing energy agent values.
+    mycol_historique_index_avusy: The database collection for Avusy project.
+    """
+    st.markdown(
+        '<span style="font-size:1.2em;">**Agents énergétiques utilisés**</span>',
+        unsafe_allow_html=True,
+    )
+
+    # Handle Avusy project specific logic
+    if data_site["nom_projet"] == "Avusy 10-10A":
+        handle_avusy_project(data_site, mycol_historique_index_avusy)
+
+    # Get selected energy agents
+    selected_agents = get_selected_agents(data_sites_db) if data_sites_db else []
+
+    # Display multiselect for energy agents
+    selected_agents = st.multiselect(
+        "Agent(s) énergétique(s):",
+        [option["label"] for option in OPTIONS_AGENT_ENERGETIQUE_EF],
+        default=selected_agents,
+    )
+
+    # Display input fields for selected agents
+    for option in OPTIONS_AGENT_ENERGETIQUE_EF:
+        if option["label"] in selected_agents:
+            default_value = get_default_value(data_site, option)
+            value = st.text_input(option["label"] + ":", value=default_value)
+            if value != "0":
+                option["value"] = validate_agent_energetique_input(
+                    option["label"], value, option["unit"]
+                )
+
+    # Update data_site with new values
+    data_site = update_data_site(data_site, OPTIONS_AGENT_ENERGETIQUE_EF)
+
+    # Calculate and display total energy
+    total_energy = calculate_total_energy(data_site)
+    if total_energy <= 0:
+        st.warning(
+            f"Veuillez renseigner une quantité d'énergie utilisée sur la période ({total_energy})"
+        )
+
+
 def handle_avusy_project(data_site: Dict, mycol_historique_index_avusy):
-    """Handle special case for Avusy 10-10A project."""
+    """
+    Handle Avusy project specific logic.
+
+    Args:
+    data_site (Dict): The current site data.
+    mycol_historique_index_avusy: The database collection for Avusy project.
+    """
     conso_elec_pac_immeuble, nearest_start_date, nearest_end_date = (
         avusy_consommation_energie_elec_periode(
             data_site["periode_start"],
@@ -170,90 +248,26 @@ def handle_avusy_project(data_site: Dict, mycol_historique_index_avusy):
         st.warning(
             f"Pas de données pour ces dates, dates les plus proches: du {nearest_start_date.date()} au {nearest_end_date.date()}"
         )
-    return conso_elec_pac_immeuble
 
 
-def display_energy_agent_inputs(
-    data_site: Dict,
-    selected_agents: List[str],
-    is_avusy: bool,
-    conso_elec_pac_immeuble: float = None,
-):
-    """Display and process energy agent inputs."""
-    for option in ENERGY_AGENTS:
-        if option["label"] in selected_agents:
-            if is_avusy and option["label"] == "Electricité pour les PAC (kWh)":
-                value = st.text_input(
-                    option["label"] + ":",
-                    value=(
-                        round(conso_elec_pac_immeuble, 1)
-                        if conso_elec_pac_immeuble
-                        else 0.0
-                    ),
-                )
-            else:
-                value = st.text_input(
-                    option["label"] + ":", value=data_site.get(option["variable"], 0.0)
-                )
+def get_default_value(data_site: Dict, option: Dict) -> float:
+    """
+    Get the default value for an energy agent input field.
 
-            if value != "0":
-                validated_value = validate_agent_energetique_input(
-                    option["label"], value, option["unit"]
-                )
-                data_site[option["variable"]] = validated_value
-            else:
-                data_site[option["variable"]] = 0.0
+    Args:
+    data_site (Dict): The current site data.
+    option (Dict): The energy agent option.
+
+    Returns:
+    float: The default value for the input field.
+    """
+    if (
+        data_site["nom_projet"] == "Avusy 10-10A"
+        and option["label"] == "Electricité pour les PAC (kWh)"
+    ):
+        return round(data_site.get("conso_elec_pac_immeuble", 0), 1)
+    return 0.0
 
 
-def calculate_energy_agent_sum(data_site: Dict) -> float:
-    """Calculate sum of all energy agent values."""
-    return sum(float(data_site.get(option["variable"], 0)) for option in ENERGY_AGENTS)
-
-
-def display_energy_agents(
-    data_site: Dict, data_sites_db: Dict, mycol_historique_index_avusy
-):
-    """Main function to display and process energy agents."""
-    st.markdown(
-        '<span style="font-size:1.2em;">**Agents énergétiques utilisés**</span>',
-        unsafe_allow_html=True,
-    )
-
-    is_avusy = data_site["nom_projet"] == "Avusy 10-10A"
-    conso_elec_pac_immeuble = None
-
-    if is_avusy:
-        conso_elec_pac_immeuble = handle_avusy_project(
-            data_site, mycol_historique_index_avusy
-        )
-
-    # Initialize session state for selected agents if it doesn't exist
-    if "selected_energy_agents" not in st.session_state:
-        st.session_state.selected_energy_agents = get_selected_energy_agents(
-            data_sites_db
-        )
-
-    # Use session state for the multiselect
-    selected_agents = st.multiselect(
-        "Agent(s) énergétique(s):",
-        [option["label"] for option in ENERGY_AGENTS],
-        default=st.session_state.selected_energy_agents,
-    )
-
-    # Update session state with the current selection
-    st.session_state.selected_energy_agents = selected_agents
-
-    display_energy_agent_inputs(
-        data_site, selected_agents, is_avusy, conso_elec_pac_immeuble
-    )
-
-    energy_agent_sum = calculate_energy_agent_sum(data_site)
-    if energy_agent_sum <= 0:
-        st.warning(
-            f"Veuillez renseigner une quantité d'énergie utilisée sur la période ({energy_agent_sum})"
-        )
-
-    # Ensure all energy agent variables are set in data_site
-    for option in ENERGY_AGENTS:
-        if option["variable"] not in data_site:
-            data_site[option["variable"]] = 0.0
+# Note: The avusy_consommation_energie_elec_periode function is not provided in the original code.
+# You may need to implement or import this function separately.

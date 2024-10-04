@@ -70,7 +70,7 @@ from sections.helpers.avusy import (
     update_existing_data_avusy,
 )
 
-from sections.helpers.affectation_sre import display_affectations
+from sections.helpers.affectations_sre import display_affectations
 
 os.environ["USE_ARROW_extension"] = "1"
 

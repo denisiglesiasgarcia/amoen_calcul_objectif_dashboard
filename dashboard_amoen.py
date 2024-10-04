@@ -40,7 +40,6 @@ from yaml.loader import SafeLoader
 
 from sections.helpers.validation_saisie import (
     validate_input,
-    validate_agent_energetique_input,
     validate_energie_input,
 )
 from sections.helpers.calcul_dj import get_meteo_data, calcul_dj_periode

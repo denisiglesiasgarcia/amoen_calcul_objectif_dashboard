@@ -227,11 +227,21 @@ def display_energy_agents(
             data_site, mycol_historique_index_avusy
         )
 
+    # Initialize session state for selected agents if it doesn't exist
+    if "selected_energy_agents" not in st.session_state:
+        st.session_state.selected_energy_agents = get_selected_energy_agents(
+            data_sites_db
+        )
+
+    # Use session state for the multiselect
     selected_agents = st.multiselect(
         "Agent(s) énergétique(s):",
         [option["label"] for option in ENERGY_AGENTS],
-        default=get_selected_energy_agents(data_sites_db),
+        default=st.session_state.selected_energy_agents,
     )
+
+    # Update session state with the current selection
+    st.session_state.selected_energy_agents = selected_agents
 
     display_energy_agent_inputs(
         data_site, selected_agents, is_avusy, conso_elec_pac_immeuble

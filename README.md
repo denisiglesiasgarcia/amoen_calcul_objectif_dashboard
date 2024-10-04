@@ -8,7 +8,9 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 
 - Prioritaire
   - [ ] Corriger bug sur les agents énergétiques
-  - [ ] Ajouter barre de 85% dans le graphique du rapport PDF
+  - Rapport
+    - [ ] Ajouter barre de 85% dans le graphique du rapport PDF
+    - [ ] Trouver solution pour les noms de rue longs
 
 - Non prioritaire
   - [ ] Améliorer la documentation

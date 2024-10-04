@@ -1,5 +1,3 @@
-# sections/helpers/affectation_helper.py
-
 import streamlit as st
 from typing import List, Dict
 

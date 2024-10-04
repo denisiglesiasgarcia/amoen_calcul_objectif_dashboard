@@ -140,19 +140,27 @@ def get_selected_agents(data_sites_db: Dict) -> List[str]:
     ]
 
 
-def update_data_site(data_site: Dict, options: List[Dict]) -> Dict:
+def update_data_site(
+    data_site: Dict, selected_agents: List[str], options: List[Dict]
+) -> Dict:
     """
-    Update the data_site dictionary with energy agent values.
+    Update the data_site dictionary with energy agent values, setting unselected agents to 0.
 
     Args:
     data_site (Dict): The dictionary to update.
+    selected_agents (List[str]): The list of currently selected energy agents.
     options (List[Dict]): The list of energy agent options.
 
     Returns:
     Dict: The updated data_site dictionary.
     """
     for option in options:
-        data_site[option["variable"]] = option.get("value", 0)
+        # Set unselected agents to 0
+        if option["label"] not in selected_agents:
+            data_site[option["variable"]] = 0
+        # Update the values for selected agents
+        else:
+            data_site[option["variable"]] = option.get("value", 0)
     return data_site
 
 

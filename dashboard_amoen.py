@@ -42,6 +42,7 @@ from sections.helpers.validation_saisie import (
     validate_input,
     validate_energie_input,
 )
+
 from sections.helpers.calcul_dj import get_meteo_data, calcul_dj_periode
 from sections.helpers.graphique_bars_exploitation import (
     graphique_bars_objectif_exploitation,
@@ -71,7 +72,8 @@ from sections.helpers.avusy import (
 from sections.helpers.affectations_sre import display_affectations
 
 from sections.helpers.agents_energetiques import (
-    display_energy_agents
+    validate_agent_energetique_input,
+    display_energy_agents,
 )
 
 os.environ["USE_ARROW_extension"] = "1"

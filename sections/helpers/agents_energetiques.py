@@ -112,7 +112,7 @@ def validate_agent_energetique_input(label: str, value: str, unit: str) -> float
             value = float(str(value).replace(",", ".", 1))
 
         if value > 0:
-            st.info(f"{label}: {value} {unit}")
+            st.text(f"{label}: {value} {unit}")
             return value
         else:
             st.error(f"{label} doit être un chiffre positif")

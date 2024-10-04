@@ -82,7 +82,7 @@ def validate_input_affectation(name, variable, unite, sre_renovation_m2):
     try:
         variable = float(variable.replace(",", ".", 1))
         if 0 <= variable <= 100:
-            st.text(
+            st.info(
                 f"{name} {variable} {unite} → {round(variable * float(sre_renovation_m2) / 100, 2)} m²"
             )
         else:

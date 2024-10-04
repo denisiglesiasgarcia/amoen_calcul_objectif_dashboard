@@ -70,6 +70,8 @@ from sections.helpers.avusy import (
     update_existing_data_avusy,
 )
 
+from sections.helpers.affectation_helper import display_affectations
+
 os.environ["USE_ARROW_extension"] = "1"
 
 ## Météo
@@ -569,228 +571,229 @@ if st.session_state["authentication_status"]:
 
             tab2_col1, tab2_col2 = st.columns(2)
             with tab2_col1:
-                # SRE pourcentage
-                st.markdown(
-                    '<span style="font-size:1.2em;">**Affectations**</span>',
-                    unsafe_allow_html=True,
-                )
+                display_affectations(data_sites_db, sre_renovation_m2)
+                # # SRE pourcentage
+                # st.markdown(
+                #     '<span style="font-size:1.2em;">**Affectations**</span>',
+                #     unsafe_allow_html=True,
+                # )
 
-                options_sre_pourcentage = [
-                    {
-                        "label": "Habitat collectif (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_habitat_collectif",
-                        "value": 0.0,
-                    },
-                    {
-                        "label": "Habitat individuel (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_habitat_individuel",
-                        "value": 0.0,
-                    },
-                    {
-                        "label": "Administration (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_administration",
-                        "value": 0.0,
-                    },
-                    {
-                        "label": "Écoles (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_ecoles",
-                        "value": 0.0,
-                    },
-                    {
-                        "label": "Commerce (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_commerce",
-                        "value": 0.0,
-                    },
-                    {
-                        "label": "Restauration (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_restauration",
-                        "value": 0.0,
-                    },
-                    {
-                        "label": "Lieux de rassemblement (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_lieux_de_rassemblement",
-                        "value": 0.0,
-                    },
-                    {
-                        "label": "Hôpitaux (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_hopitaux",
-                        "value": 0.0,
-                    },
-                    {
-                        "label": "Industrie (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_industrie",
-                        "value": 0.0,
-                    },
-                    {
-                        "label": "Dépôts (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_depots",
-                        "value": 0.0,
-                    },
-                    {
-                        "label": "Installations sportives (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_installations_sportives",
-                        "value": 0.0,
-                    },
-                    {
-                        "label": "Piscines couvertes (%)",
-                        "unit": "%",
-                        "variable": "sre_pourcentage_piscines_couvertes",
-                        "value": 0.0,
-                    },
-                ]
+                # options_sre_pourcentage = [
+                #     {
+                #         "label": "Habitat collectif (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_habitat_collectif",
+                #         "value": 0.0,
+                #     },
+                #     {
+                #         "label": "Habitat individuel (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_habitat_individuel",
+                #         "value": 0.0,
+                #     },
+                #     {
+                #         "label": "Administration (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_administration",
+                #         "value": 0.0,
+                #     },
+                #     {
+                #         "label": "Écoles (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_ecoles",
+                #         "value": 0.0,
+                #     },
+                #     {
+                #         "label": "Commerce (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_commerce",
+                #         "value": 0.0,
+                #     },
+                #     {
+                #         "label": "Restauration (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_restauration",
+                #         "value": 0.0,
+                #     },
+                #     {
+                #         "label": "Lieux de rassemblement (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_lieux_de_rassemblement",
+                #         "value": 0.0,
+                #     },
+                #     {
+                #         "label": "Hôpitaux (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_hopitaux",
+                #         "value": 0.0,
+                #     },
+                #     {
+                #         "label": "Industrie (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_industrie",
+                #         "value": 0.0,
+                #     },
+                #     {
+                #         "label": "Dépôts (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_depots",
+                #         "value": 0.0,
+                #     },
+                #     {
+                #         "label": "Installations sportives (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_installations_sportives",
+                #         "value": 0.0,
+                #     },
+                #     {
+                #         "label": "Piscines couvertes (%)",
+                #         "unit": "%",
+                #         "variable": "sre_pourcentage_piscines_couvertes",
+                #         "value": 0.0,
+                #     },
+                # ]
 
-                # Pre-select options based on database values
-                if data_sites_db:
-                    selected_sre_pourcentage = [
-                        option["label"]
-                        for option in options_sre_pourcentage
-                        if data_sites_db.get(option["variable"], 0) > 0
-                    ]
-                else:
-                    selected_sre_pourcentage = []
+                # # Pre-select options based on database values
+                # if data_sites_db:
+                #     selected_sre_pourcentage = [
+                #         option["label"]
+                #         for option in options_sre_pourcentage
+                #         if data_sites_db.get(option["variable"], 0) > 0
+                #     ]
+                # else:
+                #     selected_sre_pourcentage = []
 
-                selected_sre_pourcentage = st.multiselect(
-                    "Affectation(s):",
-                    [option["label"] for option in options_sre_pourcentage],
-                    default=selected_sre_pourcentage,
-                )
+                # selected_sre_pourcentage = st.multiselect(
+                #     "Affectation(s):",
+                #     [option["label"] for option in options_sre_pourcentage],
+                #     default=selected_sre_pourcentage,
+                # )
 
-                sre_pourcentage = {}
+                # sre_pourcentage = {}
 
-                if data_sites_db:
-                    for option in options_sre_pourcentage:
-                        if option["label"] in selected_sre_pourcentage:
-                            value = st.text_input(
-                                option["label"] + ":",
-                                value=data_sites_db[option["variable"]],
-                            )
-                            if value != "0":
-                                validate_input_affectation(
-                                    option["label"] + ":",
-                                    value,
-                                    option["unit"],
-                                    sre_renovation_m2,
-                                )
-                                option["value"] = float(value)
-                else:
-                    for option in options_sre_pourcentage:
-                        if option["label"] in selected_sre_pourcentage:
-                            value = st.text_input(option["label"] + ":", value=0.0)
-                            if value != "0":
-                                validate_input_affectation(
-                                    option["label"] + ":",
-                                    value,
-                                    option["unit"],
-                                    sre_renovation_m2,
-                                )
-                                option["value"] = float(value)
+                # if data_sites_db:
+                #     for option in options_sre_pourcentage:
+                #         if option["label"] in selected_sre_pourcentage:
+                #             value = st.text_input(
+                #                 option["label"] + ":",
+                #                 value=data_sites_db[option["variable"]],
+                #             )
+                #             if value != "0":
+                #                 validate_input_affectation(
+                #                     option["label"] + ":",
+                #                     value,
+                #                     option["unit"],
+                #                     sre_renovation_m2,
+                #                 )
+                #                 option["value"] = float(value)
+                # else:
+                #     for option in options_sre_pourcentage:
+                #         if option["label"] in selected_sre_pourcentage:
+                #             value = st.text_input(option["label"] + ":", value=0.0)
+                #             if value != "0":
+                #                 validate_input_affectation(
+                #                     option["label"] + ":",
+                #                     value,
+                #                     option["unit"],
+                #                     sre_renovation_m2,
+                #                 )
+                #                 option["value"] = float(value)
 
-                st.session_state["data_site"]["sre_pourcentage_habitat_collectif"] = (
-                    options_sre_pourcentage[0]["value"]
-                )
-                st.session_state["data_site"]["sre_pourcentage_habitat_individuel"] = (
-                    options_sre_pourcentage[1]["value"]
-                )
-                st.session_state["data_site"]["sre_pourcentage_administration"] = (
-                    options_sre_pourcentage[2]["value"]
-                )
-                st.session_state["data_site"]["sre_pourcentage_ecoles"] = (
-                    options_sre_pourcentage[3]["value"]
-                )
-                st.session_state["data_site"]["sre_pourcentage_commerce"] = (
-                    options_sre_pourcentage[4]["value"]
-                )
-                st.session_state["data_site"]["sre_pourcentage_restauration"] = (
-                    options_sre_pourcentage[5]["value"]
-                )
-                st.session_state["data_site"][
-                    "sre_pourcentage_lieux_de_rassemblement"
-                ] = options_sre_pourcentage[6]["value"]
-                st.session_state["data_site"]["sre_pourcentage_hopitaux"] = (
-                    options_sre_pourcentage[7]["value"]
-                )
-                st.session_state["data_site"]["sre_pourcentage_industrie"] = (
-                    options_sre_pourcentage[8]["value"]
-                )
-                st.session_state["data_site"]["sre_pourcentage_depots"] = (
-                    options_sre_pourcentage[9]["value"]
-                )
-                st.session_state["data_site"][
-                    "sre_pourcentage_installations_sportives"
-                ] = options_sre_pourcentage[10]["value"]
-                st.session_state["data_site"]["sre_pourcentage_piscines_couvertes"] = (
-                    options_sre_pourcentage[11]["value"]
-                )
+                # st.session_state["data_site"]["sre_pourcentage_habitat_collectif"] = (
+                #     options_sre_pourcentage[0]["value"]
+                # )
+                # st.session_state["data_site"]["sre_pourcentage_habitat_individuel"] = (
+                #     options_sre_pourcentage[1]["value"]
+                # )
+                # st.session_state["data_site"]["sre_pourcentage_administration"] = (
+                #     options_sre_pourcentage[2]["value"]
+                # )
+                # st.session_state["data_site"]["sre_pourcentage_ecoles"] = (
+                #     options_sre_pourcentage[3]["value"]
+                # )
+                # st.session_state["data_site"]["sre_pourcentage_commerce"] = (
+                #     options_sre_pourcentage[4]["value"]
+                # )
+                # st.session_state["data_site"]["sre_pourcentage_restauration"] = (
+                #     options_sre_pourcentage[5]["value"]
+                # )
+                # st.session_state["data_site"][
+                #     "sre_pourcentage_lieux_de_rassemblement"
+                # ] = options_sre_pourcentage[6]["value"]
+                # st.session_state["data_site"]["sre_pourcentage_hopitaux"] = (
+                #     options_sre_pourcentage[7]["value"]
+                # )
+                # st.session_state["data_site"]["sre_pourcentage_industrie"] = (
+                #     options_sre_pourcentage[8]["value"]
+                # )
+                # st.session_state["data_site"]["sre_pourcentage_depots"] = (
+                #     options_sre_pourcentage[9]["value"]
+                # )
+                # st.session_state["data_site"][
+                #     "sre_pourcentage_installations_sportives"
+                # ] = options_sre_pourcentage[10]["value"]
+                # st.session_state["data_site"]["sre_pourcentage_piscines_couvertes"] = (
+                #     options_sre_pourcentage[11]["value"]
+                # )
 
-                # Somme des pourcentages
-                try:
-                    sre_pourcentage_affectations_somme_avertisement = (
-                        float(
-                            st.session_state["data_site"][
-                                "sre_pourcentage_habitat_collectif"
-                            ]
-                        )
-                        + float(
-                            st.session_state["data_site"][
-                                "sre_pourcentage_habitat_individuel"
-                            ]
-                        )
-                        + float(
-                            st.session_state["data_site"][
-                                "sre_pourcentage_administration"
-                            ]
-                        )
-                        + float(st.session_state["data_site"]["sre_pourcentage_ecoles"])
-                        + float(
-                            st.session_state["data_site"]["sre_pourcentage_commerce"]
-                        )
-                        + float(
-                            st.session_state["data_site"][
-                                "sre_pourcentage_restauration"
-                            ]
-                        )
-                        + float(
-                            st.session_state["data_site"][
-                                "sre_pourcentage_lieux_de_rassemblement"
-                            ]
-                        )
-                        + float(
-                            st.session_state["data_site"]["sre_pourcentage_hopitaux"]
-                        )
-                        + float(
-                            st.session_state["data_site"]["sre_pourcentage_industrie"]
-                        )
-                        + float(st.session_state["data_site"]["sre_pourcentage_depots"])
-                        + float(
-                            st.session_state["data_site"][
-                                "sre_pourcentage_installations_sportives"
-                            ]
-                        )
-                        + float(
-                            st.session_state["data_site"][
-                                "sre_pourcentage_piscines_couvertes"
-                            ]
-                        )
-                    )
-                    if sre_pourcentage_affectations_somme_avertisement != 100:
-                        st.warning(
-                            f"Somme des pourcentages doit être égale à 100% ({sre_pourcentage_affectations_somme_avertisement})"
-                        )
-                except ValueError:
-                    st.warning(
-                        "Problème dans la somme des pourcentages des affectations"
-                    )
+                # # Somme des pourcentages
+                # try:
+                #     sre_pourcentage_affectations_somme_avertisement = (
+                #         float(
+                #             st.session_state["data_site"][
+                #                 "sre_pourcentage_habitat_collectif"
+                #             ]
+                #         )
+                #         + float(
+                #             st.session_state["data_site"][
+                #                 "sre_pourcentage_habitat_individuel"
+                #             ]
+                #         )
+                #         + float(
+                #             st.session_state["data_site"][
+                #                 "sre_pourcentage_administration"
+                #             ]
+                #         )
+                #         + float(st.session_state["data_site"]["sre_pourcentage_ecoles"])
+                #         + float(
+                #             st.session_state["data_site"]["sre_pourcentage_commerce"]
+                #         )
+                #         + float(
+                #             st.session_state["data_site"][
+                #                 "sre_pourcentage_restauration"
+                #             ]
+                #         )
+                #         + float(
+                #             st.session_state["data_site"][
+                #                 "sre_pourcentage_lieux_de_rassemblement"
+                #             ]
+                #         )
+                #         + float(
+                #             st.session_state["data_site"]["sre_pourcentage_hopitaux"]
+                #         )
+                #         + float(
+                #             st.session_state["data_site"]["sre_pourcentage_industrie"]
+                #         )
+                #         + float(st.session_state["data_site"]["sre_pourcentage_depots"])
+                #         + float(
+                #             st.session_state["data_site"][
+                #                 "sre_pourcentage_installations_sportives"
+                #             ]
+                #         )
+                #         + float(
+                #             st.session_state["data_site"][
+                #                 "sre_pourcentage_piscines_couvertes"
+                #             ]
+                #         )
+                #     )
+                #     if sre_pourcentage_affectations_somme_avertisement != 100:
+                #         st.warning(
+                #             f"Somme des pourcentages doit être égale à 100% ({sre_pourcentage_affectations_somme_avertisement})"
+                #         )
+                # except ValueError:
+                #     st.warning(
+                #         "Problème dans la somme des pourcentages des affectations"
+                #     )
 
             with tab2_col2:
                 # Agents énergétiques

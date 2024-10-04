@@ -6,7 +6,6 @@ import streamlit as st
 DJ_REF_ANNUELS = 3260.539010836340
 DJ_TEMPERATURE_REFERENCE = 20
 
-
 @st.cache_data
 def get_meteo_data():
     """

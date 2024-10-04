@@ -9,31 +9,6 @@ def validate_input(name, variable, unit):
         st.warning(f"{name} doit être un chiffre")
 
 
-
-
-
-def validate_agent_energetique_input(name, value, unit):
-    if value is None or value == "":
-        st.text(f"{name} doit être un chiffre")
-        return 0
-
-    try:
-        if isinstance(value, (int, float, np.float64)):
-            value = float(value)
-        else:
-            value = float(str(value).replace(",", ".", 1))
-
-        if value > 0:
-            st.text(f"{name} {value} {unit}")
-            return value
-        else:
-            st.text(f"{name} doit être un chiffre positif")
-            return 0
-    except ValueError:
-        st.text(f"{name} doit être un chiffre")
-        return 0
-
-
 def validate_energie_input(name, variable, unit1, unit2):
     try:
         variable = float(variable.replace(",", ".", 1))

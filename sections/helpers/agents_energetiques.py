@@ -129,7 +129,7 @@ def get_selected_energy_agents(data_sites_db: Dict) -> List[str]:
 
 def validate_agent_energetique_input(label: str, value: str, unit: str) -> float:
     if value is None or value == "":
-        st.error(f"{label} doit être un chiffre")
+        st.text(f"{name} doit être un chiffre")
         return 0
 
     try:
@@ -139,13 +139,13 @@ def validate_agent_energetique_input(label: str, value: str, unit: str) -> float
             value = float(str(value).replace(",", ".", 1))
 
         if value > 0:
-            st.info(f"{label}: {value} {unit}")
+            st.text(f"{name} {value} {unit}")
             return value
         else:
-            st.error(f"{label} doit être un chiffre positif")
+            st.text(f"{name} doit être un chiffre positif")
             return 0
     except ValueError:
-        st.error(f"{label} doit être un chiffre")
+        st.text(f"{name} doit être un chiffre")
         return 0
 
 

@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 from typing import List, Dict
 from sections.helpers.avusy import avusy_consommation_energie_elec_periode
+import time
 
 # Define energy agent options
 OPTIONS_AGENT_ENERGETIQUE_EF = [
@@ -267,7 +268,3 @@ def get_default_value(data_site: Dict, option: Dict) -> float:
     ):
         return round(data_site.get("conso_elec_pac_immeuble", 0), 1)
     return 0.0
-
-
-# Note: The avusy_consommation_energie_elec_periode function is not provided in the original code.
-# You may need to implement or import this function separately.

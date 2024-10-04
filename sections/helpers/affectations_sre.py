@@ -138,6 +138,7 @@ def calculate_affectation_sum() -> float:
         for option in AFFECTATION_OPTIONS
     )
 
+
 def default_affectations(data_sites_db: Dict):
     """Set default affectation values."""
     for option in AFFECTATION_OPTIONS:
@@ -168,5 +169,3 @@ def display_affectations(data_sites_db: Dict, sre_renovation_m2: float):
     affectation_sum = calculate_affectation_sum()
     if affectation_sum != 100:
         st.warning(f"Somme des pourcentages doit être égale à 100% ({affectation_sum})")
-
-

@@ -80,6 +80,20 @@ AFFECTATION_OPTIONS = [
 ]
 
 
+def validate_input_affectation(name, variable, unite, sre_renovation_m2):
+    try:
+        variable = float(variable.replace(",", ".", 1))
+        if 0 <= variable <= 100:
+            st.text(
+                f"{name} {variable} {unite} → {round(variable * float(sre_renovation_m2) / 100, 2)} m²"
+            )
+        else:
+            st.warning(f"Valeur doit être comprise entre 0 et 100")
+    except ValueError:
+        st.warning(f"{name} doit être un chiffre")
+        variable = 0
+
+
 def get_selected_affectations(data_sites_db: Dict) -> List[str]:
     """Return list of selected affectations based on database values."""
     return (
@@ -144,4 +158,3 @@ def display_affectations(data_sites_db: Dict, sre_renovation_m2: float):
     affectation_sum = calculate_affectation_sum()
     if affectation_sum != 100:
         st.warning(f"Somme des pourcentages doit être égale à 100% ({affectation_sum})")
-

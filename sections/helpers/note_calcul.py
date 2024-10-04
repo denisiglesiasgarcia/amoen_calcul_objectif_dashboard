@@ -1,4 +1,5 @@
 import pandas as pd
+from calcul_dj import calcul_dj_periode
 
 # Agent énergétique facteur de pondération
 FACTEUR_PONDERATION_MAZOUT = 1

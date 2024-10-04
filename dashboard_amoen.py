@@ -40,7 +40,6 @@ from yaml.loader import SafeLoader
 
 from sections.helpers.validation_saisie import (
     validate_input,
-    validate_input_affectation,
     validate_agent_energetique_input,
     validate_energie_input,
 )

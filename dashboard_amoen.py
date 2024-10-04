@@ -71,6 +71,10 @@ from sections.helpers.avusy import (
 
 from sections.helpers.affectations_sre import display_affectations
 
+from sections.helpers.agents_energetiques import (
+    display_energy_agents
+)
+
 os.environ["USE_ARROW_extension"] = "1"
 
 ## Météo

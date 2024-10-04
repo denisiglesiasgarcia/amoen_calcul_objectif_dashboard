@@ -7,10 +7,12 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 ## TODO
 
 - Prioritaire
-  - [ ] Améliorer la documentation
-  - [ ] Nettoyer code
+  - [ ] Corriger bug sur les agents énergétiques
+  - [ ] Ajouter barre de 85% dans le graphique du rapport PDF
 
 - Non prioritaire
+  - [ ] Améliorer la documentation
+  - [ ] Nettoyer code
   - [ ] Ajouter option de renseigner ECS séparée du chauffage
 
 - En attente

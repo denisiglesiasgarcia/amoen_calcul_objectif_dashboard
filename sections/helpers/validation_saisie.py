@@ -9,18 +9,7 @@ def validate_input(name, variable, unit):
         st.warning(f"{name} doit être un chiffre")
 
 
-def validate_input_affectation(name, variable, unite, sre_renovation_m2):
-    try:
-        variable = float(variable.replace(",", ".", 1))
-        if 0 <= variable <= 100:
-            st.text(
-                f"{name} {variable} {unite} → {round(variable * float(sre_renovation_m2) / 100, 2)} m²"
-            )
-        else:
-            st.warning(f"Valeur doit être comprise entre 0 et 100")
-    except ValueError:
-        st.warning(f"{name} doit être un chiffre")
-        variable = 0
+
 
 
 def validate_agent_energetique_input(name, value, unit):

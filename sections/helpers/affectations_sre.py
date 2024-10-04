@@ -138,6 +138,18 @@ def calculate_affectation_sum() -> float:
         for option in AFFECTATION_OPTIONS
     )
 
+def default_affectations(data_sites_db: Dict):
+    """Set default affectation values."""
+    for option in AFFECTATION_OPTIONS:
+        if option["label"] not in get_selected_affectations(data_sites_db):
+            option["value"] = 0.0
+            st.session_state["data_site"][option["variable"]] = 0.0
+        else:
+            option["value"] = data_sites_db.get(option["variable"], 0.0)
+            st.session_state["data_site"][option["variable"]] = data_sites_db.get(
+                option["variable"], 0.0
+            )
+
 
 def display_affectations(data_sites_db: Dict, sre_renovation_m2: float):
     """Main function to display and process affectations."""
@@ -152,7 +164,9 @@ def display_affectations(data_sites_db: Dict, sre_renovation_m2: float):
     )
 
     display_affectation_inputs(data_sites_db, selected_affectations, sre_renovation_m2)
-
+    default_affectations(data_sites_db)
     affectation_sum = calculate_affectation_sum()
     if affectation_sum != 100:
         st.warning(f"Somme des pourcentages doit être égale à 100% ({affectation_sum})")
+
+

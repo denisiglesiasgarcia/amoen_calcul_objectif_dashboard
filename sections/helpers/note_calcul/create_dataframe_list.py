@@ -6,6 +6,15 @@ import pandas as pd
 def make_dataframe_df_list(data_site, DJ_REF_ANNUELS):
     df_list = []
 
+    columns = [
+        "Dénomination",
+        "Valeur",
+        "Unité",
+        "Commentaire",
+        "Excel",
+        "Variable/Formule",
+    ]
+
     # C67 → Nombre de jours
     df_list.append(
         {

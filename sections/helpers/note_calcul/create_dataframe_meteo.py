@@ -2,6 +2,7 @@
 
 import pandas as pd
 
+
 def make_dataframe_df_meteo_note_calcul(periode_start, periode_end, df_meteo_tre200d0):
     df_meteo_note_calcul = df_meteo_tre200d0[
         (df_meteo_tre200d0["time"] >= periode_start)

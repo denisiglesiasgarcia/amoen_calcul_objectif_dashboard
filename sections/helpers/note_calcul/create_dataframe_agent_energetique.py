@@ -1,5 +1,6 @@
 # sections/helpers/note_calcul/create_dataframe_agent_energetique.py
 
+import pandas as pd
 
 def make_dataframe_df_agent_energetique(
     data_site,

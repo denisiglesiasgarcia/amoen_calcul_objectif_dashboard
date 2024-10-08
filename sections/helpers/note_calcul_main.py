@@ -365,7 +365,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
         ],
     )
     # générer dataframe df_list
-    df_list = make_dataframe_df_list(data_site)
+    df_list = make_dataframe_df_list(data_site, DJ_REF_ANNUELS)
 
     # df_agent_energetique
     df_agent_energetique = make_dataframe_df_agent_energetique(

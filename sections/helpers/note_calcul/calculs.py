@@ -311,9 +311,19 @@ def fonction_methodo_e_h_kwh(
 def fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2(
     methodo_e_ww_kwh, methodo_e_h_kwh
 ):
-    energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
-        methodo_e_ww_kwh + methodo_e_h_kwh
-    )
+    try:
+        if methodo_e_ww_kwh > 0 and methodo_e_h_kwh > 0:
+            energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
+                methodo_e_ww_kwh + methodo_e_h_kwh
+            )
+        else:
+            energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
+                0.0
+            )
+    except:
+        energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
+            0.0
+        )
     return (
         energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2
     )

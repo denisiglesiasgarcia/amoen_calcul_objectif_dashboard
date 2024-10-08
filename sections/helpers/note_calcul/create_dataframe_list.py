@@ -1,5 +1,7 @@
 # sections/helpers/note_calcul/create_dataframe_list.py
 
+import pandas as pd
+
 
 def make_dataframe_df_list(data_site):
     df_list = []

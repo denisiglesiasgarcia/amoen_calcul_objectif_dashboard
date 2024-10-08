@@ -1,5 +1,6 @@
 # sections/helpers/note_calcul/create_dataframes.py
 
+import pandas as pd
 
 def make_dataframe_df_periode_list(periode_start, periode_end):
     df_periode_list = []

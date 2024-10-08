@@ -93,7 +93,7 @@ def fonction_part_chauffage_periode_comptage(
             part_chauffage_periode_comptage = 0.0
     except ZeroDivisionError:
         part_chauffage_periode_comptage = 0.0
-    return data_site
+    return part_chauffage_periode_comptage
 
 
 # C97 → correction ECS = 365/nb jour comptage

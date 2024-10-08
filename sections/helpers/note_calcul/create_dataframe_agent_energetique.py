@@ -2,6 +2,7 @@
 
 import pandas as pd
 
+
 def make_dataframe_df_agent_energetique(
     data_site,
     FACTEUR_PONDERATION_MAZOUT,

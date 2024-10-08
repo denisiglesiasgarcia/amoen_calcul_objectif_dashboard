@@ -6,6 +6,7 @@ import streamlit as st
 DJ_REF_ANNUELS = 3260.539010836340
 DJ_TEMPERATURE_REFERENCE = 20
 
+
 @st.cache_data
 def get_meteo_data():
     """
@@ -92,4 +93,5 @@ def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):
         (df_meteo_tre200d0["time"] >= periode_start)
         & (df_meteo_tre200d0["time"] <= periode_end)
     ]["DJ_theta0_16"].sum()
+    dj_periode = float(dj_periode)
     return dj_periode

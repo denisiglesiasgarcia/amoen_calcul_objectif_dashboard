@@ -220,8 +220,9 @@ def display_energy_agents(
                 )
 
     # Update data_site with new values, setting unselected agents to 0
-    data_site = update_data_site(data_site, selected_agents, OPTIONS_AGENT_ENERGETIQUE_EF)
-
+    data_site = update_data_site(
+        data_site, selected_agents, OPTIONS_AGENT_ENERGETIQUE_EF
+    )
 
     # Calculate and display total energy
     total_energy = calculate_total_energy(data_site)

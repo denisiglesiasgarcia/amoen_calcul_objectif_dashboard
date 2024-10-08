@@ -84,6 +84,10 @@ from sections.helpers.note_calcul.constantes import (
     FACTEUR_PONDERATION_AUTRE,
 )
 
+from sections.helpers.note_calcul.latex import (
+    make_latex_formula_facteur_ponderation_moyen_texte,
+    make_latex_formula_facteur_ponderation_moyen,
+)
 
 def fonction_note_calcul(data_site, df_meteo_tre200d0):
     """
@@ -391,7 +395,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
 
     # latex text
     formula_facteur_ponderation_moyen_texte = (
-        make_latex_formula_facteur_ponderation_moyen_texte()
+        make_latex_formula_facteur_ponderation_moyen_texte(),
     )
 
     # latex formula

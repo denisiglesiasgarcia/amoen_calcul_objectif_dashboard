@@ -1,6 +1,6 @@
 # sections/note_calcul.py
 
-from helpers.note_calcul.create_dataframe_periode_list import (
+from sections.helpers.note_calcul.create_dataframe_periode_list import (
     make_dataframe_df_periode_list,
 )
 

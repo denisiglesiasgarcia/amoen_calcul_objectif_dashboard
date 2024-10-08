@@ -279,7 +279,13 @@ def fonction_methodo_e_ww_kwh(methodo_b_ww_kwh, sre_renovation_m2, periode_nb_jo
 def fonction_methodo_b_h_kwh(
     agent_energetique_ef_somme_kwh, part_chauffage_periode_comptage
 ):
-    methodo_b_h_kwh = agent_energetique_ef_somme_kwh * part_chauffage_periode_comptage
+    try:
+        if agent_energetique_ef_somme_kwh and part_chauffage_periode_comptage:
+            methodo_b_h_kwh = agent_energetique_ef_somme_kwh * part_chauffage_periode_comptage
+        else:
+            methodo_b_h_kwh = 0.0
+    except:
+        methodo_b_h_kwh = 0.0
     return methodo_b_h_kwh
 
 
@@ -302,7 +308,7 @@ def fonction_methodo_e_h_kwh(
 # C105 → Ef,après,corr → Methodo_Eww + Methodo_Eh
 def fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2(
     methodo_e_ww_kwh, methodo_e_h_kwh
-):
+):  
     energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
         methodo_e_ww_kwh + methodo_e_h_kwh
     )

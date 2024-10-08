@@ -76,7 +76,7 @@ from sections.helpers.agents_energetiques import (
     display_energy_agents,
 )
 
-from sections.helpers.note_calcul.note_calcul import fonction_note_calcul
+from sections.helpers.note_calcul import fonction_note_calcul
 
 os.environ["USE_ARROW_extension"] = "1"
 

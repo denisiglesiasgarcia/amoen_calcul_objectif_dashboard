@@ -300,7 +300,7 @@ def fonction_methodo_e_h_kwh(
             )
         else:
             methodo_e_h_kwh = 0.0
-    except ZeroDivisionError:
+    except:
         methodo_e_h_kwh = 0.0
     return methodo_e_h_kwh
 

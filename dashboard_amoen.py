@@ -43,7 +43,12 @@ from sections.helpers.validation_saisie import (
     validate_energie_input,
 )
 
-from sections.helpers.calcul_dj import get_meteo_data, calcul_dj_periode
+from sections.helpers.calcul_dj import (
+    get_meteo_data,
+    calcul_dj_periode,
+    DJ_TEMPERATURE_REFERENCE,
+)
+
 from sections.helpers.graphique_bars_exploitation import (
     graphique_bars_objectif_exploitation,
 )

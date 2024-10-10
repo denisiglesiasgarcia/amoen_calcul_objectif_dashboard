@@ -60,7 +60,7 @@ from sections.helpers.note_calcul.calculs import (
     fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2,
     fonction_delta_ef_realisee_kwh_m2,
     fonction_delta_ef_visee_kwh_m2,
-    fonction_atteinte_objectifs,
+    fonction_atteinte_objectif,
 )
 
 from sections.helpers.note_calcul.constantes import (
@@ -165,7 +165,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     - data_site["energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2"]
     - data_site["delta_ef_realisee_kwh_m2"]
     - data_site["delta_ef_visee_kwh_m2"]
-    - data_site["atteinte_objectifs"]
+    - data_site["atteinte_objectif"]
 
     éléments créés:
     - df_periode_list (dataframe des periodes considérées)
@@ -411,7 +411,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
         data_site["ef_avant_corr_kwh_m2"],
         data_site["ef_objectif_pondere_kwh_m2"],
     )
-    data_site["atteinte_objectifs"] = fonction_atteinte_objectifs(
+    data_site["atteinte_objectif"] = fonction_atteinte_objectif(
         data_site["delta_ef_realisee_kwh_m2"],
         data_site[
             "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"

@@ -647,7 +647,9 @@ if st.session_state["authentication_status"]:
         if df_results:
             st.table(df_results)
         else:
-            st.warning("Veuillez compléter les informations dans '1 Données site' pour voir les résultats")
+            st.warning(
+                "Veuillez compléter les informations dans '1 Données site' pour voir les résultats"
+            )
 
         # résultats en latex
 

@@ -1,5 +1,6 @@
 # sections/helpers/note_calcul/latex.py
 
+
 def make_latex_formula_facteur_ponderation_moyen(
     agent_energetique_ef_mazout_somme_mj,
     agent_energetique_ef_gaz_naturel_somme_mj,

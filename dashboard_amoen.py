@@ -621,6 +621,12 @@ if st.session_state["authentication_status"]:
         st.write("Données météo station Genève-Cointrin pour la période sélectionnée")
         st.dataframe(df_meteo_note_calcul)
 
+        # display a hidden dataframe with all the data
+        st.write("Données complètes")
+        show_debug_data = st.checkbox("Afficher les données complètes")
+        if show_debug_data:
+            st.write(st.session_state["data_site"])
+
     with tab4:
         st.subheader("Synthèse des résultats")
 

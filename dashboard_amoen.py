@@ -624,7 +624,8 @@ if st.session_state["authentication_status"]:
         st.write("Données complètes")
         show_debug_data = st.checkbox("Afficher les données complètes")
         if show_debug_data:
-            st.write(st.session_state["data_site"])
+            st.dataframe(st.session_state["data_site"])
+            st.dataframe(st.session_state.df_meteo_tre200d0)
 
     with tab4:
         st.subheader("Synthèse des résultats")

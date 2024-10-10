@@ -3,6 +3,7 @@
 import pandas as pd
 import streamlit as st
 
+
 def make_dataframe_df_results(
     ef_avant_corr_kwh_m2,
     ef_objectif_pondere_kwh_m2,
@@ -81,9 +82,4 @@ def make_dataframe_df_results(
         df_resultats["Variable"] = df_resultats["Variable"].astype(str)
         df_resultats["kWh/m²/an"] = df_resultats["kWh/m²/an"].astype(float)
         df_resultats["MJ/m²/an"] = df_resultats["MJ/m²/an"].astype(float)
-    else:
-        st.error(
-            "Les données nécessaires pour le calcul des résultats ne sont pas disponibles."
-        )
-        df_resultats = None
     return df_resultats

@@ -413,7 +413,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     # df_meteo_note_calcul
     df_meteo_note_calcul = make_dataframe_df_meteo_note_calcul(
         data_site["periode_start"],
-        data_site["periode_start"],
+        data_site["periode_end"],
         df_meteo_tre200d0,
     )
 

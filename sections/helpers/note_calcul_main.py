@@ -20,6 +20,7 @@ from sections.helpers.note_calcul.create_dataframe_results import (
     make_dataframe_df_results,
 )
 
+
 from sections.helpers.calcul_dj import (
     calcul_dj_periode,
     DJ_REF_ANNUELS,

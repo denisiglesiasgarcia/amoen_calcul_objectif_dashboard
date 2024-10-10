@@ -644,7 +644,7 @@ if st.session_state["authentication_status"]:
 
     with tab4:
         st.subheader("Synthèse des résultats")
-        if df_results:
+        if df_results is not None:
             st.table(df_results)
         else:
             st.warning(

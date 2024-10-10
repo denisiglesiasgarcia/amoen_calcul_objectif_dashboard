@@ -419,7 +419,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     )
 
     # df_results
-    df_results = create_dataframe_df_results(
+    df_results = make_dataframe_df_results(
         data_site["ef_avant_corr_kwh_m2"],
         data_site["ef_objectif_pondere_kwh_m2"],
         data_site["delta_ef_realisee_kwh_m2"],

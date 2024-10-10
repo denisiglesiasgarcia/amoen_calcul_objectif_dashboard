@@ -1,7 +1,7 @@
 # sections/helpers/note_calcul/create_dataframe_results.py
 
 
-def create_dataframe_df_results(
+def make_dataframe_df_results(
     ef_avant_corr_kwh_m2,
     ef_objectif_pondere_kwh_m2,
     delta_ef_realisee_kwh_m2,

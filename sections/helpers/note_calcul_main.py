@@ -16,6 +16,10 @@ from sections.helpers.note_calcul.create_dataframe_meteo import (
     make_dataframe_df_meteo_note_calcul,
 )
 
+from sections.helpers.note_calcul.create_dataframe_results import (
+    make_dataframe_df_results,
+)
+
 from sections.helpers.calcul_dj import (
     calcul_dj_periode,
     DJ_REF_ANNUELS,
@@ -52,6 +56,9 @@ from sections.helpers.note_calcul.calculs import (
     fonction_methodo_e_h_renovee_pondere_kwh_m2,
     fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
     fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2,
+    fonction_delta_ef_realisee_kwh_m2,
+    fonction_delta_ef_visee_kwh_m2,
+    fonction_atteinte_objectifs,
 )
 
 from sections.helpers.note_calcul.constantes import (
@@ -142,6 +149,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     - df_meteo_note_calcul (dataframe météo utilisée pour le calcul)
     - formule_facteur_ponderation_moyen_texte (latex texte formule du facteur de pondération moyen)
     - formule_facteur_ponderation_moyen (latex formule résolue numériquement du facteur de pondération moyen)
+
 
     """
 
@@ -368,6 +376,22 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
             "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
         ],
     )
+    data_site["delta_ef_realisee_kwh_m2"] = fonction_delta_ef_realisee_kwh_m2(
+        data_site["ef_avant_corr_kwh_m2"],
+        data_site[
+            "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
+        ],
+    )
+    data_site["delta_ef_visee_kwh_m2"] = fonction_delta_ef_visee_kwh_m2(
+        data_site["ef_avant_corr_kwh_m2"],
+        data_site["ef_objectif_pondere_kwh_m2"],
+    )
+    data_site["atteinte_objectifs"] = fonction_atteinte_objectifs(
+        data_site["delta_ef_realisee_kwh_m2"],
+        data_site[
+            "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
+        ],
+    )
     # générer dataframe df_list
     df_list = make_dataframe_df_list(data_site, DJ_REF_ANNUELS)
 
@@ -391,6 +415,17 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
         data_site["periode_start"],
         data_site["periode_start"],
         df_meteo_tre200d0,
+    )
+
+    # df_results
+    df_results = create_dataframe_df_results(
+        data_site["ef_avant_corr_kwh_m2"],
+        data_site["ef_objectif_pondere_kwh_m2"],
+        data_site["delta_ef_realisee_kwh_m2"],
+        data_site["delta_ef_visee_kwh_m2"],
+        data_site[
+            "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
+        ],
     )
 
     # latex text
@@ -436,6 +471,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
         df_list,
         df_agent_energetique,
         df_meteo_note_calcul,
+        df_results,
         formula_facteur_ponderation_moyen_texte,
         formula_facteur_ponderation_moyen,
     )

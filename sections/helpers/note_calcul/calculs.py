@@ -603,3 +603,55 @@ def fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_ponder
     except:
         energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = 0
     return energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2
+
+
+# atteinte objectifs
+def fonction_delta_ef_realisee_kwh_m2(
+    ef_avant_corr_kwh_m2,
+    energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
+):
+    try:
+        if (
+            ef_avant_corr_kwh_m2 > 0
+            and energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
+            > 0
+        ):
+            delta_ef_realisee_kwh_m2 = (
+                ef_avant_corr_kwh_m2
+                - energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
+            )
+        else:
+            delta_ef_realisee_kwh_m2 = 0.0
+    except:
+        delta_ef_realisee_kwh_m2 = 0.0
+    return delta_ef_realisee_kwh_m2
+
+
+def fonction_delta_ef_visee_kwh_m2(ef_avant_corr_kwh_m2, ef_objectif_pondere_kwh_m2):
+    try:
+        if ef_avant_corr_kwh_m2 > 0 and ef_objectif_pondere_kwh_m2 > 0:
+            delta_ef_visee_kwh_m2 = ef_avant_corr_kwh_m2 - ef_objectif_pondere_kwh_m2
+        else:
+            delta_ef_visee_kwh_m2 = 0.0
+    except:
+        delta_ef_visee_kwh_m2 = 0.0
+    return delta_ef_visee_kwh_m2
+
+
+def fonction_atteinte_objectifs(
+    delta_ef_realisee_kwh_m2,
+    energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
+    delta_ef_visee_kwh_m2,
+):
+    try:
+        if (
+            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
+            != 0
+        ):
+            atteinte_objectif = delta_ef_realisee_kwh_m2 / delta_ef_visee_kwh_m2
+        else:
+            atteinte_objectif = 0.0
+    except:
+        atteinte_objectif = 0.0
+
+    return atteinte_objectif

@@ -392,6 +392,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
         data_site[
             "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
         ],
+        data_site["delta_ef_visee_kwh_m2"],
     )
     # générer dataframe df_list
     df_list = make_dataframe_df_list(data_site, DJ_REF_ANNUELS)

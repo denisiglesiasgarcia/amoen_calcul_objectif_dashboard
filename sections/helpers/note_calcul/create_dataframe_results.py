@@ -1,5 +1,7 @@
 # sections/helpers/note_calcul/create_dataframe_results.py
 
+import pandas as pd
+import streamlit as st
 
 def make_dataframe_df_results(
     ef_avant_corr_kwh_m2,

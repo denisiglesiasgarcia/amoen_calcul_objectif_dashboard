@@ -581,9 +581,9 @@ if st.session_state["authentication_status"]:
         st.subheader("Note de calcul")
 
         (
-            st.session_state["data_site"],
-            df_periode_list,
-            df_list,
+            _,
+            _,
+            _,
             df_agent_energetique,
             df_meteo_note_calcul,
             formula_facteur_ponderation_moyen_texte,

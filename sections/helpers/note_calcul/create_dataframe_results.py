@@ -85,4 +85,5 @@ def make_dataframe_df_results(
         st.error(
             "Les données nécessaires pour le calcul des résultats ne sont pas disponibles."
         )
+        df_resultats = None
     return df_resultats

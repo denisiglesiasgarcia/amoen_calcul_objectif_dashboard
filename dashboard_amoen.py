@@ -164,8 +164,7 @@ def load_projets_admin():
 now = datetime.datetime.now()
 if (now - last_update_time_meteo).days > 1:
     last_update_time_meteo = now
-    df_meteo_tre200d0 = get_meteo_data()
-    st.session_state.df_meteo_tre200d0 = df_meteo_tre200d0
+    st.session_state["df_meteo_tre200d0"] = get_meteo_data(DJ_TEMPERATURE_REFERENCE)
 
 
 # Authentification
@@ -506,7 +505,7 @@ if st.session_state["authentication_status"]:
             # dates
             with tab2_col3:
                 last_year = pd.to_datetime(
-                    df_meteo_tre200d0["time"].max()
+                    st.session_state["df_meteo_tre200d0"]["time"].max()
                 ) - pd.DateOffset(days=365)
                 periode_start = st.date_input(
                     "Début de la période",
@@ -514,8 +513,13 @@ if st.session_state["authentication_status"]:
                 )
 
             with tab2_col4:
-                fin_periode_txt = f"Fin de la période (météo disponible jusqu'au: {df_meteo_tre200d0['time'].max().strftime('%Y-%m-%d')})"
-                max_date = pd.to_datetime(df_meteo_tre200d0["time"].max())
+                max_date_texte = st.session_state["df_meteo_tre200d0"]['time'].max().strftime('%Y-%m-%d')
+                fin_periode_txt = (
+                    f"Fin de la période (météo disponible jusqu'au: {max_date_texte})"
+                )
+                max_date = pd.to_datetime(
+                    st.session_state["df_meteo_tre200d0"]["time"].max()
+                )
                 periode_end = st.date_input(
                     fin_periode_txt,
                     datetime.date(max_date.year, max_date.month, max_date.day),
@@ -587,7 +591,9 @@ if st.session_state["authentication_status"]:
             df_meteo_note_calcul,
             formula_facteur_ponderation_moyen_texte,
             formula_facteur_ponderation_moyen,
-        ) = fonction_note_calcul(st.session_state["data_site"], df_meteo_tre200d0)
+        ) = fonction_note_calcul(
+            st.session_state["data_site"], st.session_state["df_meteo_tre200d0"]
+        )
 
         # Hide the index
         hide_index_style = """
@@ -625,7 +631,7 @@ if st.session_state["authentication_status"]:
         show_debug_data = st.checkbox("Afficher les données complètes")
         if show_debug_data:
             st.dataframe(st.session_state["data_site"])
-            st.dataframe(st.session_state.df_meteo_tre200d0)
+            st.dataframe(st.session_state["df_meteo_tre200d0"])
 
     with tab4:
         st.subheader("Synthèse des résultats")

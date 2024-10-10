@@ -100,7 +100,7 @@ from sections.helpers.note_calcul.latex import (
 
 def fonction_note_calcul(data_site, df_meteo_tre200d0):
     """
-    déjà calculé dans data_site:
+    déjà dans data_site:
     - data_site["periode_start"]
     - data_site["periode_end"]
     - data_site["periode_nb_jours"]
@@ -112,6 +112,26 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     - data_site["repartition_energie_finale_partie_surelevee_ecs"],
     - data_site["repartition_energie_finale_partie_renovee_chauffage"],
     - data_site["repartition_energie_finale_partie_surelevee_chauffage"],
+    - data_site["sre_renovation_m2"],
+    - data_site["ef_avant_corr_kwh_m2"],
+    - data_site["ef_objectif_pondere_kwh_m2"],
+    - data_site["agent_energetique_ef_mazout_kg"],
+    - data_site["agent_energetique_ef_mazout_litres"],
+    - data_site["agent_energetique_ef_mazout_kwh"],
+    - data_site["agent_energetique_ef_gaz_naturel_m3"],
+    - data_site["agent_energetique_ef_gaz_naturel_kwh"],
+    - data_site["agent_energetique_ef_bois_buches_dur_stere"],
+    - data_site["agent_energetique_ef_bois_buches_tendre_stere"],
+    - data_site["agent_energetique_ef_bois_buches_tendre_kwh"],
+    - data_site["agent_energetique_ef_pellets_m3"],
+    - data_site["agent_energetique_ef_pellets_kg"],
+    - data_site["agent_energetique_ef_pellets_kwh"],
+    - data_site["agent_energetique_ef_plaquettes_m3"],
+    - data_site["agent_energetique_ef_plaquettes_kwh"],
+    - data_site["agent_energetique_ef_cad_kwh"],
+    - data_site["agent_energetique_ef_electricite_pac_kwh"],
+    - data_site["agent_energetique_ef_electricite_directe_kwh"],
+    - data_site["agent_energetique_ef_autre_kwh"],
 
     Calculs réalisés ici:
     - data_site["dj_periode"]
@@ -143,15 +163,18 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     - data_site["methodo_e_h_renovee_pondere_kwh_m2"]
     - data_site["energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"]
     - data_site["energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2"]
+    - data_site["delta_ef_realisee_kwh_m2"]
+    - data_site["delta_ef_visee_kwh_m2"]
+    - data_site["atteinte_objectifs"]
 
     éléments créés:
     - df_periode_list (dataframe des periodes considérées)
     - df_list (dataframe avec la pluspart des données)
     - df_agent_energetique (dataframe des agents énergétiques et facteur de pondération)
     - df_meteo_note_calcul (dataframe météo utilisée pour le calcul)
+    - df_results (dataframe des résultats)
     - formule_facteur_ponderation_moyen_texte (latex texte formule du facteur de pondération moyen)
     - formule_facteur_ponderation_moyen (latex formule résolue numériquement du facteur de pondération moyen)
-
 
     """
 

@@ -638,7 +638,7 @@ def fonction_delta_ef_visee_kwh_m2(ef_avant_corr_kwh_m2, ef_objectif_pondere_kwh
     return delta_ef_visee_kwh_m2
 
 
-def fonction_atteinte_objectifs(
+def fonction_atteinte_objectif(
     delta_ef_realisee_kwh_m2,
     energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
     delta_ef_visee_kwh_m2,

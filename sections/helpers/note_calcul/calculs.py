@@ -382,8 +382,9 @@ def fonction_methodo_e_ww_kwh(methodo_b_ww_kwh, sre_renovation_m2, periode_nb_jo
             )
         else:
             methodo_e_ww_kwh = 0.0
-    except ZeroDivisionError:
+    except:
         methodo_e_ww_kwh = 0.0
+    return methodo_e_ww_kwh
 
 
 # C103 → Methodo_Bh → Part de chauffage en énergie finale sur la période

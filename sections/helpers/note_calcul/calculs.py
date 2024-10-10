@@ -21,7 +21,15 @@ def fonction_estimation_ecs_annuel(periode_nb_jours):
 
 # C93 → Est. Chauffage/Chauffage annuel prévisible
 def fonction_estimation_part_chauffage_periode_sur_annuel(dj_periode, DJ_REF_ANNUELS):
-    estimation_part_chauffage_periode_sur_annuel = float(dj_periode / DJ_REF_ANNUELS)
+    try:
+        if dj_periode > 0 and DJ_REF_ANNUELS > 0:
+            estimation_part_chauffage_periode_sur_annuel = float(
+                dj_periode / DJ_REF_ANNUELS
+            )
+        else:
+            estimation_part_chauffage_periode_sur_annuel = 0.0
+    except:
+        estimation_part_chauffage_periode_sur_annuel = 0.0
     return estimation_part_chauffage_periode_sur_annuel
 
 
@@ -68,7 +76,7 @@ def fonction_part_ecs_periode_comptage(
             ) / estimation_energie_finale_periode_sur_annuel
         else:
             part_ecs_periode_comptage = 0.0
-    except ZeroDivisionError:
+    except:
         part_ecs_periode_comptage = 0.0
     return part_ecs_periode_comptage
 
@@ -91,7 +99,7 @@ def fonction_part_chauffage_periode_comptage(
             ) / estimation_energie_finale_periode_sur_annuel
         else:
             part_chauffage_periode_comptage = 0.0
-    except ZeroDivisionError:
+    except:
         part_chauffage_periode_comptage = 0.0
     return part_chauffage_periode_comptage
 

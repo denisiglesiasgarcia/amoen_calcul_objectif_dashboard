@@ -597,7 +597,7 @@ if st.session_state["authentication_status"]:
             df_list,
             df_agent_energetique,
             df_meteo_note_calcul,
-            df_resultats,
+            df_results,
             formula_facteur_ponderation_moyen_texte,
             formula_facteur_ponderation_moyen,
         ) = fonction_note_calcul(
@@ -644,86 +644,8 @@ if st.session_state["authentication_status"]:
 
     with tab4:
         st.subheader("Synthèse des résultats")
-
-        # calculs
-        # st.session_state["data_site"]["delta_ef_realisee_kwh_m2"] = (
-        #     st.session_state["data_site"]["ef_avant_corr_kwh_m2"]
-        #     - st.session_state["data_site"][
-        #         "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
-        #     ]
-        # )
-        # try:
-        #     if (
-        #         st.session_state["data_site"][
-        #             "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
-        #         ]
-        #         != 0
-        #     ):
-        #         st.session_state["data_site"]["atteinte_objectif"] = (
-        #             st.session_state["data_site"]["delta_ef_realisee_kwh_m2"]
-        #             / st.session_state["data_site"]["delta_ef_visee_kwh_m2"]
-        #         )
-        #     else:
-        #         st.session_state["data_site"]["atteinte_objectif"] = 0.0
-        # except ZeroDivisionError:
-        #     st.session_state["data_site"]["atteinte_objectif"] = 0.0
-
-        # df_resultats1 = pd.DataFrame(
-        #     {
-        #         "Variable": [
-        #             "IDC moyen 3 ans avant travaux → (Ef,avant,corr)",
-        #             "EF pondéré corrigé clim. après travaux → (Ef,après,corr,rénové*fp)",
-        #             "Objectif en énergie finale (Ef,obj *fp)",
-        #             "Baisse ΔEf réalisée → ∆Ef,réel = Ef,avant,corr - Ef,après,corr*fp",
-        #             "Baisse ΔEf visée → ∆Ef,visée = Ef,avant,corr - Ef,obj*fp",
-        #         ],
-        #         "kWh/m²/an": [
-        #             round(st.session_state["data_site"]["ef_avant_corr_kwh_m2"], 4),
-        #             round(
-        #                 st.session_state["data_site"][
-        #                     "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
-        #                 ],
-        #                 4,
-        #             ),
-        #             round(
-        #                 st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"], 4
-        #             ),
-        #             round(st.session_state["data_site"]["delta_ef_realisee_kwh_m2"], 4),
-        #             round(st.session_state["data_site"]["delta_ef_visee_kwh_m2"], 4),
-        #         ],
-        #         "MJ/m²/an": [
-        #             round(
-        #                 st.session_state["data_site"]["ef_avant_corr_kwh_m2"] * 3.6, 4
-        #             ),
-        #             round(
-        #                 st.session_state["data_site"][
-        #                     "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
-        #                 ]
-        #                 * 3.6,
-        #                 4,
-        #             ),
-        #             round(
-        #                 st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"]
-        #                 * 3.6,
-        #                 4,
-        #             ),
-        #             round(
-        #                 st.session_state["data_site"]["delta_ef_realisee_kwh_m2"] * 3.6,
-        #                 4,
-        #             ),
-        #             round(
-        #                 st.session_state["data_site"]["delta_ef_visee_kwh_m2"] * 3.6, 4
-        #             ),
-        #         ],
-        #     }
-        # )
-
-        # # dtypes
-        # df_resultats1["Variable"] = df_resultats1["Variable"].astype(str)
-        # df_resultats1["kWh/m²/an"] = df_resultats1["kWh/m²/an"].astype(float)
-        # df_resultats1["MJ/m²/an"] = df_resultats1["MJ/m²/an"].astype(float)
-        if df_resultats:
-            st.table(df_resultats)
+        if df_results:
+            st.table(df_results)
         else:
             st.warning("Veuillez compléter les informations dans '1 Données site' pour voir les résultats")
 

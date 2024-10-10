@@ -432,7 +432,6 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     )
 
     return (
-        data_site,
         df_periode_list,
         df_list,
         df_agent_energetique,

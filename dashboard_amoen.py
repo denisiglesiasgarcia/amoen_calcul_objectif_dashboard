@@ -653,7 +653,16 @@ if st.session_state["authentication_status"]:
 
         # résultats en latex
 
-        if st.session_state["data_site"]["facteur_ponderation_moyen"] > 0:
+        if (
+            st.session_state["data_site"]["facteur_ponderation_moyen"] > 0
+            and st.session_state["data_site"]["ef_avant_corr_kwh_m2"] > 0
+            and st.session_state["data_site"][
+                "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
+            ]
+            > 0
+            and st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"] > 0
+            and st.session_state["data_site"]["atteinte_objectif"] > 0
+        ):
             formula_atteinte_objectif = r"Atteinte\ objectif \ [\%]= \frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}"
 
             formula_atteinte_objectif_num = r"Atteinte\ objectif \ [\%]= \frac{{{} - {}*{}}}{{{} - {}*{}}} = {}".format(

@@ -722,7 +722,10 @@ if st.session_state["authentication_status"]:
         # df_resultats1["Variable"] = df_resultats1["Variable"].astype(str)
         # df_resultats1["kWh/m²/an"] = df_resultats1["kWh/m²/an"].astype(float)
         # df_resultats1["MJ/m²/an"] = df_resultats1["MJ/m²/an"].astype(float)
-        st.table(df_resultats)
+        if df_resultats:
+            st.table(df_resultats)
+        else:
+            st.warning("Veuillez compléter les informations dans '1 Données site' pour voir les résultats")
 
         # résultats en latex
 

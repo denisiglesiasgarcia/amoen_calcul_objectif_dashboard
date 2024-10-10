@@ -39,7 +39,7 @@ def make_dataframe_df_results(
         and energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
         > 0
     ):
-        df_resultats = pd.DataFrame(
+        df_results = pd.DataFrame(
             {
                 "Variable": [
                     "IDC moyen 3 ans avant travaux → (Ef,avant,corr)",
@@ -78,7 +78,9 @@ def make_dataframe_df_results(
             }
         )
         # dtypes
-        df_resultats["Variable"] = df_resultats["Variable"].astype(str)
-        df_resultats["kWh/m²/an"] = df_resultats["kWh/m²/an"].astype(float)
-        df_resultats["MJ/m²/an"] = df_resultats["MJ/m²/an"].astype(float)
-    return df_resultats
+        df_results["Variable"] = df_results["Variable"].astype(str)
+        df_results["kWh/m²/an"] = df_results["kWh/m²/an"].astype(float)
+        df_results["MJ/m²/an"] = df_results["MJ/m²/an"].astype(float)
+    else:
+        df_results = None
+    return df_results

@@ -8,7 +8,7 @@ DJ_TEMPERATURE_REFERENCE = 20
 
 
 @st.cache_data
-def get_meteo_data(DJ_TEMPERATURE_REFERENCE):
+def get_meteo_data():
     """
     Fetches and processes meteorological data for calculating Degree Days (DJ).
 
@@ -25,6 +25,7 @@ def get_meteo_data(DJ_TEMPERATURE_REFERENCE):
     Returns:
         pd.DataFrame: A DataFrame containing processed meteorological data with additional columns for heating season, temperature below 16 degrees, and Degree Days (DJ).
     """
+    global DJ_TEMPERATURE_REFERENCE
     # Mise à jour des données météo de manière journalière
     df_meteo_tre200d0_historique = pd.read_csv(
         "https://data.geo.admin.ch/ch.meteoschweiz.klima/nbcn-tageswerte/nbcn-daily_GVE_previous.csv",

@@ -1,7 +1,7 @@
 """
 TODO
 - renseigner les consommations ECS séparées du total
-- déplacer les valeurs fixes tel que DJ_TEMPERATURE_REFERENCE vers le helper 
+
 """
 
 import os
@@ -46,7 +46,6 @@ from sections.helpers.validation_saisie import (
 from sections.helpers.calcul_dj import (
     get_meteo_data,
     calcul_dj_periode,
-    DJ_TEMPERATURE_REFERENCE,
 )
 
 from sections.helpers.graphique_bars_exploitation import (
@@ -169,7 +168,7 @@ def load_projets_admin():
 now = datetime.datetime.now()
 if (now - last_update_time_meteo).days > 1:
     last_update_time_meteo = now
-    st.session_state["df_meteo_tre200d0"] = get_meteo_data(DJ_TEMPERATURE_REFERENCE)
+    st.session_state["df_meteo_tre200d0"] = get_meteo_data()
 
 
 # Authentification

@@ -716,32 +716,7 @@ def generate_pdf(data):
     elements.append(Spacer(1, 0.5 * cm))
 
     # Project details
-    def wrap_text(text, max_width, style="Normal"):
-        """
-        Wrap text to fit within a specified width.
-        Returns a Paragraph object.
-        """
-        words = text.split()
-        lines = []
-        current_line = []
-        for word in words:
-            test_line = " ".join(current_line + [word])
-            width = (
-                style.fontSize * len(test_line) * 0.55
-            )  # Approximate width calculation
-            if width <= max_width:
-                current_line.append(word)
-            else:
-                if current_line:
-                    lines.append(" ".join(current_line))
-                    current_line = [word]
-                else:
-                    lines.append(word)
-        if current_line:
-            lines.append(" ".join(current_line))
-
-    return Paragraph("<br/>".join(lines), style)
-
+    nom_rue = data["adresse_projet"].replace(";", "<br/>")
     project_admin = [
         [
             Paragraph("<b>Informations administratives</b>", styles["Heading4"]),
@@ -750,7 +725,7 @@ def generate_pdf(data):
         [Paragraph("", styles["Normal"]), ""],  # Empty row
         [
             Paragraph("Adresse:", styles["Normal"]),
-            wrap_text(data["adresse_projet"], 340),
+            nom_rue,
         ],
         [Paragraph("AMOén:", styles["Normal"]), data["amoen_id"]],
     ]

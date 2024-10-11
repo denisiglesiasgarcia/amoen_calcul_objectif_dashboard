@@ -752,7 +752,7 @@ def generate_pdf(data):
 
     # Surfaces
     project_surfaces = [
-        [Paragraph("<b>Surfaces</b>", styles["Heading3"]), ""],  # Title row
+        [Paragraph("<b>Surfaces</b>", styles["Heading4"]), ""],  # Title row
         [Paragraph("", styles["Normal"]), ""],  # Empty row
     ]
     if data["sre_extension_surelevation_m2"] > 0.0:
@@ -828,7 +828,7 @@ def generate_pdf(data):
     # Conso énergie après travaux
     project_energie = [
         [
-            Paragraph("<b>Consommation après travaux</b>", styles["Heading3"]),
+            Paragraph("<b>Consommation après travaux</b>", styles["Heading4"]),
             "",
         ],  # Title row
         [Paragraph("", styles["Normal"]), ""],  # Empty row
@@ -901,7 +901,7 @@ def generate_pdf(data):
     # Energy data table with an additional "Dénomination" column
     project_results = [
         [
-            Paragraph("<b>Atteinte de l'objectif</b>", styles["Heading3"]),
+            Paragraph("<b>Atteinte de l'objectif</b>", styles["Heading4"]),
             "",
             "",
             "",

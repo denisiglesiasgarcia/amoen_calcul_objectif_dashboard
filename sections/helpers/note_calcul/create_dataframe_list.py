@@ -190,7 +190,7 @@ def make_dataframe_df_list(data_site, DJ_REF_ANNUELS):
     df_list.append(
         {
             "Dénomination": "Methodo_Eww",
-            "Valeur": data_site["methodo_e_ww_kwh"],
+            "Valeur": data_site["methodo_e_ww_kwh_m2"],
             "Unité": "kWh",
             "Commentaire": "",
             "Excel": "C100",
@@ -238,11 +238,11 @@ def make_dataframe_df_list(data_site, DJ_REF_ANNUELS):
     df_list.append(
         {
             "Dénomination": "Methodo_Eh",
-            "Valeur": data_site["methodo_e_h_kwh"],
+            "Valeur": data_site["methodo_e_h_kwh_m2"],
             "Unité": "kWh/m²",
             "Commentaire": "Energie finale par unité de surface pour le chauffage sur la période climatiquement corrigée",
             "Excel": "C104",
-            "Variable/Formule": "methodo_e_h_kwh = (methodo_b_h_kwh / sre_renovation_m2) * (DJ_REF_ANNUELS / dj_periode)",
+            "Variable/Formule": "methodo_e_h_kwh_m2 = (methodo_b_h_kwh / sre_renovation_m2) * (DJ_REF_ANNUELS / dj_periode)",
         }
     )
 
@@ -256,7 +256,7 @@ def make_dataframe_df_list(data_site, DJ_REF_ANNUELS):
             "Unité": "kWh/m²",
             "Commentaire": "Energie finale par unité de surface pour le chauffage climatiquement corrigée et l'ECS sur la période (inclus surélévation)",
             "Excel": "C105",
-            "Variable/Formule": "energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = methodo_e_ww_kwh + methodo_e_h_kwh",
+            "Variable/Formule": "energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = methodo_e_ww_kwh_m2 + methodo_e_h_kwh_m2",
         }
     )
 
@@ -306,7 +306,7 @@ def make_dataframe_df_list(data_site, DJ_REF_ANNUELS):
             "Unité": "kWh/m²",
             "Commentaire": "",
             "Excel": "C109",
-            "Variable/Formule": "methodo_e_ww_renovee_pondere_kwh_m2 = methodo_e_ww_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)",
+            "Variable/Formule": "methodo_e_ww_renovee_pondere_kwh_m2 = methodo_e_ww_kwh_m2 * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)",
         }
     )
 
@@ -318,7 +318,7 @@ def make_dataframe_df_list(data_site, DJ_REF_ANNUELS):
             "Unité": "kWh/m²",
             "Commentaire": "",
             "Excel": "C110",
-            "Variable/Formule": "methodo_e_h_renovee_pondere_kwh_m2 = methodo_e_h_kwh * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)",
+            "Variable/Formule": "methodo_e_h_renovee_pondere_kwh_m2 = methodo_e_h_kwh_m2 * facteur_ponderation_moyen * (repartition_energie_finale_partie_renovee_somme / 100)",
         }
     )
 

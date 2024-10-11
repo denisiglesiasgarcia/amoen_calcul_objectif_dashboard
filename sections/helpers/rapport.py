@@ -716,7 +716,7 @@ def generate_pdf(data):
     elements.append(Spacer(1, 0.5 * cm))
 
     # Project details
-    def wrap_text(text, max_width, style=normal_style):
+    def wrap_text(text, max_width, style="Normal"):
         """
         Wrap text to fit within a specified width.
         Returns a Paragraph object.

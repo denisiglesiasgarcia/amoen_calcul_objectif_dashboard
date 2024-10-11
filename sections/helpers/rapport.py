@@ -738,6 +738,7 @@ def generate_pdf(data):
                 ("SPAN", (0, 0), (1, 1)),
                 ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
                 ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
                 ("ALIGN", (0, 0), (-1, -1), "LEFT"),
                 ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
                 ("FONTSIZE", (0, 0), (-1, -1), 10),

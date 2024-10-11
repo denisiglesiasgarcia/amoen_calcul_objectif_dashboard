@@ -716,7 +716,7 @@ def generate_pdf(data):
     elements.append(Spacer(1, 0.5 * cm))
 
     # Project details
-    nom_rue = data["adresse_projet"].replace(";", "<br/>")
+    nom_rues = data["adresse_projet"].replace(";", "<br />")
     project_admin = [
         [
             Paragraph("<b>Informations administratives</b>", styles["Heading4"]),
@@ -725,7 +725,7 @@ def generate_pdf(data):
         [Paragraph("", styles["Normal"]), ""],  # Empty row
         [
             Paragraph("Adresse:", styles["Normal"]),
-            nom_rue,
+            nom_rues,
         ],
         [Paragraph("AMOén:", styles["Normal"]), data["amoen_id"]],
     ]

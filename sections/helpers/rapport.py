@@ -716,7 +716,7 @@ def generate_pdf(data):
     elements.append(Spacer(1, 0.5 * cm))
 
     # Project details
-    def wrap_text(text, max_width, style):
+    def wrap_text(text, max_width, style="Normal"):
         """
         Wrap text to fit within a specified width.
         Returns a Paragraph object.
@@ -749,7 +749,7 @@ def generate_pdf(data):
         [Paragraph("", styles["Normal"]), ""],  # Empty row
         [
             Paragraph("Adresse:", styles["Normal"]),
-            wrap_text(data["adresse_projet"], 340, normal_style),
+            wrap_text(data["adresse_projet"], 340),
         ],
         [Paragraph("AMOén:", styles["Normal"]), data["amoen_id"]],
     ]

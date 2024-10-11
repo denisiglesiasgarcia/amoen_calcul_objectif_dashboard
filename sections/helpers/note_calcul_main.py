@@ -48,7 +48,7 @@ from sections.helpers.note_calcul.calculs import (
     fonction_agent_energetique_ef_autre_somme_mj,
     fonction_agent_energetique_ef_somme_kwh,
     fonction_methodo_b_ww_kwh,
-    fonction_methodo_e_ww_kwh,
+    fonction_methodo_e_ww_kwh_m2,
     fonction_methodo_b_h_kwh,
     fonction_methodo_e_h_kwh,
     fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2,
@@ -108,10 +108,6 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     - data_site["repartition_energie_finale_partie_renovee_ecs"]
     - data_site["repartition_energie_finale_partie_surelevee_chauffage"]
     - data_site["repartition_energie_finale_partie_surelevee_ecs"]
-    - data_site["repartition_energie_finale_partie_renovee_ecs"],
-    - data_site["repartition_energie_finale_partie_surelevee_ecs"],
-    - data_site["repartition_energie_finale_partie_renovee_chauffage"],
-    - data_site["repartition_energie_finale_partie_surelevee_chauffage"],
     - data_site["sre_renovation_m2"],
     - data_site["ef_avant_corr_kwh_m2"],
     - data_site["ef_objectif_pondere_kwh_m2"],
@@ -153,7 +149,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     - data_site["agent_energetique_ef_autre_somme_mj"]
     - data_site["agent_energetique_ef_somme_kwh"]
     - data_site["methodo_b_ww_kwh"]
-    - data_site["methodo_e_ww_kwh"]
+    - data_site["methodo_e_ww_kwh_m2"]
     - data_site["methodo_b_h_kwh"]
     - data_site["methodo_e_h_kwh"]
     - data_site["energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2"]
@@ -321,7 +317,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
         data_site["agent_energetique_ef_somme_kwh"],
         data_site["part_ecs_periode_comptage"],
     )
-    data_site["methodo_e_ww_kwh"] = fonction_methodo_e_ww_kwh(
+    data_site["methodo_e_ww_kwh_m2"] = fonction_methodo_e_ww_kwh_m2(
         data_site["methodo_b_ww_kwh"],
         data_site["sre_renovation_m2"],
         data_site["periode_nb_jours"],
@@ -339,7 +335,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     data_site[
         "energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2"
     ] = fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2(
-        data_site["methodo_e_ww_kwh"], data_site["methodo_e_h_kwh"]
+        data_site["methodo_e_ww_kwh_m2"], data_site["methodo_e_h_kwh"]
     )
     data_site["energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2"] = (
         fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2(
@@ -374,7 +370,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     )
     data_site["methodo_e_ww_renovee_pondere_kwh_m2"] = (
         fonction_methodo_e_ww_renovee_pondere_kwh_m2(
-            data_site["methodo_e_ww_kwh"],
+            data_site["methodo_e_ww_kwh_m2"],
             data_site["facteur_ponderation_moyen"],
             data_site["repartition_energie_finale_partie_renovee_somme"],
         )

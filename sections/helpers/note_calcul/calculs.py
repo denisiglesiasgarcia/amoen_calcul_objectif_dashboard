@@ -382,17 +382,17 @@ def fonction_methodo_b_ww_kwh(
 
 
 # C100 → Methodo_Eww
-def fonction_methodo_e_ww_kwh(methodo_b_ww_kwh, sre_renovation_m2, periode_nb_jours):
+def fonction_methodo_e_ww_kwh_m2(methodo_b_ww_kwh, sre_renovation_m2, periode_nb_jours):
     try:
         if sre_renovation_m2 != 0 and periode_nb_jours != 0:
-            methodo_e_ww_kwh = (methodo_b_ww_kwh / sre_renovation_m2) * (
+            methodo_e_ww_kwh_m2 = (methodo_b_ww_kwh / sre_renovation_m2) * (
                 365 / periode_nb_jours
             )
         else:
-            methodo_e_ww_kwh = 0.0
+            methodo_e_ww_kwh_m2 = 0.0
     except:
-        methodo_e_ww_kwh = 0.0
-    return methodo_e_ww_kwh
+        methodo_e_ww_kwh_m2 = 0.0
+    return methodo_e_ww_kwh_m2
 
 
 # C103 → Methodo_Bh → Part de chauffage en énergie finale sur la période
@@ -412,29 +412,29 @@ def fonction_methodo_b_h_kwh(
 
 
 # C104 → Methodo_Eh
-def fonction_methodo_e_h_kwh(
+def fonction_methodo_e_h_kwh_m2(
     sre_renovation_m2, dj_periode, methodo_b_h_kwh, DJ_REF_ANNUELS
 ):
     try:
         if sre_renovation_m2 != 0 and dj_periode != 0:
-            methodo_e_h_kwh = (methodo_b_h_kwh / sre_renovation_m2) * (
+            methodo_e_h_kwh_m2 = (methodo_b_h_kwh / sre_renovation_m2) * (
                 DJ_REF_ANNUELS / dj_periode
             )
         else:
-            methodo_e_h_kwh = 0.0
+            methodo_e_h_kwh_m2 = 0.0
     except:
-        methodo_e_h_kwh = 0.0
-    return methodo_e_h_kwh
+        methodo_e_h_kwh_m2 = 0.0
+    return methodo_e_h_kwh_m2
 
 
 # C105 → Ef,après,corr → Methodo_Eww + Methodo_Eh
 def fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2(
-    methodo_e_ww_kwh, methodo_e_h_kwh
+    methodo_e_ww_kwh_m2, methodo_e_h_kwh_m2
 ):
     try:
-        if methodo_e_ww_kwh >= 0 and methodo_e_h_kwh >= 0:
+        if methodo_e_ww_kwh_m2 >= 0 and methodo_e_h_kwh_m2 >= 0:
             energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
-                methodo_e_ww_kwh + methodo_e_h_kwh
+                methodo_e_ww_kwh_m2 + methodo_e_h_kwh_m2
             )
         else:
             energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
@@ -514,18 +514,18 @@ def fonction_facteur_ponderation_moyen(
 
 # C109 → Methodo_Eww*fp
 def fonction_methodo_e_ww_renovee_pondere_kwh_m2(
-    methodo_e_ww_kwh,
+    methodo_e_ww_kwh_m2,
     facteur_ponderation_moyen,
     repartition_energie_finale_partie_renovee_somme,
 ):
     try:
         if (
-            methodo_e_ww_kwh >= 0
+            methodo_e_ww_kwh_m2 >= 0
             and facteur_ponderation_moyen >= 0
             and repartition_energie_finale_partie_renovee_somme >= 0
         ):
             methodo_e_ww_renovee_pondere_kwh_m2 = (
-                methodo_e_ww_kwh
+                methodo_e_ww_kwh_m2
                 * facteur_ponderation_moyen
                 * (repartition_energie_finale_partie_renovee_somme / 100)
             )
@@ -538,18 +538,18 @@ def fonction_methodo_e_ww_renovee_pondere_kwh_m2(
 
 # C110 → Methodo_Eh*fp
 def fonction_methodo_e_h_renovee_pondere_kwh_m2(
-    methodo_e_h_kwh,
+    methodo_e_h_kwh_m2,
     facteur_ponderation_moyen,
     repartition_energie_finale_partie_renovee_somme,
 ):
     try:
         if (
-            methodo_e_h_kwh >= 0
+            methodo_e_h_kwh_m2 >= 0
             and facteur_ponderation_moyen >= 0
             and repartition_energie_finale_partie_renovee_somme >= 0
         ):
             methodo_e_h_renovee_pondere_kwh_m2 = (
-                methodo_e_h_kwh
+                methodo_e_h_kwh_m2
                 * facteur_ponderation_moyen
                 * (repartition_energie_finale_partie_renovee_somme / 100)
             )

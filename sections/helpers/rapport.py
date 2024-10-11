@@ -716,13 +716,41 @@ def generate_pdf(data):
     elements.append(Spacer(1, 0.5 * cm))
 
     # Project details
+    def wrap_text(text, max_width, style):
+        """
+        Wrap text to fit within a specified width.
+        Returns a Paragraph object.
+        """
+        words = text.split()
+        lines = []
+        current_line = []
+
+        for word in words:
+            test_line = ' '.join(current_line + [word])
+            if style.wordWrap(test_line, max_width)[1] <= max_width:
+                current_line.append(word)
+            else:
+                if current_line:
+                    lines.append(' '.join(current_line))
+                    current_line = [word]
+                else:
+                    lines.append(word)
+
+        if current_line:
+            lines.append(' '.join(current_line))
+
+        return Paragraph('<br/>'.join(lines), style)
+
     project_admin = [
         [
             Paragraph("<b>Informations administratives</b>", styles["Heading4"]),
             "",
         ],  # Title row
         [Paragraph("", styles["Normal"]), ""],  # Empty row
-        [Paragraph("Adresse:", styles["Normal"]), data["adresse_projet"]],
+        [
+            Paragraph("Adresse:", styles["Normal"]),
+            wrap_text(data["adresse_projet"], 340, normal_style),
+        ],
         [Paragraph("AMOén:", styles["Normal"]), data["amoen_id"]],
     ]
     project_admin_table = Table(project_admin, colWidths=[150, 350])
@@ -778,27 +806,27 @@ def generate_pdf(data):
         ]
     )
     # Add conditional rows for different surface types
-    for surface_type, percentage in [
-        ("Habitat collectif", data["sre_pourcentage_habitat_collectif"]),
-        ("Habitat individuel", data["sre_pourcentage_habitat_individuel"]),
-        ("Administration", data["sre_pourcentage_administration"]),
-        ("Ecoles", data["sre_pourcentage_ecoles"]),
-        ("Commerce", data["sre_pourcentage_commerce"]),
-        ("Restauration", data["sre_pourcentage_restauration"]),
-        ("Lieux de rassemblement", data["sre_pourcentage_lieux_de_rassemblement"]),
-        ("Hopitaux", data["sre_pourcentage_hopitaux"]),
-        ("Industrie", data["sre_pourcentage_industrie"]),
-        ("Depots", data["sre_pourcentage_depots"]),
-        ("Installations sportives", data["sre_pourcentage_installations_sportives"]),
-        ("Piscines couvertes", data["sre_pourcentage_piscines_couvertes"]),
-    ]:
-        if percentage > 0.0:
-            project_surfaces.append(
-                [
-                    f"{surface_type} (%):",
-                    f"{percentage} % de la surface rénovée soit {(percentage/100*data['sre_renovation_m2']):.0f} m² SRE",
-                ]
-            )
+    # for surface_type, percentage in [
+    #     ("Habitat collectif", data["sre_pourcentage_habitat_collectif"]),
+    #     ("Habitat individuel", data["sre_pourcentage_habitat_individuel"]),
+    #     ("Administration", data["sre_pourcentage_administration"]),
+    #     ("Ecoles", data["sre_pourcentage_ecoles"]),
+    #     ("Commerce", data["sre_pourcentage_commerce"]),
+    #     ("Restauration", data["sre_pourcentage_restauration"]),
+    #     ("Lieux de rassemblement", data["sre_pourcentage_lieux_de_rassemblement"]),
+    #     ("Hopitaux", data["sre_pourcentage_hopitaux"]),
+    #     ("Industrie", data["sre_pourcentage_industrie"]),
+    #     ("Depots", data["sre_pourcentage_depots"]),
+    #     ("Installations sportives", data["sre_pourcentage_installations_sportives"]),
+    #     ("Piscines couvertes", data["sre_pourcentage_piscines_couvertes"]),
+    # ]:
+    #     if percentage > 0.0:
+    #         project_surfaces.append(
+    #             [
+    #                 f"{surface_type} (%):",
+    #                 f"{percentage} % de la surface rénovée soit {(percentage/100*data['sre_renovation_m2']):.0f} m² SRE",
+    #             ]
+    #         )
 
     project_surfaces_table = Table(project_surfaces, colWidths=[150, 350])
     project_surfaces_table.setStyle(

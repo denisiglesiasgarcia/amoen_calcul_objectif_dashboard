@@ -716,7 +716,7 @@ def generate_pdf(data):
     elements.append(Spacer(1, 0.5 * cm))
 
     # Project details
-    def wrap_text(text, max_width, style="Normal"):
+    def wrap_text(text, max_width, style=normal_style):
         """
         Wrap text to fit within a specified width.
         Returns a Paragraph object.
@@ -724,22 +724,23 @@ def generate_pdf(data):
         words = text.split()
         lines = []
         current_line = []
-
         for word in words:
-            test_line = ' '.join(current_line + [word])
-            if style.wordWrap(test_line, max_width)[1] <= max_width:
+            test_line = " ".join(current_line + [word])
+            width = (
+                style.fontSize * len(test_line) * 0.55
+            )  # Approximate width calculation
+            if width <= max_width:
                 current_line.append(word)
             else:
                 if current_line:
-                    lines.append(' '.join(current_line))
+                    lines.append(" ".join(current_line))
                     current_line = [word]
                 else:
                     lines.append(word)
-
         if current_line:
-            lines.append(' '.join(current_line))
+            lines.append(" ".join(current_line))
 
-        return Paragraph('<br/>'.join(lines), style)
+    return Paragraph("<br/>".join(lines), style)
 
     project_admin = [
         [

@@ -50,7 +50,7 @@ from sections.helpers.note_calcul.calculs import (
     fonction_methodo_b_ww_kwh,
     fonction_methodo_e_ww_kwh_m2,
     fonction_methodo_b_h_kwh,
-    fonction_methodo_e_h_kwh,
+    fonction_methodo_e_h_kwh_m2,
     fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2,
     fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2,
     fonction_facteur_ponderation_moyen,
@@ -151,7 +151,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     - data_site["methodo_b_ww_kwh"]
     - data_site["methodo_e_ww_kwh_m2"]
     - data_site["methodo_b_h_kwh"]
-    - data_site["methodo_e_h_kwh"]
+    - data_site["methodo_e_h_kwh_m2"]
     - data_site["energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2"]
     - data_site["energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2"]
     - data_site["facteur_ponderation_moyen"]
@@ -326,7 +326,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
         data_site["agent_energetique_ef_somme_kwh"],
         data_site["part_chauffage_periode_comptage"],
     )
-    data_site["methodo_e_h_kwh"] = fonction_methodo_e_h_kwh(
+    data_site["methodo_e_h_kwh_m2"] = fonction_methodo_e_h_kwh_m2(
         data_site["sre_renovation_m2"],
         data_site["dj_periode"],
         data_site["methodo_b_h_kwh"],
@@ -335,7 +335,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     data_site[
         "energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2"
     ] = fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2(
-        data_site["methodo_e_ww_kwh_m2"], data_site["methodo_e_h_kwh"]
+        data_site["methodo_e_ww_kwh_m2"], data_site["methodo_e_h_kwh_m2"]
     )
     data_site["energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2"] = (
         fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2(
@@ -377,7 +377,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     )
     data_site["methodo_e_h_renovee_pondere_kwh_m2"] = (
         fonction_methodo_e_h_renovee_pondere_kwh_m2(
-            data_site["methodo_e_h_kwh"],
+            data_site["methodo_e_h_kwh_m2"],
             data_site["facteur_ponderation_moyen"],
             data_site["repartition_energie_finale_partie_renovee_somme"],
         )

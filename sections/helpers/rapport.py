@@ -725,7 +725,7 @@ def generate_pdf(data):
         [Paragraph("", styles["Normal"]), ""],  # Empty row
         [
             Paragraph("Adresse:", styles["Normal"]),
-            nom_rues,
+            Paragraph(nom_rues, styles["Normal"]),
         ],
         [Paragraph("AMOén:", styles["Normal"]), data["amoen_id"]],
     ]

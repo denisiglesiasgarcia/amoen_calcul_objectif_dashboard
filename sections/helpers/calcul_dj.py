@@ -2,13 +2,9 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
-## Météo
-DJ_REF_ANNUELS = 3260.539010836340
-DJ_TEMPERATURE_REFERENCE = 20
-
 
 @st.cache_data
-def get_meteo_data():
+def get_meteo_data(DJ_TEMPERATURE_REFERENCE=20):
     """
     Fetches and processes meteorological data for calculating Degree Days (DJ).
 
@@ -25,7 +21,6 @@ def get_meteo_data():
     Returns:
         pd.DataFrame: A DataFrame containing processed meteorological data with additional columns for heating season, temperature below 16 degrees, and Degree Days (DJ).
     """
-    global DJ_TEMPERATURE_REFERENCE
     # Mise à jour des données météo de manière journalière
     df_meteo_tre200d0_historique = pd.read_csv(
         "https://data.geo.admin.ch/ch.meteoschweiz.klima/nbcn-tageswerte/nbcn-daily_GVE_previous.csv",

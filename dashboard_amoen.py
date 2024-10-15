@@ -1,42 +1,38 @@
-"""
-TODO
-- renseigner les consommations ECS séparées du total
-
-"""
+# /dashboard_amoen.py
 
 import os
 import datetime
-import time
-import io
-from io import BytesIO
-import numpy as np
+
+# import io
+# from io import BytesIO
+# import numpy as np
 import pandas as pd
-import smtplib
-from email.message import EmailMessage
-from email.mime.application import MIMEApplication
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+# import smtplib
+# from email.message import EmailMessage
+# from email.mime.application import MIMEApplication
+# from email.mime.multipart import MIMEMultipart
+# from email.mime.text import MIMEText
 import streamlit as st
 
-st.set_page_config(page_title="AMOEN Dashboard", page_icon=":bar_chart:", layout="wide")
-import seaborn as sns
-import tempfile
-from datetime import date
 
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
+# import seaborn as sns
+# import tempfile
+# from datetime import date
+
+# import matplotlib.pyplot as plt
+# from matplotlib import rcParams
 import matplotlib
 
 matplotlib.use("Agg")
-import plotly.express as px
+# import plotly.express as px
 import altair as alt
 
 from pymongo import MongoClient
 from bson import ObjectId
 
 import streamlit_authenticator as stauth
-import yaml
-from yaml.loader import SafeLoader
+# import yaml
+# from yaml.loader import SafeLoader
 
 from sections.helpers.validation_saisie import (
     validate_input,
@@ -45,7 +41,6 @@ from sections.helpers.validation_saisie import (
 
 from sections.helpers.calcul_dj import (
     get_meteo_data,
-    calcul_dj_periode,
 )
 
 from sections.helpers.graphique_bars_exploitation import (
@@ -69,19 +64,18 @@ from sections.helpers.amoen_historique import create_barplot_historique_amoen
 
 from sections.helpers.avusy import (
     avusy_consommation_energie_dashboard,
-    avusy_consommation_energie_elec_periode,
     update_existing_data_avusy,
 )
 
 from sections.helpers.affectations_sre import display_affectations
 
 from sections.helpers.agents_energetiques import (
-    validate_agent_energetique_input,
     display_energy_agents,
 )
 
 from sections.helpers.note_calcul_main import fonction_note_calcul
 
+st.set_page_config(page_title="AMOEN Dashboard", page_icon=":bar_chart:", layout="wide")
 os.environ["USE_ARROW_extension"] = "1"
 
 # Variable pour la mise a jour de la météo

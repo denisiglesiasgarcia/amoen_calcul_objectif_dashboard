@@ -1,6 +1,7 @@
 # sections/helpers/note_calcul/create_dataframe_meteo.py
 
 import pandas as pd
+import streamlit as st
 
 
 def make_dataframe_df_meteo_note_calcul(periode_start, periode_end, df_meteo_tre200d0):

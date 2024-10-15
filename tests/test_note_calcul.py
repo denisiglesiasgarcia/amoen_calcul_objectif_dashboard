@@ -1,10 +1,10 @@
 # test_note_calcul.py
 # Tests for the functions in the note_calcul.py file
 
-import pytest
+# import pytest
 from pytest import approx
-import pandas as pd
-from datetime import datetime, timedelta
+# import pandas as pd
+from datetime import datetime
 import sys
 import os
 
@@ -15,7 +15,6 @@ from sections.helpers.calcul_dj import (
     get_meteo_data,
     calcul_dj_periode,
     DJ_REF_ANNUELS,
-    DJ_TEMPERATURE_REFERENCE,
 )
 
 from sections.helpers.note_calcul.calculs import (

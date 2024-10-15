@@ -10,7 +10,6 @@ import sqlite3
 import plotly.express as px
 from datetime import datetime
 import json
-import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -265,7 +264,7 @@ def show_dataframe(df):
 @st.cache_data
 def get_adresses_egid():
     conn = sqlite3.connect("adresses_egid.db")
-    c = conn.cursor()
+    # c = conn.cursor()
     df_adresses_egid = pd.read_sql_query(
         "SELECT * FROM adresses_egid ORDER BY adresse", conn
     )

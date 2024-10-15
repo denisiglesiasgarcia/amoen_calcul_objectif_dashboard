@@ -2,9 +2,11 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from pymongo import MongoClient
-from bson import ObjectId
-import datetime
-import time
+import pymongo
+
+# from bson import ObjectId
+# import datetime
+# import time
 
 MONGODB_URI = "mongodb+srv://streamlit:CYEpm33zdXRVsEJk@cluster0.hkkhetq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
@@ -621,9 +623,9 @@ def avusy_consommation_energie_elec_periode(start_datetime, end_datetime, mycol_
             if total_chaleur != 0
             else 0
         )
-        part_chaleur_villa_chauffage = (
-            index_chaleur_villa_chauffage / total_chaleur if total_chaleur != 0 else 0
-        )
+        # part_chaleur_villa_chauffage = (
+        #     index_chaleur_villa_chauffage / total_chaleur if total_chaleur != 0 else 0
+        # )
 
         part_elec_immeuble = part_chaleur_immeuble_ecs + part_chaleur_immeuble_chauffage
         conso_elec_pac_immeuble = index_elec_immeuble_villa * part_elec_immeuble

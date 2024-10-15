@@ -12,16 +12,20 @@ from reportlab.platypus import (
 )
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
-from reportlab.graphics.shapes import Drawing, Line, String, Polygon
-from reportlab.graphics.charts.barcharts import VerticalBarChart
+
+# from reportlab.graphics.shapes import Drawing, Line, String, Polygon
+# from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.lib.units import cm
 from reportlab.lib.enums import TA_LEFT
-from reportlab.pdfgen.canvas import Canvas
+
+# from reportlab.pdfgen.canvas import Canvas
 import io
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-from datetime import date, datetime
+
+# from datetime import date, datetime
+from datetime import datetime
 import os
 import matplotlib.patches as patches
 from matplotlib.colors import LinearSegmentedColormap
@@ -213,10 +217,10 @@ def graphique_bars_rapport(
         round(atteinte_objectif * 100, 1)
     )
 
-    xlabel_sep_x = 0.25
-    xlabel_sep_y = -0.17
+    # xlabel_sep_x = 0.25
+    # xlabel_sep_y = -0.17
     xlabel_level1 = -0.3
-    xlabel_level2 = xlabel_level1 + xlabel_sep_y
+    # xlabel_level2 = xlabel_level1 + xlabel_sep_y
 
     u1_titre = plt.text(
         0,
@@ -313,13 +317,13 @@ def repartition_renove_sureleve(
     building_height_reno = 2  # Smaller height
     building_width_sur = building_width_reno
     building_height_sur = 1
-    floor_height = 3
-    floors_reno = building_height_reno // floor_height
+    # floor_height = 3
+    # floors_reno = building_height_reno // floor_height
 
     # Define custom colors
     color_reno = "#2ecc71"  # A softer green
     color_sur = "#3498db"  # A softer blue
-    color_tout = "#34495e"  # A dark gray
+    # color_tout = "#34495e"  # A dark gray
     color_txt_reno = "forestgreen"
     color_txt_sur = "royalblue"
 
@@ -334,7 +338,7 @@ def repartition_renove_sureleve(
     # Text
     texte_alignement_droite = 0.10
     texte_hauteur_sous_titre = 0.15
-    texte_hauteur_texte_info = 0.30
+    # texte_hauteur_texte_info = 0.30
 
     # Rénovation
     floors_reno_fill = patches.Rectangle(
@@ -372,7 +376,7 @@ def repartition_renove_sureleve(
     ax2.add_patch(added_part)
 
     # Data for text and Sankey
-    sre_total = sre_renovation_m2 + sre_extension_surelevation_m2
+    # sre_total = sre_renovation_m2 + sre_extension_surelevation_m2
 
     INPUT = (
         repartition_energie_finale_partie_renovee_chauffage
@@ -711,7 +715,7 @@ def generate_pdf(data):
     # elements.append(Spacer(1, 0.5*cm))
 
     # Title
-    title_report = f"Rapport " + data["nom_projet"]
+    title_report = "Rapport " + data["nom_projet"]
     elements.append(Paragraph(title_report, styles["Title"]))
     elements.append(Spacer(1, 0.5 * cm))
 

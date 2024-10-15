@@ -28,7 +28,8 @@ def fonction_estimation_part_chauffage_periode_sur_annuel(dj_periode, DJ_REF_ANN
             )
         else:
             estimation_part_chauffage_periode_sur_annuel = 0.0
-    except:
+    except Exception as e:
+        print(e)
         estimation_part_chauffage_periode_sur_annuel = 0.0
     return estimation_part_chauffage_periode_sur_annuel
 
@@ -76,7 +77,8 @@ def fonction_part_ecs_periode_comptage(
             ) / estimation_energie_finale_periode_sur_annuel
         else:
             part_ecs_periode_comptage = 0.0
-    except:
+    except Exception as e:
+        print(e)
         part_ecs_periode_comptage = 0.0
     return part_ecs_periode_comptage
 
@@ -99,7 +101,8 @@ def fonction_part_chauffage_periode_comptage(
             ) / estimation_energie_finale_periode_sur_annuel
         else:
             part_chauffage_periode_comptage = 0.0
-    except:
+    except Exception as e:
+        print(e)
         part_chauffage_periode_comptage = 0.0
     return part_chauffage_periode_comptage
 
@@ -111,7 +114,8 @@ def fonction_correction_ecs(periode_nb_jours):
             correction_ecs = 365 / periode_nb_jours
         else:
             correction_ecs = 0.0
-    except:
+    except Exception as e:
+        print(e)
         correction_ecs = 0.0
     return correction_ecs
 
@@ -138,7 +142,8 @@ def fonction_agent_energetique_ef_mazout_somme_mj(
             )
         else:
             agent_energetique_ef_mazout_somme_mj = 0.0
-    except:
+    except Exception as e:
+        print(e)
         agent_energetique_ef_mazout_somme_mj = 0.0
     return agent_energetique_ef_mazout_somme_mj
 
@@ -160,7 +165,8 @@ def fonction_agent_energetique_ef_gaz_naturel_somme_mj(
             )
         else:
             agent_energetique_ef_gaz_naturel_somme_mj = 0.0
-    except:
+    except Exception as e:
+        print(e)
         agent_energetique_ef_gaz_naturel_somme_mj = 0.0
     return agent_energetique_ef_gaz_naturel_somme_mj
 
@@ -177,7 +183,8 @@ def fonction_agent_energetique_ef_bois_buches_dur_somme_mj(
             )
         else:
             agent_energetique_ef_bois_buches_dur_somme_mj = 0.0
-    except:
+    except Exception as e:
+        print(e)
         agent_energetique_ef_bois_buches_dur_somme_mj = 0.0
     return agent_energetique_ef_bois_buches_dur_somme_mj
 
@@ -202,7 +209,8 @@ def fonction_agent_energetique_ef_bois_buches_tendre_somme_mj(
             )
         else:
             agent_energetique_ef_bois_buches_tendre_somme_mj = 0.0
-    except:
+    except Exception as e:
+        print(e)
         agent_energetique_ef_bois_buches_tendre_somme_mj = 0.0
     return agent_energetique_ef_bois_buches_tendre_somme_mj
 
@@ -228,7 +236,8 @@ def fonction_agent_energetique_ef_pellets_somme_mj(
             )
         else:
             agent_energetique_ef_pellets_somme_mj = 0.0
-    except:
+    except Exception as e:
+        print(e)
         agent_energetique_ef_pellets_somme_mj = 0.0
     return agent_energetique_ef_pellets_somme_mj
 
@@ -250,7 +259,8 @@ def fonction_agent_energetique_ef_plaquettes_somme_mj(
             )
         else:
             agent_energetique_ef_plaquettes_somme_mj = 0.0
-    except:
+    except Exception as e:
+        print(e)
         agent_energetique_ef_plaquettes_somme_mj = 0.0
     return agent_energetique_ef_plaquettes_somme_mj
 
@@ -266,7 +276,8 @@ def fonction_agent_energetique_ef_cad_somme_mj(
             )
         else:
             agent_energetique_ef_cad_somme_mj = 0.0
-    except:
+    except Exception as e:
+        print(e)
         agent_energetique_ef_cad_somme_mj = 0.0
     return agent_energetique_ef_cad_somme_mj
 
@@ -283,7 +294,8 @@ def fonction_agent_energetique_ef_electricite_pac_somme_mj(
             )
         else:
             agent_energetique_ef_electricite_pac_somme_mj = 0.0
-    except:
+    except Exception as e:
+        print(e)
         agent_energetique_ef_electricite_pac_somme_mj = 0.0
     return agent_energetique_ef_electricite_pac_somme_mj
 
@@ -300,7 +312,8 @@ def fonction_agent_energetique_ef_electricite_directe_somme_mj(
             )
         else:
             agent_energetique_ef_electricite_directe_somme_mj = 0.0
-    except:
+    except Exception as e:
+        print(e)
         agent_energetique_ef_electricite_directe_somme_mj = 0.0
     return agent_energetique_ef_electricite_directe_somme_mj
 
@@ -316,7 +329,8 @@ def fonction_agent_energetique_ef_autre_somme_mj(
             )
         else:
             agent_energetique_ef_autre_somme_mj = 0.0
-    except:
+    except Exception as e:
+        print(e)
         agent_energetique_ef_autre_somme_mj = 0.0
     return agent_energetique_ef_autre_somme_mj
 
@@ -360,7 +374,8 @@ def fonction_agent_energetique_ef_somme_kwh(
             ) / 3.6
         else:
             agent_energetique_ef_somme_kwh = 0.0
-    except:
+    except Exception as e:
+        print(e)
         agent_energetique_ef_somme_kwh = 0.0
     return agent_energetique_ef_somme_kwh
 
@@ -376,7 +391,8 @@ def fonction_methodo_b_ww_kwh(
             )
         else:
             methodo_b_ww_kwh = 0.0
-    except:
+    except Exception as e:
+        print(e)
         methodo_b_ww_kwh = 0.0
     return methodo_b_ww_kwh
 
@@ -390,7 +406,8 @@ def fonction_methodo_e_ww_kwh_m2(methodo_b_ww_kwh, sre_renovation_m2, periode_nb
             )
         else:
             methodo_e_ww_kwh_m2 = 0.0
-    except:
+    except Exception as e:
+        print(e)
         methodo_e_ww_kwh_m2 = 0.0
     return methodo_e_ww_kwh_m2
 
@@ -406,7 +423,8 @@ def fonction_methodo_b_h_kwh(
             )
         else:
             methodo_b_h_kwh = 0.0
-    except:
+    except Exception as e:
+        print(e)
         methodo_b_h_kwh = 0.0
     return methodo_b_h_kwh
 
@@ -422,7 +440,8 @@ def fonction_methodo_e_h_kwh_m2(
             )
         else:
             methodo_e_h_kwh_m2 = 0.0
-    except:
+    except Exception as e:
+        print(e)
         methodo_e_h_kwh_m2 = 0.0
     return methodo_e_h_kwh_m2
 
@@ -440,7 +459,8 @@ def fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelev
             energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
                 0.0
             )
-    except:
+    except Exception as e:
+        print(e)
         energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
             0.0
         )
@@ -531,7 +551,8 @@ def fonction_methodo_e_ww_renovee_pondere_kwh_m2(
             )
         else:
             methodo_e_ww_renovee_pondere_kwh_m2 = 0
-    except:
+    except Exception as e:
+        print(e)
         methodo_e_ww_renovee_pondere_kwh_m2 = 0
     return methodo_e_ww_renovee_pondere_kwh_m2
 
@@ -555,7 +576,8 @@ def fonction_methodo_e_h_renovee_pondere_kwh_m2(
             )
         else:
             methodo_e_h_renovee_pondere_kwh_m2 = 0
-    except:
+    except Exception as e:
+        print(e)
         methodo_e_h_renovee_pondere_kwh_m2 = 0
     return methodo_e_h_renovee_pondere_kwh_m2
 
@@ -578,7 +600,8 @@ def fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_ponder
             energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = (
                 0
             )
-    except:
+    except Exception as e:
+        print(e)
         energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = 0
     return energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
 
@@ -600,7 +623,8 @@ def fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_ponder
             energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = (
                 0
             )
-    except:
+    except Exception as e:
+        print(e)
         energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = 0
     return energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2
 
@@ -622,7 +646,8 @@ def fonction_delta_ef_realisee_kwh_m2(
             )
         else:
             delta_ef_realisee_kwh_m2 = 0.0
-    except:
+    except Exception as e:
+        print(e)
         delta_ef_realisee_kwh_m2 = 0.0
     return delta_ef_realisee_kwh_m2
 
@@ -633,7 +658,8 @@ def fonction_delta_ef_visee_kwh_m2(ef_avant_corr_kwh_m2, ef_objectif_pondere_kwh
             delta_ef_visee_kwh_m2 = ef_avant_corr_kwh_m2 - ef_objectif_pondere_kwh_m2
         else:
             delta_ef_visee_kwh_m2 = 0.0
-    except:
+    except Exception as e:
+        print(e)
         delta_ef_visee_kwh_m2 = 0.0
     return delta_ef_visee_kwh_m2
 
@@ -651,7 +677,8 @@ def fonction_atteinte_objectif(
             atteinte_objectif = delta_ef_realisee_kwh_m2 / delta_ef_visee_kwh_m2
         else:
             atteinte_objectif = 0.0
-    except:
+    except Exception as e:
+        print(e)
         atteinte_objectif = 0.0
 
     return atteinte_objectif

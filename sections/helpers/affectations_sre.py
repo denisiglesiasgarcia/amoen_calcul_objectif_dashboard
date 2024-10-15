@@ -86,7 +86,7 @@ def validate_input_affectation(name, variable, unite, sre_renovation_m2):
                 f"{name} {variable} {unite} → {round(variable * float(sre_renovation_m2) / 100, 2)} m²"
             )
         else:
-            st.warning(f"Valeur doit être comprise entre 0 et 100")
+            st.warning("Valeur doit être comprise entre 0 et 100")
     except ValueError:
         st.warning(f"{name} doit être un chiffre")
         variable = 0

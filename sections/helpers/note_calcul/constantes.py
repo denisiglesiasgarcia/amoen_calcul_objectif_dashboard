@@ -1,5 +1,9 @@
 # sections/helpers/note_calcul/constantes.py
 
+## Météo
+DJ_REF_ANNUELS = 3260.539010836340
+DJ_TEMPERATURE_REFERENCE = 20
+
 # Agents énergétiques conversion
 CONVERSION_MAZOUT_MJ_KG = 44.8
 CONVERSION_MAZOUT_MJ_LITRES = 44.8 * 0.84

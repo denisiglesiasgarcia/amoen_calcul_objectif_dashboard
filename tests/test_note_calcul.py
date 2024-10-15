@@ -3,6 +3,7 @@
 
 # import pytest
 from pytest import approx
+
 # import pandas as pd
 from datetime import datetime
 import sys
@@ -14,7 +15,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from sections.helpers.calcul_dj import (
     get_meteo_data,
     calcul_dj_periode,
-    DJ_REF_ANNUELS,
 )
 
 from sections.helpers.note_calcul.calculs import (
@@ -80,6 +80,7 @@ from sections.helpers.note_calcul.constantes import (
     FACTEUR_PONDERATION_ELECTRICITE_PAC,
     FACTEUR_PONDERATION_ELECTRICITE_DIRECTE,
     FACTEUR_PONDERATION_AUTRE,
+    DJ_REF_ANNUELS,
 )
 
 # Get the meteorological data

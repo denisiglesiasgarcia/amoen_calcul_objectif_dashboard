@@ -1,5 +1,5 @@
 import streamlit as st
-import numpy as np
+# import numpy as np
 
 
 def validate_input(name, variable, unit):
@@ -15,7 +15,7 @@ def validate_energie_input(name, variable, unit1, unit2):
         if variable > 0:
             st.text(f"{name} {variable} {unit1} → {round((variable * 3.6),2)} {unit2}")
         else:
-            st.text(f"Valeur doit être positive")
+            st.text("Valeur doit être positive")
     except ValueError:
         st.text(f"{name} doit être un chiffre")
         variable = 0

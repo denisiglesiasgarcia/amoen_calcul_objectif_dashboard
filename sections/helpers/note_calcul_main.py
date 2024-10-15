@@ -1,7 +1,7 @@
 # sections/note_calcul.py
 
-import pandas as pd
-import streamlit as st
+# import pandas as pd
+# import streamlit as st
 
 from sections.helpers.note_calcul.create_dataframe_periode_list import (
     make_dataframe_df_periode_list,
@@ -25,7 +25,6 @@ from sections.helpers.note_calcul.create_dataframe_results import (
 from sections.helpers.calcul_dj import (
     calcul_dj_periode,
     DJ_REF_ANNUELS,
-    DJ_TEMPERATURE_REFERENCE,
 )
 
 from sections.helpers.note_calcul.calculs import (

@@ -170,6 +170,14 @@ def test_calcul_dj_periode():
         )
         == data_site_avusy1["dj_periode"]
     )
+    assert (
+        calcul_dj_periode(
+            df_meteo_tre200d0,
+            datetime(2023, 1, 1),
+            datetime(2024, 1, 1),
+        )
+        == 2804.3
+    )
 
 
 # note_calcul.py
@@ -236,6 +244,28 @@ def test_fonction_agent_energetique_ef_mazout_somme_mj():
         CONVERSION_MAZOUT_MJ_LITRES,
         CONVERSION_MAZOUT_MJ_KWH,
     ) == approx(data_site_avusy1["agent_energetique_ef_mazout_somme_mj"])
+    assert (
+        fonction_agent_energetique_ef_mazout_somme_mj(
+            0.0,
+            0.0,
+            0.0,
+            CONVERSION_MAZOUT_MJ_KG,
+            CONVERSION_MAZOUT_MJ_LITRES,
+            CONVERSION_MAZOUT_MJ_KWH,
+        )
+        == 0.0
+    )
+    assert (
+        fonction_agent_energetique_ef_mazout_somme_mj(
+            1000,
+            1000,
+            1000,
+            CONVERSION_MAZOUT_MJ_KG,
+            CONVERSION_MAZOUT_MJ_LITRES,
+            CONVERSION_MAZOUT_MJ_KWH,
+        )
+        == 86032
+    )
 
 
 def test_fonction_agent_energetique_ef_gaz_naturel_somme_mj():
@@ -245,6 +275,15 @@ def test_fonction_agent_energetique_ef_gaz_naturel_somme_mj():
         CONVERSION_GAZ_NATUREL_MJ_M3,
         CONVERSION_GAZ_NATUREL_MJ_KWH,
     ) == approx(data_site_avusy1["agent_energetique_ef_gaz_naturel_somme_mj"])
+    assert (
+        fonction_agent_energetique_ef_gaz_naturel_somme_mj(
+            1000,
+            1000,
+            CONVERSION_GAZ_NATUREL_MJ_M3,
+            CONVERSION_GAZ_NATUREL_MJ_KWH,
+        )
+        == 42100
+    )
 
 
 def test_fonction_agent_energetique_ef_bois_buches_dur_somme_mj():
@@ -252,6 +291,13 @@ def test_fonction_agent_energetique_ef_bois_buches_dur_somme_mj():
         data_site_avusy1["agent_energetique_ef_bois_buches_dur_stere"],
         CONVERSION_BOIS_BUCHES_DUR_MJ_STERE,
     ) == approx(data_site_avusy1["agent_energetique_ef_bois_buches_dur_somme_mj"])
+    assert (
+        fonction_agent_energetique_ef_bois_buches_dur_somme_mj(
+            1000,
+            CONVERSION_BOIS_BUCHES_DUR_MJ_STERE,
+        )
+        == 7960000.000
+    )
 
 
 def test_fonction_agent_energetique_ef_bois_buches_tendre_somme_mj():
@@ -261,6 +307,15 @@ def test_fonction_agent_energetique_ef_bois_buches_tendre_somme_mj():
         CONVERSION_BOIS_BUCHES_TENDRE_MJ_STERE,
         CONVERSION_BOIS_BUCHES_TENDRE_MJ_KWH,
     ) == approx(data_site_avusy1["agent_energetique_ef_bois_buches_tendre_somme_mj"])
+    assert (
+        fonction_agent_energetique_ef_bois_buches_tendre_somme_mj(
+            1000,
+            1000,
+            CONVERSION_BOIS_BUCHES_TENDRE_MJ_STERE,
+            CONVERSION_BOIS_BUCHES_TENDRE_MJ_KWH,
+        )
+        == 5575600.000
+    )
 
 
 def test_fonction_agent_energetique_ef_pellets_somme_mj():
@@ -272,6 +327,17 @@ def test_fonction_agent_energetique_ef_pellets_somme_mj():
         CONVERSION_PELLETS_MJ_KG,
         CONVERSION_PELLETS_MJ_KWH,
     ) == approx(data_site_avusy1["agent_energetique_ef_pellets_somme_mj"])
+    assert (
+        fonction_agent_energetique_ef_pellets_somme_mj(
+            1000,
+            1000,
+            1000,
+            CONVERSION_PELLETS_MJ_M3,
+            CONVERSION_PELLETS_MJ_KG,
+            CONVERSION_PELLETS_MJ_KWH,
+        )
+        == 13355800
+    )
 
 
 def test_fonction_agent_energetique_ef_plaquettes_somme_mj():
@@ -281,6 +347,15 @@ def test_fonction_agent_energetique_ef_plaquettes_somme_mj():
         CONVERSION_PLAQUETTES_MJ_M3,
         CONVERSION_PLAQUETTES_MJ_KWH,
     ) == approx(data_site_avusy1["agent_energetique_ef_plaquettes_somme_mj"])
+    assert (
+        fonction_agent_energetique_ef_plaquettes_somme_mj(
+            1000,
+            1000,
+            CONVERSION_PLAQUETTES_MJ_M3,
+            CONVERSION_PLAQUETTES_MJ_KWH,
+        )
+        == approx(4004065.51724138)
+    )
 
 
 def test_fonction_agent_energetique_ef_cad_somme_mj():
@@ -288,6 +363,13 @@ def test_fonction_agent_energetique_ef_cad_somme_mj():
         data_site_avusy1["agent_energetique_ef_cad_kwh"],
         CONVERSION_CAD_MJ_KWH,
     ) == approx(data_site_avusy1["agent_energetique_ef_cad_somme_mj"])
+    assert (
+        fonction_agent_energetique_ef_cad_somme_mj(
+            1000,
+            CONVERSION_CAD_MJ_KWH,
+        )
+        == 3600
+    )
 
 
 def test_fonction_agent_energetique_ef_electricite_pac_somme_mj():
@@ -295,6 +377,13 @@ def test_fonction_agent_energetique_ef_electricite_pac_somme_mj():
         data_site_avusy1["agent_energetique_ef_electricite_pac_kwh"],
         CONVERSION_ELECTRICITE_PAC_MJ_KWH,
     ) == approx(data_site_avusy1["agent_energetique_ef_electricite_pac_somme_mj"])
+    assert (
+        fonction_agent_energetique_ef_electricite_pac_somme_mj(
+            1000,
+            CONVERSION_ELECTRICITE_PAC_MJ_KWH,
+        )
+        == 3600
+    )
 
 
 def test_fonction_agent_energetique_ef_electricite_directe_somme_mj():
@@ -302,6 +391,13 @@ def test_fonction_agent_energetique_ef_electricite_directe_somme_mj():
         data_site_avusy1["agent_energetique_ef_electricite_directe_kwh"],
         CONVERSION_ELECTRICITE_DIRECTE_MJ_KWH,
     ) == approx(data_site_avusy1["agent_energetique_ef_electricite_directe_somme_mj"])
+    assert (
+        fonction_agent_energetique_ef_electricite_directe_somme_mj(
+            1000,
+            CONVERSION_ELECTRICITE_DIRECTE_MJ_KWH,
+        )
+        == 3600
+    )
 
 
 def test_fonction_agent_energetique_ef_autre_somme_mj():
@@ -309,6 +405,13 @@ def test_fonction_agent_energetique_ef_autre_somme_mj():
         data_site_avusy1["agent_energetique_ef_autre_kwh"],
         CONVERSION_AUTRE_MJ_KWH,
     ) == approx(data_site_avusy1["agent_energetique_ef_autre_somme_mj"])
+    assert (
+        fonction_agent_energetique_ef_autre_somme_mj(
+            1000,
+            CONVERSION_AUTRE_MJ_KWH,
+        )
+        == 3600
+    )
 
 
 def test_fonction_agent_energetique_ef_somme_kwh():
@@ -324,6 +427,21 @@ def test_fonction_agent_energetique_ef_somme_kwh():
         data_site_avusy1["agent_energetique_ef_electricite_directe_somme_mj"],
         data_site_avusy1["agent_energetique_ef_autre_somme_mj"],
     ) == approx(data_site_avusy1["agent_energetique_ef_somme_kwh"])
+    assert (
+        fonction_agent_energetique_ef_somme_kwh(
+            1000,
+            1000,
+            1000,
+            1000,
+            1000,
+            1000,
+            1000,
+            1000,
+            1000,
+            1000,
+        )
+        == 10000/3.6
+    )
 
 
 def test_fonction_methodo_b_ww_kwh():

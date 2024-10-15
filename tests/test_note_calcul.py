@@ -347,15 +347,12 @@ def test_fonction_agent_energetique_ef_plaquettes_somme_mj():
         CONVERSION_PLAQUETTES_MJ_M3,
         CONVERSION_PLAQUETTES_MJ_KWH,
     ) == approx(data_site_avusy1["agent_energetique_ef_plaquettes_somme_mj"])
-    assert (
-        fonction_agent_energetique_ef_plaquettes_somme_mj(
-            1000,
-            1000,
-            CONVERSION_PLAQUETTES_MJ_M3,
-            CONVERSION_PLAQUETTES_MJ_KWH,
-        )
-        == approx(4004065.51724138)
-    )
+    assert fonction_agent_energetique_ef_plaquettes_somme_mj(
+        1000,
+        1000,
+        CONVERSION_PLAQUETTES_MJ_M3,
+        CONVERSION_PLAQUETTES_MJ_KWH,
+    ) == approx(4004065.51724138)
 
 
 def test_fonction_agent_energetique_ef_cad_somme_mj():
@@ -440,7 +437,7 @@ def test_fonction_agent_energetique_ef_somme_kwh():
             1000,
             1000,
         )
-        == 10000/3.6
+        == 10000 / 3.6
     )
 
 

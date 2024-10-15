@@ -24,7 +24,6 @@ from sections.helpers.note_calcul.create_dataframe_results import (
 
 from sections.helpers.calcul_dj import (
     calcul_dj_periode,
-    DJ_REF_ANNUELS,
 )
 
 from sections.helpers.note_calcul.calculs import (
@@ -90,6 +89,7 @@ from sections.helpers.note_calcul.constantes import (
     FACTEUR_PONDERATION_ELECTRICITE_PAC,
     FACTEUR_PONDERATION_ELECTRICITE_DIRECTE,
     FACTEUR_PONDERATION_AUTRE,
+    DJ_REF_ANNUELS,
 )
 
 from sections.helpers.note_calcul.latex import (

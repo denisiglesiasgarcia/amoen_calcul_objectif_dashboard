@@ -9,22 +9,21 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 ## TODO
 
 - Prioritaire
-  - [ ] Corriger bug sur les agents énergétiques
+  - Webinaire
+    - [ ] Préparer powerpoint/présentation ou autre document qui accompagnera le webinaire
+    - [ ] Générer les mots de passes pour les utilisateurs
   - Rapport
     - [ ] Ajouter barre de 85% dans le graphique du rapport PDF
-    - [ ] Trouver solution pour les noms de rue longs
+  - IDC
+    - [ ] Ajouter calcul IDC
 
 - Non prioritaire
   - [ ] Améliorer la documentation
   - [ ] Nettoyer code
   - [ ] Ajouter option de renseigner ECS séparée du chauffage
 
-- En attente
-  - [ ] Ajouter calcul IDC → En attente nouveau règlement/calcul IDC  
-
 ## Fait
 
-- [x] Ajouter unité de test pour vérifier que le calcul de l'atteinte de l'objectif est correct
 - [x] Météo mise à jour automatique
 - [x] Ajouter README
 - [x] Amélioration performance
@@ -38,3 +37,6 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 - [X] Ajouter pour les surélévations, le total énergie finale ainsi que la répartition
 - [X] Gérer les cas ou l'atteinte de l'objectif est négative
 - [X] Première version documentation avec mkdocs
+- [x] Ajouter unité de test pour vérifier que le calcul de l'atteinte de l'objectif est correct
+- [X] Corriger bug sur les agents énergétiques
+- [X] Trouver solution pour les noms de rue longs dans le rapport PDF

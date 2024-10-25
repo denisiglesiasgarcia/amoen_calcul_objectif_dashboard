@@ -276,7 +276,7 @@ if st.session_state["authentication_status"]:
         except Exception as e:
             st.error(e)
     authenticator.logout(location="sidebar")
-    st.sidebar.write("You are logged as: ", st.session_state["username"])
+    st.sidebar.write("utilisateur: ", st.session_state["username"])
 
     # dashboard
     st.title("Calcul de l'atteinte des objectifs AMOén selon méthodologie")

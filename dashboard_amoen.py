@@ -250,6 +250,11 @@ def add_sidebar_links():
                target="_blank">
                 <i class="fab fa-github"></i> GitHub Repository
             </a>
+            <a href="https://pa.eco21.ch/accueil"
+                class="sidebar-link"
+                target="_blank">
+                <i class="fas fa-link"></i> Applications SIG-éco21
+            </a>
             <hr>
         </div>
     """,

@@ -60,26 +60,15 @@ def insert_project_to_mongodb(
         return False
 
 
-def display_database_management(mycol_historique_sites, data_admin: list):
-    """
-    Display database management interface with CRUD operations
-
-    Args:
-        mycol_historique_sites: MongoDB collection
-        data_admin (list): List of project data
-    """
+def display_database_management(mycol_historique_sites, data_admin):
+    """Display database management interface with CRUD operations"""
     st.subheader("Base de données")
 
-    # Convert data to DataFrame and sort by project name
-    df = (
-        pd.DataFrame(data_admin).sort_values("nom_projet")
-        if data_admin
-        else pd.DataFrame()
-    )
-
-    if df.empty:
-        st.warning("Aucun projet trouvé dans la base de données")
-        return
+    # Convert data to DataFrame and sort by project name and date
+    df = pd.DataFrame(data_admin)
+    # Convert date_rapport to datetime for proper sorting
+    df["date_rapport"] = pd.to_datetime(df["date_rapport"])
+    df = df.sort_values(["nom_projet", "date_rapport"])
 
     tab_view, tab_edit, tab_add = st.tabs(
         ["Voir les projets", "Modifier un projet", "Ajouter un projet"]
@@ -87,14 +76,7 @@ def display_database_management(mycol_historique_sites, data_admin: list):
 
     with tab_view:
         st.write("Liste des projets dans la base de données")
-        # Add search/filter functionality
-        search_term = st.text_input("Rechercher un projet", key="search_projects")
-        filtered_df = (
-            df[df["nom_projet"].str.contains(search_term, case=False)]
-            if search_term
-            else df
-        )
-        st.dataframe(filtered_df, use_container_width=True)
+        st.dataframe(df)
 
     with tab_edit:
         st.write("Modifier un projet existant")

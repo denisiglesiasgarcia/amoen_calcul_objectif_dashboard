@@ -100,15 +100,15 @@ def display_database_management(mycol_historique_sites, data_admin: list):
         st.write("Modifier un projet existant")
 
         # Create a combined identifier for selection
-        df["project_identifier"] = df.apply(
-            lambda x: f"{x['nom_projet']} ({x['date_rapport'].strftime('%d-%m-%Y')})",
-            axis=1,
+        df['project_identifier'] = df.apply(
+            lambda x: f"{x['nom_projet']} ({x['date_rapport'].strftime('%d-%m-%Y')})", 
+            axis=1
         )
 
         # Project selection with date
         selected_project_identifier = st.selectbox(
             "Sélectionner le projet à modifier",
-            df["project_identifier"].unique(),
+            df['project_identifier'].unique(),
             key="edit_project",
         )
 
@@ -116,38 +116,46 @@ def display_database_management(mycol_historique_sites, data_admin: list):
             # Extract project name and date from the selection
             selected_project = selected_project_identifier.split(" (")[0]
             selected_date = selected_project_identifier.split("(")[1].rstrip(")")
-
+            
             # Get the specific project data
             project_data = df[
-                (df["nom_projet"] == selected_project)
-                & (df["date_rapport"].dt.strftime("%d-%m-%Y") == selected_date)
+                (df['nom_projet'] == selected_project) & 
+                (df['date_rapport'].dt.strftime('%d-%m-%Y') == selected_date)
             ].iloc[0]
 
             # Create input fields for each column
             edited_data = {}
             for col in df.columns:
-                if col not in [
-                    "_id",
-                    "project_identifier",
-                ]:  # Skip MongoDB ID and our custom identifier
+                if col not in ['_id', 'project_identifier']:  # Skip MongoDB ID and our custom identifier
                     current_value = project_data[col]
 
                     # Handle different data types
                     if isinstance(current_value, (int, float)):
+                        # Add step and format parameters to show all decimals
                         edited_data[col] = st.number_input(
-                            f"{col}", value=float(current_value), key=f"edit_{col}"
+                            f"{col}", 
+                            value=float(current_value),
+                            format="%.15f",  # Show up to 15 decimal places
+                            step=1e-10,      # Allow very small increments
+                            key=f"edit_{col}"
                         )
                     elif isinstance(current_value, bool):
                         edited_data[col] = st.checkbox(
-                            f"{col}", value=current_value, key=f"edit_{col}"
+                            f"{col}", 
+                            value=current_value, 
+                            key=f"edit_{col}"
                         )
                     elif isinstance(current_value, pd.Timestamp):
                         edited_data[col] = st.date_input(
-                            f"{col}", value=current_value, key=f"edit_{col}"
+                            f"{col}", 
+                            value=current_value,
+                            key=f"edit_{col}"
                         )
                     else:
                         edited_data[col] = st.text_input(
-                            f"{col}", value=str(current_value), key=f"edit_{col}"
+                            f"{col}", 
+                            value=str(current_value), 
+                            key=f"edit_{col}"
                         )
 
             if st.button("Sauvegarder les modifications"):
@@ -156,16 +164,12 @@ def display_database_management(mycol_historique_sites, data_admin: list):
                     result = mycol_historique_sites.update_one(
                         {
                             "nom_projet": selected_project,
-                            "date_rapport": project_data["date_rapport"].strftime(
-                                "%Y-%m-%d"
-                            ),
+                            "date_rapport": project_data['date_rapport'].strftime('%Y-%m-%d')
                         },
-                        {"$set": edited_data},
+                        {"$set": edited_data}
                     )
                     if result.modified_count > 0:
-                        st.success(
-                            f"Projet {selected_project_identifier} mis à jour avec succès!"
-                        )
+                        st.success(f"Projet {selected_project_identifier} mis à jour avec succès!")
                         st.rerun()
                     else:
                         st.error("Erreur lors de la mise à jour du projet")

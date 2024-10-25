@@ -193,15 +193,6 @@ username, authentication_status, username_login = authenticator.login(
 
 
 def add_sidebar_links():
-    # Hide the default Streamlit menu and footer
-    hide_styles = """
-        <style>
-            div[data-testid="stToolbar"] {visibility: hidden;}
-            footer {visibility: hidden;}
-        </style>
-    """
-    st.markdown(hide_styles, unsafe_allow_html=True)
-
     # Custom CSS for the buttons including Font Awesome - now embedded within the HTML
     st.sidebar.markdown(
         """

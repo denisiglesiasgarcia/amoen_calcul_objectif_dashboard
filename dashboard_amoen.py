@@ -268,15 +268,15 @@ if st.session_state["authentication_status"]:
                     "Reset": "Reset",
                 },
             ):
-                st.success("Password modified successfully")
+                st.success("Mot de passe modifié.")
                 # update a specific field in mongodb
                 mycol_authentification_site.update_one(
                     {"_id": ObjectId("66ad0b102f5cc6cb3c64e1d1")}, {"$set": config}
                 )
         except Exception as e:
             st.error(e)
-    authenticator.logout(location="sidebar")
-    st.sidebar.write("utilisateur: ", st.session_state["username"])
+    authenticator.logout(button_name="Déconnexion", location="sidebar")
+    st.sidebar.write("Utilisateur: ", st.session_state["username"])
 
     # dashboard
     st.title("Calcul de l'atteinte des objectifs AMOén selon méthodologie")

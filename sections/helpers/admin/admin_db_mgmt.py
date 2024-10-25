@@ -127,7 +127,10 @@ def display_database_management(mycol_historique_sites, data_admin):
                         edited_data[col] = st.checkbox(
                             f"{col}", value=current_value, key=f"edit_{col}"
                         )
-                    elif isinstance(current_value, (pd.Timestamp, pd.DatetimeDtype)):
+                    elif (
+                        isinstance(current_value, pd.Timestamp)
+                        or "datetime" in str(type(current_value)).lower()
+                    ):
                         date_value = st.date_input(
                             f"{col}", value=current_value, key=f"edit_{col}"
                         )

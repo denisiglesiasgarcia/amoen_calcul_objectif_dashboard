@@ -261,7 +261,7 @@ def add_sidebar_links():
 if st.session_state["authentication_status"]:
     # st.write(config['credentials']['usernames'][st.session_state['username']]['password'])
     add_sidebar_links()
-    with st.sidebar.popover("Changer mot de passe", "Changer mot de passe"):
+    with st.sidebar.popover("Changer mot de passe"):
         try:
             if authenticator.reset_password(
                 username=st.session_state["username"],

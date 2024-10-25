@@ -7,6 +7,7 @@ import datetime
 # from io import BytesIO
 # import numpy as np
 import pandas as pd
+
 # import smtplib
 # from email.message import EmailMessage
 # from email.mime.application import MIMEApplication
@@ -31,6 +32,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 
 import streamlit_authenticator as stauth
+
 # import yaml
 # from yaml.loader import SafeLoader
 
@@ -193,7 +195,7 @@ if st.session_state["authentication_status"]:
     # st.write(config['credentials']['usernames'][st.session_state['username']]['password'])
     # add to the sidebar a help button that goes to the documentation https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/
     st.sidebar.markdown(
-        "[![Documentation](https://img.shields.io/badge/Documentation-Click%20ici-blue)](https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/)"
+        "[![Documentation](https://img.shields.io/badge/Aide-Click%20ici-blue)](https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/)"
     )
     with st.sidebar.popover("Change password"):
         try:

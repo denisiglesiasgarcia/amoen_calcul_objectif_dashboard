@@ -143,26 +143,14 @@ def display_database_management(mycol_historique_sites, data_admin):
 
             if st.button("Sauvegarder les modifications"):
                 try:
+                    from bson import ObjectId
+
+                    # Use _id for querying
+                    query = {"_id": ObjectId(project_data["_id"])}
+
                     # Debug information
                     st.write("### Debug Information")
-                    st.write("Query criteria:")
-                    query = {
-                        "nom_projet": selected_project,
-                        "date_rapport": project_data["date_rapport"].strftime(
-                            "%Y-%m-%d"
-                        ),
-                    }
-                    st.json(query)
-
-                    st.write("Update data:")
-                    st.json(edited_data)
-
-                    # Try to find the document first
-                    existing_doc = mycol_historique_sites.find_one(query)
-                    if existing_doc:
-                        st.write("Document found in database")
-                    else:
-                        st.write("No document found matching query")
+                    st.write("Document ID:", str(project_data["_id"]))
 
                     # Update MongoDB document
                     result = mycol_historique_sites.update_one(

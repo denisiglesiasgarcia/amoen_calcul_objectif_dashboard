@@ -134,10 +134,8 @@ def display_database_management(mycol_historique_sites, data_admin):
                         date_value = st.date_input(
                             f"{col}", value=current_value, key=f"edit_{col}"
                         )
-                        # Convert to MongoDB ISODate format
-                        edited_data[col] = {
-                            "$date": date_value.strftime("%Y-%m-%dT00:00:00Z")
-                        }
+                        # Convert to datetime string for MongoDB
+                        edited_data[col] = pd.Timestamp(date_value).isoformat()
                     else:
                         edited_data[col] = st.text_input(
                             f"{col}", value=str(current_value), key=f"edit_{col}"
@@ -145,15 +143,11 @@ def display_database_management(mycol_historique_sites, data_admin):
 
             if st.button("Sauvegarder les modifications"):
                 try:
-                    # Update MongoDB document using both name and date for precise matching
+                    # Update MongoDB document using both name and date
                     result = mycol_historique_sites.update_one(
                         {
                             "nom_projet": selected_project,
-                            "date_rapport": {
-                                "$date": project_data["date_rapport"].strftime(
-                                    "%Y-%m-%dT00:00:00Z"
-                                )
-                            },
+                            "date_rapport": project_data["date_rapport"].isoformat(),
                         },
                         {"$set": edited_data},
                     )

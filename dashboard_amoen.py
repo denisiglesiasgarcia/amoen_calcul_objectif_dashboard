@@ -191,12 +191,70 @@ username, authentication_status, username_login = authenticator.login(
     location="sidebar"
 )
 
+def add_sidebar_links():
+    # Custom CSS for the buttons including Font Awesome
+    st.markdown("""
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <style>
+        .sidebar-link {
+            display: inline-block;
+            width: 100%;
+            padding: 8px 16px;
+            margin: 4px 0px;
+            text-align: left;
+            background-color: #262730;
+            color: #ffffff;
+            border-radius: 4px;
+            text-decoration: none;
+            border: 1px solid #464855;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-link:hover {
+            background-color: #464855;
+            border-color: #666;
+            color: #ffffff;
+            text-decoration: none;
+        }
+        
+        .sidebar-link i {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # Add a divider in the sidebar
+    st.sidebar.markdown("---")
+    
+    # Help Documentation Link
+    st.sidebar.markdown(
+        """
+        <a href="https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/" 
+           class="sidebar-link" 
+           target="_blank">
+            <i class="fas fa-book"></i> Documentation
+        </a>
+        """, 
+        unsafe_allow_html=True
+    )
+    
+    # GitHub Repository Link
+    st.sidebar.markdown(
+        """
+        <a href="https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard/tree/main" 
+           class="sidebar-link" 
+           target="_blank">
+            <i class="fab fa-github"></i> GitHub Repository
+        </a>
+        """, 
+        unsafe_allow_html=True
+    )
+
 if st.session_state["authentication_status"]:
     # st.write(config['credentials']['usernames'][st.session_state['username']]['password'])
-    # add to the sidebar a help button that goes to the documentation https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/
-    st.sidebar.markdown(
-        "[![Documentation](https://img.shields.io/badge/documentation%20outil-Faire%20click%20ici-blue)](https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/)"
-    )
+    add_sidebar_links()
     with st.sidebar.popover("Change password"):
         try:
             if authenticator.reset_password(

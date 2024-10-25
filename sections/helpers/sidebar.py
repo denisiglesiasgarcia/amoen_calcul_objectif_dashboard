@@ -2,7 +2,23 @@
 
 import streamlit as st
 
+
 def add_sidebar_links():
+    """
+    Adds custom sidebar links to a Streamlit application.
+
+    This function embeds custom CSS and HTML into the Streamlit sidebar to create
+    styled links with Font Awesome icons. The links include:
+    - Documentation
+    - GitHub Repository
+    - Applications SIG-éco21
+
+    The links open in a new browser tab.
+
+    Note:
+        This function uses `st.sidebar.markdown` with `unsafe_allow_html=True` to
+        inject HTML and CSS directly into the Streamlit sidebar.
+    """
     # Custom CSS for the buttons including Font Awesome - now embedded within the HTML
     st.sidebar.markdown(
         """

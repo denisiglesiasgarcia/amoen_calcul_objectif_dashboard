@@ -191,6 +191,10 @@ username, authentication_status, username_login = authenticator.login(
 
 if st.session_state["authentication_status"]:
     # st.write(config['credentials']['usernames'][st.session_state['username']]['password'])
+    # add to the sidebar a help button that goes to the documentation https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/
+    st.sidebar.markdown(
+        "[![Documentation](https://img.shields.io/badge/Documentation-Click%20here-blue)](https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/)"
+    )
     with st.sidebar.popover("Change password"):
         try:
             if authenticator.reset_password(

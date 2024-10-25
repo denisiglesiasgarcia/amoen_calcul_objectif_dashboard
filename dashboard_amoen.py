@@ -193,53 +193,52 @@ username, authentication_status, username_login = authenticator.login(
 
 
 def add_sidebar_links():
-    # Custom CSS for the buttons including Font Awesome
-    st.markdown(
-        """
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    # Hide the default Streamlit menu and footer
+    hide_styles = """
         <style>
-        .sidebar-section {
-            margin: 20px 0;
-        }
-        .sidebar-link {
-            display: inline-block;
-            width: 100%;
-            padding: 8px 16px;
-            margin: 8px 0;
-            text-align: left;
-            background-color: #262730;
-            color: #ffffff;
-            border-radius: 4px;
-            text-decoration: none;
-            border: 1px solid #464855;
-            transition: all 0.3s;
-        }
-       
-        .sidebar-link:hover {
-            background-color: #464855;
-            border-color: #666;
-            color: #ffffff;
-            text-decoration: none;
-        }
-       
-        .sidebar-link i {
-            margin-right: 8px;
-            width: 20px;
-            text-align: center;
-        }
-
-        hr {
-            margin: 20px 0;
-        }
+            div[data-testid="stToolbar"] {visibility: hidden;}
+            footer {visibility: hidden;}
         </style>
-    """,
-        unsafe_allow_html=True,
-    )
+    """
+    st.markdown(hide_styles, unsafe_allow_html=True)
 
-    # Wrap content in a div with consistent margins
+    # Custom CSS for the buttons including Font Awesome - now embedded within the HTML
     st.sidebar.markdown(
         """
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <div class="sidebar-section">
+            <style>
+                .sidebar-section {
+                    margin: 20px 0;
+                }
+                .sidebar-link {
+                    display: inline-block;
+                    width: 100%;
+                    padding: 8px 16px;
+                    margin: 8px 0;
+                    text-align: left;
+                    background-color: #262730;
+                    color: #ffffff;
+                    border-radius: 4px;
+                    text-decoration: none;
+                    border: 1px solid #464855;
+                    transition: all 0.3s;
+                }
+                .sidebar-link:hover {
+                    background-color: #464855;
+                    border-color: #666;
+                    color: #ffffff;
+                    text-decoration: none;
+                }
+                .sidebar-link i {
+                    margin-right: 8px;
+                    width: 20px;
+                    text-align: center;
+                }
+                hr {
+                    margin: 20px 0;
+                }
+            </style>
             <hr>
             <a href="https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/"
                class="sidebar-link"

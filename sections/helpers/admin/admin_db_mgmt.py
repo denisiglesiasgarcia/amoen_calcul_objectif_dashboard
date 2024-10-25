@@ -141,16 +141,15 @@ def display_database_management(mycol_historique_sites, data_admin):
                             f"{col}", value=str(current_value), key=f"edit_{col}"
                         )
 
+            if "update_success" not in st.session_state:
+                st.session_state.update_success = False
+
             if st.button("Sauvegarder les modifications"):
                 try:
                     from bson import ObjectId
 
                     # Use _id for querying
                     query = {"_id": ObjectId(project_data["_id"])}
-
-                    # Debug information
-                    st.write("### Debug Information")
-                    st.write("Document ID:", str(project_data["_id"]))
 
                     # Update MongoDB document
                     result = mycol_historique_sites.update_one(
@@ -159,10 +158,8 @@ def display_database_management(mycol_historique_sites, data_admin):
 
                     if result.matched_count > 0:
                         if result.modified_count > 0:
-                            st.success(
-                                f"Projet {selected_project_identifier} mis à jour avec succès!"
-                            )
-                            st.rerun()
+                            st.session_state.update_success = True
+                            st.experimental_rerun()
                         else:
                             st.warning(
                                 "Document trouvé mais aucune modification n'a été effectuée"
@@ -173,6 +170,13 @@ def display_database_management(mycol_historique_sites, data_admin):
                 except Exception as e:
                     st.error(f"Erreur lors de la mise à jour: {str(e)}")
                     st.write("Type d'erreur:", type(e).__name__)
+
+            # Show success message if update was successful
+            if st.session_state.update_success:
+                st.success(
+                    f"Projet {selected_project_identifier} mis à jour avec succès!"
+                )
+                st.session_state.update_success = False
 
     with tab_add:
         st.write("Ajouter un nouveau projet")

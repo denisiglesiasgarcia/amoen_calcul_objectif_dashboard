@@ -227,7 +227,7 @@ def add_sidebar_links():
 
     # Add a divider in the sidebar
     st.sidebar.markdown("---")
-    
+
     # Help Documentation Link
     st.sidebar.markdown(
         """
@@ -239,7 +239,7 @@ def add_sidebar_links():
         """, 
         unsafe_allow_html=True
     )
-    
+
     # GitHub Repository Link
     st.sidebar.markdown(
         """
@@ -251,6 +251,9 @@ def add_sidebar_links():
         """, 
         unsafe_allow_html=True
     )
+
+    # Add a divider in the sidebar
+    st.sidebar.markdown("---")
 
 if st.session_state["authentication_status"]:
     # st.write(config['credentials']['usernames'][st.session_state['username']]['password'])

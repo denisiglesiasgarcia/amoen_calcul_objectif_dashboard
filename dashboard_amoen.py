@@ -69,6 +69,8 @@ from sections.helpers.sidebar import add_sidebar_links
 
 from sections.helpers.admin.admin_chiffre_cle import display_admin_dashboard
 
+from sections.helpers.admin.admin_db_mgmt import display_database_management
+
 st.set_page_config(page_title="AMOEN Dashboard", page_icon=":bar_chart:", layout="wide")
 os.environ["USE_ARROW_extension"] = "1"
 
@@ -957,13 +959,7 @@ if st.session_state["authentication_status"]:
             display_admin_dashboard(df)
         with tab8:
             # Admin - Base de données
-            st.subheader("Base de données")
-            st.write("Liste des projets")
-            st.write("Liste des projets dans la base de données")
-            data_admin = load_projets_admin()
-            df = pd.DataFrame(data_admin)
-            st.dataframe(df)
-        
+            display_database_management(mycol_historique_sites, load_projets_admin())
 
 
 elif st.session_state["authentication_status"] is False:

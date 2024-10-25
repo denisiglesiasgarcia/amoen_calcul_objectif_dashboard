@@ -230,7 +230,6 @@ def add_sidebar_links():
                     margin: 20px 0;
                 }
             </style>
-            <hr>
             <a href="https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/"
                class="sidebar-link"
                target="_blank">

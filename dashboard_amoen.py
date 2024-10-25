@@ -209,7 +209,7 @@ def add_sidebar_links():
                     margin: 8px 0;
                     text-align: left;
                     background-color: #262730;
-                    color: #ffffff;
+                    color: #ffffff !important;
                     border-radius: 4px;
                     text-decoration: none;
                     border: 1px solid #464855;
@@ -218,13 +218,14 @@ def add_sidebar_links():
                 .sidebar-link:hover {
                     background-color: #464855;
                     border-color: #666;
-                    color: #ffffff;
+                    color: #ffffff !important;
                     text-decoration: none;
                 }
                 .sidebar-link i {
                     margin-right: 8px;
                     width: 20px;
                     text-align: center;
+                    color: #ffffff !important;
                 }
                 hr {
                     margin: 20px 0;

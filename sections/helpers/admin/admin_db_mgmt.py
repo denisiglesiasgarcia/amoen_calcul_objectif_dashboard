@@ -135,7 +135,7 @@ def display_database_management(mycol_historique_sites, data_admin):
                             f"{col}", value=current_value, key=f"edit_{col}"
                         )
                         # Convert to datetime string for MongoDB
-                        edited_data[col] = pd.Timestamp(date_value).isoformat()
+                        edited_data[col] = date_value.strftime("%Y-%m-%d")
                     else:
                         edited_data[col] = st.text_input(
                             f"{col}", value=str(current_value), key=f"edit_{col}"
@@ -143,23 +143,48 @@ def display_database_management(mycol_historique_sites, data_admin):
 
             if st.button("Sauvegarder les modifications"):
                 try:
-                    # Update MongoDB document using both name and date
-                    result = mycol_historique_sites.update_one(
-                        {
-                            "nom_projet": selected_project,
-                            "date_rapport": project_data["date_rapport"].isoformat(),
-                        },
-                        {"$set": edited_data},
-                    )
-                    if result.modified_count > 0:
-                        st.success(
-                            f"Projet {selected_project_identifier} mis à jour avec succès!"
-                        )
-                        st.rerun()
+                    # Debug information
+                    st.write("### Debug Information")
+                    st.write("Query criteria:")
+                    query = {
+                        "nom_projet": selected_project,
+                        "date_rapport": project_data["date_rapport"].strftime(
+                            "%Y-%m-%d"
+                        ),
+                    }
+                    st.json(query)
+
+                    st.write("Update data:")
+                    st.json(edited_data)
+
+                    # Try to find the document first
+                    existing_doc = mycol_historique_sites.find_one(query)
+                    if existing_doc:
+                        st.write("Document found in database")
                     else:
-                        st.error("Erreur lors de la mise à jour du projet")
+                        st.write("No document found matching query")
+
+                    # Update MongoDB document
+                    result = mycol_historique_sites.update_one(
+                        query, {"$set": edited_data}
+                    )
+
+                    if result.matched_count > 0:
+                        if result.modified_count > 0:
+                            st.success(
+                                f"Projet {selected_project_identifier} mis à jour avec succès!"
+                            )
+                            st.rerun()
+                        else:
+                            st.warning(
+                                "Document trouvé mais aucune modification n'a été effectuée"
+                            )
+                    else:
+                        st.error("Aucun document trouvé correspondant aux critères")
+
                 except Exception as e:
-                    st.error(f"Erreur: {str(e)}")
+                    st.error(f"Erreur lors de la mise à jour: {str(e)}")
+                    st.write("Type d'erreur:", type(e).__name__)
 
     with tab_add:
         st.write("Ajouter un nouveau projet")

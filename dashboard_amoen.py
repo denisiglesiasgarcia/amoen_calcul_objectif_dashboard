@@ -26,7 +26,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 # import plotly.express as px
-import altair as alt
+# import altair as alt
 
 from pymongo import MongoClient
 from bson import ObjectId
@@ -78,6 +78,8 @@ from sections.helpers.agents_energetiques import (
 from sections.helpers.note_calcul_main import fonction_note_calcul
 
 from sections.helpers.sidebar import add_sidebar_links
+
+from sections.helpers.admin.admin_chiffre_cle import display_admin_dashboard
 
 st.set_page_config(page_title="AMOEN Dashboard", page_icon=":bar_chart:", layout="wide")
 os.environ["USE_ARROW_extension"] = "1"
@@ -961,201 +963,204 @@ if st.session_state["authentication_status"]:
 
     if username_login == "admin":
         with tab7:
-            # TODO: convertir en helper
-            # data
             data_admin = load_projets_admin()
             df = pd.DataFrame(data_admin)
-            # chiffres clés
-            st.subheader("Chiffres-clés")
-            # Filtrer les atteinte_projets sans agents énergétiques
-            df_date = df.copy()
-            df_date = df_date[
-                (
-                    df_date["agent_energetique_ef_mazout_litres"]
-                    + df_date["agent_energetique_ef_mazout_kwh"]
-                    + df_date["agent_energetique_ef_gaz_naturel_m3"]
-                    + df_date["agent_energetique_ef_gaz_naturel_kwh"]
-                    + df_date["agent_energetique_ef_bois_buches_dur_stere"]
-                    + df_date["agent_energetique_ef_bois_buches_tendre_stere"]
-                    + df_date["agent_energetique_ef_bois_buches_tendre_kwh"]
-                    + df_date["agent_energetique_ef_pellets_m3"]
-                    + df_date["agent_energetique_ef_pellets_kg"]
-                    + df_date["agent_energetique_ef_pellets_kwh"]
-                    + df_date["agent_energetique_ef_plaquettes_m3"]
-                    + df_date["agent_energetique_ef_plaquettes_kwh"]
-                    + df_date["agent_energetique_ef_cad_kwh"]
-                    + df_date["agent_energetique_ef_electricite_pac_kwh"]
-                    + df_date["agent_energetique_ef_electricite_directe_kwh"]
-                    + df_date["agent_energetique_ef_autre_kwh"]
-                )
-                > 0
-            ]
-            # date dernier rapport par projet
-            df_date_sorted = df_date.sort_values(["nom_projet", "date_rapport"])
-            df_date_sorted["date_rapport"] = pd.to_datetime(
-                df_date_sorted["date_rapport"], format="%Y-%m-%d"
-            )
-            df_date_sorted["date_rapport"] = df_date_sorted["date_rapport"].astype(str)
-            df_date_sorted["periode_start"] = pd.to_datetime(
-                df_date_sorted["periode_start"], format="%Y-%m-%d"
-            )
-            df_date_sorted["periode_start"] = df_date_sorted["periode_start"].astype(
-                str
-            )
-            df_date_sorted["periode_end"] = pd.to_datetime(
-                df_date_sorted["periode_end"], format="%Y-%m-%d"
-            )
-            df_date_sorted["periode_end"] = df_date_sorted["periode_end"].astype(str)
-            df_date_sorted["atteinte_objectif"] = (
-                df_date_sorted["atteinte_objectif"] * 100
-            )
-            df_date_sorted["atteinte_objectif"] = df_date_sorted[
-                "atteinte_objectif"
-            ].apply(lambda x: f"{x:.2f}%")
-            idx = df_date_sorted.groupby("nom_projet")["date_rapport"].idxmax()
-            df_date = df_date_sorted.loc[
-                idx,
-                [
-                    "nom_projet",
-                    "date_rapport",
-                    "periode_start",
-                    "periode_end",
-                    "atteinte_objectif",
-                ],
-            ]
-            df_date = df_date.sort_values(by=["date_rapport"])
-            st.write("Date dernier calcul atteinte objectif par projet")
-            st.dataframe(df_date)
-            st.subheader("Données")
-            # Drop unnecessary columns
-            df_filtre = df.drop(
-                columns=[
-                    "_id",
-                    "sre_pourcentage_lieux_de_rassemblement",
-                    "sre_pourcentage_hopitaux",
-                    "sre_pourcentage_industrie",
-                    "sre_pourcentage_depots",
-                    "sre_pourcentage_installations_sportives",
-                    "sre_pourcentage_piscines_couvertes",
-                ]
-            )
-            # Filtres
-            all_projets = df_filtre["nom_projet"].unique()
-            all_amoen = df_filtre["amoen_id"].unique()
-            filtre_amoen = st.multiselect("AMOén", all_amoen, default=all_amoen)
-            filtre_projets = st.multiselect(
-                "Projet",
-                all_projets,
-                default=df_filtre[df_filtre["amoen_id"].isin(filtre_amoen)][
-                    "nom_projet"
-                ].unique(),
-            )
-            # Apply the final filter to the DataFrame
-            df_filtre = df_filtre[
-                (df_filtre["nom_projet"].isin(filtre_projets))
-                & (df_filtre["amoen_id"].isin(filtre_amoen))
-            ]
-            # Display the filtered DataFrame
-            st.write(df_filtre)
+            display_admin_dashboard(df)
+        # # TODO: convertir en helper
+        # # data
+        # data_admin = load_projets_admin()
+        # df = pd.DataFrame(data_admin)
+        # # chiffres clés
+        # st.subheader("Chiffres-clés")
+        # # Filtrer les atteinte_projets sans agents énergétiques
+        # df_date = df.copy()
+        # df_date = df_date[
+        #     (
+        #         df_date["agent_energetique_ef_mazout_litres"]
+        #         + df_date["agent_energetique_ef_mazout_kwh"]
+        #         + df_date["agent_energetique_ef_gaz_naturel_m3"]
+        #         + df_date["agent_energetique_ef_gaz_naturel_kwh"]
+        #         + df_date["agent_energetique_ef_bois_buches_dur_stere"]
+        #         + df_date["agent_energetique_ef_bois_buches_tendre_stere"]
+        #         + df_date["agent_energetique_ef_bois_buches_tendre_kwh"]
+        #         + df_date["agent_energetique_ef_pellets_m3"]
+        #         + df_date["agent_energetique_ef_pellets_kg"]
+        #         + df_date["agent_energetique_ef_pellets_kwh"]
+        #         + df_date["agent_energetique_ef_plaquettes_m3"]
+        #         + df_date["agent_energetique_ef_plaquettes_kwh"]
+        #         + df_date["agent_energetique_ef_cad_kwh"]
+        #         + df_date["agent_energetique_ef_electricite_pac_kwh"]
+        #         + df_date["agent_energetique_ef_electricite_directe_kwh"]
+        #         + df_date["agent_energetique_ef_autre_kwh"]
+        #     )
+        #     > 0
+        # ]
+        # # date dernier rapport par projet
+        # df_date_sorted = df_date.sort_values(["nom_projet", "date_rapport"])
+        # df_date_sorted["date_rapport"] = pd.to_datetime(
+        #     df_date_sorted["date_rapport"], format="%Y-%m-%d"
+        # )
+        # df_date_sorted["date_rapport"] = df_date_sorted["date_rapport"].astype(str)
+        # df_date_sorted["periode_start"] = pd.to_datetime(
+        #     df_date_sorted["periode_start"], format="%Y-%m-%d"
+        # )
+        # df_date_sorted["periode_start"] = df_date_sorted["periode_start"].astype(
+        #     str
+        # )
+        # df_date_sorted["periode_end"] = pd.to_datetime(
+        #     df_date_sorted["periode_end"], format="%Y-%m-%d"
+        # )
+        # df_date_sorted["periode_end"] = df_date_sorted["periode_end"].astype(str)
+        # df_date_sorted["atteinte_objectif"] = (
+        #     df_date_sorted["atteinte_objectif"] * 100
+        # )
+        # df_date_sorted["atteinte_objectif"] = df_date_sorted[
+        #     "atteinte_objectif"
+        # ].apply(lambda x: f"{x:.2f}%")
+        # idx = df_date_sorted.groupby("nom_projet")["date_rapport"].idxmax()
+        # df_date = df_date_sorted.loc[
+        #     idx,
+        #     [
+        #         "nom_projet",
+        #         "date_rapport",
+        #         "periode_start",
+        #         "periode_end",
+        #         "atteinte_objectif",
+        #     ],
+        # ]
+        # df_date = df_date.sort_values(by=["date_rapport"])
+        # st.write("Date dernier calcul atteinte objectif par projet")
+        # st.dataframe(df_date)
+        # st.subheader("Données")
+        # # Drop unnecessary columns
+        # df_filtre = df.drop(
+        #     columns=[
+        #         "_id",
+        #         "sre_pourcentage_lieux_de_rassemblement",
+        #         "sre_pourcentage_hopitaux",
+        #         "sre_pourcentage_industrie",
+        #         "sre_pourcentage_depots",
+        #         "sre_pourcentage_installations_sportives",
+        #         "sre_pourcentage_piscines_couvertes",
+        #     ]
+        # )
+        # # Filtres
+        # all_projets = df_filtre["nom_projet"].unique()
+        # all_amoen = df_filtre["amoen_id"].unique()
+        # filtre_amoen = st.multiselect("AMOén", all_amoen, default=all_amoen)
+        # filtre_projets = st.multiselect(
+        #     "Projet",
+        #     all_projets,
+        #     default=df_filtre[df_filtre["amoen_id"].isin(filtre_amoen)][
+        #         "nom_projet"
+        #     ].unique(),
+        # )
+        # # Apply the final filter to the DataFrame
+        # df_filtre = df_filtre[
+        #     (df_filtre["nom_projet"].isin(filtre_projets))
+        #     & (df_filtre["amoen_id"].isin(filtre_amoen))
+        # ]
+        # # Display the filtered DataFrame
+        # st.write(df_filtre)
 
-            # Sort the dataframe by 'nom_projet' and 'periode_start'
-            df_barplot = df_filtre.sort_values(by=["nom_projet", "periode_start"])
+        # # Sort the dataframe by 'nom_projet' and 'periode_start'
+        # df_barplot = df_filtre.sort_values(by=["nom_projet", "periode_start"])
 
-            # Filtrer les atteinte_projets sans agents énergétiques
-            df_barplot = df_barplot[
-                (
-                    df_barplot["agent_energetique_ef_mazout_litres"]
-                    + df_barplot["agent_energetique_ef_mazout_kwh"]
-                    + df_barplot["agent_energetique_ef_gaz_naturel_m3"]
-                    + df_barplot["agent_energetique_ef_gaz_naturel_kwh"]
-                    + df_barplot["agent_energetique_ef_bois_buches_dur_stere"]
-                    + df_barplot["agent_energetique_ef_bois_buches_tendre_stere"]
-                    + df_barplot["agent_energetique_ef_bois_buches_tendre_kwh"]
-                    + df_barplot["agent_energetique_ef_pellets_m3"]
-                    + df_barplot["agent_energetique_ef_pellets_kg"]
-                    + df_barplot["agent_energetique_ef_pellets_kwh"]
-                    + df_barplot["agent_energetique_ef_plaquettes_m3"]
-                    + df_barplot["agent_energetique_ef_plaquettes_kwh"]
-                    + df_barplot["agent_energetique_ef_cad_kwh"]
-                    + df_barplot["agent_energetique_ef_electricite_pac_kwh"]
-                    + df_barplot["agent_energetique_ef_electricite_directe_kwh"]
-                    + df_barplot["agent_energetique_ef_autre_kwh"]
-                )
-                > 0
-            ]
+        # # Filtrer les atteinte_projets sans agents énergétiques
+        # df_barplot = df_barplot[
+        #     (
+        #         df_barplot["agent_energetique_ef_mazout_litres"]
+        #         + df_barplot["agent_energetique_ef_mazout_kwh"]
+        #         + df_barplot["agent_energetique_ef_gaz_naturel_m3"]
+        #         + df_barplot["agent_energetique_ef_gaz_naturel_kwh"]
+        #         + df_barplot["agent_energetique_ef_bois_buches_dur_stere"]
+        #         + df_barplot["agent_energetique_ef_bois_buches_tendre_stere"]
+        #         + df_barplot["agent_energetique_ef_bois_buches_tendre_kwh"]
+        #         + df_barplot["agent_energetique_ef_pellets_m3"]
+        #         + df_barplot["agent_energetique_ef_pellets_kg"]
+        #         + df_barplot["agent_energetique_ef_pellets_kwh"]
+        #         + df_barplot["agent_energetique_ef_plaquettes_m3"]
+        #         + df_barplot["agent_energetique_ef_plaquettes_kwh"]
+        #         + df_barplot["agent_energetique_ef_cad_kwh"]
+        #         + df_barplot["agent_energetique_ef_electricite_pac_kwh"]
+        #         + df_barplot["agent_energetique_ef_electricite_directe_kwh"]
+        #         + df_barplot["agent_energetique_ef_autre_kwh"]
+        #     )
+        #     > 0
+        # ]
 
-            df_barplot["atteinte_objectif"] = df_barplot["atteinte_objectif"] * 100
-            df_barplot["periode_start"] = pd.to_datetime(
-                df_barplot["periode_start"], errors="coerce"
-            )
-            df_barplot["periode_end"] = pd.to_datetime(
-                df_barplot["periode_end"], errors="coerce"
-            )
-            df_barplot["periode"] = (
-                df_barplot["periode_start"].dt.strftime("%Y-%m-%d")
-                + " - "
-                + df_barplot["periode_end"].dt.strftime("%Y-%m-%d")
-            )
+        # df_barplot["atteinte_objectif"] = df_barplot["atteinte_objectif"] * 100
+        # df_barplot["periode_start"] = pd.to_datetime(
+        #     df_barplot["periode_start"], errors="coerce"
+        # )
+        # df_barplot["periode_end"] = pd.to_datetime(
+        #     df_barplot["periode_end"], errors="coerce"
+        # )
+        # df_barplot["periode"] = (
+        #     df_barplot["periode_start"].dt.strftime("%Y-%m-%d")
+        #     + " - "
+        #     + df_barplot["periode_end"].dt.strftime("%Y-%m-%d")
+        # )
 
-            # Add a new column that assigns a rank based on the order of the periods within each project
-            df_barplot["periode_rank"] = df_barplot.groupby("nom_projet").cumcount()
+        # # Add a new column that assigns a rank based on the order of the periods within each project
+        # df_barplot["periode_rank"] = df_barplot.groupby("nom_projet").cumcount()
 
-            # Add a new column with formatted percentage values
-            df_barplot["atteinte_objectif_formatted"] = df_barplot[
-                "atteinte_objectif"
-            ].apply(lambda x: f"{x:.0f}%")
+        # # Add a new column with formatted percentage values
+        # df_barplot["atteinte_objectif_formatted"] = df_barplot[
+        #     "atteinte_objectif"
+        # ].apply(lambda x: f"{x:.0f}%")
 
-            # Create the chart
-            fig = (
-                alt.Chart(df_barplot)
-                .mark_bar()
-                .encode(
-                    x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
-                    y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),
-                    xOffset="periode_rank:N",
-                    color="periode:N",
-                    tooltip=[
-                        alt.Tooltip("nom_projet:N", title="Site"),
-                        alt.Tooltip("amoen_id:N", title="AMOén"),
-                        alt.Tooltip("periode:N", title="Période"),
-                        alt.Tooltip(
-                            "atteinte_objectif:Q",
-                            title="Atteinte Objectif [%]",
-                            format=".2f",
-                        ),
-                    ],
-                )
-                .properties(width=600, title="Atteinte Objectif par Site")
-            )
+        # # Create the chart
+        # fig = (
+        #     alt.Chart(df_barplot)
+        #     .mark_bar()
+        #     .encode(
+        #         x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
+        #         y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),
+        #         xOffset="periode_rank:N",
+        #         color="periode:N",
+        #         tooltip=[
+        #             alt.Tooltip("nom_projet:N", title="Site"),
+        #             alt.Tooltip("amoen_id:N", title="AMOén"),
+        #             alt.Tooltip("periode:N", title="Période"),
+        #             alt.Tooltip(
+        #                 "atteinte_objectif:Q",
+        #                 title="Atteinte Objectif [%]",
+        #                 format=".2f",
+        #             ),
+        #         ],
+        #     )
+        #     .properties(width=600, title="Atteinte Objectif par Site")
+        # )
 
-            # Add text labels on top of the bars with percentage symbol
-            text = (
-                alt.Chart(df_barplot)
-                .mark_text(
-                    align="left", baseline="bottom", dx=-4, fontSize=12, color="black"
-                )
-                .encode(
-                    x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
-                    y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),
-                    text="atteinte_objectif_formatted:N",  # Use the new formatted column
-                    xOffset="periode_rank:N",
-                )
-            )
+        # # Add text labels on top of the bars with percentage symbol
+        # text = (
+        #     alt.Chart(df_barplot)
+        #     .mark_text(
+        #         align="left", baseline="bottom", dx=-4, fontSize=12, color="black"
+        #     )
+        #     .encode(
+        #         x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
+        #         y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),
+        #         text="atteinte_objectif_formatted:N",  # Use the new formatted column
+        #         xOffset="periode_rank:N",
+        #     )
+        # )
 
-            # Combine the bar chart and text labels
-            fig = alt.layer(fig, text)
+        # # Combine the bar chart and text labels
+        # fig = alt.layer(fig, text)
 
-            # Customize the X-Axis
-            fig = fig.configure_axisX(
-                labelAngle=-45,
-                labelFontSize=12,
-            )
+        # # Customize the X-Axis
+        # fig = fig.configure_axisX(
+        #     labelAngle=-45,
+        #     labelFontSize=12,
+        # )
 
-            # Remove the legend
-            fig = fig.configure_legend(disable=True)
+        # # Remove the legend
+        # fig = fig.configure_legend(disable=True)
 
-            # Display the chart
-            st.altair_chart(fig, use_container_width=True)
+        # # Display the chart
+        # st.altair_chart(fig, use_container_width=True)
 
 
 elif st.session_state["authentication_status"] is False:

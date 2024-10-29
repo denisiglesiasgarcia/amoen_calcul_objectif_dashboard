@@ -30,25 +30,25 @@ class DataValidator:
         # Percentage fields
         "sre_pourcentage_habitat_collectif": {
             "type": float,
-            "required": False,
+            "required": True,
             "min": 0,
             "max": 100,
         },
         "sre_pourcentage_habitat_individuel": {
             "type": float,
-            "required": False,
+            "required": True,
             "min": 0,
             "max": 100,
         },
         "sre_pourcentage_administration": {
             "type": float,
-            "required": False,
+            "required": True,
             "min": 0,
             "max": 100,
         },
         "sre_pourcentage_ecoles": {
             "type": float,
-            "required": False,
+            "required": True,
             "min": 0,
             "max": 100,
         },
@@ -60,43 +60,43 @@ class DataValidator:
         },
         "sre_pourcentage_restauration": {
             "type": float,
-            "required": False,
+            "required": True,
             "min": 0,
             "max": 100,
         },
         "sre_pourcentage_lieux_de_rassemblement": {
             "type": float,
-            "required": False,
+            "required": True,
             "min": 0,
             "max": 100,
         },
         "sre_pourcentage_hopitaux": {
             "type": float,
-            "required": False,
+            "required": True,
             "min": 0,
             "max": 100,
         },
         "sre_pourcentage_industrie": {
             "type": float,
-            "required": False,
+            "required": True,
             "min": 0,
             "max": 100,
         },
         "sre_pourcentage_depots": {
             "type": float,
-            "required": False,
+            "required": True,
             "min": 0,
             "max": 100,
         },
         "sre_pourcentage_installations_sportives": {
             "type": float,
-            "required": False,
+            "required": True,
             "min": 0,
             "max": 100,
         },
         "sre_pourcentage_piscines_couvertes": {
             "type": float,
-            "required": False,
+            "required": True,
             "min": 0,
             "max": 100,
         },
@@ -192,19 +192,33 @@ class DataValidator:
                 # Convert value to correct type
                 if value is not None and value != "":
                     if field_schema["type"] == datetime:
-                        if isinstance(value, str):
+                        # Handle different date/datetime types
+                        if isinstance(value, datetime):
+                            converted_value = value
+                        elif isinstance(value, pd.Timestamp):
+                            converted_value = value.to_pydatetime()
+                        elif isinstance(value, date):  # Add this to handle date objects
+                            converted_value = datetime.combine(
+                                value, datetime.min.time()
+                            )
+                        elif isinstance(value, str):
                             try:
-                                value = datetime.strptime(value, "%Y-%m-%d")
-                            except ValueError:
+                                # Try different date formats
                                 try:
-                                    value = datetime.strptime(
-                                        value, "%Y-%m-%d %H:%M:%S"
+                                    converted_value = datetime.strptime(
+                                        value, "%Y-%m-%d"
                                     )
                                 except ValueError:
-                                    errors.append(f"{field}: format de date invalide")
-                                    continue
-                        elif isinstance(value, pd.Timestamp):
-                            value = value.to_pydatetime()
+                                    converted_value = datetime.strptime(
+                                        value, "%Y-%m-%d %H:%M:%S"
+                                    )
+                            except ValueError:
+                                errors.append(f"{field}: format de date invalide")
+                                continue
+                        else:
+                            errors.append(f"{field}: type de date non supporté")
+                            continue
+                        value = converted_value
                     else:
                         value = field_schema["type"](value)
 
@@ -450,7 +464,7 @@ def display_database_management(mycol_historique_sites, data_admin):
 
         with tab_delete:
             st.write("Supprimer un projet")
-            
+
             # Project selection for deletion
             project_to_delete = st.selectbox(
                 "Sélectionner le projet à supprimer",
@@ -462,7 +476,7 @@ def display_database_management(mycol_historique_sites, data_admin):
                 # Extract project details
                 project_name = project_to_delete.split(" (")[0]
                 project_date = project_to_delete.split("(")[1].rstrip(")")
-                
+
                 # Get project data
                 project_data = df[
                     (df["nom_projet"] == project_name)
@@ -471,20 +485,22 @@ def display_database_management(mycol_historique_sites, data_admin):
 
                 # Show warning and confirmation
                 st.warning("⚠️ Attention: Cette action est irréversible!")
-                st.write(f"Vous êtes sur le point de supprimer le projet: {project_name}")
+                st.write(
+                    f"Vous êtes sur le point de supprimer le projet: {project_name}"
+                )
                 st.write(f"Date du rapport: {project_date}")
-                
+
                 # Add a confirmation checkbox
                 confirm_delete = st.checkbox(
-                    "Je confirme vouloir supprimer ce projet",
-                    key="confirm_delete"
+                    "Je confirme vouloir supprimer ce projet", key="confirm_delete"
                 )
 
                 if confirm_delete:
-                    if st.button("Supprimer le projet", type="primary", key="delete_button"):
+                    if st.button(
+                        "Supprimer le projet", type="primary", key="delete_button"
+                    ):
                         if delete_project_from_mongodb(
-                            mycol_historique_sites,
-                            str(project_data["_id"])
+                            mycol_historique_sites, str(project_data["_id"])
                         ):
                             st.success(f"Projet {project_name} supprimé avec succès!")
                             st.rerun()
@@ -493,21 +509,20 @@ def display_database_management(mycol_historique_sites, data_admin):
 
     # Add a refresh button at the bottom
     if st.button(
-        "Actualiser",
-        use_container_width=True,
-        type="primary",
-        key="refresh_button"
+        "Actualiser", use_container_width=True, type="primary", key="refresh_button"
     ):
         st.rerun()
+
 
 def check_mongodb_connection(collection) -> bool:
     """Check if MongoDB connection is alive and working"""
     try:
-        collection.database.client.admin.command('ping')
+        collection.database.client.admin.command("ping")
         return True
     except Exception as e:
         st.error(f"Erreur de connexion à la base de données: {str(e)}")
         return False
+
 
 def check_mongodb_operation(operation_result: bool, operation_name: str) -> None:
     """Log MongoDB operation results"""

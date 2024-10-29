@@ -774,7 +774,7 @@ if st.session_state["authentication_status"]:
                 if st.checkbox("Afficher les données IDC"):
                     show_dataframe(data_df)
             else:
-                st.write("No data retrieved for the selected EGIDs.")
+                st.error("Pas de données disponibles pour le(s) EGID associé(s) à ce site.")
         else:
             st.write("Pas d'adresse sélectionnée.")
 

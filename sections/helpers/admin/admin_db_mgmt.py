@@ -21,9 +21,9 @@ class DataValidator:
         "adresse_projet": {
             "type": str,
             "required": True,
-            "form_type": "text_area",
+            "form_type": "text",
             "label": "Adresse du projet",
-            "help": "Adresse complète du projet (rue, numéro, NPA, ville)",
+            "help": "Si plusieurs adresses, séparez-les par des points-virgules par exemple: 'Chemin Dr-Adolphe-PASTEUR 23;Chemin Dr-Adolphe-PASTEUR 25;Chemin Dr-Adolphe-PASTEUR 27'. Le format d'adresse doit être celui de SITG.",
         },
         "amoen_id": {
             "type": str,
@@ -280,42 +280,65 @@ class DataValidator:
                     help=help_text,
                 )
 
-            elif form_type == "text_area":
-                return st.text_area(
-                    label,
-                    value="" if current_value is None else str(current_value),
-                    help=help_text,
-                )
-
             elif form_type == "number":
                 # Initialize default value
                 default_value = 0.0
                 if current_value is not None:
                     try:
-                        default_value = float(current_value)
+                        # Check if value is NaN
+                        if isinstance(current_value, float) and pd.isna(current_value):
+                            default_value = 0.0
+                        else:
+                            default_value = float(current_value)
                     except (ValueError, TypeError):
                         st.warning(f"Invalid number value for {label}: {current_value}")
+                        default_value = 0.0
 
                 # Convert all numeric parameters to float for consistency
-                min_value = (
-                    float(schema.get("min_value", 0))
-                    if schema.get("min_value") is not None
-                    else None
-                )
-                max_value = (
-                    float(schema.get("max_value"))
-                    if schema.get("max_value") is not None
-                    else None
-                )
-                step = float(schema.get("step", 1.0))
+                try:
+                    min_value = (
+                        float(schema.get("min_value", 0))
+                        if schema.get("min_value") is not None
+                        else None
+                    )
+                    max_value = (
+                        float(schema.get("max_value"))
+                        if schema.get("max_value") is not None
+                        else None
+                    )
+                    step = float(schema.get("step", 1.0))
+                except (ValueError, TypeError):
+                    st.warning(f"Invalid numeric parameters for {label}")
+                    min_value = 0.0
+                    max_value = None
+                    step = 1.0
 
                 # Special handling for integer-like values
                 if schema.get("format", "%.2f") == "%.0f":
-                    # Convert to int if the format suggests we want integers
-                    default_value = int(default_value)
-                    min_value = int(min_value) if min_value is not None else None
-                    max_value = int(max_value) if max_value is not None else None
-                    step = int(step)
+                    try:
+                        # Convert to int if the format suggests we want integers
+                        default_value = (
+                            int(default_value) if not pd.isna(default_value) else 0
+                        )
+                        min_value = (
+                            int(min_value)
+                            if min_value is not None and not pd.isna(min_value)
+                            else None
+                        )
+                        max_value = (
+                            int(max_value)
+                            if max_value is not None and not pd.isna(max_value)
+                            else None
+                        )
+                        step = int(step) if not pd.isna(step) else 1
+                    except (ValueError, TypeError):
+                        st.warning(
+                            f"Error converting to integer for {label}, using defaults"
+                        )
+                        default_value = 0
+                        min_value = 0
+                        max_value = None
+                        step = 1
 
                 return st.number_input(
                     label,
@@ -330,7 +353,7 @@ class DataValidator:
             elif form_type == "date":
                 try:
                     default_date = datetime.now()
-                    if current_value is not None:
+                    if current_value is not None and not pd.isna(current_value):
                         if isinstance(current_value, pd.Timestamp):
                             default_date = current_value.to_pydatetime()
                         elif isinstance(current_value, datetime):
@@ -347,7 +370,11 @@ class DataValidator:
             else:
                 return st.text_input(
                     label,
-                    value=str(current_value) if current_value else "",
+                    value=(
+                        str(current_value)
+                        if current_value and not pd.isna(current_value)
+                        else ""
+                    ),
                     help=help_text,
                 )
 

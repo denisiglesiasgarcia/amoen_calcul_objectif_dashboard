@@ -72,7 +72,6 @@ class DataValidator:
             "required": False,
             "form_type": "number",
             "step": 1,
-            "format": "%.0f",
             "label": "Nombre de jours de la période",
         },
         # Percentage fields

@@ -531,6 +531,7 @@ def display_database_management(mycol_historique_sites, data_admin):
         st.info("Aucun projet dans la base de données")
 
     # Reset cached data
+    st.write("Pour valider les modifications, veuillez réinitialiser les données en cache")
     if st.button(
         "Réinitialiser données en cache", use_container_width=True, type="primary"
     ):

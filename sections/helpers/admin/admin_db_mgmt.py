@@ -322,27 +322,27 @@ def delete_project_from_mongodb(mycol_historique_sites, project_id: str) -> bool
         return False
 
 
-# def clear_session_state(preserve_keys=None):
-#     """
-#     Clear session state while preserving specified keys.
+def clear_session_state(preserve_keys=None):
+    """
+    Clear session state while preserving specified keys.
 
-#     Args:
-#         preserve_keys: List of keys to preserve, defaults to auth keys if None
-#     """
-#     if preserve_keys is None:
-#         preserve_keys = ["authentication_status", "username", "name", "_is_logged_in"]
+    Args:
+        preserve_keys: List of keys to preserve, defaults to auth keys if None
+    """
+    if preserve_keys is None:
+        preserve_keys = ["authentication_status", "username", "name", "_is_logged_in"]
 
-#     # Save preserved state
-#     preserved_state = {
-#         key: st.session_state[key] for key in preserve_keys if key in st.session_state
-#     }
+    # Save preserved state
+    preserved_state = {
+        key: st.session_state[key] for key in preserve_keys if key in st.session_state
+    }
 
-#     # Clear everything
-#     st.session_state.clear()
+    # Clear everything
+    st.session_state.clear()
 
-#     # Restore preserved state
-#     for key, value in preserved_state.items():
-#         st.session_state[key] = value
+    # Restore preserved state
+    for key, value in preserved_state.items():
+        st.session_state[key] = value
 
 
 def display_database_management(mycol_historique_sites, data_admin):

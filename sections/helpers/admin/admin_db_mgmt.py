@@ -288,6 +288,7 @@ class DataValidator:
                 )
 
             elif form_type == "number":
+                # Initialize default value
                 default_value = 0.0
                 if current_value is not None:
                     try:
@@ -295,12 +296,33 @@ class DataValidator:
                     except (ValueError, TypeError):
                         st.warning(f"Invalid number value for {label}: {current_value}")
 
+                # Convert all numeric parameters to float for consistency
+                min_value = (
+                    float(schema.get("min_value", 0))
+                    if schema.get("min_value") is not None
+                    else None
+                )
+                max_value = (
+                    float(schema.get("max_value"))
+                    if schema.get("max_value") is not None
+                    else None
+                )
+                step = float(schema.get("step", 1.0))
+
+                # Special handling for integer-like values
+                if schema.get("format", "%.2f") == "%.0f":
+                    # Convert to int if the format suggests we want integers
+                    default_value = int(default_value)
+                    min_value = int(min_value) if min_value is not None else None
+                    max_value = int(max_value) if max_value is not None else None
+                    step = int(step)
+
                 return st.number_input(
                     label,
-                    min_value=schema.get("min_value", None),
-                    max_value=schema.get("max_value", None),
+                    min_value=min_value,
+                    max_value=max_value,
                     value=default_value,
-                    step=schema.get("step", 1.0),
+                    step=step,
                     format=schema.get("format", "%.2f"),
                     help=help_text,
                 )

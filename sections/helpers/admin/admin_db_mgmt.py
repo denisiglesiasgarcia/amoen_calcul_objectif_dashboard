@@ -322,6 +322,29 @@ def delete_project_from_mongodb(mycol_historique_sites, project_id: str) -> bool
         return False
 
 
+def clear_session_state(preserve_keys=None):
+    """
+    Clear session state while preserving specified keys.
+
+    Args:
+        preserve_keys: List of keys to preserve, defaults to auth keys if None
+    """
+    if preserve_keys is None:
+        preserve_keys = ["authentication_status", "username", "name", "_is_logged_in"]
+
+    # Save preserved state
+    preserved_state = {
+        key: st.session_state[key] for key in preserve_keys if key in st.session_state
+    }
+
+    # Clear everything
+    st.session_state.clear()
+
+    # Restore preserved state
+    for key, value in preserved_state.items():
+        st.session_state[key] = value
+
+
 def display_database_management(mycol_historique_sites, data_admin):
     """Display database management interface with CRUD operations"""
     st.subheader("Base de données")
@@ -507,10 +530,11 @@ def display_database_management(mycol_historique_sites, data_admin):
     else:
         st.info("Aucun projet dans la base de données")
 
-    # Add a refresh button at the bottom
-    if st.button(
-        "Actualiser", use_container_width=True, type="primary", key="refresh_button"
-    ):
+    # Reset cached data
+    if st.button("Réinitialiser données", use_container_width=True, type="danger"):
+        st.cache_data.clear()
+        st.cache_resource.clear()
+        st.session_state.clear()
         st.rerun()
 
 

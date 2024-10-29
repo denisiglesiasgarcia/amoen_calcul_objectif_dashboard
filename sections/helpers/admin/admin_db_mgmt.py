@@ -68,7 +68,7 @@ class DataValidator:
             "label": "Date du rapport",
         },
         "periode_nb_jours": {
-            "type": float,
+            "type": int,
             "required": False,
             "form_type": "number",
             "step": 1,

@@ -784,7 +784,7 @@ if st.session_state["authentication_status"]:
                 st.subheader("Historique IDC")
                 # create barplot
                 fig = create_barplot(data_df)
-                st.plotly_chart(fig)
+                #st.plotly_chart(fig)
 
                 # show dataframe in something hidden like a
                 if st.checkbox("Afficher les données IDC"):

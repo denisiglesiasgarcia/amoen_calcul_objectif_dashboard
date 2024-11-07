@@ -275,19 +275,19 @@ def get_adresses_egid():
 
 @st.cache_data
 def create_barplot(data_df):
+    # Create DataFrame and sort values
     df_barplot = pd.DataFrame(data_df)
     df_barplot = df_barplot[["adresse", "egid", "annee", "indice"]].sort_values(
         by=["annee", "adresse", "egid"]
     )
 
-    # Check if annee has all the years between 2011 and current year
+    # Fill in missing years with zero values
     current_year = datetime.now().year
     years = list(range(2011, current_year + 1))
     adresses_egid = df_barplot[["adresse", "egid"]].drop_duplicates().values.tolist()
 
-    # Create a list to store new rows
+    # Create missing rows
     new_rows = []
-
     for adresse, egid in adresses_egid:
         for year in years:
             if (
@@ -300,24 +300,23 @@ def create_barplot(data_df):
                     {"adresse": adresse, "egid": egid, "annee": year, "indice": 0}
                 )
 
-    # Use concat to add new rows
+    # Add new rows if any exist
     if new_rows:
         df_new_rows = pd.DataFrame(new_rows)
         df_barplot = pd.concat([df_barplot, df_new_rows], ignore_index=True)
 
+    # Sort and create legend labels
     df_barplot = df_barplot.sort_values(by=["annee", "adresse", "egid"])
-
-    # Create a new column for legend
     df_barplot["adresse_egid"] = df_barplot.apply(
         lambda row: f"{row['adresse']} - {row['egid']}", axis=1
     )
 
-    # Remove rows with indice = 0 for the text over bars
+    # Create conditional text for bar values
     df_barplot["text"] = df_barplot["indice"].apply(
-        lambda x: f"{int(x)}" if x > 0 else ""  # Changed to int for cleaner display
+        lambda x: f"{int(x)}" if x > 0 else ""
     )
 
-    # Create the bar plot
+    # Create bar plot
     fig = px.bar(
         df_barplot,
         x="annee",
@@ -326,62 +325,77 @@ def create_barplot(data_df):
         barmode="group",
         labels={"annee": "Année", "indice": "Indice [MJ/m²]"},
         title="Indice par Année et Adresse",
-        text="text",  # Use the conditional text column
+        text="text",
         height=400,
+        width=1200,
     )
 
-    # Update traces for text display
-    fig.update_traces(
-        textposition="outside",
-        texttemplate="%{text}",  # Use the text column directly
-        cliponaxis=False,
-    )
+    # Configure text display
+    fig.update_traces(textposition="outside", texttemplate="%{text}", cliponaxis=False)
 
-    # Customize the layout
+    # Update layout settings
     fig.update_layout(
+        # Axis titles
         xaxis_title="Année",
         yaxis_title="Indice [MJ/m²]",
         legend_title="Adresse - EGID",
-        xaxis={"type": "category", "tickangle": 0},  # Horizontal labels
-        yaxis={
-            "range": [0, max(df_barplot["indice"]) * 1.15]  # Add 15% padding for text
+        # X-axis settings
+        xaxis={
+            "type": "category",
+            "tickangle": 0,
+            "gridcolor": "lightgrey",
+            "gridwidth": 0.1,
         },
-        # Adjust margins
-        margin=dict(
-            t=50,  # top margin
-            r=300,  # increased right margin for legend
-            b=50,  # bottom margin
-            l=50,  # left margin
-        ),
-        # Configure legend
+        # Y-axis settings
+        yaxis={
+            "range": [0, max(df_barplot["indice"]) * 1.15],
+            "gridcolor": "lightgrey",
+            "gridwidth": 0.1,
+        },
+        # Margins
+        margin=dict(t=50, r=400, b=50, l=50),  # top  # right  # bottom  # left
+        # Legend settings
         legend=dict(
             yanchor="top",
-            y=0.99,
+            y=1,
             xanchor="left",
-            x=1.02,
-            bgcolor="rgba(255, 255, 255, 0.8)",  # Semi-transparent background
+            x=1.05,
+            bgcolor="rgba(255, 255, 255, 0.8)",
             bordercolor="Black",
             borderwidth=0,
         ),
-        # Use white background
+        # Background colors
         plot_bgcolor="white",
         paper_bgcolor="white",
-        # Add grid lines
-        yaxis_gridcolor="lightgrey",
-        yaxis_gridwidth=0.1,
+        # Disable autosize
+        autosize=False,
+        # Font settings
+        font=dict(size=12, family="Arial"),
     )
 
-    # Display the plot with config for high-quality downloads
+    # Display plot in Streamlit
     st.plotly_chart(
         fig,
-        use_container_width=True,
+        use_container_width=False,
         config={
             "toImageButtonOptions": {
                 "format": "png",
                 "filename": "indice_par_annee",
-                "height": 400,  # High resolution for downloaded image
-                "width": 1000,  # High resolution for downloaded image
-                "scale": 2,  # Multiplier for resolution
-            }
+                "height": 400,
+                "width": 1400,
+                "scale": 2,
+            },
+            "displayModeBar": True,
+            "displaylogo": False,
+            "modeBarButtonsToRemove": [
+                "zoom2d",
+                "pan2d",
+                "select2d",
+                "lasso2d",
+                "zoomIn2d",
+                "zoomOut2d",
+                "autoScale2d",
+                "resetScale2d",
+            ],
         },
     )

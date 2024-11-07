@@ -330,4 +330,19 @@ def create_barplot(data_df):
         xaxis={"type": "category"},  # Treat year as categorical
     )
 
+    # Display the plot with config for high-quality downloads
+    st.plotly_chart(
+        fig,
+        use_container_width=True,
+        config={
+            "toImageButtonOptions": {
+                "format": "png",
+                "filename": "indice_par_annee",
+                "height": 1200,  # High resolution for downloaded image
+                "width": 1800,  # High resolution for downloaded image
+                "scale": 2,  # Multiplier for resolution
+            }
+        },
+    )
+
     return fig

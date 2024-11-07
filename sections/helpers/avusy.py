@@ -516,6 +516,152 @@ def avusy_consommation_energie_dashboard(start_datetime, end_datetime, mycol_avu
         st.error(f"Erreur: {e}")
 
 
+def display_counter_indices(mycol_avusy):
+    """
+    Display counter indices from the database between two selected dates.
+
+    Parameters:
+    mycol_avusy (pymongo.collection.Collection): MongoDB collection containing the counter data
+    """
+    st.markdown(
+        '<span style="font-size:1.2em;">**Affichage des index des compteurs**</span>',
+        unsafe_allow_html=True,
+    )
+
+    # Get all data from MongoDB to find min and max dates
+    df = pd.DataFrame(list(mycol_avusy.find()))
+    if df.empty:
+        st.error("Aucune donnée trouvée dans la base de données.")
+        return
+
+    try:
+        # Convert time column to datetime
+        df["time"] = pd.to_datetime(df["time"])
+
+        # Get min and max dates from the database
+        min_date = df["time"].min()
+        max_date = df["time"].max()
+
+        # Create two columns for date selection
+        col1, col2 = st.columns(2)
+
+        with col1:
+            start_date = st.date_input(
+                "Date de début",
+                min_value=min_date.date(),
+                max_value=max_date.date(),
+                value=min_date.date(),
+            )
+
+        with col2:
+            end_date = st.date_input(
+                "Date de fin",
+                min_value=min_date.date(),
+                max_value=max_date.date(),
+                value=max_date.date(),
+            )
+
+        if start_date and end_date:
+            if start_date > end_date:
+                st.error("La date de début doit être antérieure à la date de fin.")
+                return
+
+            # Convert dates to datetime for comparison
+            start_mask = df["time"].dt.date == start_date
+            end_mask = df["time"].dt.date == end_date
+
+            start_data = df[start_mask].iloc[0] if not df[start_mask].empty else None
+            end_data = df[end_mask].iloc[0] if not df[end_mask].empty else None
+
+            if start_data is not None and end_data is not None:
+                # Create a container with a border
+                container = st.container(border=True)
+                with container:
+                    st.markdown("### Valeurs des index")
+
+                    # Create columns for start and end dates
+                    col1, col2, col3 = st.columns(3)
+
+                    with col1:
+                        st.markdown("**Date**")
+                        st.write(f"Début: {start_date}")
+                        st.write(f"Fin: {end_date}")
+
+                    with col2:
+                        st.markdown("**Index de début**")
+                        st.write(
+                            f"Chaleur Immeuble ECS: {start_data['Chaleur_Immeuble_ECS']:.1f}"
+                        )
+                        st.write(
+                            f"Chaleur Immeuble Chauffage: {start_data['Chaleur_Immeuble_Chauffage']:.1f}"
+                        )
+                        st.write(
+                            f"Chaleur Villas Chauffage: {start_data['Chaleur_Villas_Chauffage']:.1f}"
+                        )
+                        st.write(
+                            f"Elec PAC Immeuble Villas: {start_data['Elec_PAC_Immeuble_Villas']:.1f}"
+                        )
+
+                    with col3:
+                        st.markdown("**Index de fin**")
+                        st.write(
+                            f"Chaleur Immeuble ECS: {end_data['Chaleur_Immeuble_ECS']:.1f}"
+                        )
+                        st.write(
+                            f"Chaleur Immeuble Chauffage: {end_data['Chaleur_Immeuble_Chauffage']:.1f}"
+                        )
+                        st.write(
+                            f"Chaleur Villas Chauffage: {end_data['Chaleur_Villas_Chauffage']:.1f}"
+                        )
+                        st.write(
+                            f"Elec PAC Immeuble Villas: {end_data['Elec_PAC_Immeuble_Villas']:.1f}"
+                        )
+
+                    # Calculate and display differences
+                    st.markdown("### Différences d'index")
+                    diff_container = st.container(border=True)
+                    with diff_container:
+                        dcol1, dcol2 = st.columns(2)
+                        with dcol1:
+                            st.markdown("**Consommation sur la période**")
+                            st.write(
+                                f"Chaleur Immeuble ECS: {end_data['Chaleur_Immeuble_ECS'] - start_data['Chaleur_Immeuble_ECS']:.1f} kWh"
+                            )
+                            st.write(
+                                f"Chaleur Immeuble Chauffage: {end_data['Chaleur_Immeuble_Chauffage'] - start_data['Chaleur_Immeuble_Chauffage']:.1f} kWh"
+                            )
+                            st.write(
+                                f"Chaleur Villas Chauffage: {end_data['Chaleur_Villas_Chauffage'] - start_data['Chaleur_Villas_Chauffage']:.1f} kWh"
+                            )
+                            st.write(
+                                f"Elec PAC Immeuble Villas: {end_data['Elec_PAC_Immeuble_Villas'] - start_data['Elec_PAC_Immeuble_Villas']:.1f} kWh"
+                            )
+
+                        with dcol2:
+                            # Calculate daily averages
+                            days_diff = (end_date - start_date).days
+                            if days_diff > 0:
+                                st.markdown("**Moyenne journalière**")
+                                st.write(
+                                    f"Chaleur Immeuble ECS: {(end_data['Chaleur_Immeuble_ECS'] - start_data['Chaleur_Immeuble_ECS'])/days_diff:.1f} kWh/jour"
+                                )
+                                st.write(
+                                    f"Chaleur Immeuble Chauffage: {(end_data['Chaleur_Immeuble_Chauffage'] - start_data['Chaleur_Immeuble_Chauffage'])/days_diff:.1f} kWh/jour"
+                                )
+                                st.write(
+                                    f"Chaleur Villas Chauffage: {(end_data['Chaleur_Villas_Chauffage'] - start_data['Chaleur_Villas_Chauffage'])/days_diff:.1f} kWh/jour"
+                                )
+                                st.write(
+                                    f"Elec PAC Immeuble Villas: {(end_data['Elec_PAC_Immeuble_Villas'] - start_data['Elec_PAC_Immeuble_Villas'])/days_diff:.1f} kWh/jour"
+                                )
+
+            else:
+                st.warning("Pas de données disponibles pour les dates sélectionnées.")
+
+    except Exception as e:
+        st.error(f"Une erreur s'est produite: {str(e)}")
+
+
 def avusy_consommation_energie_elec_periode(start_datetime, end_datetime, mycol_avusy):
     """
     Calculate the electrical energy consumption for a given period from a MongoDB collection.

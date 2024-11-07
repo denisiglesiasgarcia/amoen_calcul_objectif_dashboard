@@ -385,5 +385,3 @@ def create_barplot(data_df):
             }
         },
     )
-
-    return fig

@@ -1,18 +1,51 @@
 from datetime import datetime
 from sections.helpers.admin.admin_db_mgmt import DataValidator
 import pandas as pd
-import streamlit as st
+from typing import Optional, Dict, Any, Union
 
-def sanitize_db(data):
+
+def sanitize_db(data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """
+    Sanitizes and validates database records according to the schema.
+
+    Args:
+        data: Dictionary containing database record fields
+
+    Returns:
+        Sanitized dictionary with validated data types and values
+    """
     if not data:
         return None
 
     # Create a copy to avoid modifying the original
     formatted_data = {}
 
+    # Helper function to convert dates
+    def convert_date(value: Any) -> Optional[datetime]:
+        if value is None or pd.isna(value):
+            return None
+        if isinstance(value, (datetime, pd.Timestamp)):
+            return pd.Timestamp(value).to_pydatetime()
+        if isinstance(value, str):
+            try:
+                return pd.to_datetime(value).to_pydatetime()
+            except (ValueError, TypeError):
+                return None
+        return None
+
+    # Helper function to convert numeric values
+    def convert_numeric(value: Any, type_: type) -> Union[int, float]:
+        if value is None or pd.isna(value):
+            return type_(0)
+        try:
+            return type_(value)
+        except (ValueError, TypeError):
+            return type_(0)
+
+    # Process each field according to its type
     for key, value in data.items():
         try:
-            # Handle ObjectId separately
+            # Skip MongoDB ID field
             if key == "_id":
                 formatted_data[key] = str(value)
                 continue
@@ -24,67 +57,30 @@ def sanitize_db(data):
 
             field_type = DataValidator.SCHEMA[key]["type"]
 
-            # Special handling for empty/null date values
+            # Handle different field types
             if field_type == datetime:
-                if value in [None, "", "NaT", "NaN", pd.NaT] or pd.isna(value):
-                    formatted_data[key] = None
-                elif isinstance(value, (datetime, pd.Timestamp)):
-                    formatted_data[key] = value
-                elif isinstance(value, str):
-                    try:
-                        if value.strip():  # Check if string is not just whitespace
-                            formatted_data[key] = pd.to_datetime(value)
-                        else:
-                            formatted_data[key] = None
-                    except Exception as e:
-                        print(f"Error parsing date field '{key}': {str(e)}")
-                        formatted_data[key] = None
-                else:
-                    formatted_data[key] = None
-                continue
-
-            # Handle None values based on field type
-            if value is None or pd.isna(value) or value == "":
-                if field_type == float:
-                    formatted_data[key] = 0.0
-                elif field_type == int:
-                    formatted_data[key] = 0
-                else:
-                    formatted_data[key] = value
-                continue
-
-            # Convert other types
-            if field_type == float:
-                try:
-                    formatted_data[key] = float(value)
-                except (ValueError, TypeError):
-                    formatted_data[key] = 0.0
-
+                formatted_data[key] = convert_date(value)
+            elif field_type == float:
+                formatted_data[key] = convert_numeric(value, float)
             elif field_type == int:
-                try:
-                    formatted_data[key] = int(value)
-                except (ValueError, TypeError):
-                    formatted_data[key] = 0
-
+                formatted_data[key] = convert_numeric(value, int)
             elif field_type == str:
                 formatted_data[key] = str(value) if value is not None else ""
-
             else:
                 formatted_data[key] = value
 
-            # Validate against schema constraints for numeric fields
+            # Apply constraints from schema
             if field_type in (float, int):
                 min_value = DataValidator.SCHEMA[key].get("min")
                 max_value = DataValidator.SCHEMA[key].get("max")
 
                 if min_value is not None and formatted_data[key] < min_value:
-                    formatted_data[key] = min_value
-
+                    formatted_data[key] = field_type(min_value)
                 if max_value is not None and formatted_data[key] > max_value:
-                    formatted_data[key] = max_value
+                    formatted_data[key] = field_type(max_value)
 
         except Exception as e:
-            st.warning(f"Error processing field '{key}': {str(e)}")
+            print(f"Error processing field '{key}': {str(e)}")
             # Set safe default values
             if field_type == float:
                 formatted_data[key] = 0.0
@@ -92,10 +88,12 @@ def sanitize_db(data):
                 formatted_data[key] = 0
             elif field_type == datetime:
                 formatted_data[key] = None
+            elif field_type == str:
+                formatted_data[key] = ""
             else:
                 formatted_data[key] = value
 
-    # Handle required fields
+    # Ensure required fields are present
     for field, schema in DataValidator.SCHEMA.items():
         if schema.get("required", False) and field not in formatted_data:
             if schema["type"] == float:
@@ -107,26 +105,13 @@ def sanitize_db(data):
             elif schema["type"] == str:
                 formatted_data[field] = ""
 
+    # Validate percentage fields sum to 100%
+    percentage_fields = [
+        f for f in formatted_data.keys() if f.startswith("sre_pourcentage_")
+    ]
+    if percentage_fields:
+        total = sum(formatted_data.get(f, 0) for f in percentage_fields)
+        if abs(total - 100) > 0.01:  # Allow small floating point differences
+            print(f"Warning: Percentage fields sum to {total}% instead of 100%")
+
     return formatted_data
-
-
-# Helper function to check if a value represents an empty date
-def is_empty_date(value):
-    """
-    Check if a value represents an empty/null date.
-
-    Args:
-        value: The value to check
-
-    Returns:
-        bool: True if the value represents an empty date, False otherwise
-    """
-    if value is None:
-        return True
-    if pd.isna(value):
-        return True
-    if isinstance(value, str) and not value.strip():
-        return True
-    if value in ["NaT", "NaN"]:
-        return True
-    return False

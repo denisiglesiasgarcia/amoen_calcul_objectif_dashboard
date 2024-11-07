@@ -753,7 +753,7 @@ def generate_pdf(data):
         )
     )
     elements.append(project_admin_table)
-    elements.append(Spacer(1, 0.5 * cm))
+    elements.append(Spacer(1, 0.2 * cm))
 
     # Surfaces
     project_surfaces = [

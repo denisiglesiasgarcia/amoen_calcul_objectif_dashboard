@@ -312,6 +312,12 @@ def create_barplot(data_df):
         lambda row: f"{row['adresse']} - {row['egid']}", axis=1
     )
 
+    # Remove rows with indice = 0 for the text over bars
+    df_barplot["text"] = df_barplot["indice"].apply(
+        lambda x: f"{x:.1f}" if x > 0 else ""
+    )
+
+    # Create the bar plot
     fig = px.bar(
         df_barplot,
         x="annee",
@@ -320,13 +326,13 @@ def create_barplot(data_df):
         barmode="group",
         labels={"annee": "Année", "indice": "Indice [MJ/m²]"},
         title="Indice par Année et Adresse",
-        text="indice",
+        text="text",  # Use the conditional text column
     )
 
     # Update layout to position the text labels
     fig.update_traces(
         textposition="outside",  # Show text above bars
-        texttemplate="%{text:.1f}",  # Format to 1 decimal place
+        texttemplate="%{text:.0f}",  # Format to 0 decimal place
         cliponaxis=False,  # Prevent text cutoff
     )
 

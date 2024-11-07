@@ -775,7 +775,7 @@ def generate_pdf(data):
             [
                 Paragraph("Surface surélévation (m² SRE):", styles["Normal"]),
                 Paragraph(
-                    f"{data['sre_extension_surelevation_m2']} m² SRE. <i>La SRE surélevée n'est pas sujette à la subvention AMOén</i>"
+                    f"{round(data['sre_extension_surelevation_m2'],2):.1f} m² SRE. <i>La SRE surélevée n'est pas sujette à la subvention AMOén</i>"
                 ),
             ]
         )

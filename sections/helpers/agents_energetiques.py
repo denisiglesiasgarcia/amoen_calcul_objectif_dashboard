@@ -1,8 +1,6 @@
 import streamlit as st
 import numpy as np
 from typing import List, Dict
-from sections.helpers.avusy import avusy_consommation_energie_elec_periode
-import time
 
 # Define energy agent options
 OPTIONS_AGENT_ENERGETIQUE_EF = [
@@ -180,7 +178,7 @@ def calculate_total_energy(data_site: Dict) -> float:
 
 
 def display_energy_agents(
-    data_site: Dict, data_sites_db: Dict, mycol_historique_index_avusy
+    data_site: Dict, data_sites_db: Dict,
 ):
     """
     Display energy agents inputs and handle user interactions.
@@ -188,16 +186,11 @@ def display_energy_agents(
     Args:
     data_site (Dict): The current site data.
     data_sites_db (Dict): The database containing energy agent values.
-    mycol_historique_index_avusy: The database collection for Avusy project.
     """
     st.markdown(
         '<span style="font-size:1.2em;">**Agents énergétiques utilisés**</span>',
         unsafe_allow_html=True,
     )
-
-    # Handle Avusy project specific logic
-    if data_site["nom_projet"] == "Avusy 10-10A":
-        handle_avusy_project(data_site, mycol_historique_index_avusy)
 
     # Get selected energy agents
     selected_agents = get_selected_agents(data_sites_db) if data_sites_db else []
@@ -232,35 +225,6 @@ def display_energy_agents(
         )
 
 
-def handle_avusy_project(data_site: Dict, mycol_historique_index_avusy):
-    """
-    Handle Avusy project specific logic.
-
-    Args:
-    data_site (Dict): The current site data.
-    mycol_historique_index_avusy: The database collection for Avusy project.
-    """
-    conso_elec_pac_immeuble, nearest_start_date, nearest_end_date = (
-        avusy_consommation_energie_elec_periode(
-            data_site["periode_start"],
-            data_site["periode_end"],
-            mycol_historique_index_avusy,
-        )
-    )
-    if (
-        conso_elec_pac_immeuble
-        and nearest_start_date.date() == data_site["periode_start"].date()
-        and nearest_end_date.date() == data_site["periode_end"].date()
-    ):
-        success = st.success("Dates OK!")
-        time.sleep(3)
-        success.empty()
-    else:
-        st.warning(
-            f"Pas de données pour ces dates, dates les plus proches: du {nearest_start_date.date()} au {nearest_end_date.date()}"
-        )
-
-
 def get_default_value(data_site: Dict, option: Dict) -> float:
     """
     Get the default value for an energy agent input field.
@@ -272,9 +236,4 @@ def get_default_value(data_site: Dict, option: Dict) -> float:
     Returns:
     float: The default value for the input field.
     """
-    if (
-        data_site["nom_projet"] == "Avusy 10-10A"
-        and option["label"] == "Electricité pour les PAC (kWh)"
-    ):
-        return round(data_site.get("conso_elec_pac_immeuble", 0), 1)
     return 0.0

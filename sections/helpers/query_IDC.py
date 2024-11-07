@@ -379,7 +379,7 @@ def create_barplot(data_df, nom_projet):
         # Disable autosize
         autosize=False,
         # Font settings
-        font=dict(size=12, family="Arial"),
+        font=dict(size=12, family="Arial", color="black"),
         # Title settings
         title={"y": 0.95, "x": 0.5, "xanchor": "center", "yanchor": "top"},
     )

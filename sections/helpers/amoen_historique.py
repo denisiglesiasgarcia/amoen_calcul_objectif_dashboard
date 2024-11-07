@@ -27,6 +27,7 @@ def create_barplot_historique_amoen(data_df):
         + "<br>"
         + "Durée: "
         + df_barplot["periode_end"].sub(df_barplot["periode_start"]).dt.days.add(1).astype(str)
+        + " jours"
     )
 
     # Convert to percentage

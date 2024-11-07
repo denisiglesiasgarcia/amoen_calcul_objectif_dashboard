@@ -40,6 +40,18 @@ class DataValidator:
             "format": "%.2f",
             "label": "SRE rénovée (m²)",
         },
+        "travaux_start": {
+            "type": datetime,
+            "required": True,
+            "form_type": "date",
+            "label": "Date de début des travaux",
+        },
+        "travaux_end": {
+            "type": datetime,
+            "required": True,
+            "form_type": "date",
+            "label": "Date de fin des travaux",
+        },
         "ef_avant_corr_kwh_m2": {
             "type": float,
             "required": True,

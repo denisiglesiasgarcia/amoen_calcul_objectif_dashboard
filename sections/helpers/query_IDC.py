@@ -325,7 +325,9 @@ def create_barplot(data_df):
     right_margin = legend_width + 25
 
     # Get project name
-    nom_projet = df_barplot["nom_projet"].iloc[0]
+    st.write(df_barplot)
+    #nom_projet = df_barplot["nom_projet"].iloc[0]
+    nom_projet = "Projet"
 
     # Create bar plot
     fig = px.bar(

@@ -19,11 +19,13 @@ def create_barplot_historique_amoen(data_df):
 
     # Create period labels after sorting
     df_barplot["periode"] = (
-        df_barplot["periode_start"].dt.strftime("%Y-%m-%d")
+        "Du "
+        + df_barplot["periode_start"].dt.strftime("%Y-%m-%d")
         + "<br>"
-        + "-"
-        + "<br>"
+        + "au "
         + df_barplot["periode_end"].dt.strftime("%Y-%m-%d")
+        + "<br>"
+        + "365 jours"
     )
 
     # Convert to percentage

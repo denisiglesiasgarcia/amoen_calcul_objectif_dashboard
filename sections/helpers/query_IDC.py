@@ -345,7 +345,7 @@ def create_barplot(data_df):
         # Adjust margins to prevent cutoff
         margin=dict(
             t=50,  # top margin
-            r=200,  # right margin - make space for legend
+            r=250,  # right margin - make space for legend
             b=50,  # bottom margin
             l=50,  # left margin
         ),

@@ -342,6 +342,13 @@ def create_barplot(data_df):
         yaxis_title="Indice [MJ/m²]",
         legend_title="Adresse - EGID",
         xaxis={"type": "category"},
+        # Adjust margins to prevent cutoff
+        margin=dict(
+            t=50,  # top margin
+            r=250,  # right margin - make space for legend
+            b=50,  # bottom margin
+            l=50,  # left margin
+        ),
         # Make sure plot adjusts to new margins
         autosize=True,
     )

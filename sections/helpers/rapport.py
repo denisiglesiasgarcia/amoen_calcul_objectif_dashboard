@@ -783,8 +783,8 @@ def generate_pdf(data):
         ],
         [Paragraph("", styles["Normal"]), ""],
         [
-            Paragraph("Adresse:", address_style),
-            Paragraph(formatted_address, address_style),
+            Paragraph("Adresse:"),
+            Paragraph(formatted_address),
         ],
         [Paragraph("AMOén:", styles["Normal"]), data["amoen_id"]],
     ]

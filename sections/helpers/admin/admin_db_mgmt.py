@@ -581,34 +581,74 @@ def display_database_management(mycol_historique_sites, data_admin):
     """Display database management interface with CRUD operations"""
     st.subheader("Base de données")
 
+    # Add general usage instructions
+    with st.expander("ℹ️ Instructions d'utilisation", expanded=True):
+        st.markdown(
+            """
+        ### Comment utiliser cette interface:
+        1. **Voir les projets**: Consultez tous les projets existants
+        2. **Modifier un projet**: Effectuez des changements sur un projet existant
+        3. **Ajouter un projet**: Créez un nouveau projet
+        4. **Supprimer un projet**: Supprimez définitivement un projet
+        
+        ⚠️ **Attention**: 
+        - Toute modification ou suppression est **définitive**
+        - Vérifiez toujours les informations avant de valider
+        - En cas de doute, contactez votre administrateur
+        """
+        )
+
     if not check_mongodb_connection(mycol_historique_sites):
+        st.error(
+            "❌ Impossible de se connecter à la base de données. Veuillez réessayer plus tard ou contacter votre administrateur."
+        )
         return
 
     try:
         # Convert data to DataFrame and sort by project name and date
         df = pd.DataFrame(data_admin)
         if df.empty:
-            st.info("Aucun projet dans la base de données")
+            st.info(
+                "📝 La base de données est vide. Utilisez l'onglet 'Ajouter un projet' pour commencer."
+            )
             return
 
         # Convert date fields to datetime for proper sorting
         for date_field in ["date_rapport", "date_creation", "last_modified"]:
             if date_field in df.columns:
-                df[date_field] = pd.to_datetime(df[date_field])
+                df[date_field] = pd.to_datetime(df[date_field], errors="coerce")
 
-        df = df.sort_values(["nom_projet", "date_rapport"])
+        # Ensure required columns exist
+        required_columns = ["nom_projet", "date_rapport", "_id"]
+        missing_columns = [col for col in required_columns if col not in df.columns]
+        if missing_columns:
+            st.error(
+                f"❌ Structure de données invalide. Colonnes manquantes: {', '.join(missing_columns)}"
+            )
+            st.warning("Contactez votre administrateur système.")
+            return
+
+        # Sort with handling for null values
+        df = df.sort_values(
+            ["nom_projet", "date_rapport", "last_modified"],
+            ascending=[True, True, False],
+            na_position="last",
+        )
 
         tab_view, tab_edit, tab_add, tab_delete = st.tabs(
             [
-                "Voir les projets",
-                "Modifier un projet",
-                "Ajouter un projet",
-                "Supprimer un projet",
+                "👀 Voir les projets",
+                "✏️ Modifier un projet",
+                "➕ Ajouter un projet",
+                "🗑️ Supprimer un projet",
             ]
         )
 
         with tab_view:
-            st.write("Liste des projets dans la base de données")
+            st.write("📋 Liste des projets dans la base de données")
+            st.info(
+                "ℹ️ Utilisez la barre de recherche en haut à droite pour trouver un projet spécifique"
+            )
             display_df = df.copy()
             date_columns = ["date_rapport", "date_creation", "last_modified"]
             for col in date_columns:
@@ -617,12 +657,28 @@ def display_database_management(mycol_historique_sites, data_admin):
             st.dataframe(display_df.drop(columns=["_id"]), use_container_width=True)
 
         with tab_edit:
-            st.write("Modifier un projet existant")
-            df["project_identifier"] = df.apply(
-                lambda x: f"{x['nom_projet']} ({x['date_rapport'].strftime('%d-%m-%Y')})",
-                axis=1,
+            st.write("✏️ Modifier un projet existant")
+            st.warning(
+                "⚠️ Assurez-vous de bien vérifier toutes les informations avant de sauvegarder les modifications"
             )
 
+            # Create project identifier with safe handling of null dates
+            def create_project_identifier(row):
+                try:
+                    date_str = (
+                        row["date_rapport"].strftime("%d-%m-%Y %H:%M:%S")
+                        if pd.notnull(row["date_rapport"])
+                        else "Date non définie"
+                    )
+                    return f"{row['nom_projet']} ({date_str})"
+                except (AttributeError, ValueError) as e:
+                    return f"{row['nom_projet']} (Date invalide)"
+
+            df["project_identifier"] = df.apply(create_project_identifier, axis=1)
+
+            st.info(
+                "💡 Le format du projet est: Nom du projet (Date et heure du rapport)"
+            )
             selected_project_identifier = st.selectbox(
                 "Sélectionner le projet à modifier",
                 df["project_identifier"].unique(),
@@ -630,69 +686,110 @@ def display_database_management(mycol_historique_sites, data_admin):
             )
 
             if selected_project_identifier:
-                # Extract project name and date
-                selected_project = selected_project_identifier.split(" (")[0]
-                selected_date = selected_project_identifier.split("(")[1].rstrip(")")
+                try:
+                    # Extract project name and datetime
+                    selected_project = selected_project_identifier.split(" (")[0]
+                    selected_datetime = selected_project_identifier.split("(")[
+                        1
+                    ].rstrip(")")
 
-                # Get the specific project data
-                project_data = df[
-                    (df["nom_projet"] == selected_project)
-                    & (df["date_rapport"].dt.strftime("%d-%m-%Y") == selected_date)
-                ].iloc[0]
+                    # Find the matching project with proper null handling
+                    mask = df["nom_projet"] == selected_project
+                    if (
+                        selected_datetime != "Date non définie"
+                        and selected_datetime != "Date invalide"
+                    ):
+                        mask &= (
+                            df["date_rapport"].dt.strftime("%d-%m-%Y %H:%M:%S")
+                            == selected_datetime
+                        )
 
-                with st.form("edit_project_form"):
-                    edited_data = {}
-                    non_editable = [
-                        "_id",
-                        "project_identifier",
-                        "date_creation",
-                        "last_modified",
-                    ]
+                    if not any(mask):
+                        st.error("❌ Projet non trouvé dans la base de données")
+                        return
 
-                    for col in df.columns:
-                        if col not in non_editable and col in DataValidator.SCHEMA:
-                            current_value = project_data[col]
-                            schema = DataValidator.SCHEMA[col]
-                            edited_data[col] = DataValidator.create_form_field(
-                                col, schema, current_value
-                            )
+                    project_data = df[mask].iloc[0]
 
-                    if st.form_submit_button("Sauvegarder les modifications"):
-                        with st.spinner("Validation en cours..."):
-                            if update_project_in_mongodb(
-                                mycol_historique_sites,
-                                str(project_data["_id"]),
-                                edited_data,
-                            ):
-                                st.success(
-                                    f"Projet {selected_project} mis à jour avec succès!"
+                    with st.form("edit_project_form"):
+                        st.info(
+                            "📝 Modifiez les champs souhaités puis cliquez sur 'Sauvegarder'"
+                        )
+                        edited_data = {}
+                        non_editable = [
+                            "_id",
+                            "project_identifier",
+                            "date_creation",
+                            "last_modified",
+                        ]
+
+                        for col in df.columns:
+                            if col not in non_editable and col in DataValidator.SCHEMA:
+                                current_value = project_data[col]
+                                schema = DataValidator.SCHEMA[col]
+                                edited_data[col] = DataValidator.create_form_field(
+                                    col, schema, current_value
                                 )
-                                time.sleep(1)
-                                st.rerun()
+
+                        st.warning(
+                            "⚠️ Vérifiez bien toutes les informations avant de sauvegarder"
+                        )
+                        if st.form_submit_button("💾 Sauvegarder les modifications"):
+                            with st.spinner("⏳ Validation en cours..."):
+                                if update_project_in_mongodb(
+                                    mycol_historique_sites,
+                                    str(project_data["_id"]),
+                                    edited_data,
+                                ):
+                                    st.success(
+                                        f"✅ Projet {selected_project} mis à jour avec succès!"
+                                    )
+                                    time.sleep(1)
+                                    st.rerun()
+
+                except Exception as e:
+                    st.error(f"❌ Erreur lors de la modification du projet: {str(e)}")
+                    st.info("💡 Si l'erreur persiste, contactez votre administrateur")
 
         with tab_add:
-            st.write("Ajouter un nouveau projet")
+            st.write("➕ Ajouter un nouveau projet")
+            st.info(
+                "📝 Remplissez tous les champs requis (*) pour créer un nouveau projet"
+            )
+
             with st.form("new_project_form"):
                 new_project_data = {}
+                st.warning("⚠️ Les champs marqués d'un astérisque (*) sont obligatoires")
+
                 for field, schema in DataValidator.SCHEMA.items():
-                    if schema.get(
-                        "required", True
-                    ):  # Show all fields that are required
+                    if schema.get("required", True):
+                        st.markdown(f"**{schema.get('label', field)}** *")
                         new_project_data[field] = DataValidator.create_form_field(
                             field, schema
                         )
 
-                if st.form_submit_button("Ajouter le projet"):
-                    with st.spinner("Création en cours..."):
+                st.warning(
+                    "⚠️ Vérifiez bien toutes les informations avant de créer le projet"
+                )
+                if st.form_submit_button("➕ Ajouter le projet"):
+                    with st.spinner("⏳ Création en cours..."):
                         if insert_project_to_mongodb(
                             mycol_historique_sites, new_project_data
                         ):
-                            st.success("Nouveau projet ajouté avec succès!")
+                            st.success("✅ Nouveau projet ajouté avec succès!")
                             time.sleep(1)
                             st.rerun()
+                        else:
+                            st.error("❌ Erreur lors de la création du projet")
+                            st.info(
+                                "💡 Vérifiez que tous les champs obligatoires sont remplis correctement"
+                            )
 
         with tab_delete:
-            st.write("Supprimer un projet")
+            st.write("🗑️ Supprimer un projet")
+            st.error(
+                "⚠️ ATTENTION: La suppression d'un projet est définitive et irréversible!"
+            )
+
             project_to_delete = st.selectbox(
                 "Sélectionner le projet à supprimer",
                 df["project_identifier"].unique(),
@@ -700,47 +797,80 @@ def display_database_management(mycol_historique_sites, data_admin):
             )
 
             if project_to_delete:
-                project_name = project_to_delete.split(" (")[0]
-                project_date = project_to_delete.split("(")[1].rstrip(")")
+                try:
+                    project_name = project_to_delete.split(" (")[0]
+                    project_datetime = project_to_delete.split("(")[1].rstrip(")")
 
-                project_data = df[
-                    (df["nom_projet"] == project_name)
-                    & (df["date_rapport"].dt.strftime("%d-%m-%Y") == project_date)
-                ].iloc[0]
-
-                st.warning("⚠️ Attention: Cette action est irréversible!")
-                st.write(
-                    f"Vous êtes sur le point de supprimer le projet: {project_name}"
-                )
-                st.write(f"Date du rapport: {project_date}")
-
-                confirm_delete = st.checkbox(
-                    "Je confirme vouloir supprimer ce projet", key="confirm_delete"
-                )
-
-                if confirm_delete:
-                    if st.button(
-                        "Supprimer le projet", type="primary", key="delete_button"
+                    # Find the matching project with proper null handling
+                    mask = df["nom_projet"] == project_name
+                    if (
+                        project_datetime != "Date non définie"
+                        and project_datetime != "Date invalide"
                     ):
-                        with st.spinner("Suppression en cours..."):
-                            if delete_project_from_mongodb(
-                                mycol_historique_sites, str(project_data["_id"])
-                            ):
-                                st.success(
-                                    f"Projet {project_name} supprimé avec succès!"
-                                )
-                                time.sleep(1)
-                                st.rerun()
+                        mask &= (
+                            df["date_rapport"].dt.strftime("%d-%m-%Y %H:%M:%S")
+                            == project_datetime
+                        )
+
+                    if not any(mask):
+                        st.error("❌ Projet non trouvé")
+                        return
+
+                    project_data = df[mask].iloc[0]
+
+                    st.error(
+                        """
+                    ⚠️ ATTENTION: 
+                    - Cette action est IRRÉVERSIBLE
+                    - Toutes les données du projet seront PERDUES
+                    - Cette action ne peut pas être annulée
+                    """
+                    )
+
+                    st.write(
+                        f"🗑️ Vous êtes sur le point de supprimer le projet: **{project_name}**"
+                    )
+                    st.write(f"📅 Date et heure du rapport: **{project_datetime}**")
+
+                    confirm_delete = st.checkbox(
+                        "✅ Je confirme vouloir supprimer ce projet et je comprends que cette action est irréversible",
+                        key="confirm_delete",
+                    )
+
+                    if confirm_delete:
+                        if st.button(
+                            "🗑️ Supprimer définitivement le projet",
+                            type="primary",
+                            key="delete_button",
+                        ):
+                            with st.spinner("⏳ Suppression en cours..."):
+                                if delete_project_from_mongodb(
+                                    mycol_historique_sites, str(project_data["_id"])
+                                ):
+                                    st.success(
+                                        f"✅ Projet {project_name} supprimé avec succès!"
+                                    )
+                                    time.sleep(1)
+                                    st.rerun()
+                    else:
+                        st.info(
+                            "💡 Cochez la case de confirmation pour activer le bouton de suppression"
+                        )
+
+                except Exception as e:
+                    st.error(f"❌ Erreur lors de la suppression du projet: {str(e)}")
+                    st.info("💡 Si l'erreur persiste, contactez votre administrateur")
 
     except Exception as e:
-        st.error(f"Une erreur est survenue: {str(e)}")
+        st.error(f"❌ Une erreur inattendue est survenue: {str(e)}")
+        st.info("💡 Si l'erreur persiste, contactez votre administrateur")
         return
 
     # Reset cached data
     col1, col2 = st.columns(2)
     with col1:
         if st.button(
-            "Actualiser",
+            "🔄 Actualiser",
             use_container_width=True,
             type="primary",
             help="Actualise les données en conservant la session",
@@ -752,13 +882,20 @@ def display_database_management(mycol_historique_sites, data_admin):
 
     with col2:
         if st.button(
-            "Réinitialiser complètement",
+            "🔁 Réinitialiser complètement",
             use_container_width=True,
             type="secondary",
             help="Réinitialise complètement l'application et déconnecte l'utilisateur",
         ):
             st.warning("⚠️ Cette action va vous déconnecter!")
+            time.sleep(2)
             st.cache_data.clear()
             st.cache_resource.clear()
             st.session_state.clear()
             st.rerun()
+
+    # Add footer with support information
+    st.markdown("---")
+    st.info(
+        "💡 En cas de problème ou de question, contactez votre administrateur système"
+    )

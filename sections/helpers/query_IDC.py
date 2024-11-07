@@ -350,7 +350,7 @@ def create_barplot(data_df):
             l=50,  # left margin
         ),
         # Make sure plot adjusts to new margins
-        autosize=False,
+        autosize=True,
     )
 
     # Display the plot with config for high-quality downloads

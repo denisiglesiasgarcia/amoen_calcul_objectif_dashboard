@@ -338,8 +338,8 @@ def create_barplot(data_df):
             "toImageButtonOptions": {
                 "format": "png",
                 "filename": "indice_par_annee",
-                "height": 1200,  # High resolution for downloaded image
-                "width": 1800,  # High resolution for downloaded image
+                "height": 400,  # High resolution for downloaded image
+                "width": 1000,  # High resolution for downloaded image
                 "scale": 2,  # Multiplier for resolution
             }
         },

@@ -53,12 +53,13 @@ def create_barplot_historique_amoen(data_df):
             "type": "category",
             "tickangle": 0,
             "gridcolor": "rgba(211, 211, 211, 0.2)",
-            "tickfont": {"size": 10},
+            "tickfont": {"size": 12},
         },
         yaxis={
             "range": [0, max(max(df_barplot["atteinte_objectif"]) * 1.15, 100)],
             "gridcolor": "rgba(211, 211, 211, 0.2)",
             "gridwidth": 0.1,
+            "tickfont": {"size": 12},
         },
         # Margins
         margin=dict(

@@ -26,7 +26,10 @@ def create_barplot_historique_amoen(data_df):
         + df_barplot["periode_end"].dt.strftime("%Y-%m-%d")
         + "<br>"
         + "Durée: "
-        + df_barplot["periode_end"].sub(df_barplot["periode_start"]).dt.days.add(1).astype(str)
+        + df_barplot["periode_end"]
+        .sub(df_barplot["periode_start"])
+        .dt.days.add(1)
+        .astype(str)
         + " jours"
     )
 
@@ -86,14 +89,14 @@ def create_barplot_historique_amoen(data_df):
         texttemplate="%{y:.1f}%",
         textposition="outside",
         textfont=dict(
+            size=12,
             color=[
-                "#16a34a" if y >= 85 else "#e74c3c"
-                for y in df_barplot["atteinte_objectif"]  # Darker green
-            ]
+                "black" if y >= 85 else "#e74c3c"
+                for y in df_barplot["atteinte_objectif"]
+            ],
         ),
         marker_color=[
-            "#16a34a" if y >= 85 else "#e74c3c"
-            for y in df_barplot["atteinte_objectif"]  # Changed from #2ecc71 to #27ae60
+            "#27ae60" if y >= 85 else "#e74c3c" for y in df_barplot["atteinte_objectif"]
         ],
     )
 

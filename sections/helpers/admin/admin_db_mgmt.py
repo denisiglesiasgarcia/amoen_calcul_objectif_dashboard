@@ -45,12 +45,14 @@ class DataValidator:
             "required": True,
             "form_type": "date",
             "label": "Date de début des travaux",
+            "default": datetime(1900, 1, 1),
         },
         "travaux_end": {
             "type": datetime,
             "required": True,
             "form_type": "date",
             "label": "Date de fin des travaux",
+            "default": datetime(1900, 12, 31),
         },
         "ef_avant_corr_kwh_m2": {
             "type": float,

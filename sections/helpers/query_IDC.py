@@ -316,6 +316,14 @@ def create_barplot(data_df):
         lambda x: f"{int(x)}" if x > 0 else ""
     )
 
+    # Calculate approximate legend width based on longest text
+    longest_legend = max(df_barplot["adresse_egid"].str.len())
+    # Approximate pixels per character (adjust this value based on your font size)
+    pixels_per_char = 8
+    legend_width = longest_legend * pixels_per_char
+    # Calculate right margin with some padding
+    right_margin = legend_width + 50  # Add 50px padding
+
     # Create bar plot
     fig = px.bar(
         df_barplot,
@@ -352,13 +360,13 @@ def create_barplot(data_df):
             "gridwidth": 0.1,
         },
         # Margins
-        margin=dict(t=50, r=400, b=50, l=50),  # top  # right  # bottom  # left
+        margin=dict(t=50, r=right_margin, b=50, l=50),  # top  # right  # bottom  # left
         # Legend settings
         legend=dict(
             yanchor="top",
             y=1,
             xanchor="left",
-            x=1.05,
+            x=1.02,
             bgcolor="rgba(255, 255, 255, 0.8)",
             bordercolor="Black",
             borderwidth=0,

@@ -21,7 +21,7 @@ def create_barplot_historique_amoen(data_df):
     df_barplot["periode"] = (
         df_barplot["periode_start"].dt.strftime("%Y-%m-%d")
         + "<br>"
-        + "→"
+        + "-"
         + "<br>"
         + df_barplot["periode_end"].dt.strftime("%Y-%m-%d")
     )

@@ -854,6 +854,7 @@ if st.session_state["authentication_status"]:
     with tab6:
         st.subheader("Générer rapport")
 
+        st.write(st.session_state["data_site"])
         # Check if all fields are valid
         def is_valid(var):
             """

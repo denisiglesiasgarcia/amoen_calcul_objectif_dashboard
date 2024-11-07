@@ -52,11 +52,12 @@ def create_barplot_historique_amoen(data_df):
         xaxis={
             "type": "category",
             "tickangle": 0,
+            "gridcolor": "rgba(211, 211, 211, 0.2)",
             "tickfont": {"size": 10},
         },
         yaxis={
             "range": [0, max(max(df_barplot["atteinte_objectif"]) * 1.15, 100)],
-            "gridcolor": "lightgrey",
+            "gridcolor": "rgba(211, 211, 211, 0.2)",
             "gridwidth": 0.1,
         },
         # Margins
@@ -114,4 +115,3 @@ def create_barplot_historique_amoen(data_df):
             ],
         },
     )
-

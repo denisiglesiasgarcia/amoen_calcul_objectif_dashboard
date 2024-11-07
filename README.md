@@ -21,6 +21,7 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
   - [ ] Améliorer la documentation
   - [ ] Nettoyer code
   - [ ] Ajouter option de renseigner ECS séparée du chauffage
+  - [ ] Améliorer impression/sauvegarde graphiques px
 
 ## Fait
 

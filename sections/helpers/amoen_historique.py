@@ -54,7 +54,6 @@ def create_barplot_historique_amoen(data_df):
         },
         title=f"Historique atteinte objectifs pour {nom_projet}",
         height=500,
-        width=1000,
     )
 
     # Customize the layout
@@ -125,7 +124,7 @@ def create_barplot_historique_amoen(data_df):
                 "format": "png",
                 "filename": "historique_objectifs",
                 "height": 500,
-                "width": 1000,
+                "width": 1400,
                 "scale": 2,  # Higher resolution
             },
             "displayModeBar": True,

@@ -378,6 +378,8 @@ def create_barplot(data_df):
         autosize=False,
         # Font settings
         font=dict(size=12, family="Arial"),
+        # Title settings
+        title={"y": 0.95, "x": 0.5, "xanchor": "center", "yanchor": "top"},
     )
 
     # Display plot in Streamlit

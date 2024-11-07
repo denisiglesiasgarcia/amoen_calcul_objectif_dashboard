@@ -314,7 +314,7 @@ def create_barplot(data_df):
 
     # Remove rows with indice = 0 for the text over bars
     df_barplot["text"] = df_barplot["indice"].apply(
-        lambda x: f"{x:.1f}" if x > 0 else ""
+        lambda x: f"{int(x)}" if x > 0 else ""  # Changed to int for cleaner display
     )
 
     # Create the bar plot
@@ -327,30 +327,48 @@ def create_barplot(data_df):
         labels={"annee": "Année", "indice": "Indice [MJ/m²]"},
         title="Indice par Année et Adresse",
         text="text",  # Use the conditional text column
+        height=400,
     )
 
-    # Update layout to position the text labels
+    # Update traces for text display
     fig.update_traces(
-        textposition="outside",  # Show text above bars
-        texttemplate="%{text:.0f}",  # Format to 0 decimal place
-        cliponaxis=False,  # Prevent text cutoff
+        textposition="outside",
+        texttemplate="%{text}",  # Use the text column directly
+        cliponaxis=False,
     )
 
-    # Customize the layout with adjusted margins and legend position
+    # Customize the layout
     fig.update_layout(
         xaxis_title="Année",
         yaxis_title="Indice [MJ/m²]",
         legend_title="Adresse - EGID",
-        xaxis={"type": "category"},
-        # Adjust margins to prevent cutoff
+        xaxis={"type": "category", "tickangle": 0},  # Horizontal labels
+        yaxis={
+            "range": [0, max(df_barplot["indice"]) * 1.15]  # Add 15% padding for text
+        },
+        # Adjust margins
         margin=dict(
             t=50,  # top margin
-            r=250,  # right margin - make space for legend
+            r=300,  # increased right margin for legend
             b=50,  # bottom margin
             l=50,  # left margin
         ),
-        # Make sure plot adjusts to new margins
-        autosize=True,
+        # Configure legend
+        legend=dict(
+            yanchor="top",
+            y=0.99,
+            xanchor="left",
+            x=1.02,
+            bgcolor="rgba(255, 255, 255, 0.8)",  # Semi-transparent background
+            bordercolor="Black",
+            borderwidth=1,
+        ),
+        # Use white background
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        # Add grid lines
+        yaxis_gridcolor="lightgrey",
+        yaxis_gridwidth=0.1,
     )
 
     # Display the plot with config for high-quality downloads

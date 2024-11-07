@@ -783,7 +783,7 @@ if st.session_state["authentication_status"]:
 
                 st.subheader("Historique IDC")
                 # create barplot
-                create_barplot(data_df)
+                create_barplot(data_df, st.session_state["data_site"]["nom_projet"])
 
                 # show dataframe in something hidden like a
                 if st.checkbox("Afficher les données IDC"):

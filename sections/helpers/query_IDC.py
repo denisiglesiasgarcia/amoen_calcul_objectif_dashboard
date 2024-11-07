@@ -274,7 +274,7 @@ def get_adresses_egid():
 
 
 @st.cache_data
-def create_barplot(data_df):
+def create_barplot(data_df, nom_projet):
     # Create DataFrame and sort values
     df_barplot = pd.DataFrame(data_df)
     df_barplot = df_barplot[["adresse", "egid", "annee", "indice"]].sort_values(
@@ -323,11 +323,6 @@ def create_barplot(data_df):
     legend_width = longest_legend * pixels_per_char
     # Calculate right margin with some padding
     right_margin = legend_width + 25
-
-    # Get project name
-    st.write(df_barplot)
-    #nom_projet = df_barplot["nom_projet"].iloc[0]
-    nom_projet = "Projet"
 
     # Create bar plot
     fig = px.bar(

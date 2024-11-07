@@ -324,6 +324,9 @@ def create_barplot(data_df):
     # Calculate right margin with some padding
     right_margin = legend_width + 25
 
+    # Get project name
+    nom_projet = df_barplot["nom_projet"].iloc[0]
+
     # Create bar plot
     fig = px.bar(
         df_barplot,
@@ -332,7 +335,7 @@ def create_barplot(data_df):
         color="adresse_egid",
         barmode="group",
         labels={"annee": "Année", "indice": "Indice [MJ/m²]"},
-        title="Indice par Année et Adresse",
+        title=f"Indice par Année et Adresse pour {nom_projet}",
         text="text",
         height=400,
     )

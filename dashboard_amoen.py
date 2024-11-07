@@ -558,7 +558,6 @@ if st.session_state["authentication_status"]:
                 display_energy_agents(
                     st.session_state["data_site"],
                     data_sites_db,
-                    mycol_historique_index_avusy,
                 )
 
             st.session_state["data_site"]["annees_calcul_idc_avant_travaux"] = (

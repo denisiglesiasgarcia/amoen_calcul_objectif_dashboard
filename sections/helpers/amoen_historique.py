@@ -87,12 +87,12 @@ def create_barplot_historique_amoen(data_df):
         textposition="outside",
         textfont=dict(
             color=[
-                "#006400" if y >= 85 else "#e74c3c"
+                "#16a34a" if y >= 85 else "#e74c3c"
                 for y in df_barplot["atteinte_objectif"]  # Darker green
             ]
         ),
         marker_color=[
-            "#27ae60" if y >= 85 else "#e74c3c"
+            "#16a34a" if y >= 85 else "#e74c3c"
             for y in df_barplot["atteinte_objectif"]  # Changed from #2ecc71 to #27ae60
         ],
     )

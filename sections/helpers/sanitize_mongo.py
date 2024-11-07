@@ -105,13 +105,4 @@ def sanitize_db(data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
             elif schema["type"] == str:
                 formatted_data[field] = ""
 
-    # Validate percentage fields sum to 100%
-    percentage_fields = [
-        f for f in formatted_data.keys() if f.startswith("sre_pourcentage_")
-    ]
-    if percentage_fields:
-        total = sum(formatted_data.get(f, 0) for f in percentage_fields)
-        if abs(total - 100) > 0.01:  # Allow small floating point differences
-            print(f"Warning: Percentage fields sum to {total}% instead of 100%")
-
     return formatted_data

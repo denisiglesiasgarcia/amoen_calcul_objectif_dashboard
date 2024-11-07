@@ -603,7 +603,7 @@ if st.session_state["authentication_status"]:
 
             with tab2:
                 display_counter_indices(mycol_historique_index_avusy)
-
+        st.write(st.session_state["data_site"])
     with tab3:
         update_existing_data_avusy(mycol_historique_index_avusy)
 

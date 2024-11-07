@@ -565,7 +565,6 @@ if st.session_state["authentication_status"]:
                     data_sites_db,
                 )
 
-            st.write(data_sites_db)
             # Autres données
             st.session_state["data_site"]["travaux_start"] = data_sites_db[
                 "travaux_start"

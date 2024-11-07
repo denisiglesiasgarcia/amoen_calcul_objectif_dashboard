@@ -759,7 +759,7 @@ def generate_pdf(data):
     # Title
     title_report = "Rapport " + data["nom_projet"]
     elements.append(Paragraph(title_report, styles["Title"]))
-    elements.append(Spacer(1, 0.5 * cm))
+    elements.append(Spacer(1, 0.2 * cm))
 
     # Project details
     addresses = data["adresse_projet"].split(";")
@@ -877,7 +877,7 @@ def generate_pdf(data):
         )
     )
     elements.append(project_surfaces_table)
-    elements.append(Spacer(1, 0.5 * cm))
+    elements.append(Spacer(1, 0.2 * cm))
 
     # Conso énergie après travaux
     project_energie = [
@@ -950,7 +950,7 @@ def generate_pdf(data):
         )
     )
     elements.append(project_energie_table)
-    elements.append(Spacer(1, 0.5 * cm))
+    elements.append(Spacer(1, 0.2 * cm))
 
     # Energy data table with an additional "Dénomination" column
     project_results = [
@@ -1059,11 +1059,11 @@ def generate_pdf(data):
         data["amoen_id"],
     )
     elements.append(Image("01_bar_chart.png", width=510, height=280))
-    elements.append(Spacer(1, 0.5 * cm))
+    elements.append(Spacer(1, 0.2 * cm))
 
     if data["sre_extension_surelevation_m2"] > 0.0:
         elements.append(PageBreak())
-        elements.append(Spacer(1, 0.5 * cm))
+        elements.append(Spacer(1, 0.2 * cm))
         ratio_figsize_rep_reno_sur = repartition_renove_sureleve(
             data["sre_renovation_m2"],
             data["sre_extension_surelevation_m2"],

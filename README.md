@@ -21,7 +21,6 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
   - [ ] Améliorer la documentation
   - [ ] Nettoyer code
   - [ ] Ajouter option de renseigner ECS séparée du chauffage
-  - [ ] Améliorer impression/sauvegarde graphiques px
 
 ## Fait
 
@@ -41,3 +40,4 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 - [x] Ajouter unité de test pour vérifier que le calcul de l'atteinte de l'objectif est correct
 - [X] Corriger bug sur les agents énergétiques
 - [X] Trouver solution pour les noms de rue longs dans le rapport PDF
+- [x] Améliorer impression/sauvegarde graphiques px

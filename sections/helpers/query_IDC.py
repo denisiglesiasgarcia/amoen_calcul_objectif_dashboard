@@ -327,7 +327,6 @@ def create_barplot(data_df):
         title="Indice par Année et Adresse",
         text="text",
         height=400,
-        width=1200,
     )
 
     # Configure text display

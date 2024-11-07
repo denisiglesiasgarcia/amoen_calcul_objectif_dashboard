@@ -839,10 +839,7 @@ if st.session_state["authentication_status"]:
 
             # Proceed only if all required columns are present
             if all([col in df_historique_complet.columns for col in required_columns]):
-                fig_historique_amoen = create_barplot_historique_amoen(
-                    df_historique_complet
-                )
-                st.plotly_chart(fig_historique_amoen)
+                create_barplot_historique_amoen(df_historique_complet)
 
                 # Show DataFrame in a hidden section
                 if st.checkbox("Afficher les données historiques"):

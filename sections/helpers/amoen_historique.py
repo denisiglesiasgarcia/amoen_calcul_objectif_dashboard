@@ -115,4 +115,3 @@ def create_barplot_historique_amoen(data_df):
         },
     )
 
-    return fig

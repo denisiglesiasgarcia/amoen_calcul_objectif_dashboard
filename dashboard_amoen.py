@@ -55,6 +55,7 @@ from sections.helpers.amoen_historique import create_barplot_historique_amoen
 from sections.helpers.avusy import (
     avusy_consommation_energie_dashboard,
     update_existing_data_avusy,
+    display_counter_indices,
 )
 
 from sections.helpers.affectations_sre import display_affectations
@@ -342,7 +343,7 @@ if st.session_state["authentication_status"]:
                 # st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
                 ef_avant_corr_kwh_m2 = st.text_input(
                     "IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an]):",
-                    value=round(data_sites_db["ef_avant_corr_kwh_m2"],2),
+                    value=round(data_sites_db["ef_avant_corr_kwh_m2"], 2),
                     help="Surélévation: C92 / Rénovation: C61",
                 )
                 if ef_avant_corr_kwh_m2 != "0":
@@ -361,7 +362,7 @@ if st.session_state["authentication_status"]:
             with tab2_col6:
                 ef_objectif_pondere_kwh_m2 = st.text_input(
                     "Ef,obj * fp [kWh/m²/an]:",
-                    value=round(data_sites_db["ef_objectif_pondere_kwh_m2"],2),
+                    value=round(data_sites_db["ef_objectif_pondere_kwh_m2"], 2),
                     help="Surélévation: C94 / Rénovation: C63",
                 )
                 if ef_objectif_pondere_kwh_m2 != "0":
@@ -380,7 +381,6 @@ if st.session_state["authentication_status"]:
                 except ValueError:
                     st.warning("Problème dans Ef,obj *fp [kWh/m²/an]")
 
-
             st.markdown(
                 '<span style="font-size:1.2em;">**Répartition énergie finale ECS/Chauffage**</span>',
                 unsafe_allow_html=True,
@@ -392,9 +392,12 @@ if st.session_state["authentication_status"]:
                 # rénovation - chauffage
                 repartition_energie_finale_partie_renovee_chauffage = st.text_input(
                     "Chauffage partie rénovée [%]",
-                    value=round(data_sites_db[
-                        "repartition_energie_finale_partie_renovee_chauffage"
-                    ],2),
+                    value=round(
+                        data_sites_db[
+                            "repartition_energie_finale_partie_renovee_chauffage"
+                        ],
+                        2,
+                    ),
                     help="Surélévation: C77 / Rénovation: C49",
                 )
                 if repartition_energie_finale_partie_renovee_chauffage != "0":
@@ -409,9 +412,12 @@ if st.session_state["authentication_status"]:
                 # surélévation - chauffage
                 repartition_energie_finale_partie_surelevee_chauffage = st.text_input(
                     "Chauffage partie surélévée",
-                    value=round(data_sites_db[
-                        "repartition_energie_finale_partie_surelevee_chauffage"
-                    ],2),
+                    value=round(
+                        data_sites_db[
+                            "repartition_energie_finale_partie_surelevee_chauffage"
+                        ],
+                        2,
+                    ),
                     help="C79",
                 )
                 if repartition_energie_finale_partie_surelevee_chauffage != "0":
@@ -428,9 +434,10 @@ if st.session_state["authentication_status"]:
                 # rénovation - ECS
                 repartition_energie_finale_partie_renovee_ecs = st.text_input(
                     "ECS partie rénovée [%]",
-                    value=round(data_sites_db[
-                        "repartition_energie_finale_partie_renovee_ecs"
-                    ],2),
+                    value=round(
+                        data_sites_db["repartition_energie_finale_partie_renovee_ecs"],
+                        2,
+                    ),
                     help="Surélévation: C78 / Rénovation: C50",
                 )
                 if repartition_energie_finale_partie_renovee_ecs != "0":
@@ -445,9 +452,12 @@ if st.session_state["authentication_status"]:
                 # surélévation - ECS
                 repartition_energie_finale_partie_surelevee_ecs = st.text_input(
                     "ECS partie surélévée [%]",
-                    value=round(data_sites_db[
-                        "repartition_energie_finale_partie_surelevee_ecs"
-                    ],2),
+                    value=round(
+                        data_sites_db[
+                            "repartition_energie_finale_partie_surelevee_ecs"
+                        ],
+                        2,
+                    ),
                     help="C80",
                 )
                 if repartition_energie_finale_partie_surelevee_ecs != "0":
@@ -568,12 +578,25 @@ if st.session_state["authentication_status"]:
         if st.session_state["data_site"]["nom_projet"] == "Avusy 10-10A":
             st.divider()
             st.subheader("Informations spécifiques Avusy 10-10A")
-            avusy_consommation_energie_dashboard(
-                st.session_state["data_site"]["periode_start"],
-                st.session_state["data_site"]["periode_end"],
-                mycol_historique_index_avusy,
+
+            # Create tabs for different views
+            tab1, tab2, tab3 = st.tabs(
+                ["Dashboard", "Index des compteurs", "Mise à jour des données"]
             )
-            update_existing_data_avusy(mycol_historique_index_avusy)
+
+            with tab1:
+                # Use the session state dates for the dashboard
+                avusy_consommation_energie_dashboard(
+                    st.session_state["data_site"]["periode_start"],
+                    st.session_state["data_site"]["periode_end"],
+                    mycol_historique_index_avusy,
+                )
+
+            with tab2:
+                display_counter_indices(mycol_historique_index_avusy)
+
+    with tab3:
+        update_existing_data_avusy(mycol_historique_index_avusy)
 
     with tab3:
         st.subheader("Note de calcul")
@@ -768,7 +791,9 @@ if st.session_state["authentication_status"]:
                 if st.checkbox("Afficher les données IDC"):
                     show_dataframe(data_df)
             else:
-                st.error("Pas de données disponibles pour le(s) EGID associé(s) à ce site.")
+                st.error(
+                    "Pas de données disponibles pour le(s) EGID associé(s) à ce site."
+                )
         else:
             st.write("Pas d'adresse sélectionnée.")
 
@@ -936,7 +961,7 @@ if st.session_state["authentication_status"]:
                     del st.session_state["data_site"]["_id"]
 
                 # Send data_site to MongoDB
-                x = mycol_historique_sites.insert_one(st.session_state['data_site'])
+                x = mycol_historique_sites.insert_one(st.session_state["data_site"])
         else:
             st.warning(
                 "Toutes les informations nécessaires ne sont pas disponibles pour générer le PDF."

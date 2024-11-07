@@ -618,6 +618,50 @@ def repartition_renove_sureleve(
     return ratio_figsize
 
 
+def format_addresses(addresses, max_chars_per_line=60):
+    """
+    Intelligently format addresses based on their length.
+
+    Args:
+        addresses: List of address strings
+        max_chars_per_line: Maximum characters allowed per line
+
+    Returns:
+        Formatted address string with appropriate line breaks
+    """
+    formatted_lines = []
+    current_line = []
+    current_length = 0
+
+    for addr in addresses:
+        addr = addr.strip()
+        # Check if adding this address (plus comma and space) would exceed max length
+        if current_line and (current_length + len(addr) + 2) > max_chars_per_line:
+            # Add current line to formatted lines and start new line
+            formatted_lines.append(", ".join(current_line))
+            current_line = []
+            current_length = 0
+
+        # If address itself is longer than max_chars_per_line, add it as its own line
+        if len(addr) > max_chars_per_line:
+            if current_line:
+                formatted_lines.append(", ".join(current_line))
+                current_line = []
+            formatted_lines.append(addr)
+            current_length = 0
+            continue
+
+        # Add address to current line
+        current_line.append(addr)
+        current_length = len(", ".join(current_line))
+
+    # Add any remaining addresses
+    if current_line:
+        formatted_lines.append(", ".join(current_line))
+
+    return "<br />".join(formatted_lines)
+
+
 def header(canvas, doc):
     # Get the directory of the current script (rapport.py)
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -710,9 +754,18 @@ def generate_pdf(data):
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name="Center", alignment=1))
     styles.add(ParagraphStyle(name="SmallCenter", alignment=1, fontSize=8))
+    address_style = ParagraphStyle(
+        name='Address',
+        parent=styles['Normal'],
+        spaceBefore=2,
+        spaceAfter=2,
+        leading=14,  # Line spacing
+        leftIndent=0,
+        rightIndent=0,
+        wordWrap='LTR',  # Left to Right word wrapping
+        alignment=1  # Left alignment
+    )
     elements = []
-
-    # elements.append(Spacer(1, 0.5*cm))
 
     # Title
     title_report = "Rapport " + data["nom_projet"]
@@ -720,20 +773,24 @@ def generate_pdf(data):
     elements.append(Spacer(1, 0.5 * cm))
 
     # Project details
-    nom_rues = data["adresse_projet"].replace(";", "<br />")
+    addresses = data["adresse_projet"].split(";")
+    formatted_address = format_addresses(addresses)
+
     project_admin = [
         [
             Paragraph("<b>Informations administratives</b>", styles["Heading4"]),
             "",
-        ],  # Title row
-        [Paragraph("", styles["Normal"]), ""],  # Empty row
+        ],
+        [Paragraph("", styles["Normal"]), ""],
         [
-            Paragraph("Adresse:", styles["Normal"]),
-            Paragraph(nom_rues, styles["Normal"]),
+            Paragraph("Adresse:", address_style),
+            Paragraph(formatted_address, address_style),
         ],
         [Paragraph("AMOén:", styles["Normal"]), data["amoen_id"]],
     ]
-    project_admin_table = Table(project_admin, colWidths=[150, 350])
+
+    # Adjust the column widths to make better use of space
+    project_admin_table = Table(project_admin, colWidths=[100, 400])
     project_admin_table.setStyle(
         TableStyle(
             [
@@ -748,10 +805,13 @@ def generate_pdf(data):
                 ("FONTSIZE", (0, 0), (-1, -1), 10),
                 ("TOPPADDING", (0, 0), (-1, -1), 3),
                 ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+                ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 6),
                 ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
             ]
         )
     )
+
     elements.append(project_admin_table)
     elements.append(Spacer(1, 0.2 * cm))
 

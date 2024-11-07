@@ -594,13 +594,13 @@ def display_database_management(mycol_historique_sites, data_admin):
         ⚠️ **Attention**: 
         - Toute modification ou suppression est **définitive**
         - Vérifiez toujours les informations avant de valider
-        - En cas de doute, contactez votre administrateur
+        - En cas de doute, contactez votre administrateur/trice
         """
         )
 
     if not check_mongodb_connection(mycol_historique_sites):
         st.error(
-            "❌ Impossible de se connecter à la base de données. Veuillez réessayer plus tard ou contacter votre administrateur."
+            "❌ Impossible de se connecter à la base de données. Veuillez réessayer plus tard ou contacter votre administrateur/trice."
         )
         return
 
@@ -625,7 +625,7 @@ def display_database_management(mycol_historique_sites, data_admin):
             st.error(
                 f"❌ Structure de données invalide. Colonnes manquantes: {', '.join(missing_columns)}"
             )
-            st.warning("Contactez votre administrateur système.")
+            st.warning("Contactez votre administrateur/trice système.")
             return
 
         # Sort with handling for null values
@@ -748,7 +748,9 @@ def display_database_management(mycol_historique_sites, data_admin):
 
                 except Exception as e:
                     st.error(f"❌ Erreur lors de la modification du projet: {str(e)}")
-                    st.info("💡 Si l'erreur persiste, contactez votre administrateur")
+                    st.info(
+                        "💡 Si l'erreur persiste, contactez votre administrateur/trice"
+                    )
 
         with tab_add:
             st.write("➕ Ajouter un nouveau projet")
@@ -859,11 +861,13 @@ def display_database_management(mycol_historique_sites, data_admin):
 
                 except Exception as e:
                     st.error(f"❌ Erreur lors de la suppression du projet: {str(e)}")
-                    st.info("💡 Si l'erreur persiste, contactez votre administrateur")
+                    st.info(
+                        "💡 Si l'erreur persiste, contactez votre administrateur/trice"
+                    )
 
     except Exception as e:
         st.error(f"❌ Une erreur inattendue est survenue: {str(e)}")
-        st.info("💡 Si l'erreur persiste, contactez votre administrateur")
+        st.info("💡 Si l'erreur persiste, contactez votre administrateur/trice")
         return
 
     # Reset cached data
@@ -897,5 +901,5 @@ def display_database_management(mycol_historique_sites, data_admin):
     # Add footer with support information
     st.markdown("---")
     st.info(
-        "💡 En cas de problème ou de question, contactez votre administrateur système"
+        "💡 En cas de problème ou de question, contactez votre administrateur/trice système"
     )

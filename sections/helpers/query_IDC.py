@@ -320,6 +320,14 @@ def create_barplot(data_df):
         barmode="group",
         labels={"annee": "Année", "indice": "Indice [MJ/m²]"},
         title="Indice par Année et Adresse",
+        text="indice",
+    )
+
+    # Update layout to position the text labels
+    fig.update_traces(
+        textposition="outside",  # Show text above bars
+        texttemplate="%{text:.1f}",  # Format to 1 decimal place
+        cliponaxis=False,  # Prevent text cutoff
     )
 
     # Customize the layout

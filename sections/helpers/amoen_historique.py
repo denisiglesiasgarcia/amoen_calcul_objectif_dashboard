@@ -10,14 +10,14 @@ def create_barplot_historique_amoen(data_df):
     Creates a bar plot to visualize the historical achievement of objectives for a given project.
 
     Parameters:
-    data_df (pandas.DataFrame): DataFrame containing the following columns:
-        - 'nom_projet': Name of the project.
-        - 'periode_start': Start date of the period (datetime).
-        - 'periode_end': End date of the period (datetime).
-        - 'atteinte_objectif': Achievement of the objective (float, should be between 0 and 1).
+    data_df (pandas.DataFrame): DataFrame containing:
+        - 'nom_projet': Name of the project
+        - 'periode_start': Start date of the period (datetime)
+        - 'periode_end': End date of the period (datetime)
+        - 'atteinte_objectif': Achievement of objective (float, 0-1)
 
     Returns:
-    plotly.graph_objs._figure.Figure: A Plotly figure object representing the bar plot.
+    plotly.graph_objs._figure.Figure: Plotly figure object
     """
     # Data preparation
     df_barplot = data_df.copy()
@@ -25,23 +25,18 @@ def create_barplot_historique_amoen(data_df):
         ["nom_projet", "periode_start", "periode_end", "atteinte_objectif"]
     ].sort_values(by=["periode_start"])
 
-    # Create period labels
+    # Format dates for better readability (3 lines)
     df_barplot["periode"] = (
         df_barplot["periode_start"].dt.strftime("%Y-%m-%d")
-        + " → "
+        + "<br>"
+        + "→"
+        + "<br>"
         + df_barplot["periode_end"].dt.strftime("%Y-%m-%d")
     )
 
     # Convert to percentage
     df_barplot["atteinte_objectif"] = df_barplot["atteinte_objectif"] * 100
-    nom_projet = df_barplot["nom_projet"].iloc[0]  # Using iloc for safety
-
-    # Calculate layout dimensions
-    longest_period = max(df_barplot["periode"].str.len())
-    pixels_per_char = 8
-    bottom_margin = max(
-        100, longest_period * pixels_per_char * 0.5
-    )  # For rotated labels
+    nom_projet = df_barplot["nom_projet"].iloc[0]
 
     # Create the bar plot
     fig = px.bar(
@@ -54,6 +49,7 @@ def create_barplot_historique_amoen(data_df):
         },
         title=f"Historique atteinte objectifs pour {nom_projet}",
         height=500,
+        width=1000,
     )
 
     # Customize the layout
@@ -62,43 +58,30 @@ def create_barplot_historique_amoen(data_df):
         yaxis_title="Atteinte de l'objectif [%]",
         xaxis={
             "type": "category",
-            "tickangle": -45,  # Rotate labels for better readability
+            "tickangle": 0,  # Horizontal text
             "tickfont": {"size": 10},
+            "tickmode": "array",
+            "ticktext": df_barplot["periode"],  # Use formatted text with line breaks
+            "tickvals": df_barplot.index,
         },
         yaxis={
-            "range": [
-                0,
-                max(max(df_barplot["atteinte_objectif"]) * 1.15, 100),
-            ],  # Always show up to at least 100%
+            "range": [0, max(max(df_barplot["atteinte_objectif"]) * 1.15, 100)],
             "gridcolor": "lightgrey",
             "gridwidth": 0.1,
         },
-        # Adjust margins
+        # Margins
         margin=dict(
-            t=50,  # top margin
-            r=50,  # right margin
-            b=bottom_margin,  # dynamic bottom margin for labels
-            l=50,  # left margin
+            t=50,  # top
+            r=50,  # right
+            b=100,  # bottom - increased for 3-line labels
+            l=50,  # left
         ),
-        # Style improvements
+        # Style
         plot_bgcolor="white",
         paper_bgcolor="white",
-        bargap=0.2,  # Adjust gap between bars
+        bargap=0.2,
         showlegend=False,
         title={"y": 0.95, "x": 0.5, "xanchor": "center", "yanchor": "top"},
-        # Add a red reference line at 85%
-        shapes=[
-            dict(
-                type="line",
-                yref="y",
-                y0=85,
-                y1=85,
-                xref="paper",
-                x0=0,
-                x1=1,
-                line=dict(color="red", width=1, dash="dash"),
-            )
-        ],
     )
 
     # Add value labels on top of bars with conditional coloring
@@ -124,8 +107,8 @@ def create_barplot_historique_amoen(data_df):
                 "format": "png",
                 "filename": "historique_objectifs",
                 "height": 500,
-                "width": 1400,
-                "scale": 2,  # Higher resolution
+                "width": 1000,
+                "scale": 2,
             },
             "displayModeBar": True,
             "displaylogo": False,

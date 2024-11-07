@@ -618,7 +618,7 @@ def repartition_renove_sureleve(
     return ratio_figsize
 
 
-def format_addresses(addresses, max_chars_per_line=60):
+def format_addresses(addresses, max_chars_per_line=70):
     """
     Intelligently format addresses based on their length.
 
@@ -773,7 +773,7 @@ def generate_pdf(data):
         [Paragraph("", styles["Normal"]), ""],
         [
             Paragraph("Adresse:", styles["Normal"]),
-            Paragraph(formatted_address),
+            Paragraph(formatted_address, styles["Normal"]),
         ],
         [Paragraph("AMOén:", styles["Normal"]), data["amoen_id"]],
     ]

@@ -350,13 +350,13 @@ def create_barplot(data_df, nom_projet):
         xaxis={
             "type": "category",
             "tickangle": 0,
-            "gridcolor": "lightgrey",
+            "gridcolor": "rgba(211, 211, 211, 0.2)",
             "gridwidth": 0.1,
         },
         # Y-axis settings
         yaxis={
             "range": [0, max(df_barplot["indice"]) * 1.15],
-            "gridcolor": "lightgrey",
+            "gridcolor": "rgba(211, 211, 211, 0.2)",
             "gridwidth": 0.1,
         },
         # Margins

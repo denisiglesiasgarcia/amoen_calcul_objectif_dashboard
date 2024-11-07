@@ -72,6 +72,8 @@ from sections.helpers.admin.admin_chiffre_cle import display_admin_dashboard
 
 from sections.helpers.admin.admin_db_mgmt import display_database_management
 
+from sections.helpers.sanitize_mongo import sanitize_db
+
 st.set_page_config(page_title="AMOEN Dashboard", page_icon=":bar_chart:", layout="wide")
 os.environ["USE_ARROW_extension"] = "1"
 
@@ -115,7 +117,9 @@ def load_project_data(project_name):
         dict: A dictionary containing the project data if found, otherwise None.
     """
     data = mycol_historique_sites.find_one({"nom_projet": project_name})
-    return data
+    if data is not None:
+        data_cleaned = sanitize_db(data)
+    return data_cleaned
 
 
 @st.cache_data

@@ -322,7 +322,7 @@ def create_barplot(data_df):
     pixels_per_char = 8
     legend_width = longest_legend * pixels_per_char
     # Calculate right margin with some padding
-    right_margin = legend_width + 50  # Add 50px padding
+    right_margin = legend_width + 25
 
     # Create bar plot
     fig = px.bar(
@@ -366,7 +366,7 @@ def create_barplot(data_df):
             yanchor="top",
             y=1,
             xanchor="left",
-            x=1.02,
+            x=1,
             bgcolor="rgba(255, 255, 255, 0.8)",
             bordercolor="Black",
             borderwidth=0,
@@ -388,7 +388,7 @@ def create_barplot(data_df):
             "toImageButtonOptions": {
                 "format": "png",
                 "filename": "indice_par_annee",
-                "height": 400,
+                "height": 500,
                 "width": 1400,
                 "scale": 2,
             },

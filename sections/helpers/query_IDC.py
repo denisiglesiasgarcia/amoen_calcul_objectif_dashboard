@@ -349,14 +349,6 @@ def create_barplot(data_df):
             b=50,  # bottom margin
             l=50,  # left margin
         ),
-        # Adjust legend position with correct orientation value
-        legend=dict(
-            yanchor="top",
-            y=0.99,
-            xanchor="right",
-            x=1.15,  # Move legend further right
-            orientation="v",  # Changed from 'vertical' to 'v'
-        ),
         # Make sure plot adjusts to new margins
         autosize=False,
     )

@@ -1,5 +1,6 @@
 # import pandas as pd
 import plotly.express as px
+
 # from datetime import datetime
 import streamlit as st
 
@@ -8,24 +9,15 @@ import streamlit as st
 def create_barplot_historique_amoen(data_df):
     """
     Creates a bar plot to visualize the historical achievement of objectives for a given project.
-
-    Parameters:
-    data_df (pandas.DataFrame): DataFrame containing:
-        - 'nom_projet': Name of the project
-        - 'periode_start': Start date of the period (datetime)
-        - 'periode_end': End date of the period (datetime)
-        - 'atteinte_objectif': Achievement of objective (float, 0-1)
-
-    Returns:
-    plotly.graph_objs._figure.Figure: Plotly figure object
     """
     # Data preparation
     df_barplot = data_df.copy()
+    # Sort by periode_start first
     df_barplot = df_barplot[
         ["nom_projet", "periode_start", "periode_end", "atteinte_objectif"]
     ].sort_values(by=["periode_start"])
 
-    # Format dates for better readability (3 lines)
+    # Create period labels after sorting
     df_barplot["periode"] = (
         df_barplot["periode_start"].dt.strftime("%Y-%m-%d")
         + "<br>"
@@ -50,6 +42,7 @@ def create_barplot_historique_amoen(data_df):
         title=f"Historique atteinte objectifs pour {nom_projet}",
         height=500,
         width=1000,
+        category_orders={"periode": df_barplot["periode"].tolist()},  # Enforce order
     )
 
     # Customize the layout
@@ -58,11 +51,8 @@ def create_barplot_historique_amoen(data_df):
         yaxis_title="Atteinte de l'objectif [%]",
         xaxis={
             "type": "category",
-            "tickangle": 0,  # Horizontal text
+            "tickangle": 0,
             "tickfont": {"size": 10},
-            "tickmode": "array",
-            "ticktext": df_barplot["periode"],  # Use formatted text with line breaks
-            "tickvals": df_barplot.index,
         },
         yaxis={
             "range": [0, max(max(df_barplot["atteinte_objectif"]) * 1.15, 100)],

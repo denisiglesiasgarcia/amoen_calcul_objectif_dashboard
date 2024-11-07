@@ -1,22 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from pymongo import MongoClient
 import pymongo
-
-# from bson import ObjectId
-# import datetime
-# import time
-
-MONGODB_URI = "mongodb+srv://streamlit:CYEpm33zdXRVsEJk@cluster0.hkkhetq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
-# BD mongodb
-client = MongoClient(MONGODB_URI)
-db_sites = client["amoen_ancienne_methodo"]
-mycol_sites = db_sites["sites"]
-mycol_resultats = db_sites["historique"]
-mycol_auth = db_sites["authentification"]
-mycol_avusy = db_sites["avusy"]
 
 
 def load_csv_in_pandas():

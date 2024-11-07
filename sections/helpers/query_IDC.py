@@ -361,7 +361,7 @@ def create_barplot(data_df):
             x=1.02,
             bgcolor="rgba(255, 255, 255, 0.8)",  # Semi-transparent background
             bordercolor="Black",
-            borderwidth=1,
+            borderwidth=0,
         ),
         # Use white background
         plot_bgcolor="white",

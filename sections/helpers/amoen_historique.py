@@ -73,6 +73,7 @@ def create_barplot_historique_amoen(data_df):
         bargap=0.2,
         showlegend=False,
         title={"y": 0.95, "x": 0.5, "xanchor": "center", "yanchor": "top"},
+        font=dict(size=12, family="Arial"),
     )
 
     # Add value labels on top of bars with conditional coloring

@@ -754,17 +754,6 @@ def generate_pdf(data):
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name="Center", alignment=1))
     styles.add(ParagraphStyle(name="SmallCenter", alignment=1, fontSize=8))
-    address_style = ParagraphStyle(
-        name='Address',
-        parent=styles['Normal'],
-        spaceBefore=2,
-        spaceAfter=2,
-        leading=14,  # Line spacing
-        leftIndent=0,
-        rightIndent=0,
-        wordWrap='LTR',  # Left to Right word wrapping
-        alignment=1  # Left alignment
-    )
     elements = []
 
     # Title

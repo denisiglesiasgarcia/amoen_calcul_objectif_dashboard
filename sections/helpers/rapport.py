@@ -783,14 +783,14 @@ def generate_pdf(data):
         ],
         [Paragraph("", styles["Normal"]), ""],
         [
-            Paragraph("Adresse:"),
+            Paragraph("Adresse:", styles["Normal"]),
             Paragraph(formatted_address),
         ],
         [Paragraph("AMOén:", styles["Normal"]), data["amoen_id"]],
     ]
 
     # Adjust the column widths to make better use of space
-    project_admin_table = Table(project_admin, colWidths=[100, 400])
+    project_admin_table = Table(project_admin, colWidths=[150, 350])
     project_admin_table.setStyle(
         TableStyle(
             [

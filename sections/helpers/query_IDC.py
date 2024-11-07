@@ -352,12 +352,14 @@ def create_barplot(data_df, nom_projet):
             "tickangle": 0,
             "gridcolor": "rgba(211, 211, 211, 0.2)",
             "gridwidth": 0.1,
+            "tickfont": {"size": 12},
         },
         # Y-axis settings
         yaxis={
             "range": [0, max(df_barplot["indice"]) * 1.15],
             "gridcolor": "rgba(211, 211, 211, 0.2)",
             "gridwidth": 0.1,
+            "tickfont": {"size": 12},
         },
         # Margins
         margin=dict(t=50, r=right_margin, b=50, l=50),  # top  # right  # bottom  # left

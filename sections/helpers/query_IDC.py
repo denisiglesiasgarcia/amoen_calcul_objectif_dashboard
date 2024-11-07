@@ -336,12 +336,29 @@ def create_barplot(data_df):
         cliponaxis=False,  # Prevent text cutoff
     )
 
-    # Customize the layout
+    # Customize the layout with adjusted margins and legend position
     fig.update_layout(
         xaxis_title="Année",
         yaxis_title="Indice [MJ/m²]",
         legend_title="Adresse - EGID",
-        xaxis={"type": "category"},  # Treat year as categorical
+        xaxis={"type": "category"},
+        # Adjust margins to prevent cutoff
+        margin=dict(
+            t=50,  # top margin
+            r=200,  # right margin - make space for legend
+            b=50,  # bottom margin
+            l=50,  # left margin
+        ),
+        # Adjust legend position
+        legend=dict(
+            yanchor="top",
+            y=0.99,
+            xanchor="right",
+            x=1.15,  # Move legend further right
+            orientation="vertical",
+        ),
+        # Make sure plot adjusts to new margins
+        autosize=False,
     )
 
     # Display the plot with config for high-quality downloads

@@ -1,5 +1,5 @@
 from datetime import datetime
-from sections.helper.admin.admin_db_mgmt import DataValidator
+from admin.admin_db_mgmt import DataValidator
 import pandas as pd
 import streamlit as st
 

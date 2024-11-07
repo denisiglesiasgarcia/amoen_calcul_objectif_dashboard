@@ -535,30 +535,24 @@ def display_counter_indices(mycol_avusy):
         return
 
     try:
-        # Convert time column to datetime
+        # Convert time column to datetime if it's not already
         df["time"] = pd.to_datetime(df["time"])
 
         # Get min and max dates from the database
-        min_date = df["time"].min()
-        max_date = df["time"].max()
+        min_date = df["time"].min().date()
+        max_date = df["time"].max().date()
 
         # Create two columns for date selection
         col1, col2 = st.columns(2)
 
         with col1:
             start_date = st.date_input(
-                "Date de début",
-                min_value=min_date.date(),
-                max_value=max_date.date(),
-                value=min_date.date(),
+                "Date de début", min_value=min_date, max_value=max_date, value=min_date
             )
 
         with col2:
             end_date = st.date_input(
-                "Date de fin",
-                min_value=min_date.date(),
-                max_value=max_date.date(),
-                value=max_date.date(),
+                "Date de fin", min_value=min_date, max_value=max_date, value=max_date
             )
 
         if start_date and end_date:
@@ -566,14 +560,15 @@ def display_counter_indices(mycol_avusy):
                 st.error("La date de début doit être antérieure à la date de fin.")
                 return
 
-            # Convert dates to datetime for comparison
-            start_mask = df["time"].dt.date == start_date
-            end_mask = df["time"].dt.date == end_date
+            # Filter data for the selected dates
+            mask = (df["time"].dt.date >= start_date) & (df["time"].dt.date <= end_date)
+            filtered_df = df[mask]
 
-            start_data = df[start_mask].iloc[0] if not df[start_mask].empty else None
-            end_data = df[end_mask].iloc[0] if not df[end_mask].empty else None
+            if not filtered_df.empty:
+                # Get first and last records for the selected period
+                start_data = filtered_df.iloc[0]
+                end_data = filtered_df.iloc[-1]
 
-            if start_data is not None and end_data is not None:
                 # Create a container with a border
                 container = st.container(border=True)
                 with container:
@@ -584,8 +579,8 @@ def display_counter_indices(mycol_avusy):
 
                     with col1:
                         st.markdown("**Date**")
-                        st.write(f"Début: {start_date}")
-                        st.write(f"Fin: {end_date}")
+                        st.write(f"Début: {start_data['time'].date()}")
+                        st.write(f"Fin: {end_data['time'].date()}")
 
                     with col2:
                         st.markdown("**Index de début**")

@@ -10,6 +10,7 @@ import sqlite3
 import plotly.express as px
 from datetime import datetime
 import json
+from sections.helpers.save_excel_streamlit import display_dataframe_with_excel_download
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -258,7 +259,7 @@ def show_dataframe(df):
         ]
     ].sort_values(by=["egid", "annee"])
 
-    st.dataframe(df)
+    display_dataframe_with_excel_download(df)
 
 
 @st.cache_data

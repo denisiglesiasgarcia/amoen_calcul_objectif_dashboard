@@ -642,10 +642,12 @@ if st.session_state["authentication_status"]:
         display_dataframe_with_excel_download(df_periode_list, "periode_liste.xlsx")
 
         st.write("Calculs effectués pour la période sélectionnée")
-        st.dataframe(df_list)
+        display_dataframe_with_excel_download(df_list, "calculs_periode.xlsx")
 
         st.write("Agents énergétiques")
-        st.dataframe(df_agent_energetique)
+        display_dataframe_with_excel_download(
+            df_agent_energetique, "agents_energetiques.xlsx"
+        )
 
         # Render the text in LaTeX
         st.latex(formula_facteur_ponderation_moyen_texte)
@@ -655,14 +657,20 @@ if st.session_state["authentication_status"]:
 
         # Display the meteo data
         st.write("Données météo station Genève-Cointrin pour la période sélectionnée")
-        st.dataframe(df_meteo_note_calcul)
+        display_dataframe_with_excel_download(
+            df_meteo_note_calcul, "meteo_note_calcul.xlsx"
+        )
 
         # display a hidden dataframe with all the data
         st.write("Données complètes")
         show_debug_data = st.checkbox("Afficher les données complètes")
         if show_debug_data:
-            st.dataframe(st.session_state["data_site"])
-            st.dataframe(st.session_state["df_meteo_tre200d0"])
+            display_dataframe_with_excel_download(
+                st.session_state["data_site"], "data_site.xlsx"
+            )
+            display_dataframe_with_excel_download(
+                st.session_state["df_meteo_tre200d0"], "df_meteo_tre200d0.xlsx"
+            )
 
     with tab4:
         st.subheader("Synthèse des résultats")
@@ -857,7 +865,9 @@ if st.session_state["authentication_status"]:
 
                 # Show DataFrame in a hidden section
                 if st.checkbox("Afficher les données historiques"):
-                    st.dataframe(df_historique_complet)
+                    display_dataframe_with_excel_download(
+                        df_historique_complet, "historique_amoen.xlsx"
+                    )
             else:
                 st.error("Pas de données historiques disponibles")
 

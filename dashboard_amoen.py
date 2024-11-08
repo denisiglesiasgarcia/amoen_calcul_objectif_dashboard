@@ -639,7 +639,7 @@ if st.session_state["authentication_status"]:
 
         # Display the dataframes
         st.write("Période sélectionnée")
-        display_dataframe_with_excel_download(df_periode_list)
+        display_dataframe_with_excel_download(df_periode_list, "periode_liste.xlsx")
 
         st.write("Calculs effectués pour la période sélectionnée")
         st.dataframe(df_list)

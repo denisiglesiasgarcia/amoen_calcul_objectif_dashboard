@@ -589,11 +589,11 @@ if st.session_state["authentication_status"]:
             st.subheader("Informations spécifiques Avusy 10-10A")
 
             # Create tabs for different views
-            tab1, tab2, tab3 = st.tabs(
+            avusy_tab1, avusy_tab2, avusy_tab3 = st.tabs(
                 ["Dashboard", "Index des compteurs", "Mise à jour des données"]
             )
 
-            with tab1:
+            with avusy_tab1:
                 # Use the session state dates for the dashboard
                 avusy_consommation_energie_dashboard(
                     st.session_state["data_site"]["periode_start"],
@@ -601,13 +601,11 @@ if st.session_state["authentication_status"]:
                     mycol_historique_index_avusy,
                 )
 
-            with tab2:
+            with avusy_tab2:
                 display_counter_indices(mycol_historique_index_avusy)
 
-            with tab3:
+            with avusy_tab3:
                 update_existing_data_avusy(mycol_historique_index_avusy)
-
-            st.write(st.session_state["data_site"])
 
     with tab3:
         st.subheader("Note de calcul")

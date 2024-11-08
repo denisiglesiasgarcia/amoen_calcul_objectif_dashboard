@@ -74,6 +74,10 @@ from sections.helpers.admin.admin_db_mgmt import display_database_management
 
 from sections.helpers.sanitize_mongo import sanitize_db
 
+from sections.helpers.save_excel_streamlit import (
+    display_dataframe_with_excel_download,
+)
+
 st.set_page_config(page_title="AMOEN Dashboard", page_icon=":bar_chart:", layout="wide")
 os.environ["USE_ARROW_extension"] = "1"
 
@@ -635,7 +639,7 @@ if st.session_state["authentication_status"]:
 
         # Display the dataframes
         st.write("Période sélectionnée")
-        st.dataframe(df_periode_list)
+        display_dataframe_with_excel_download(df_periode_list)
 
         st.write("Calculs effectués pour la période sélectionnée")
         st.dataframe(df_list)

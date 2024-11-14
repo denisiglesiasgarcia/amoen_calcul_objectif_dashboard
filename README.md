@@ -9,7 +9,9 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 ## TODO
 
 - Prioritaire
-  - [ ] Bug travaux_start et travaux_end Avusy
+  - Base de données
+    - [ ] Bug travaux_start et travaux_end Avusy
+    - [ ] Schéma validation données
   - Webinaire
     - [ ] Préparer powerpoint/présentation ou autre document qui accompagnera le webinaire
     - [ ] Générer les mots de passes pour les utilisateurs

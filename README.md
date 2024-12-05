@@ -10,19 +10,13 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 
 - Prioritaire
   - Base de données
-    - [ ] Bug travaux_start et travaux_end Avusy
-    - [ ] Schéma validation données
   - Webinaire
-    - [ ] Préparer powerpoint/présentation ou autre document qui accompagnera le webinaire
     - [ ] Générer les mots de passes pour les utilisateurs
   - Rapport
     - [ ] Ajouter barre de 85% dans le graphique du rapport PDF
   - IDC
     - [ ] Ajouter calcul IDC
-
 - Non prioritaire
-  - [ ] Améliorer la documentation
-  - [ ] Nettoyer code
   - [ ] Ajouter option de renseigner ECS séparée du chauffage
 
 ## Fait
@@ -44,3 +38,6 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 - [X] Corriger bug sur les agents énergétiques
 - [X] Trouver solution pour les noms de rue longs dans le rapport PDF
 - [x] Améliorer impression/sauvegarde graphiques px
+- [x] Bug travaux_start et travaux_end Avusy
+- [x] Schéma validation données
+- [x] Améliorer la documentation

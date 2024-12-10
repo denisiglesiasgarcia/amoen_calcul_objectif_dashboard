@@ -34,34 +34,52 @@ def clean_excel_column_name(name: str) -> str:
     Returns:
         str: Cleaned column name suitable for Excel
     """
-    # Convert to string if not already
-    name = str(name)
+    # Convert to string and clean invalid characters
+    name = str(name).strip()
 
-    # Replace invalid Excel characters
-    cleaned = re.sub(r"[\[\]*/\\?:]+", "_", name)
+    # Replace problematic characters with underscores
+    cleaned = re.sub(r"[\[\]*/\\?:]", "_", name)
+    cleaned = re.sub(r"\s+", "_", cleaned)  # Replace spaces with underscores
+    cleaned = re.sub(r"_+", "_", cleaned)  # Replace multiple underscores with single
+    cleaned = cleaned.strip("_")  # Remove leading/trailing underscores
 
-    # Remove leading/trailing spaces and underscores
-    cleaned = cleaned.strip(" _")
-
-    # Ensure name isn't empty after cleaning
-    if not cleaned:
-        cleaned = "Column"
+    # Ensure the name isn't empty and starts with a letter
+    if not cleaned or not cleaned[0].isalpha():
+        cleaned = "Col_" + cleaned if cleaned else "Column"
 
     return cleaned
+
+
+def clean_dataframe_for_excel(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Prepare DataFrame for Excel export by cleaning column names and data.
+
+    Args:
+        df: Input DataFrame
+
+    Returns:
+        pd.DataFrame: Cleaned DataFrame ready for Excel export
+    """
+    # Make a deep copy to avoid modifying the original
+    df = df.copy()
+
+    # Clean column names
+    df.columns = [clean_excel_column_name(col) for col in df.columns]
+
+    # Handle missing values and problematic data types
+    df = df.replace({np.nan: "", None: "", "nan": "", "None": "", "NaT": ""})
+
+    # Convert problematic types to strings
+    for col in df.columns:
+        if df[col].dtype == "object":
+            df[col] = df[col].astype(str).replace("nan", "").replace("None", "")
+
+    return df
 
 
 def validate_data(data: Union[pd.DataFrame, Dict[str, Any]]) -> pd.DataFrame:
     """
     Validate and convert input data to DataFrame with comprehensive error checking.
-
-    Args:
-        data: Input data (DataFrame or dictionary)
-
-    Returns:
-        pd.DataFrame: Validated and processed DataFrame
-
-    Raises:
-        ExcelExportError: If validation fails
     """
     try:
         # Check for None or empty input
@@ -72,12 +90,9 @@ def validate_data(data: Union[pd.DataFrame, Dict[str, Any]]) -> pd.DataFrame:
             raise ExcelExportError("Input dictionary is empty")
 
         if isinstance(data, dict):
-            # Process dictionary items with type checking
             processed_items = []
             for k, v in data.items():
-                # Validate key
-                if not isinstance(k, (str, int, float)):
-                    k = str(k)
+                k = str(k)
 
                 # Process value based on type
                 if v is None:
@@ -88,27 +103,14 @@ def validate_data(data: Union[pd.DataFrame, Dict[str, Any]]) -> pd.DataFrame:
                     processed_value = v.strftime("%Y-%m-%d %H:%M:%S")
                 elif isinstance(v, (int, float)):
                     processed_value = v
-                elif isinstance(v, bool):
-                    processed_value = str(v)
                 else:
                     processed_value = str(v)
 
                 processed_items.append({"Key": k, "Value": processed_value})
 
             df = pd.DataFrame(processed_items)
-
         elif isinstance(data, pd.DataFrame):
-            # Deep copy to avoid modifying original
-            df = data.copy()
-
-            # Handle missing values consistently
-            df = df.replace({np.nan: "", None: "", "nan": "", "None": "", "NaT": ""})
-
-            # Convert any remaining problematic types
-            for col in df.columns:
-                if df[col].dtype == "object":
-                    df[col] = df[col].apply(lambda x: str(x) if x != "" else "")
-
+            df = data
         else:
             raise ExcelExportError(
                 f"Unsupported data type: {type(data)}. Expected DataFrame or dictionary."
@@ -118,8 +120,8 @@ def validate_data(data: Union[pd.DataFrame, Dict[str, Any]]) -> pd.DataFrame:
         if df.empty:
             raise ExcelExportError("Resulting DataFrame is empty")
 
-        # Clean and validate column names
-        df.columns = [clean_excel_column_name(col) for col in df.columns]
+        # Clean DataFrame for Excel
+        df = clean_dataframe_for_excel(df)
 
         return df
 
@@ -132,15 +134,6 @@ def validate_data(data: Union[pd.DataFrame, Dict[str, Any]]) -> pd.DataFrame:
 def convert_df_to_excel(data: Union[pd.DataFrame, Dict[str, Any]]) -> bytes:
     """
     Convert data to Excel bytes with enhanced error handling and formatting.
-
-    Args:
-        data: Input data (DataFrame or dictionary)
-
-    Returns:
-        bytes: Excel file as bytes
-
-    Raises:
-        ExcelExportError: If conversion fails
     """
     output = None
     try:
@@ -160,27 +153,20 @@ def convert_df_to_excel(data: Union[pd.DataFrame, Dict[str, Any]]) -> bytes:
 
             # Format columns
             for idx, col in enumerate(df.columns):
-                column = df[col]
-                # Calculate max length considering header and content
-                max_length = max(
-                    max(column.astype(str).apply(len).max(), len(str(col)))
-                    + 2,  # Add padding
-                    5,  # Minimum width
-                )
-                # Cap maximum width
-                max_length = min(max_length, 50)
+                # Get maximum content length
+                content_length = max(df[col].astype(str).str.len().max(), len(str(col)))
 
-                # Set column width
-                worksheet.column_dimensions[chr(65 + idx)].width = max_length
+                # Set column width (with minimum and maximum limits)
+                width = min(max(content_length + 2, 8), 50)
+                col_letter = chr(65 + idx)
+                worksheet.column_dimensions[col_letter].width = width
 
             # Style header row
             for cell in worksheet[1]:
                 cell.style = "Headline 3"
 
-        # Get Excel data
         excel_data = output.getvalue()
 
-        # Verify output
         if not excel_data:
             raise ExcelExportError("Generated Excel file is empty")
 
@@ -200,15 +186,10 @@ def display_dataframe_with_excel_download(
 ) -> None:
     """
     Display data in Streamlit with Excel download button and error handling.
-
-    Args:
-        data: Input data (DataFrame or dictionary)
-        filename: Name of the Excel file for download
     """
     try:
         # Validate filename
-        if not isinstance(filename, str):
-            filename = str(filename)
+        filename = str(filename)
         if not filename.endswith(".xlsx"):
             filename += ".xlsx"
 
@@ -219,7 +200,7 @@ def display_dataframe_with_excel_download(
         st.dataframe(display_df, use_container_width=True, hide_index=True)
 
         # Generate Excel file
-        excel_data = convert_df_to_excel(data)
+        excel_data = convert_df_to_excel(display_df)  # Use already validated data
 
         # Create download button
         st.download_button(

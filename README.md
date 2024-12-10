@@ -10,8 +10,7 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 
 - Prioritaire
   - Base de données
-  - Webinaire
-    - [ ] Générer les mots de passes pour les utilisateurs
+    - [ ] Améliorer sauvegarde des données
   - Rapport
     - [ ] Ajouter barre de 85% dans le graphique du rapport PDF
   - IDC
@@ -41,3 +40,4 @@ La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoe
 - [x] Bug travaux_start et travaux_end Avusy
 - [x] Schéma validation données
 - [x] Améliorer la documentation
+- [x] Générer les mots de passes pour les utilisateurs

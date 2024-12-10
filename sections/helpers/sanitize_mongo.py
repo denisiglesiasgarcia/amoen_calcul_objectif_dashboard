@@ -1,9 +1,135 @@
-# sections/helpers/sanitize_mongo.py
-
 from datetime import datetime
 from sections.helpers.admin.admin_db_mgmt import DataValidator
 import pandas as pd
-from typing import Optional, Dict, Any, Union
+from typing import Optional, Dict, Any, Union, Type
+import logging
+from bson import ObjectId
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
+
+class DataSanitizer:
+    """Handles sanitization of database records."""
+
+    @staticmethod
+    def _convert_date(value: Any) -> Optional[datetime]:
+        """
+        Convert various date formats to datetime.
+
+        Args:
+            value: Value to convert
+
+        Returns:
+            datetime object or None if conversion fails
+        """
+        if value is None or pd.isna(value):
+            return None
+
+        try:
+            if isinstance(value, (datetime, pd.Timestamp)):
+                return pd.Timestamp(value).to_pydatetime()
+            elif isinstance(value, str):
+                return pd.to_datetime(value).to_pydatetime()
+            return None
+        except Exception as e:
+            logger.warning(f"Date conversion failed: {str(e)}")
+            return None
+
+    @staticmethod
+    def _convert_numeric(
+        value: Any, type_: Type[Union[int, float]]
+    ) -> Union[int, float]:
+        """
+        Convert value to specified numeric type.
+
+        Args:
+            value: Value to convert
+            type_: Target numeric type (int or float)
+
+        Returns:
+            Converted numeric value or 0 if conversion fails
+        """
+        if value is None or pd.isna(value):
+            return type_(0)
+
+        try:
+            if isinstance(value, (int, float, str)):
+                return type_(value)
+            return type_(0)
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Numeric conversion failed: {str(e)}")
+            return type_(0)
+
+    @staticmethod
+    def _get_default_value(type_: Type) -> Any:
+        """
+        Get default value for a given type.
+
+        Args:
+            type_: Type to get default value for
+
+        Returns:
+            Default value for the specified type
+        """
+        defaults = {float: 0.0, int: 0, str: "", datetime: None, bool: False}
+        return defaults.get(type_, None)
+
+    @classmethod
+    def _sanitize_field(
+        cls, key: str, value: Any, field_type: Type, schema: Dict[str, Any]
+    ) -> Any:
+        """
+        Sanitize a single field according to its type and schema.
+
+        Args:
+            key: Field name
+            value: Field value
+            field_type: Expected type
+            schema: Field schema
+
+        Returns:
+            Sanitized value
+        """
+        try:
+            if value is None and not schema.get("required", False):
+                return None
+
+            if field_type == datetime:
+                return cls._convert_date(value)
+            elif field_type == float:
+                val = cls._convert_numeric(value, float)
+                min_val = schema.get("min")
+                max_val = schema.get("max")
+                if min_val is not None:
+                    val = max(min_val, val)
+                if max_val is not None:
+                    val = min(max_val, val)
+                return val
+            elif field_type == int:
+                val = cls._convert_numeric(value, int)
+                min_val = schema.get("min")
+                max_val = schema.get("max")
+                if min_val is not None:
+                    val = max(min_val, val)
+                if max_val is not None:
+                    val = min(max_val, val)
+                return val
+            elif field_type == str:
+                return str(value) if value is not None else ""
+            elif field_type == bool:
+                if isinstance(value, str):
+                    return value.lower() in ("true", "1", "yes", "y")
+                return bool(value)
+            else:
+                return value
+
+        except Exception as e:
+            logger.warning(f"Field sanitization failed for {key}: {str(e)}")
+            return cls._get_default_value(field_type)
 
 
 def sanitize_db(data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
@@ -17,94 +143,57 @@ def sanitize_db(data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
         Sanitized dictionary with validated data types and values
     """
     if not data:
+        logger.warning("Received empty data for sanitization")
         return None
 
-    # Create a copy to avoid modifying the original
-    formatted_data = {}
+    try:
+        # Handle ObjectId and create a copy
+        formatted_data = {}
+        if "_id" in data:
+            formatted_data["_id"] = (
+                str(data["_id"]) if isinstance(data["_id"], ObjectId) else data["_id"]
+            )
 
-    # Helper function to convert dates
-    def convert_date(value: Any) -> Optional[datetime]:
-        if value is None or pd.isna(value):
-            return None
-        if isinstance(value, (datetime, pd.Timestamp)):
-            return pd.Timestamp(value).to_pydatetime()
-        if isinstance(value, str):
-            try:
-                return pd.to_datetime(value).to_pydatetime()
-            except (ValueError, TypeError):
-                return None
-        return None
+        # First pass: Use DataValidator for schema-defined fields
+        converted_data, validation_errors = DataValidator.validate_and_convert(data)
+        if validation_errors:
+            for error in validation_errors:
+                logger.warning(f"Validation warning: {error}")
 
-    # Helper function to convert numeric values
-    def convert_numeric(value: Any, type_: type) -> Union[int, float]:
-        if value is None or pd.isna(value):
-            return type_(0)
-        try:
-            return type_(value)
-        except (ValueError, TypeError):
-            return type_(0)
+        # Update formatted data with validated fields
+        formatted_data.update(converted_data)
 
-    # Process each field according to its type
-    for key, value in data.items():
-        try:
-            # Skip MongoDB ID field
-            if key == "_id":
-                formatted_data[key] = str(value)
-                continue
+        # Second pass: Handle remaining fields
+        for key, value in data.items():
+            if key not in formatted_data and key != "_id":
+                schema = DataValidator.SCHEMA.get(key, {})
+                field_type = schema.get("type", str)
 
-            # Skip if field not in schema
-            if key not in DataValidator.SCHEMA:
-                formatted_data[key] = value
-                continue
+                sanitized_value = DataSanitizer._sanitize_field(
+                    key, value, field_type, schema
+                )
+                formatted_data[key] = sanitized_value
 
-            field_type = DataValidator.SCHEMA[key]["type"]
+        # Ensure all required fields have values
+        for field, schema in DataValidator.SCHEMA.items():
+            if schema.get("required", False) and (
+                field not in formatted_data or formatted_data[field] is None
+            ):
+                formatted_data[field] = DataSanitizer._get_default_value(schema["type"])
 
-            # Handle different field types
-            if field_type == datetime:
-                formatted_data[key] = convert_date(value)
-            elif field_type == float:
-                formatted_data[key] = convert_numeric(value, float)
-            elif field_type == int:
-                formatted_data[key] = convert_numeric(value, int)
-            elif field_type == str:
-                formatted_data[key] = str(value) if value is not None else ""
-            else:
-                formatted_data[key] = value
+        # Validate percentage fields sum
+        percentage_fields = [
+            f for f in formatted_data.keys() if f.startswith("sre_pourcentage_")
+        ]
+        if percentage_fields:
+            total = sum(formatted_data.get(f, 0) for f in percentage_fields)
+            if abs(total - 100) > 0.01:
+                logger.warning(
+                    f"Percentage fields sum warning: total is {total}% (should be 100%)"
+                )
 
-            # Apply constraints from schema
-            if field_type in (float, int):
-                min_value = DataValidator.SCHEMA[key].get("min")
-                max_value = DataValidator.SCHEMA[key].get("max")
+        return formatted_data
 
-                if min_value is not None and formatted_data[key] < min_value:
-                    formatted_data[key] = field_type(min_value)
-                if max_value is not None and formatted_data[key] > max_value:
-                    formatted_data[key] = field_type(max_value)
-
-        except Exception as e:
-            print(f"Error processing field '{key}': {str(e)}")
-            # Set safe default values
-            if field_type == float:
-                formatted_data[key] = 0.0
-            elif field_type == int:
-                formatted_data[key] = 0
-            elif field_type == datetime:
-                formatted_data[key] = None
-            elif field_type == str:
-                formatted_data[key] = ""
-            else:
-                formatted_data[key] = value
-
-    # Ensure required fields are present
-    for field, schema in DataValidator.SCHEMA.items():
-        if schema.get("required", False) and field not in formatted_data:
-            if schema["type"] == float:
-                formatted_data[field] = 0.0
-            elif schema["type"] == int:
-                formatted_data[field] = 0
-            elif schema["type"] == datetime:
-                formatted_data[field] = None
-            elif schema["type"] == str:
-                formatted_data[field] = ""
-
-    return formatted_data
+    except Exception as e:
+        logger.error(f"Database sanitization failed: {str(e)}")
+        return data  # Return original data if sanitization fails

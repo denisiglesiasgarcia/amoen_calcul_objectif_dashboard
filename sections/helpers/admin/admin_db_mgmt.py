@@ -4,6 +4,8 @@ from datetime import datetime, date
 from bson import ObjectId
 from typing import Dict, Any
 from sections.helpers.save_excel_streamlit import display_dataframe_with_excel_download
+import time
+
 
 class DataValidator:
     """Handles data validation and type conversion for MongoDB documents"""
@@ -667,7 +669,9 @@ def display_database_management(mycol_historique_sites, data_admin):
             for col in date_columns:
                 if col in display_df.columns:
                     display_df[col] = display_df[col].dt.strftime("%Y-%m-%d %H:%M:%S")
-            display_dataframe_with_excel_download(display_df.drop(columns=["_id"]), "dataframe.xslx")
+            display_dataframe_with_excel_download(
+                display_df.drop(columns=["_id"]), "dataframe.xslx"
+            )
 
         with tab_edit:
             st.write("✏️ Modifier un projet existant")

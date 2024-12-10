@@ -639,15 +639,12 @@ if st.session_state["authentication_status"]:
 
         # Display the dataframes
         st.write("Période sélectionnée")
-        st.dataframe(df_periode_list)
         display_dataframe_with_excel_download(df_periode_list, "periode_liste.xlsx")
 
         st.write("Calculs effectués pour la période sélectionnée")
-        st.dataframe(df_list)
         display_dataframe_with_excel_download(df_list, "calculs_periode.xlsx")
 
         st.write("Agents énergétiques")
-        st.dataframe(df_agent_energetique)
         display_dataframe_with_excel_download(
             df_agent_energetique, "agents_energetiques.xlsx"
         )
@@ -660,14 +657,12 @@ if st.session_state["authentication_status"]:
 
         # Display the meteo data
         st.write("Données météo station Genève-Cointrin pour la période sélectionnée")
-        st.dataframe(df_meteo_note_calcul)
         display_dataframe_with_excel_download(
             df_meteo_note_calcul, "meteo_note_calcul.xlsx"
         )
 
         # display a hidden dataframe with all the data
         st.write("Données complètes")
-        st.write(st.session_state["data_site"])
         show_debug_data = st.checkbox("Afficher les données complètes")
         if show_debug_data:
             display_dataframe_with_excel_download(

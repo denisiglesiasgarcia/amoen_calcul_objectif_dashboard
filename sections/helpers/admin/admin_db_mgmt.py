@@ -5,6 +5,10 @@ from bson import ObjectId
 from typing import Dict, Any
 from sections.helpers.save_excel_streamlit import display_dataframe_with_excel_download
 import time
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 
 class DataValidator:
@@ -396,64 +400,6 @@ class DataValidator:
             st.error(f"Error creating form field for {label}: {str(e)}")
             return None
 
-    @classmethod
-    def validate_and_convert(
-        cls, data: Dict[str, Any]
-    ) -> tuple[Dict[str, Any], list[str]]:
-        """Validates and converts data according to schema."""
-        converted_data = {}
-        errors = []
-
-        # Check required fields first
-        for field, schema in cls.SCHEMA.items():
-            if schema.get("required", False) and field not in data:
-                errors.append(f"{field}: champ requis manquant")
-
-        # Process all fields according to schema
-        for field, value in data.items():
-            if field not in cls.SCHEMA:
-                continue  # Skip fields not in schema
-
-            field_schema = cls.SCHEMA[field]
-
-            try:
-                # Convert value to correct type
-                if value is not None and value != "":
-                    if field_schema["type"] == datetime:
-                        value = cls._convert_to_datetime(value, field, errors)
-                    else:
-                        value = field_schema["type"](value)
-
-                    # Check min/max if specified
-                    if "min" in field_schema and value < field_schema["min"]:
-                        errors.append(
-                            f"{field}: valeur inférieure au minimum permis ({field_schema['min']})"
-                        )
-                    if "max" in field_schema and value > field_schema["max"]:
-                        errors.append(
-                            f"{field}: valeur supérieure au maximum permis ({field_schema['max']})"
-                        )
-
-                    converted_data[field] = value
-                elif field_schema.get("required", False):
-                    errors.append(f"{field}: champ requis manquant")
-
-            except (ValueError, TypeError) as e:
-                errors.append(f"{field}: erreur de conversion - {str(e)}")
-
-        # Validate percentage fields sum to 100%
-        percentage_fields = [
-            f for f in converted_data.keys() if f.startswith("sre_pourcentage_")
-        ]
-        if percentage_fields:
-            total = sum(converted_data.get(f, 0) for f in percentage_fields)
-            if abs(total - 100) > 0.01:  # Allow small floating point differences
-                errors.append(
-                    f"La somme des pourcentages doit être 100% (actuellement {total}%)"
-                )
-
-        return converted_data, errors
-
     @staticmethod
     def _convert_to_datetime(value, field: str, errors: list) -> datetime:
         """Helper method to convert values to datetime"""
@@ -475,6 +421,101 @@ class DataValidator:
         else:
             errors.append(f"{field}: type de date non supporté")
             return None
+
+    @classmethod
+    def handle_datetime_fields(cls, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Properly handle datetime fields according to schema.
+        """
+        df = df.copy()
+
+        # Get all datetime fields from schema
+        datetime_fields = [
+            field
+            for field, schema in cls.SCHEMA.items()
+            if schema.get("type") == datetime
+        ]
+
+        # Convert datetime fields
+        for field in datetime_fields:
+            if field in df.columns:
+                try:
+                    # Convert to datetime if it's not already
+                    if df[field].dtype != "datetime64[ns]":
+                        df[field] = pd.to_datetime(df[field], errors="coerce")
+                except Exception as e:
+                    logger.warning(f"Error converting {field} to datetime: {str(e)}")
+
+        return df
+
+    @classmethod
+    def validate_and_convert(
+        cls, data: Dict[str, Any]
+    ) -> tuple[Dict[str, Any], list[str]]:
+        """Validates and converts data according to schema."""
+        converted_data = {}
+        errors = []
+
+        # Check required fields first
+        for field, schema in cls.SCHEMA.items():
+            if schema.get("required", False) and field not in data:
+                errors.append(f"{field}: champ requis manquant")
+
+        # Process all fields according to schema
+        for field, value in data.items():
+            if field not in cls.SCHEMA:
+                continue  # Skip fields not in schema
+
+            field_schema = cls.SCHEMA[field]
+
+            try:
+                # Handle empty values
+                if value is None or value == "":
+                    if field_schema.get("required", False):
+                        errors.append(f"{field}: champ requis manquant")
+                    continue
+
+                # Special handling for datetime fields
+                if field_schema["type"] == datetime:
+                    value = cls._convert_to_datetime(value, field, errors)
+                    if value is not None:
+                        converted_data[field] = value
+                    continue
+
+                # Convert other types
+                try:
+                    value = field_schema["type"](value)
+                except (ValueError, TypeError) as e:
+                    errors.append(f"{field}: erreur de conversion - {str(e)}")
+                    continue
+
+                # Check min/max if specified
+                if "min" in field_schema and value < field_schema["min"]:
+                    errors.append(
+                        f"{field}: valeur inférieure au minimum permis ({field_schema['min']})"
+                    )
+                if "max" in field_schema and value > field_schema["max"]:
+                    errors.append(
+                        f"{field}: valeur supérieure au maximum permis ({field_schema['max']})"
+                    )
+
+                converted_data[field] = value
+
+            except Exception as e:
+                errors.append(f"{field}: erreur de traitement - {str(e)}")
+
+        # Validate percentage fields sum to 100%
+        percentage_fields = [
+            f for f in converted_data.keys() if f.startswith("sre_pourcentage_")
+        ]
+        if percentage_fields:
+            total = sum(converted_data.get(f, 0) for f in percentage_fields)
+            if abs(total - 100) > 0.01:  # Allow small floating point differences
+                errors.append(
+                    f"La somme des pourcentages doit être 100% (actuellement {total}%)"
+                )
+
+        return converted_data, errors
 
 
 def check_mongodb_connection(collection) -> bool:
@@ -626,6 +667,7 @@ def display_database_management(mycol_historique_sites, data_admin):
             st.info(
                 "📝 La base de données est vide. Utilisez l'onglet 'Ajouter un projet' pour commencer."
             )
+            df = DataValidator.handle_datetime_fields(df)
             return
 
         # Convert date fields to datetime for proper sorting

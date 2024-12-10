@@ -108,18 +108,7 @@ if "data_site" not in st.session_state:
 
 @st.cache_data
 def load_project_data(project_name):
-    """
-    Load project data from the database.
-
-    This function retrieves data for a given project from the 'mycol_historique_sites' collection
-    in the database. The project is identified by its name.
-
-    Args:
-        project_name (str): The name of the project to retrieve data for.
-
-    Returns:
-        dict: A dictionary containing the project data if found, otherwise None.
-    """
+    """Load project data from the database."""
     data = mycol_historique_sites.find_one({"nom_projet": project_name})
     if data is not None:
         data_cleaned = sanitize_db(data)

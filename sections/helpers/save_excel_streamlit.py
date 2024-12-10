@@ -15,6 +15,23 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def debug_dataframe(df: pd.DataFrame) -> None:
+    """
+    Print debug information about DataFrame columns and types.
+    """
+    print("\nDEBUG INFO:")
+    print("Column names and types:")
+    for col in df.columns:
+        print(f"Column: '{col}' | Type: {type(col)} | Content type: {df[col].dtype}")
+
+    # Check for problematic characters
+    for col in df.columns:
+        if any(char in str(col) for char in "[]*/\\?:"):
+            print(f"Problematic column found: '{col}'")
+
+    return df
+
+
 class ExcelExportError(Exception):
     """Custom exception for Excel export errors with detailed messaging"""
 
@@ -110,7 +127,7 @@ def validate_data(data: Union[pd.DataFrame, Dict[str, Any]]) -> pd.DataFrame:
 
             df = pd.DataFrame(processed_items)
         elif isinstance(data, pd.DataFrame):
-            df = data
+            df = data.copy()
         else:
             raise ExcelExportError(
                 f"Unsupported data type: {type(data)}. Expected DataFrame or dictionary."
@@ -120,8 +137,16 @@ def validate_data(data: Union[pd.DataFrame, Dict[str, Any]]) -> pd.DataFrame:
         if df.empty:
             raise ExcelExportError("Resulting DataFrame is empty")
 
+        # Add debug information before cleaning
+        print("\nBefore cleaning:")
+        debug_dataframe(df)
+
         # Clean DataFrame for Excel
         df = clean_dataframe_for_excel(df)
+
+        # Add debug information after cleaning
+        print("\nAfter cleaning:")
+        debug_dataframe(df)
 
         return df
 

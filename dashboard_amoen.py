@@ -88,11 +88,6 @@ last_update_time_meteo = datetime.datetime(2021, 1, 1)
 FIELDS = "*"
 URL_INDICE_MOYENNES_3_ANS = "https://vector.sitg.ge.ch/arcgis/rest/services/Hosted/SCANE_INDICE_MOYENNES_3_ANS/FeatureServer/0/query"
 
-# Variables pour l'envoi de mail
-# GMAIL_ADDRESS = st.secrets["GMAIL_ADDRESS"]
-# GMAIL_PASSWORD = st.secrets["GMAIL_PASSWORD"]
-# TO_ADRESS_EMAIL = st.secrets["TO_ADRESS_EMAIL"]
-
 MONGODB_URI = st.secrets["MONGODB_URI"]
 
 # BD mongodb
@@ -278,12 +273,6 @@ if st.session_state["authentication_status"]:
 
         st.subheader("Limitations du calcul")
         st.write("La période minimale recommandée de calcul est de 6 mois de données.")
-
-        st.subheader("Liens utiles")
-        st.markdown(
-            "**[GitHub de la dashboard](https://github.com/denisiglesiasgarcia/amoen_calcul_objectif_dashboard)**",
-            unsafe_allow_html=True,
-        )
 
     with tab2:
 

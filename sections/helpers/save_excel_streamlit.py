@@ -44,25 +44,23 @@ class ExcelExportError(Exception):
 def clean_excel_column_name(name: str) -> str:
     """
     Clean column names to be Excel-compatible.
-
-    Args:
-        name: Original column name
-
-    Returns:
-        str: Cleaned column name suitable for Excel
     """
     # Convert to string and clean invalid characters
     name = str(name).strip()
 
     # Replace problematic characters with underscores
-    cleaned = re.sub(r"[\[\]*/\\?:]", "_", name)
+    cleaned = re.sub(r"[\[\]*/\\?:]", "", name)  # Remove problematic characters
     cleaned = re.sub(r"\s+", "_", cleaned)  # Replace spaces with underscores
     cleaned = re.sub(r"_+", "_", cleaned)  # Replace multiple underscores with single
     cleaned = cleaned.strip("_")  # Remove leading/trailing underscores
 
-    # Ensure the name isn't empty and starts with a letter
-    if not cleaned or not cleaned[0].isalpha():
-        cleaned = "Col_" + cleaned if cleaned else "Column"
+    # Ensure the name isn't empty
+    if not cleaned:
+        cleaned = "Column"
+
+    # Ensure the name starts with a letter
+    if not cleaned[0].isalpha():
+        cleaned = "Col_" + cleaned
 
     return cleaned
 
@@ -162,8 +160,18 @@ def convert_df_to_excel(data: Union[pd.DataFrame, Dict[str, Any]]) -> bytes:
     """
     output = None
     try:
-        # Validate and process input data
-        df = validate_data(data)
+        # Create a copy of the data to avoid modifying the original
+        if isinstance(data, pd.DataFrame):
+            df = data.copy()
+        else:
+            df = pd.DataFrame(data)
+
+        # Clean column names explicitly before Excel conversion
+        cleaned_columns = {col: clean_excel_column_name(col) for col in df.columns}
+        df = df.rename(columns=cleaned_columns)
+
+        # Handle missing values
+        df = df.replace({np.nan: "", None: "", "nan": "", "None": "", "NaT": ""})
 
         # Create Excel file in memory
         output = BytesIO()
@@ -171,7 +179,7 @@ def convert_df_to_excel(data: Union[pd.DataFrame, Dict[str, Any]]) -> bytes:
         # Write to Excel with formatting
         with pd.ExcelWriter(output, engine="openpyxl", mode="wb") as writer:
             # Write DataFrame
-            df.to_excel(writer, index=False, sheet_name="Sheet1", float_format="%.2f")
+            df.to_excel(writer, index=False, sheet_name="Sheet1")
 
             # Get worksheet
             worksheet = writer.sheets["Sheet1"]
@@ -218,14 +226,11 @@ def display_dataframe_with_excel_download(
         if not filename.endswith(".xlsx"):
             filename += ".xlsx"
 
-        # Process data
-        display_df = validate_data(data)
+        # Display original data
+        st.dataframe(data, use_container_width=True, hide_index=True)
 
-        # Display data
-        st.dataframe(display_df, use_container_width=True, hide_index=True)
-
-        # Generate Excel file
-        excel_data = convert_df_to_excel(display_df)  # Use already validated data
+        # Generate Excel file with cleaned column names
+        excel_data = convert_df_to_excel(data)
 
         # Create download button
         st.download_button(

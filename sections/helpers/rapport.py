@@ -1,3 +1,5 @@
+# sections/helpers/rapport.py
+
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import (
     SimpleDocTemplate,
@@ -75,11 +77,9 @@ def graphique_bars_rapport(
         }
     )
 
-    # Générer histogramme. taillebin est utilisé pour uniformiser le format de l'histogramme et que les axes
-    # correspondent bien à la largeur des barres (bin)
     cm = 1 / 2.54
     sns.set(style="white", rc={"figure.figsize": (30 * cm, 14.2 * cm)})
-    # ax1 = sns.catplot(x='Nom_projet', y='Valeur', hue='Type', kind='bar', data=bar_data1)
+    plt.clf()  # Clear the figure
 
     ax = sns.barplot(
         y="Valeur",

@@ -1,5 +1,3 @@
-# sections/helpers/save_excel_streamlit.py
-
 import pandas as pd
 import numpy as np
 from io import BytesIO
@@ -8,6 +6,7 @@ from typing import Union, Dict, Any, Optional
 from datetime import datetime
 import logging
 import traceback
+import re
 
 # Configure logging with timestamp
 logging.basicConfig(
@@ -23,6 +22,32 @@ class ExcelExportError(Exception):
         self.message = message
         self.original_error = original_error
         super().__init__(self.message)
+
+
+def clean_excel_column_name(name: str) -> str:
+    """
+    Clean column names to be Excel-compatible.
+
+    Args:
+        name: Original column name
+
+    Returns:
+        str: Cleaned column name suitable for Excel
+    """
+    # Convert to string if not already
+    name = str(name)
+
+    # Replace invalid Excel characters
+    cleaned = re.sub(r"[\[\]*/\\?:]+", "_", name)
+
+    # Remove leading/trailing spaces and underscores
+    cleaned = cleaned.strip(" _")
+
+    # Ensure name isn't empty after cleaning
+    if not cleaned:
+        cleaned = "Column"
+
+    return cleaned
 
 
 def validate_data(data: Union[pd.DataFrame, Dict[str, Any]]) -> pd.DataFrame:
@@ -93,8 +118,8 @@ def validate_data(data: Union[pd.DataFrame, Dict[str, Any]]) -> pd.DataFrame:
         if df.empty:
             raise ExcelExportError("Resulting DataFrame is empty")
 
-        # Validate column names
-        df.columns = [str(col) for col in df.columns]
+        # Clean and validate column names
+        df.columns = [clean_excel_column_name(col) for col in df.columns]
 
         return df
 

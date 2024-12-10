@@ -4,10 +4,10 @@ pymongo-auth-aws==1.2.0
 cryptography==43.0.0
 streamlit==1.38.0
 streamlit-authenticator==0.3.3
-seaborn
-reportlab
-pyproj
+seaborn==0.13.2
+reportlab==4.2.5
+pyproj==3.7.0
 plotly==5.23.0
 pip==24.2
 altair==5.4.1
-openpyxl
+openpyxl==3.1.5

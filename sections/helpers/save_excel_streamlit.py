@@ -166,12 +166,17 @@ def convert_df_to_excel(data: Union[pd.DataFrame, Dict[str, Any]]) -> bytes:
         else:
             df = pd.DataFrame(data)
 
+        logger.info("Converting DataFrame to Excel format...")
+        logger.info(f"DataFrame shape: {df.shape}")
+        logger.info(f"DataFrame columns: {df.columns}")
         # Clean column names explicitly before Excel conversion
         cleaned_columns = {col: clean_excel_column_name(col) for col in df.columns}
         df = df.rename(columns=cleaned_columns)
 
         # Handle missing values
-        df = df.replace({np.nan: "", None: "", "nan": "", "None": "", "NaT": "", "[": "", "]": ""})
+        df = df.replace(
+            {np.nan: "", None: "", "nan": "", "None": "", "NaT": "", "[": "", "]": ""}
+        )
 
         # Create Excel file in memory
         output = BytesIO()

@@ -330,24 +330,13 @@ if st.session_state["authentication_status"]:
                 # st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
                 ef_avant_corr_kwh_m2 = st.text_input(
                     "IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an]):",
-                    value=round(
-                        float(
-                            data_sites_db.get(
-                                "ef_avant_corr_kwh_m2",
-                                0,
-                            )
-                        ),
-                        2,
-                    ),
+                    value=get_rounded_float(data_sites_db, "ef_avant_corr_kwh_m2"),
                     help="Surélévation: C92 / Rénovation: C61",
                 )
                 if ef_avant_corr_kwh_m2 != "0":
                     validate_energie_input(
                         "Ef,avant,corr:", ef_avant_corr_kwh_m2, "kWh/m²/an", "MJ/m²/an"
                     )
-                st.session_state["data_site"]["ef_avant_corr_kwh_m2"] = float(
-                    ef_avant_corr_kwh_m2
-                )
                 try:
                     if float(ef_avant_corr_kwh_m2) <= 0:
                         st.warning("Ef,avant,corr [kWh/m²/an] doit être supérieur à 0")
@@ -356,8 +345,8 @@ if st.session_state["authentication_status"]:
             with tab2_col6:
                 ef_objectif_pondere_kwh_m2 = st.text_input(
                     "Ef,obj * fp [kWh/m²/an]:",
-                    value=round(
-                        float(data_sites_db.get("ef_objectif_pondere_kwh_m2", 0)), 2
+                    value=get_rounded_float(
+                        data_sites_db, "ef_objectif_pondere_kwh_m2"
                     ),
                     help="Surélévation: C94 / Rénovation: C63",
                 )
@@ -368,9 +357,6 @@ if st.session_state["authentication_status"]:
                         "kWh/m²/an",
                         "MJ/m²/an",
                     )
-                st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"] = float(
-                    ef_objectif_pondere_kwh_m2
-                )
                 try:
                     if float(ef_objectif_pondere_kwh_m2) <= 0:
                         st.warning("Ef,obj *fp [kWh/m²/an] doit être supérieur à 0")
@@ -388,13 +374,9 @@ if st.session_state["authentication_status"]:
                 # rénovation - chauffage
                 repartition_energie_finale_partie_renovee_chauffage = st.text_input(
                     "Chauffage partie rénovée [%]",
-                    value=round(
-                        float(
-                            data_sites_db.get(
-                                "repartition_energie_finale_partie_renovee_chauffage", 0
-                            )
-                        ),
-                        2,
+                    value=get_rounded_float(
+                        data_sites_db,
+                        "repartition_energie_finale_partie_renovee_chauffage",
                     ),
                     help="Surélévation: C77 / Rénovation: C49",
                 )
@@ -404,20 +386,12 @@ if st.session_state["authentication_status"]:
                         repartition_energie_finale_partie_renovee_chauffage,
                         "%",
                     )
-                st.session_state["data_site"][
-                    "repartition_energie_finale_partie_renovee_chauffage"
-                ] = float(repartition_energie_finale_partie_renovee_chauffage)
                 # surélévation - chauffage
                 repartition_energie_finale_partie_surelevee_chauffage = st.text_input(
                     "Chauffage partie surélévée",
-                    value=round(
-                        float(
-                            data_sites_db.get(
-                                "repartition_energie_finale_partie_surelevee_chauffage",
-                                0,
-                            )
-                        ),
-                        2,
+                    value=get_rounded_float(
+                        data_sites_db,
+                        "repartition_energie_finale_partie_surelevee_chauffage",
                     ),
                     help="C79",
                 )
@@ -427,22 +401,14 @@ if st.session_state["authentication_status"]:
                         repartition_energie_finale_partie_surelevee_chauffage,
                         "%",
                     )
-                st.session_state["data_site"][
-                    "repartition_energie_finale_partie_surelevee_chauffage"
-                ] = float(repartition_energie_finale_partie_surelevee_chauffage)
 
             with tab2_col8:
                 # rénovation - ECS
                 repartition_energie_finale_partie_renovee_ecs = st.text_input(
                     "ECS partie rénovée [%]",
-                    value=round(
-                        float(
-                            data_sites_db.get(
-                                "repartition_energie_finale_partie_renovee_ecs",
-                                0,
-                            )
-                        ),
-                        2,
+                    value=get_rounded_float(
+                        data_sites_db,
+                        "repartition_energie_finale_partie_renovee_ecs",
                     ),
                     help="Surélévation: C78 / Rénovation: C50",
                 )
@@ -452,20 +418,12 @@ if st.session_state["authentication_status"]:
                         repartition_energie_finale_partie_renovee_ecs,
                         "%",
                     )
-                st.session_state["data_site"][
-                    "repartition_energie_finale_partie_renovee_ecs"
-                ] = float(repartition_energie_finale_partie_renovee_ecs)
                 # surélévation - ECS
                 repartition_energie_finale_partie_surelevee_ecs = st.text_input(
                     "ECS partie surélévée [%]",
-                    value=round(
-                        float(
-                            data_sites_db.get(
-                                "repartition_energie_finale_partie_surelevee_ecs",
-                                0,
-                            )
-                        ),
-                        2,
+                    value=get_rounded_float(
+                        data_sites_db,
+                        "repartition_energie_finale_partie_surelevee_ecs",
                     ),
                     help="C80",
                 )
@@ -475,9 +433,6 @@ if st.session_state["authentication_status"]:
                         repartition_energie_finale_partie_surelevee_ecs,
                         "%",
                     )
-                st.session_state["data_site"][
-                    "repartition_energie_finale_partie_surelevee_ecs"
-                ] = float(repartition_energie_finale_partie_surelevee_ecs)
 
             # Validation somme des pourcentages
             try:

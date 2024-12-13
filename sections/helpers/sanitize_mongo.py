@@ -12,32 +12,24 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def safe_convert_to_float(value, default=0.0):
+def safe_convert_to_float(dictionary, key, decimals=2):
     """
-    Convert a value to float. Returns default if conversion fails.
+    Get value from dictionary, convert to float, and round to specified decimals.
+    Returns 0.0 if value is missing or conversion fails.
 
     Args:
-        value: Number to convert (str, int, float, or None)
-        default: Value to return if conversion fails
+        dictionary: Dictionary to get value from
+        key: Dictionary key to look up
+        decimals: Number of decimal places (default: 2)
 
     Returns:
-        float: Converted number or default value
-
-    Examples:
-        >>> to_float("1.23")
-        1.23
-        >>> to_float("bad")
-        0.0
-        >>> to_float(None)
-        0.0
+        float: Rounded number or 0.0
     """
-    if value is None:
-        return default
-
     try:
-        return float(str(value).strip().replace(",", "."))
+        value = dictionary.get(key, 0)
+        return round(float(str(value).strip().replace(",", ".")), decimals)
     except:
-        return default
+        return 0.0
 
 
 class DataSanitizer:

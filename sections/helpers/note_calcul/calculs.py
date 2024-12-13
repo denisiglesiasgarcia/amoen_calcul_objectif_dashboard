@@ -474,10 +474,9 @@ def fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2
     energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2,
     repartition_energie_finale_partie_renovee_somme,
 ):
-    energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 = (
-        float(energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2)
-        * (float(repartition_energie_finale_partie_renovee_somme) / 100)
-    )
+    energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 = float(
+        energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2
+    ) * (float(repartition_energie_finale_partie_renovee_somme) / 100)
     return energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2
 
 

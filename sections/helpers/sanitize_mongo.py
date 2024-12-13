@@ -12,7 +12,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def safe_convert_to_float(dictionary, key, decimals=2):
+def get_rounded_float(dictionary, key, decimals=2):
     """
     Get value from dictionary, convert to float, and round to specified decimals.
     Returns 0.0 if value is missing or conversion fails.

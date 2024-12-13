@@ -389,6 +389,10 @@ if st.session_state["authentication_status"]:
                         repartition_energie_finale_partie_renovee_chauffage,
                         "%",
                     )
+                st.session_state["data_site"][
+                    "repartition_energie_finale_partie_renovee_chauffage"
+                ] = repartition_energie_finale_partie_renovee_chauffage
+
                 # surélévation - chauffage
                 repartition_energie_finale_partie_surelevee_chauffage = st.text_input(
                     "Chauffage partie surélévée",
@@ -404,7 +408,9 @@ if st.session_state["authentication_status"]:
                         repartition_energie_finale_partie_surelevee_chauffage,
                         "%",
                     )
-
+                st.session_state["data_site"][
+                    "repartition_energie_finale_partie_surelevee_chauffage"
+                ] = repartition_energie_finale_partie_surelevee_chauffage
             with tab2_col8:
                 # rénovation - ECS
                 repartition_energie_finale_partie_renovee_ecs = st.text_input(
@@ -421,6 +427,9 @@ if st.session_state["authentication_status"]:
                         repartition_energie_finale_partie_renovee_ecs,
                         "%",
                     )
+                st.session_state["data_site"][
+                    "repartition_energie_finale_partie_renovee_ecs"
+                ] = repartition_energie_finale_partie_renovee_ecs
                 # surélévation - ECS
                 repartition_energie_finale_partie_surelevee_ecs = st.text_input(
                     "ECS partie surélévée [%]",
@@ -436,6 +445,9 @@ if st.session_state["authentication_status"]:
                         repartition_energie_finale_partie_surelevee_ecs,
                         "%",
                     )
+                st.session_state["data_site"][
+                    "repartition_energie_finale_partie_surelevee_ecs"
+                ] = repartition_energie_finale_partie_surelevee_ecs
 
             # Validation somme des pourcentages
             try:

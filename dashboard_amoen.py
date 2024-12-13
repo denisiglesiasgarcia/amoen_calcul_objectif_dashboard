@@ -715,22 +715,22 @@ if st.session_state["authentication_status"]:
 
         # Graphique 1
         if (
-            st.session_state["data_site"]["amoen_id"]
-            and st.session_state["data_site"]["ef_avant_corr_kwh_m2"]
-            and st.session_state["data_site"][
+            st.session_state["data_site"].get("amoen_id")
+            and st.session_state["data_site"].get("ef_avant_corr_kwh_m2")
+            and st.session_state["data_site"].get(
                 "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
-            ]
-            and st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"]
+            )
+            and st.session_state["data_site"].get("ef_objectif_pondere_kwh_m2")
         ):
             graphique_bars_objectif_exploitation(
                 st.session_state["data_site"]["nom_projet"],
-                st.session_state["data_site"]["ef_avant_corr_kwh_m2"],
-                st.session_state["data_site"][
-                    "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
-                ],
-                st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"],
-                st.session_state["data_site"]["atteinte_objectif"],
-                st.session_state["data_site"]["amoen_id"],
+                st.session_state["data_site"].get("ef_avant_corr_kwh_m2", 0),
+                st.session_state["data_site"].get(
+                    "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2", 0
+                ),
+                st.session_state["data_site"].get("ef_objectif_pondere_kwh_m2", 0),
+                st.session_state["data_site"].get("atteinte_objectif", 0),
+                st.session_state["data_site"].get("amoen_id", "")
             )
         else:
             st.warning(

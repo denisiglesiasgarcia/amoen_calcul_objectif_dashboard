@@ -681,13 +681,13 @@ if st.session_state["authentication_status"]:
         # résultats en latex
 
         if (
-            st.session_state["data_site"].get("facteur_ponderation_moyen", 0) > 0
-            and st.session_state["data_site"].get("ef_avant_corr_kwh_m2", 0) > 0
+            st.session_state["data_site"].get("facteur_ponderation_moyen") > 0
+            and st.session_state["data_site"].get("ef_avant_corr_kwh_m2") > 0
             and st.session_state["data_site"].get(
                 "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2", 0
             ) > 0
-            and st.session_state["data_site"].get("ef_objectif_pondere_kwh_m2", 0) > 0
-            and st.session_state["data_site"].get("atteinte_objectif", 0) > 0
+            and st.session_state["data_site"].get("ef_objectif_pondere_kwh_m2") > 0
+            and st.session_state["data_site"].get("atteinte_objectif") > 0
         ):
             formula_atteinte_objectif = r"Atteinte\ objectif \ [\%]= \frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}"
 
@@ -742,13 +742,11 @@ if st.session_state["authentication_status"]:
         ):
             graphique_bars_objectif_exploitation(
                 st.session_state["data_site"]["nom_projet"],
-                st.session_state["data_site"].get("ef_avant_corr_kwh_m2", 0),
-                st.session_state["data_site"].get(
-                    "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2", 0
-                ),
-                st.session_state["data_site"].get("ef_objectif_pondere_kwh_m2", 0),
-                st.session_state["data_site"].get("atteinte_objectif", 0),
-                st.session_state["data_site"].get("amoen_id", "")
+                st.session_state["data_site"]["ef_avant_corr_kwh_m2"],
+                st.session_state["data_site"]["energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"],
+                st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"],
+                st.session_state["data_site"]["atteinte_objectif"],
+                st.session_state["data_site"]["amoen_id"],
             )
         else:
             st.warning(

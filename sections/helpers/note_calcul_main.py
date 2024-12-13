@@ -202,25 +202,25 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     data_site["estimation_energie_finale_periode_sur_annuel"] = (
         fonction_estimation_energie_finale_periode_sur_annuel(
             data_site["estimation_ecs_annuel"],
-            data_site["repartition_energie_finale_partie_renovee_ecs"],
-            data_site["repartition_energie_finale_partie_surelevee_ecs"],
+            data_site.get("repartition_energie_finale_partie_renovee_ecs", 0),
+            data_site.get("repartition_energie_finale_partie_surelevee_ecs", 0),
             data_site["estimation_part_chauffage_periode_sur_annuel"],
-            data_site["repartition_energie_finale_partie_renovee_chauffage"],
-            data_site["repartition_energie_finale_partie_surelevee_chauffage"],
+            data_site.get("repartition_energie_finale_partie_renovee_chauffage", 0),
+            data_site.get("repartition_energie_finale_partie_surelevee_chauffage", 0),
         )
     )
     data_site["part_ecs_periode_comptage"] = fonction_part_ecs_periode_comptage(
         data_site["estimation_energie_finale_periode_sur_annuel"],
         data_site["estimation_ecs_annuel"],
-        data_site["repartition_energie_finale_partie_renovee_ecs"],
-        data_site["repartition_energie_finale_partie_surelevee_ecs"],
+        data_site.get("repartition_energie_finale_partie_renovee_ecs", 0),
+        data_site.get("repartition_energie_finale_partie_surelevee_ecs", 0),
     )
     data_site["part_chauffage_periode_comptage"] = (
         fonction_part_chauffage_periode_comptage(
             data_site["estimation_energie_finale_periode_sur_annuel"],
             data_site["estimation_part_chauffage_periode_sur_annuel"],
-            data_site["repartition_energie_finale_partie_renovee_chauffage"],
-            data_site["repartition_energie_finale_partie_surelevee_chauffage"],
+            data_site.get("repartition_energie_finale_partie_renovee_chauffage", 0),
+            data_site.get("repartition_energie_finale_partie_surelevee_chauffage", 0),
         )
     )
     data_site["correction_ecs"] = fonction_correction_ecs(data_site["periode_nb_jours"])

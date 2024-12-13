@@ -97,6 +97,55 @@ from sections.helpers.note_calcul.latex import (
 )
 
 
+def validate_required_data_for_note_calcul(data_site):
+    """
+    Validates that all required fields are present and not None in data_site.
+
+    Args:
+        data_site: Dictionary containing site data
+
+    Returns:
+        tuple: (bool, list) - (is_valid, missing_fields)
+    """
+    required_fields = [
+        "periode_start",
+        "periode_end",
+        "periode_nb_jours",
+        "repartition_energie_finale_partie_renovee_chauffage",
+        "repartition_energie_finale_partie_renovee_ecs",
+        "repartition_energie_finale_partie_surelevee_chauffage",
+        "repartition_energie_finale_partie_surelevee_ecs",
+        "sre_renovation_m2",
+        "ef_avant_corr_kwh_m2",
+        "ef_objectif_pondere_kwh_m2",
+        "agent_energetique_ef_mazout_kg",
+        "agent_energetique_ef_mazout_litres",
+        "agent_energetique_ef_mazout_kwh",
+        "agent_energetique_ef_gaz_naturel_m3",
+        "agent_energetique_ef_gaz_naturel_kwh",
+        "agent_energetique_ef_bois_buches_dur_stere",
+        "agent_energetique_ef_bois_buches_tendre_stere",
+        "agent_energetique_ef_bois_buches_tendre_kwh",
+        "agent_energetique_ef_pellets_m3",
+        "agent_energetique_ef_pellets_kg",
+        "agent_energetique_ef_pellets_kwh",
+        "agent_energetique_ef_plaquettes_m3",
+        "agent_energetique_ef_plaquettes_kwh",
+        "agent_energetique_ef_cad_kwh",
+        "agent_energetique_ef_electricite_pac_kwh",
+        "agent_energetique_ef_electricite_directe_kwh",
+        "agent_energetique_ef_autre_kwh",
+    ]
+
+    missing_fields = []
+
+    for field in required_fields:
+        if field not in data_site or data_site.get(field) is None:
+            missing_fields.append(field)
+
+    return len(missing_fields) == 0, missing_fields
+
+
 def fonction_note_calcul(data_site, df_meteo_tre200d0):
     """
     déjà dans data_site:

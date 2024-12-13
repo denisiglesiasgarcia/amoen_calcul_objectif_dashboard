@@ -681,7 +681,8 @@ if st.session_state["authentication_status"]:
         # résultats en latex
 
         if (
-            st.session_state["data_site"].get("facteur_ponderation_moyen") > 0
+            st.session_state["data_site"].get("facteur_ponderation_moyen") is not None
+            and st.session_state["data_site"].get("facteur_ponderation_moyen") > 0
             and st.session_state["data_site"].get("ef_avant_corr_kwh_m2") > 0
             and st.session_state["data_site"].get(
                 "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2", 0

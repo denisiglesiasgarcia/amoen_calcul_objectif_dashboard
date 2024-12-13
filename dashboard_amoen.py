@@ -437,18 +437,10 @@ if st.session_state["authentication_status"]:
             # Validation somme des pourcentages
             try:
                 repartition_ef_somme_avertissement = (
-                    st.session_state["data_site"][
-                        "repartition_energie_finale_partie_renovee_chauffage"
-                    ]
-                    + st.session_state["data_site"][
-                        "repartition_energie_finale_partie_renovee_ecs"
-                    ]
-                    + st.session_state["data_site"][
-                        "repartition_energie_finale_partie_surelevee_chauffage"
-                    ]
-                    + st.session_state["data_site"][
-                        "repartition_energie_finale_partie_surelevee_ecs"
-                    ]
+                    st.session_state["data_site"].get("repartition_energie_finale_partie_renovee_chauffage", 0)
+                    + st.session_state["data_site"].get("repartition_energie_finale_partie_renovee_ecs", 0)
+                    + st.session_state["data_site"].get("repartition_energie_finale_partie_surelevee_chauffage", 0)
+                    + st.session_state["data_site"].get("repartition_energie_finale_partie_surelevee_ecs", 0)
                 )
                 if repartition_ef_somme_avertissement != 100:
                     st.warning(

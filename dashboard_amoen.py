@@ -351,7 +351,7 @@ if st.session_state["authentication_status"]:
             with tab2_col6:
                 ef_objectif_pondere_kwh_m2 = st.text_input(
                     "Ef,obj * fp [kWh/m²/an]:",
-                    value=round(data_sites_db["ef_objectif_pondere_kwh_m2"], 2),
+                    value=round(data_sites_db.get("ef_objectif_pondere_kwh_m2", 0), 2),
                     help="Surélévation: C94 / Rénovation: C63",
                 )
                 if ef_objectif_pondere_kwh_m2 != "0":

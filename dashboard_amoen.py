@@ -440,18 +440,28 @@ if st.session_state["authentication_status"]:
             # Validation somme des pourcentages
             try:
                 # Get and print each value to verify what we're receiving
-                val1 = st.session_state["data_site"].get("repartition_energie_finale_partie_renovee_chauffage", 0)
-                val2 = st.session_state["data_site"].get("repartition_energie_finale_partie_renovee_ecs", 0)
-                val3 = st.session_state["data_site"].get("repartition_energie_finale_partie_surelevee_chauffage", 0)
-                val4 = st.session_state["data_site"].get("repartition_energie_finale_partie_surelevee_ecs", 0)
-                
-                print(f"Values: {val1} ({type(val1)}), {val2} ({type(val2)}), {val3} ({type(val3)}), {val4} ({type(val4)})")
-                
+
+                val1 = get_rounded_float(
+                    st.session_state["data_site"],
+                    "repartition_energie_finale_partie_renovee_chauffage",
+                )
+                val2 = get_rounded_float(
+                    st.session_state["data_site"],
+                    "repartition_energie_finale_partie_renovee_ecs",
+                )
+                val3 = get_rounded_float(
+                    st.session_state["data_site"],
+                    "repartition_energie_finale_partie_surelevee_chauffage",
+                )
+                val4 = get_rounded_float(
+                    st.session_state["data_site"],
+                    "repartition_energie_finale_partie_surelevee_ecs",
+                )
                 # Convert to float before adding
                 repartition_ef_somme_avertissement = (
                     float(val1) + float(val2) + float(val3) + float(val4)
                 )
-                
+
                 if abs(repartition_ef_somme_avertissement - 100) > 0.01:  # Use small tolerance for float comparison
                     st.warning(
                         f"La somme des pourcentages de répartition de l'énergie finale doit être égale à 100% ({repartition_ef_somme_avertissement:.2f}%)"

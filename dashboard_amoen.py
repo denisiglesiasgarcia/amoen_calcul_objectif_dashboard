@@ -346,6 +346,8 @@ if st.session_state["authentication_status"]:
                 except ValueError:
                     st.warning("Problème dans Ef,avant,corr [kWh/m²/an]")
                 st.write(data_sites_db["ef_objectif_pondere_kwh_m2"])
+                st.write("data_sites_db type:", type(data_sites_db))
+                st.write("data_sites_db keys:", data_sites_db.keys() if data_sites_db else None)
             with tab2_col6:
                 ef_objectif_pondere_kwh_m2 = st.text_input(
                     "Ef,obj * fp [kWh/m²/an]:",

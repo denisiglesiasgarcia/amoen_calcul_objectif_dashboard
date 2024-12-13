@@ -12,6 +12,34 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def safe_convert_to_float(value, default=0.0):
+    """
+    Convert a value to float. Returns default if conversion fails.
+
+    Args:
+        value: Number to convert (str, int, float, or None)
+        default: Value to return if conversion fails
+
+    Returns:
+        float: Converted number or default value
+
+    Examples:
+        >>> to_float("1.23")
+        1.23
+        >>> to_float("bad")
+        0.0
+        >>> to_float(None)
+        0.0
+    """
+    if value is None:
+        return default
+
+    try:
+        return float(str(value).strip().replace(",", "."))
+    except:
+        return default
+
+
 class DataSanitizer:
     """Handles sanitization of database records."""
 

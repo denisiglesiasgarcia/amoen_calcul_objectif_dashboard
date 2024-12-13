@@ -340,7 +340,7 @@ if st.session_state["authentication_status"]:
                     validate_energie_input(
                         "Ef,avant,corr:", ef_avant_corr_kwh_m2, "kWh/m²/an", "MJ/m²/an"
                     )
-                st.session_state["data_site"]["ef_avant_corr_kwh_m2"] = ef_avant_corr_kwh_m2
+                st.session_state["data_site"]["ef_avant_corr_kwh_m2"] = float(ef_avant_corr_kwh_m2)
                 try:
                     if float(ef_avant_corr_kwh_m2) <= 0:
                         st.warning("Ef,avant,corr [kWh/m²/an] doit être supérieur à 0")
@@ -361,7 +361,7 @@ if st.session_state["authentication_status"]:
                         "kWh/m²/an",
                         "MJ/m²/an",
                     )
-                st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"] = ef_objectif_pondere_kwh_m2
+                st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"] = float(ef_objectif_pondere_kwh_m2)
                 try:
                     if float(ef_objectif_pondere_kwh_m2) <= 0:
                         st.warning("Ef,obj *fp [kWh/m²/an] doit être supérieur à 0")
@@ -393,7 +393,7 @@ if st.session_state["authentication_status"]:
                     )
                 st.session_state["data_site"][
                     "repartition_energie_finale_partie_renovee_chauffage"
-                ] = repartition_energie_finale_partie_renovee_chauffage
+                ] = float(repartition_energie_finale_partie_renovee_chauffage)
 
                 # surélévation - chauffage
                 repartition_energie_finale_partie_surelevee_chauffage = st.text_input(
@@ -412,7 +412,7 @@ if st.session_state["authentication_status"]:
                     )
                 st.session_state["data_site"][
                     "repartition_energie_finale_partie_surelevee_chauffage"
-                ] = repartition_energie_finale_partie_surelevee_chauffage
+                ] = float(repartition_energie_finale_partie_surelevee_chauffage)
             with tab2_col8:
                 # rénovation - ECS
                 repartition_energie_finale_partie_renovee_ecs = st.text_input(
@@ -431,7 +431,7 @@ if st.session_state["authentication_status"]:
                     )
                 st.session_state["data_site"][
                     "repartition_energie_finale_partie_renovee_ecs"
-                ] = repartition_energie_finale_partie_renovee_ecs
+                ] = float(repartition_energie_finale_partie_renovee_ecs)
                 # surélévation - ECS
                 repartition_energie_finale_partie_surelevee_ecs = st.text_input(
                     "ECS partie surélévée [%]",
@@ -449,7 +449,7 @@ if st.session_state["authentication_status"]:
                     )
                 st.session_state["data_site"][
                     "repartition_energie_finale_partie_surelevee_ecs"
-                ] = repartition_energie_finale_partie_surelevee_ecs
+                ] = float(repartition_energie_finale_partie_surelevee_ecs)
 
             # Validation somme des pourcentages
             try:

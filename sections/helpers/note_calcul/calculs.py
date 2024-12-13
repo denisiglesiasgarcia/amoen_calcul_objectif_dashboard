@@ -44,16 +44,16 @@ def fonction_estimation_energie_finale_periode_sur_annuel(
     repartition_energie_finale_partie_surelevee_chauffage,
 ):
     estimation_energie_finale_periode_sur_annuel = (
-        estimation_ecs_annuel
+        float(estimation_ecs_annuel)
         * (
-            repartition_energie_finale_partie_renovee_ecs
-            + repartition_energie_finale_partie_surelevee_ecs
+            float(repartition_energie_finale_partie_renovee_ecs)
+            + float(repartition_energie_finale_partie_surelevee_ecs)
         )
     ) + (
-        estimation_part_chauffage_periode_sur_annuel
+        float(estimation_part_chauffage_periode_sur_annuel)
         * (
-            repartition_energie_finale_partie_renovee_chauffage
-            + repartition_energie_finale_partie_surelevee_chauffage
+            float(repartition_energie_finale_partie_renovee_chauffage)
+            + float(repartition_energie_finale_partie_surelevee_chauffage)
         )
     )
     return estimation_energie_finale_periode_sur_annuel

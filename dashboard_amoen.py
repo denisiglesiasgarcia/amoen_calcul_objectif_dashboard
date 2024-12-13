@@ -72,7 +72,7 @@ from sections.helpers.admin.admin_chiffre_cle import display_admin_dashboard
 
 from sections.helpers.admin.admin_db_mgmt import display_database_management
 
-from sections.helpers.sanitize_mongo import sanitize_db
+from sections.helpers.sanitize_mongo import sanitize_db, safe_convert_to_float
 
 from sections.helpers.save_excel_streamlit import (
     display_dataframe_with_excel_download,
@@ -744,7 +744,6 @@ if st.session_state["authentication_status"]:
             ]
             and st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"]
         ):
-
             graphique_bars_objectif_exploitation(
                 st.session_state["data_site"]["nom_projet"],
                 st.session_state["data_site"]["ef_avant_corr_kwh_m2"],
@@ -971,9 +970,9 @@ if st.session_state["authentication_status"]:
                 )
 
                 # add date to data_rapport
-                st.session_state["data_site"][
-                    "date_rapport"
-                ] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                st.session_state["data_site"]["date_rapport"] = (
+                    datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                )
 
                 # Remove the _id field if it exists to ensure MongoDB generates a new one
                 if "_id" in st.session_state["data_site"]:

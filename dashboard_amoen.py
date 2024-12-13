@@ -378,12 +378,7 @@ if st.session_state["authentication_status"]:
                 # rénovation - chauffage
                 repartition_energie_finale_partie_renovee_chauffage = st.text_input(
                     "Chauffage partie rénovée [%]",
-                    value=round(
-                        data_sites_db[
-                            "repartition_energie_finale_partie_renovee_chauffage"
-                        ],
-                        2,
-                    ),
+                    value=round(float(data_sites_db["repartition_energie_finale_partie_renovee_chauffage"]),2),
                     help="Surélévation: C77 / Rénovation: C49",
                 )
                 if repartition_energie_finale_partie_renovee_chauffage != "0":

@@ -26,9 +26,21 @@ def get_rounded_float(dictionary, key, decimals=2):
         float: Rounded number or 0.0
     """
     try:
-        value = dictionary.get(key, 0)
-        return round(float(str(value).strip().replace(",", ".")), decimals)
-    except:
+        # Get the value with a default of 0
+        value = dictionary.get(key)
+
+        # If value is None, return 0
+        if value is None:
+            return 0.0
+
+        # Convert to string, clean it, and convert to float
+        cleaned_value = str(value).strip().replace(",", ".")
+
+        # Convert to float and round
+        return round(float(cleaned_value), decimals)
+
+    except Exception as e:
+        print(f"Error converting {key}: {value}, Error: {str(e)}")  # Debug print
         return 0.0
 
 

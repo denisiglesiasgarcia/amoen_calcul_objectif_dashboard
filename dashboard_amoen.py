@@ -72,7 +72,7 @@ from sections.helpers.admin.admin_chiffre_cle import display_admin_dashboard
 
 from sections.helpers.admin.admin_db_mgmt import display_database_management
 
-from sections.helpers.sanitize_mongo import sanitize_db, safe_convert_to_float
+from sections.helpers.sanitize_mongo import sanitize_db, get_rounded_float
 
 from sections.helpers.save_excel_streamlit import (
     display_dataframe_with_excel_download,
@@ -294,7 +294,7 @@ if st.session_state["authentication_status"]:
                 # SRE rénovée
                 sre_renovation_m2 = st.text_input(
                     "SRE rénovée (m²):",
-                    value=round(data_sites_db["sre_renovation_m2"], 2),
+                    value=get_rounded_float(data_sites_db, "sre_renovation_m2"),
                     help="La SRE rénovée est la partie du batiment qui a été rénovée, la surélévation/extension n'est pas incluse",
                 )
                 validate_input("SRE rénovée:", sre_renovation_m2, "m²")

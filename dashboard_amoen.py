@@ -330,7 +330,15 @@ if st.session_state["authentication_status"]:
                 # st.write('IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an])')
                 ef_avant_corr_kwh_m2 = st.text_input(
                     "IDC moyen 3 ans avant travaux (Ef,avant,corr [kWh/m²/an]):",
-                    value=round(data_sites_db["ef_avant_corr_kwh_m2"], 2),
+                    value=round(
+                        float(
+                            data_sites_db.get(
+                                "ef_avant_corr_kwh_m2",
+                                0,
+                            )
+                        ),
+                        2,
+                    ),
                     help="Surélévation: C92 / Rénovation: C61",
                 )
                 if ef_avant_corr_kwh_m2 != "0":
@@ -348,7 +356,9 @@ if st.session_state["authentication_status"]:
             with tab2_col6:
                 ef_objectif_pondere_kwh_m2 = st.text_input(
                     "Ef,obj * fp [kWh/m²/an]:",
-                    value=round(float(data_sites_db.get("ef_objectif_pondere_kwh_m2", 0)), 2),
+                    value=round(
+                        float(data_sites_db.get("ef_objectif_pondere_kwh_m2", 0)), 2
+                    ),
                     help="Surélévation: C94 / Rénovation: C63",
                 )
                 if ef_objectif_pondere_kwh_m2 != "0":
@@ -378,7 +388,14 @@ if st.session_state["authentication_status"]:
                 # rénovation - chauffage
                 repartition_energie_finale_partie_renovee_chauffage = st.text_input(
                     "Chauffage partie rénovée [%]",
-                    value=round(float(data_sites_db["repartition_energie_finale_partie_renovee_chauffage"]),2),
+                    value=round(
+                        float(
+                            data_sites_db.get(
+                                "repartition_energie_finale_partie_renovee_chauffage", 0
+                            )
+                        ),
+                        2,
+                    ),
                     help="Surélévation: C77 / Rénovation: C49",
                 )
                 if repartition_energie_finale_partie_renovee_chauffage != "0":
@@ -394,9 +411,12 @@ if st.session_state["authentication_status"]:
                 repartition_energie_finale_partie_surelevee_chauffage = st.text_input(
                     "Chauffage partie surélévée",
                     value=round(
-                        data_sites_db[
-                            "repartition_energie_finale_partie_surelevee_chauffage"
-                        ],
+                        float(
+                            data_sites_db.get(
+                                "repartition_energie_finale_partie_surelevee_chauffage",
+                                0,
+                            )
+                        ),
                         2,
                     ),
                     help="C79",
@@ -416,7 +436,12 @@ if st.session_state["authentication_status"]:
                 repartition_energie_finale_partie_renovee_ecs = st.text_input(
                     "ECS partie rénovée [%]",
                     value=round(
-                        data_sites_db["repartition_energie_finale_partie_renovee_ecs"],
+                        float(
+                            data_sites_db.get(
+                                "repartition_energie_finale_partie_renovee_ecs",
+                                0,
+                            )
+                        ),
                         2,
                     ),
                     help="Surélévation: C78 / Rénovation: C50",
@@ -434,9 +459,12 @@ if st.session_state["authentication_status"]:
                 repartition_energie_finale_partie_surelevee_ecs = st.text_input(
                     "ECS partie surélévée [%]",
                     value=round(
-                        data_sites_db[
-                            "repartition_energie_finale_partie_surelevee_ecs"
-                        ],
+                        float(
+                            data_sites_db.get(
+                                "repartition_energie_finale_partie_surelevee_ecs",
+                                0,
+                            )
+                        ),
                         2,
                     ),
                     help="C80",

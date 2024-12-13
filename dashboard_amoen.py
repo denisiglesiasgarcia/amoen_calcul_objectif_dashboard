@@ -340,6 +340,7 @@ if st.session_state["authentication_status"]:
                     validate_energie_input(
                         "Ef,avant,corr:", ef_avant_corr_kwh_m2, "kWh/m²/an", "MJ/m²/an"
                     )
+                st.session_state["data_site"]["ef_avant_corr_kwh_m2"] = ef_avant_corr_kwh_m2
                 try:
                     if float(ef_avant_corr_kwh_m2) <= 0:
                         st.warning("Ef,avant,corr [kWh/m²/an] doit être supérieur à 0")
@@ -360,6 +361,7 @@ if st.session_state["authentication_status"]:
                         "kWh/m²/an",
                         "MJ/m²/an",
                     )
+                st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"] = ef_objectif_pondere_kwh_m2
                 try:
                     if float(ef_objectif_pondere_kwh_m2) <= 0:
                         st.warning("Ef,obj *fp [kWh/m²/an] doit être supérieur à 0")

@@ -187,8 +187,8 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     )
     data_site["repartition_energie_finale_partie_renovee_somme"] = (
         fonction_repartition_energie_finale_partie_renovee_somme(
-            data_site["repartition_energie_finale_partie_renovee_chauffage"],
-            data_site["repartition_energie_finale_partie_renovee_ecs"],
+            data_site.get("repartition_energie_finale_partie_renovee_chauffage", 0),
+            data_site.get("repartition_energie_finale_partie_renovee_ecs", 0),
         )
     )
     data_site["estimation_ecs_annuel"] = fonction_estimation_ecs_annuel(

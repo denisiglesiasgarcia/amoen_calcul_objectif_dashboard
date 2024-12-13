@@ -461,7 +461,7 @@ if st.session_state["authentication_status"]:
                 repartition_ef_somme_avertissement = (
                     float(val1) + float(val2) + float(val3) + float(val4)
                 )
-
+                st.write(val1, val2, val3, val4)
                 if abs(repartition_ef_somme_avertissement - 100) > 0.01:  # Use small tolerance for float comparison
                     st.warning(
                         f"La somme des pourcentages de répartition de l'énergie finale doit être égale à 100% ({repartition_ef_somme_avertissement:.2f}%)"

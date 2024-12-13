@@ -64,7 +64,10 @@ from sections.helpers.agents_energetiques import (
     display_energy_agents,
 )
 
-from sections.helpers.note_calcul_main import fonction_note_calcul
+from sections.helpers.note_calcul_main import (
+    fonction_note_calcul,
+    validate_required_data_for_note_calcul,
+)
 
 from sections.helpers.sidebar import add_sidebar_links
 
@@ -437,10 +440,18 @@ if st.session_state["authentication_status"]:
             # Validation somme des pourcentages
             try:
                 repartition_ef_somme_avertissement = (
-                    st.session_state["data_site"].get("repartition_energie_finale_partie_renovee_chauffage", 0)
-                    + st.session_state["data_site"].get("repartition_energie_finale_partie_renovee_ecs", 0)
-                    + st.session_state["data_site"].get("repartition_energie_finale_partie_surelevee_chauffage", 0)
-                    + st.session_state["data_site"].get("repartition_energie_finale_partie_surelevee_ecs", 0)
+                    st.session_state["data_site"].get(
+                        "repartition_energie_finale_partie_renovee_chauffage", 0
+                    )
+                    + st.session_state["data_site"].get(
+                        "repartition_energie_finale_partie_renovee_ecs", 0
+                    )
+                    + st.session_state["data_site"].get(
+                        "repartition_energie_finale_partie_surelevee_chauffage", 0
+                    )
+                    + st.session_state["data_site"].get(
+                        "repartition_energie_finale_partie_surelevee_ecs", 0
+                    )
                 )
                 if repartition_ef_somme_avertissement != 100:
                     st.warning(
@@ -561,17 +572,38 @@ if st.session_state["authentication_status"]:
     with tab3:
         st.subheader("Note de calcul")
 
-        (
-            df_periode_list,
-            df_list,
-            df_agent_energetique,
-            df_meteo_note_calcul,
-            df_results,
-            formula_facteur_ponderation_moyen_texte,
-            formula_facteur_ponderation_moyen,
-        ) = fonction_note_calcul(
-            st.session_state["data_site"], st.session_state["df_meteo_tre200d0"]
-        )
+        if "data_site" in st.session_state and "df_meteo_tre200d0" in st.session_state:
+            # vérifier que toutes les données sont présentes pour la note de calcul
+            is_valid, missing_fields = validate_required_data_for_note_calcul(
+                st.session_state["data_site"]
+            )
+
+            if is_valid:
+                (
+                    df_periode_list,
+                    df_list,
+                    df_agent_energetique,
+                    df_meteo_note_calcul,
+                    df_results,
+                    formula_facteur_ponderation_moyen_texte,
+                    formula_facteur_ponderation_moyen,
+                ) = fonction_note_calcul(
+                    st.session_state["data_site"], st.session_state["df_meteo_tre200d0"]
+                )
+            else:
+                st.warning("Missing required data:")
+                for field in missing_fields:
+                    st.warning(f"- {field}")
+                # Initialize empty returns if needed
+                df_periode_list = pd.DataFrame()
+                df_list = pd.DataFrame()
+                df_agent_energetique = pd.DataFrame()
+                df_meteo_note_calcul = pd.DataFrame()
+                df_results = pd.DataFrame()
+                formula_facteur_ponderation_moyen_texte = ""
+                formula_facteur_ponderation_moyen = ""
+        else:
+            st.warning("Données pas complètes pour la note de calcul")
 
         # Hide the index
         hide_index_style = """
@@ -917,9 +949,9 @@ if st.session_state["authentication_status"]:
                 )
 
                 # add date to data_rapport
-                st.session_state["data_site"]["date_rapport"] = (
-                    datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                )
+                st.session_state["data_site"][
+                    "date_rapport"
+                ] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
                 # Remove the _id field if it exists to ensure MongoDB generates a new one
                 if "_id" in st.session_state["data_site"]:

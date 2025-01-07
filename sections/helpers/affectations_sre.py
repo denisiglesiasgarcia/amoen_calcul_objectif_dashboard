@@ -79,31 +79,45 @@ AFFECTATION_OPTIONS = [
 ]
 
 
-def validate_input_affectation(name, variable, unite, sre_renovation_m2):
+def validate_input_affectation(
+    name: str, variable: str, unite: str, sre_renovation_m2: float
+) -> float:
+    """
+    Validates an affectation input value and returns the validated value.
+
+    Args:
+        name: Name of the field
+        variable: Input value to validate
+        unite: Unit for display
+        sre_renovation_m2: SRE renovation value for area calculation
+
+    Returns:
+        float: The validated value, or 0 if invalid
+    """
     try:
-        variable = float(variable.replace(",", ".", 1))
-        if 0 <= variable <= 100:
+        value = float(variable.replace(",", ".", 1))
+        if 0 <= value <= 100:
             st.text(
-                f"{name} {variable} {unite} → {round(variable * float(sre_renovation_m2) / 100, 2)} m²"
+                f"{name} {value} {unite} → {round(value * float(sre_renovation_m2) / 100, 2)} m²"
             )
+            return value
         else:
             st.warning("Valeur doit être comprise entre 0 et 100")
+            return 0.0
     except ValueError:
         st.warning(f"{name} doit être un chiffre")
-        variable = 0
+        return 0.0
 
 
 def get_selected_affectations(data_sites_db: Dict) -> List[str]:
     """Return list of selected affectations based on database values."""
-    return (
-        [
-            option["label"]
-            for option in AFFECTATION_OPTIONS
-            if data_sites_db.get(option["variable"], 0) > 0
-        ]
-        if data_sites_db
-        else []
-    )
+    if not data_sites_db:
+        return []
+    return [
+        option["label"]
+        for option in AFFECTATION_OPTIONS
+        if data_sites_db.get(option["variable"], 0) > 0
+    ]
 
 
 def display_affectation_inputs(
@@ -112,42 +126,29 @@ def display_affectation_inputs(
     """Display and process affectation inputs."""
     for option in AFFECTATION_OPTIONS:
         if option["label"] in selected_affectations:
-            value = st.text_input(
-                option["label"] + ":",
-                value=(
-                    data_sites_db.get(option["variable"], 0.0) if data_sites_db else 0.0
-                ),
+            default_value = (
+                data_sites_db.get(option["variable"], 0.0) if data_sites_db else 0.0
             )
-            if value != "0":
-                validate_input_affectation(
+            value = st.text_input(option["label"] + ":", value=default_value)
+
+            if value and value != "0":
+                validated_value = validate_input_affectation(
                     option["label"] + ":",
                     value,
                     option["unit"],
                     sre_renovation_m2,
                 )
-                option["value"] = float(value)
-                st.session_state["data_site"][option["variable"]] = float(value)
+                st.session_state["data_site"][option["variable"]] = validated_value
             else:
-                option["value"] = 0.0
                 st.session_state["data_site"][option["variable"]] = 0.0
-
-
-def calculate_affectation_sum() -> float:
-    """Calculate sum of all affectation percentages."""
-    return sum(
-        float(st.session_state["data_site"].get(option["variable"], 0))
-        for option in AFFECTATION_OPTIONS
-    )
 
 
 def default_affectations(data_sites_db: Dict):
     """Set default affectation values."""
     for option in AFFECTATION_OPTIONS:
         if option["label"] not in get_selected_affectations(data_sites_db):
-            option["value"] = 0.0
             st.session_state["data_site"][option["variable"]] = 0.0
         else:
-            option["value"] = data_sites_db.get(option["variable"], 0.0)
             st.session_state["data_site"][option["variable"]] = data_sites_db.get(
                 option["variable"], 0.0
             )
@@ -168,10 +169,8 @@ def display_affectations(data_sites_db: Dict, sre_renovation_m2: float):
     display_affectation_inputs(data_sites_db, selected_affectations, sre_renovation_m2)
     default_affectations(data_sites_db)
 
-    # Define fields to validate (all affectation variables)
+    # Validate the sum of all affectation percentages
     fields_to_validate = [option["variable"] for option in AFFECTATION_OPTIONS]
-
-    # Use the validate_percentage_sum function instead of direct calculation
     validate_percentage_sum(
         data_dict=st.session_state["data_site"], field_names=fields_to_validate
     )

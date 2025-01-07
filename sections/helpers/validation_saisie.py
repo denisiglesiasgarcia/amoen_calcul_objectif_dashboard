@@ -1,5 +1,7 @@
+# /sections/helpers/validation_saisie.py
+
 import streamlit as st
-# import numpy as np
+from sections.helpers.sanitize_mongo import get_rounded_float
 
 
 def validate_input(name, variable, unit):
@@ -19,3 +21,40 @@ def validate_energie_input(name, variable, unit1, unit2):
     except ValueError:
         st.text(f"{name} doit être un chiffre")
         variable = 0
+
+
+def validate_percentage_sum(data_dict, field_names, expected_sum=100.0, round_digits=2):
+    """
+    Validates that the sum of specified percentage fields equals an expected value.
+
+    Args:
+        data_dict (dict): Dictionary containing the percentage values
+        field_names (list): List of field names to sum
+        expected_sum (float): Expected sum of percentages (default: 100.0)
+        round_digits (int): Number of decimal places to round to (default: 2)
+
+    Returns:
+        tuple: (bool, float, str)
+            - bool: True if validation passed, False otherwise
+            - float: Actual sum of percentages
+            - str: Error message if any, empty string if validation passed
+    """
+    try:
+        # Get values for each field and convert to float
+        values = [float(get_rounded_float(data_dict, field)) for field in field_names]
+
+        # Calculate sum and round to specified digits
+        actual_sum = round(sum(values), round_digits)
+
+        # Check if sum matches expected value
+        if actual_sum != expected_sum:
+            return (
+                False,
+                actual_sum,
+                f"La somme des pourcentages doit être égale à {expected_sum}% ({actual_sum:.2f}%)",
+            )
+
+        return True, actual_sum, ""
+
+    except Exception as e:
+        return False, 0.0, f"Problème dans la somme des pourcentages: {str(e)}"

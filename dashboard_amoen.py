@@ -943,7 +943,7 @@ if st.session_state["authentication_status"]:
         # Generate the PDF report
         invalid_fields = check_validity()
         if (
-            invalid_fields is None
+            invalid_fields is not None
             and st.session_state["data_site"].get("facteur_ponderation_moyen")
             is not None
             and st.session_state["data_site"].get("facteur_ponderation_moyen") > 0
@@ -995,7 +995,7 @@ if st.session_state["authentication_status"]:
             # Check and display which conditions are not met
             conditions_not_met = []
             
-            if invalid_fields is not None:
+            if invalid_fields is None:
                 conditions_not_met.append("Des champs sont invalides")
                 
             if not st.session_state["data_site"].get("facteur_ponderation_moyen"):

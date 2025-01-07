@@ -340,7 +340,7 @@ if st.session_state["authentication_status"]:
                 #     st.warning("Problème dans Ef,avant,corr [kWh/m²/an]")
                 st.session_state["data_site"]["ef_avant_corr_kwh_m2"] = (
                     validate_energie_input(
-                        name="IDC moyen 3 ans avant travaux (Ef,avant,corr):",
+                        name="Ef,avant,corr:",
                         variable=ef_avant_corr_kwh_m2,
                         unit1="kWh/m²/an",
                         unit2="MJ/m²/an",

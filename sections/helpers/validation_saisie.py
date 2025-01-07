@@ -62,7 +62,7 @@ def validate_energie_input(name, variable, unit1, unit2):
             st.warning("Valeur doit être positive")
             return 0
     except ValueError:
-        st.warning(f"{name} doit être un chiffre")
+        st.warning(f"{name}: doit être un chiffre")
         return 0
 
 

@@ -183,7 +183,10 @@ def display_affectations(data_sites_db: Dict, sre_renovation_m2: float):
         ]
 
         # Run validation on only the selected fields
-        validate_percentage_sum(
+        sum = validate_percentage_sum(
             data_dict=st.session_state["data_site"],
             field_names=fields_to_validate,
         )
+        return sum
+    else:
+        return 0.0

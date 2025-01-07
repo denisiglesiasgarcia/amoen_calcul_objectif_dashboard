@@ -10,10 +10,10 @@ def validate_input(name, variable, unit):
     else:
         st.warning(f"{name} doit être un chiffre")
 
-def validate_input_float(name, variable, unit, text=True):
+def validate_input_float(name, variable, unit, text=True, zero=False):
     try:
         variable = float(variable.replace(",", ".", 1))
-        if variable > 0:
+        if variable > 0 and not zero:
             if text:
                 st.text(f"{name} {variable} {unit}")
                 return round(variable, 2)
@@ -21,6 +21,15 @@ def validate_input_float(name, variable, unit, text=True):
                 return round(variable, 2)
         else:
             st.warning(f"{name} doit être positive")
+            return 0
+        if variable >= 0 and zero:
+            if text:
+                st.text(f"{name} {variable} {unit}")
+                return round(variable, 2)
+            else:
+                return round(variable, 2)
+        else:
+            st.warning(f"{name} doit être positive ou nulle")
             return 0
     except ValueError:
         st.warning(f"{name} doit être un chiffre")

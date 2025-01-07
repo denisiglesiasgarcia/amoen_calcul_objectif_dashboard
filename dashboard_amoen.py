@@ -303,13 +303,6 @@ if st.session_state["authentication_status"]:
                     help="La SRE rénovée est la partie du batiment qui a été rénovée, la surélévation/extension n'est pas incluse",
                 )
                 st.session_state["data_site"]["sre_renovation_m2"] = validate_input_float(name="SRE rénovée:", variable=sre_renovation_m2, unit="m²", text=False)
-                # try:
-                #     # check if it is numeric and positive
-                #     st.session_state["data_site"]["sre_renovation_m2"] = float(
-                #         sre_renovation_m2
-                #     )
-                # except ValueError as e:
-                #     st.warning(f"SRE rénovée doit être un chiffre positif. {str(e)}")
 
             with tab2_col02:
                 st.session_state["data_site"]["adresse_projet"] = st.text_input(

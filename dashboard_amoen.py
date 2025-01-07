@@ -412,6 +412,7 @@ if st.session_state["authentication_status"]:
                     variable=repartition_energie_finale_partie_surelevee_chauffage,
                     unit="%",
                     text=True,
+                    zero=True,
                 )
             with tab2_col8:
                 # rénovation - ECS

@@ -57,11 +57,13 @@ def validate_energie_input(name, variable, unit1, unit2):
         variable = float(variable.replace(",", ".", 1))
         if variable > 0:
             st.text(f"{name} {variable} {unit1} → {round((variable * 3.6),2)} {unit2}")
+            return variable
         else:
             st.text("Valeur doit être positive")
+            return 0
     except ValueError:
         st.text(f"{name} doit être un chiffre")
-        variable = 0
+        return 0
 
 
 def validate_percentage_sum(data_dict, field_names, expected_sum=100.0, round_digits=2):

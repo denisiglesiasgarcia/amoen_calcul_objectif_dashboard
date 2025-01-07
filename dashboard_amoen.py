@@ -396,15 +396,23 @@ if st.session_state["authentication_status"]:
                     ),
                     help="C79",
                 )
-                if repartition_energie_finale_partie_surelevee_chauffage != "0":
-                    validate_input(
-                        "Répartition EF - Chauffage partie surélévée:",
-                        repartition_energie_finale_partie_surelevee_chauffage,
-                        "%",
-                    )
+                # if repartition_energie_finale_partie_surelevee_chauffage != "0":
+                #     validate_input(
+                #         "Répartition EF - Chauffage partie surélévée:",
+                #         repartition_energie_finale_partie_surelevee_chauffage,
+                #         "%",
+                #     )
+                # st.session_state["data_site"][
+                #     "repartition_energie_finale_partie_surelevee_chauffage"
+                # ] = float(repartition_energie_finale_partie_surelevee_chauffage)
                 st.session_state["data_site"][
                     "repartition_energie_finale_partie_surelevee_chauffage"
-                ] = float(repartition_energie_finale_partie_surelevee_chauffage)
+                ] = validate_input_float(
+                    name="Chauffage partie surélévée:",
+                    variable=repartition_energie_finale_partie_surelevee_chauffage,
+                    unit="%",
+                    text=True,
+                )
             with tab2_col8:
                 # rénovation - ECS
                 repartition_energie_finale_partie_renovee_ecs = st.text_input(

@@ -344,19 +344,6 @@ if st.session_state["authentication_status"]:
                     ),
                     help="Surélévation: C94 / Rénovation: C63",
                 )
-                # if ef_objectif_pondere_kwh_m2 != "0":
-                #     validate_energie_input(
-                #         "Ef,obj * fp:",
-                #         ef_objectif_pondere_kwh_m2,
-                #         "kWh/m²/an",
-                #         "MJ/m²/an",
-                #     )
-                # st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"] = float(ef_objectif_pondere_kwh_m2)
-                # try:
-                #     if float(ef_objectif_pondere_kwh_m2) <= 0:
-                #         st.warning("Ef,obj *fp [kWh/m²/an] doit être supérieur à 0")
-                # except ValueError:
-                #     st.warning("Problème dans Ef,obj *fp [kWh/m²/an]")
                 st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"] = (
                     validate_energie_input(
                         name="Ef,obj * fp",
@@ -382,7 +369,6 @@ if st.session_state["authentication_status"]:
                     ),
                     help="Surélévation: C77 / Rénovation: C49",
                 )
-
                 st.session_state["data_site"][
                     "repartition_energie_finale_partie_renovee_chauffage"
                 ] = validate_input_float(
@@ -458,9 +444,11 @@ if st.session_state["authentication_status"]:
                 "repartition_energie_finale_partie_surelevee_ecs"
             ]
 
-            validate_percentage_sum(
+            st.session_state["data_site"][
+                "repartition_energie_finale_somme"
+            ] = validate_percentage_sum(
                 st.session_state["data_site"],
-                fields_to_validate_sum_repartition_energie_finale
+                fields_to_validate_sum_repartition_energie_finale,
             )
 
             st.subheader("Eléments à renseigner", divider="rainbow")

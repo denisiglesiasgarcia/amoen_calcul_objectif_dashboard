@@ -82,12 +82,14 @@ def validate_percentage_sum(data_dict, field_names, expected_sum=100.0, round_di
 
         # Calculate sum and round to specified digits
         actual_sum = round(sum(values), round_digits)
-
+        return actual_sum
+        
         # Check if sum matches expected value and display warning if needed
         if actual_sum != expected_sum:
             st.warning(
                 f"La somme des pourcentages doit être égale à {expected_sum}% ({actual_sum:.2f}%)"
             )
+            return 0
 
     except Exception as e:
         st.warning(f"Problème dans la somme des pourcentages: {str(e)}")

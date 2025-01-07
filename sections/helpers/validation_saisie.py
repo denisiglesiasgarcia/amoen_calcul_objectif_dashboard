@@ -59,7 +59,7 @@ def validate_energie_input(name, variable, unit1, unit2):
             st.text(f"{name}: {variable} {unit1} → {round((variable * 3.6),2)} {unit2}")
             return variable
         else:
-            st.warning("Valeur doit être positive")
+            st.warning(f"{name} doit être positif")
             return 0
     except ValueError:
         st.warning(f"{name} doit être un chiffre")

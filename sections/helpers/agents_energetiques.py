@@ -223,6 +223,10 @@ def display_energy_agents(
         st.warning(
             f"Veuillez renseigner une quantité d'énergie utilisée sur la période ({total_energy})"
         )
+        return 0
+    else:
+        return total_energy
+    
 
 
 def get_default_value(data_site: Dict, option: Dict) -> float:

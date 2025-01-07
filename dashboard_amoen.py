@@ -991,6 +991,41 @@ if st.session_state["authentication_status"]:
             invalid_fields_list = "\n".join([f"- {field}" for field in invalid_fields])
             if len(invalid_fields_list) > 0:
                 st.warning(f"Les champs suivants sont invalides ou manquants:\n\n{invalid_fields_list}")
+            
+            # Check and display which conditions are not met
+            conditions_not_met = []
+            
+            if invalid_fields is not None:
+                conditions_not_met.append("Des champs sont invalides")
+                
+            if not st.session_state["data_site"].get("facteur_ponderation_moyen"):
+                conditions_not_met.append("Facteur de pondération moyen manquant ou égal à 0")
+                
+            if not st.session_state["data_site"].get("ef_avant_corr_kwh_m2", 0) > 0:
+                conditions_not_met.append("Énergie finale avant correction ≤ 0")
+                
+            if not st.session_state["data_site"].get("energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2", 0) > 0:
+                conditions_not_met.append("Énergie finale après travaux ≤ 0")
+                
+            if not st.session_state["data_site"].get("ef_objectif_pondere_kwh_m2", 0) > 0:
+                conditions_not_met.append("Objectif d'énergie finale pondéré ≤ 0")
+                
+            if not st.session_state["data_site"].get("atteinte_objectif", 0) > 0:
+                conditions_not_met.append("Atteinte de l'objectif ≤ 0")
+                
+            if st.session_state["data_site"].get("somme_repartition_energie_finale") != 100:
+                conditions_not_met.append("La somme des répartitions d'énergie finale n'est pas égale à 100%")
+                
+            if st.session_state["data_site"].get("somme_pourcentage_affectations") != 100:
+                conditions_not_met.append("La somme des pourcentages d'affectations n'est pas égale à 100%")
+                
+            if not st.session_state["data_site"].get("somme_agents_energetiques_mj", 0) > 0:
+                conditions_not_met.append("La somme des agents énergétiques ≤ 0")
+            
+            if conditions_not_met:
+                st.text("Conditions non respectées:")
+                for condition in conditions_not_met:
+                    st.text(f"• {condition}")
 
     if username_login == "admin":
         with tab7:

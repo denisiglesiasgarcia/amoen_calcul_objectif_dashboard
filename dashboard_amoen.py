@@ -470,9 +470,7 @@ if st.session_state["authentication_status"]:
                     "repartition_energie_finale_partie_surelevee_ecs",
                 )
                 # Convert to float before adding
-                repartition_ef_somme_avertissement = (
-                    float(val1) + float(val2) + float(val3) + float(val4)
-                )
+                repartition_ef_somme_avertissement = round(float(val1) + float(val2) + float(val3) + float(val4), 2)
                 if repartition_ef_somme_avertissement != 100.0:
                     st.warning(
                         f"La somme des pourcentages de répartition de l'énergie finale doit être égale à 100% ({repartition_ef_somme_avertissement:.2f}%)"

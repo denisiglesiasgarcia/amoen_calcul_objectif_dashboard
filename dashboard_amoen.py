@@ -487,13 +487,17 @@ if st.session_state["authentication_status"]:
                 "repartition_energie_finale_partie_surelevee_ecs"
             ]
 
-            is_valid, sum_value, error_message = validate_percentage_sum(
+            (
+                is_valid_sum_repartition_energie_finale,
+                sum_value_sum_repartition_energie_finale,
+                error_message_sum_repartition_energie_finale,
+            ) = validate_percentage_sum(
                 st.session_state["data_site"],
                 fields_to_validate_sum_repartition_energie_finale,
             )
 
-            if not is_valid:
-                st.warning(error_message)
+            if not is_valid_sum_repartition_energie_finale:
+                st.warning(error_message_sum_repartition_energie_finale)
 
             st.subheader("Eléments à renseigner", divider="rainbow")
 

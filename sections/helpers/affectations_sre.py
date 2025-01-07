@@ -1,5 +1,6 @@
 import streamlit as st
 from typing import List, Dict
+from sections.helpers.validation_saisie import validate_percentage_sum
 
 # Define data structure
 AFFECTATION_OPTIONS = [
@@ -166,6 +167,11 @@ def display_affectations(data_sites_db: Dict, sre_renovation_m2: float):
 
     display_affectation_inputs(data_sites_db, selected_affectations, sre_renovation_m2)
     default_affectations(data_sites_db)
-    affectation_sum = calculate_affectation_sum()
-    if affectation_sum != 100:
-        st.warning(f"Somme des pourcentages doit être égale à 100% ({affectation_sum})")
+
+    # Define fields to validate (all affectation variables)
+    fields_to_validate = [option["variable"] for option in AFFECTATION_OPTIONS]
+
+    # Use the validate_percentage_sum function instead of direct calculation
+    validate_percentage_sum(
+        data_dict=st.session_state["data_site"], field_names=fields_to_validate
+    )

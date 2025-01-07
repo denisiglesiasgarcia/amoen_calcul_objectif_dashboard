@@ -928,7 +928,8 @@ if st.session_state["authentication_status"]:
 
         # Generate the PDF report
         invalid_fields = check_validity()
-        if (not invalid_fields and st.session_state["data_site"].get("facteur_ponderation_moyen") is not None
+        if (invalid_fields is None 
+            and st.session_state["data_site"].get("facteur_ponderation_moyen") is not None
             and st.session_state["data_site"].get("facteur_ponderation_moyen") > 0
             and st.session_state["data_site"].get("ef_avant_corr_kwh_m2") > 0
             and st.session_state["data_site"].get(

@@ -942,7 +942,6 @@ if st.session_state["authentication_status"]:
 
         # Generate the PDF report
         invalid_fields = check_validity()
-        st.text("Champs invalides ou manquants:")
         if (
             invalid_fields is None
             and st.session_state["data_site"].get("facteur_ponderation_moyen")

@@ -346,6 +346,7 @@ if st.session_state["authentication_status"]:
                         unit2="MJ/m²/an",
                     )
                 )
+                st.text(st.session_state["data_site"]["ef_avant_corr_kwh_m2"])
             with tab2_col6:
                 ef_objectif_pondere_kwh_m2 = st.text_input(
                     "Ef,obj * fp [kWh/m²/an]:",

@@ -385,8 +385,6 @@ def repartition_renove_sureleve(
         + repartition_energie_finale_partie_surelevee_ecs
     )
 
-    assert INPUT == 100
-
     repartition_energie_finale_partie_surelevee = (
         repartition_energie_finale_partie_surelevee_chauffage
         + repartition_energie_finale_partie_surelevee_ecs

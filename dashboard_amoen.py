@@ -656,10 +656,16 @@ if st.session_state["authentication_status"]:
             and st.session_state["data_site"].get("facteur_ponderation_moyen") > 0
             and st.session_state["data_site"].get("ef_avant_corr_kwh_m2") > 0
             and st.session_state["data_site"].get(
-                "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2", 0
-            ) > 0
+                "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2",
+                0,
+            )
+            > 0
             and st.session_state["data_site"].get("ef_objectif_pondere_kwh_m2") > 0
             and st.session_state["data_site"].get("atteinte_objectif") > 0
+            and st.session_state["data_site"].get("somme_repartition_energie_finale")
+            == 100
+            and st.session_state["data_site"].get("somme_pourcentage_affectations")
+            == 100
         ):
             formula_atteinte_objectif = r"Atteinte\ objectif \ [\%]= \frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}"
 
@@ -922,7 +928,17 @@ if st.session_state["authentication_status"]:
 
         # Generate the PDF report
         invalid_fields = check_validity()
-        if not invalid_fields:
+        if (not invalid_fields and st.session_state["data_site"].get("facteur_ponderation_moyen") is not None
+            and st.session_state["data_site"].get("facteur_ponderation_moyen") > 0
+            and st.session_state["data_site"].get("ef_avant_corr_kwh_m2") > 0
+            and st.session_state["data_site"].get(
+                "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2", 0
+            ) > 0
+            and st.session_state["data_site"].get("ef_objectif_pondere_kwh_m2") > 0
+            and st.session_state["data_site"].get("atteinte_objectif") > 0
+            and st.session_state["data_site"].get("somme_repartition_energie_finale") == 100
+            and st.session_state["data_site"].get("somme_pourcentage_affectations") == 100
+        ):
             if st.button("Générer le rapport PDF"):
                 pdf_data, file_name = generate_pdf(st.session_state["data_site"])
                 st.download_button(

@@ -511,7 +511,7 @@ if st.session_state["authentication_status"]:
 
             with tab2_col2:
                 # Agents énergétiques
-                display_energy_agents(
+                st.session_state["data_site"]["somme_agents_energetiques_mj"] = display_energy_agents(
                     st.session_state["data_site"],
                     data_sites_db,
                 )
@@ -928,6 +928,7 @@ if st.session_state["authentication_status"]:
 
         # Generate the PDF report
         invalid_fields = check_validity()
+        st.text("Champs invalides ou manquants:")
         if (invalid_fields is None 
             and st.session_state["data_site"].get("facteur_ponderation_moyen") is not None
             and st.session_state["data_site"].get("facteur_ponderation_moyen") > 0

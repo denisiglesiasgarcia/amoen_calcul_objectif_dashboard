@@ -302,7 +302,14 @@ if st.session_state["authentication_status"]:
                     value=get_rounded_float(data_sites_db, "sre_renovation_m2"),
                     help="La SRE rénovée est la partie du batiment qui a été rénovée, la surélévation/extension n'est pas incluse",
                 )
-                st.session_state["data_site"]["sre_renovation_m2"] = validate_input_float(name="SRE rénovée:", variable=sre_renovation_m2, unit="m²", text=False)
+                st.session_state["data_site"]["sre_renovation_m2"] = (
+                    validate_input_float(
+                        name="SRE rénovée:",
+                        variable=sre_renovation_m2,
+                        unit="m²",
+                        text=False,
+                    )
+                )
 
             with tab2_col02:
                 st.session_state["data_site"]["adresse_projet"] = st.text_input(
@@ -441,14 +448,14 @@ if st.session_state["authentication_status"]:
                 "repartition_energie_finale_partie_renovee_chauffage",
                 "repartition_energie_finale_partie_renovee_ecs",
                 "repartition_energie_finale_partie_surelevee_chauffage",
-                "repartition_energie_finale_partie_surelevee_ecs"
+                "repartition_energie_finale_partie_surelevee_ecs",
             ]
 
-            st.session_state["data_site"][
-                "somme_repartition_energie_finale"
-            ] = validate_percentage_sum(
-                st.session_state["data_site"],
-                fields_to_validate_sum_repartition_energie_finale,
+            st.session_state["data_site"]["somme_repartition_energie_finale"] = (
+                validate_percentage_sum(
+                    st.session_state["data_site"],
+                    fields_to_validate_sum_repartition_energie_finale,
+                )
             )
 
             st.subheader("Eléments à renseigner", divider="rainbow")
@@ -507,13 +514,17 @@ if st.session_state["authentication_status"]:
             tab2_col1, tab2_col2 = st.columns(2)
             with tab2_col1:
                 # Affectations SRE
-                st.session_state["data_site"]["somme_pourcentage_affectations"] = display_affectations(data_sites_db, sre_renovation_m2)
+                st.session_state["data_site"]["somme_pourcentage_affectations"] = (
+                    display_affectations(data_sites_db, sre_renovation_m2)
+                )
 
             with tab2_col2:
                 # Agents énergétiques
-                st.session_state["data_site"]["somme_agents_energetiques_mj"] = display_energy_agents(
-                    st.session_state["data_site"],
-                    data_sites_db,
+                st.session_state["data_site"]["somme_agents_energetiques_mj"] = (
+                    display_energy_agents(
+                        st.session_state["data_site"],
+                        data_sites_db,
+                    )
                 )
 
             # Autres données
@@ -524,8 +535,8 @@ if st.session_state["authentication_status"]:
             st.session_state["data_site"]["annees_calcul_idc_avant_travaux"] = (
                 data_sites_db["annees_calcul_idc_avant_travaux"]
             )
-            st.session_state["data_site"]["sre_extension_surelevation_m2"] = (
-                float(data_sites_db["sre_extension_surelevation_m2"])
+            st.session_state["data_site"]["sre_extension_surelevation_m2"] = float(
+                data_sites_db["sre_extension_surelevation_m2"]
             )
 
         tab2_fragment()
@@ -666,6 +677,7 @@ if st.session_state["authentication_status"]:
             == 100
             and st.session_state["data_site"].get("somme_pourcentage_affectations")
             == 100
+            and st.session_state["data_site"].get("somme_agents_energetiques_mj", 0) > 0
         ):
             formula_atteinte_objectif = r"Atteinte\ objectif \ [\%]= \frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}"
 
@@ -721,7 +733,9 @@ if st.session_state["authentication_status"]:
             graphique_bars_objectif_exploitation(
                 st.session_state["data_site"]["nom_projet"],
                 st.session_state["data_site"]["ef_avant_corr_kwh_m2"],
-                st.session_state["data_site"]["energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"],
+                st.session_state["data_site"][
+                    "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
+                ],
                 st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"],
                 st.session_state["data_site"]["atteinte_objectif"],
                 st.session_state["data_site"]["amoen_id"],
@@ -929,17 +943,24 @@ if st.session_state["authentication_status"]:
         # Generate the PDF report
         invalid_fields = check_validity()
         st.text("Champs invalides ou manquants:")
-        if (invalid_fields is None 
-            and st.session_state["data_site"].get("facteur_ponderation_moyen") is not None
+        if (
+            invalid_fields is None
+            and st.session_state["data_site"].get("facteur_ponderation_moyen")
+            is not None
             and st.session_state["data_site"].get("facteur_ponderation_moyen") > 0
             and st.session_state["data_site"].get("ef_avant_corr_kwh_m2") > 0
             and st.session_state["data_site"].get(
-                "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2", 0
-            ) > 0
+                "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2",
+                0,
+            )
+            > 0
             and st.session_state["data_site"].get("ef_objectif_pondere_kwh_m2") > 0
             and st.session_state["data_site"].get("atteinte_objectif") > 0
-            and st.session_state["data_site"].get("somme_repartition_energie_finale") == 100
-            and st.session_state["data_site"].get("somme_pourcentage_affectations") == 100
+            and st.session_state["data_site"].get("somme_repartition_energie_finale")
+            == 100
+            and st.session_state["data_site"].get("somme_pourcentage_affectations")
+            == 100
+            and st.session_state["data_site"].get("somme_agents_energetiques_mj", 0) > 0
         ):
             if st.button("Générer le rapport PDF"):
                 pdf_data, file_name = generate_pdf(st.session_state["data_site"])

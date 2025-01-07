@@ -27,6 +27,7 @@ import streamlit_authenticator as stauth
 from sections.helpers.validation_saisie import (
     validate_input,
     validate_energie_input,
+    validate_percentage_sum,
 )
 
 from sections.helpers.calcul_dj import (
@@ -452,33 +453,47 @@ if st.session_state["authentication_status"]:
                 ] = float(repartition_energie_finale_partie_surelevee_ecs)
 
             # Validation somme des pourcentages
-            try:
-                val1 = get_rounded_float(
-                    st.session_state["data_site"],
-                    "repartition_energie_finale_partie_renovee_chauffage",
-                )
-                val2 = get_rounded_float(
-                    st.session_state["data_site"],
-                    "repartition_energie_finale_partie_renovee_ecs",
-                )
-                val3 = get_rounded_float(
-                    st.session_state["data_site"],
-                    "repartition_energie_finale_partie_surelevee_chauffage",
-                )
-                val4 = get_rounded_float(
-                    st.session_state["data_site"],
-                    "repartition_energie_finale_partie_surelevee_ecs",
-                )
-                # Convert to float before adding
-                repartition_ef_somme_avertissement = round(val1 + val2 + val3 + val4, 2)
-                if repartition_ef_somme_avertissement != 100.0:
-                    st.warning(
-                        f"La somme des pourcentages de répartition de l'énergie finale doit être égale à 100% ({repartition_ef_somme_avertissement:.2f}%)"
-                    )
-            except Exception as e:
-                st.warning(
-                    f"Problème dans la somme des pourcentages de répartition de l'énergie finale: {str(e)}"
-                )
+            # try:
+            #     val1 = get_rounded_float(
+            #         st.session_state["data_site"],
+            #         "repartition_energie_finale_partie_renovee_chauffage",
+            #     )
+            #     val2 = get_rounded_float(
+            #         st.session_state["data_site"],
+            #         "repartition_energie_finale_partie_renovee_ecs",
+            #     )
+            #     val3 = get_rounded_float(
+            #         st.session_state["data_site"],
+            #         "repartition_energie_finale_partie_surelevee_chauffage",
+            #     )
+            #     val4 = get_rounded_float(
+            #         st.session_state["data_site"],
+            #         "repartition_energie_finale_partie_surelevee_ecs",
+            #     )
+            #     # Convert to float before adding
+            #     repartition_ef_somme_avertissement = round(val1 + val2 + val3 + val4, 2)
+            #     if repartition_ef_somme_avertissement != 100.0:
+            #         st.warning(
+            #             f"La somme des pourcentages de répartition de l'énergie finale doit être égale à 100% ({repartition_ef_somme_avertissement:.2f}%)"
+            #         )
+            # except Exception as e:
+            #     st.warning(
+            #         f"Problème dans la somme des pourcentages de répartition de l'énergie finale: {str(e)}"
+            #     )
+            fields_to_validate_sum_repartition_energie_finale = [
+                "repartition_energie_finale_partie_renovee_chauffage",
+                "repartition_energie_finale_partie_renovee_ecs",
+                "repartition_energie_finale_partie_surelevee_chauffage",
+                "repartition_energie_finale_partie_surelevee_ecs"
+            ]
+
+            is_valid, sum_value, error_message = validate_percentage_sum(
+                st.session_state["data_site"],
+                fields_to_validate_sum_repartition_energie_finale,
+            )
+
+            if not is_valid:
+                st.warning(error_message)
 
             st.subheader("Eléments à renseigner", divider="rainbow")
 

@@ -507,7 +507,7 @@ if st.session_state["authentication_status"]:
             tab2_col1, tab2_col2 = st.columns(2)
             with tab2_col1:
                 # Affectations SRE
-                display_affectations(data_sites_db, sre_renovation_m2)
+                st.session_state["data_site"]["somme_pourcentage_affectations"] = display_affectations(data_sites_db, sre_renovation_m2)
 
             with tab2_col2:
                 # Agents énergétiques

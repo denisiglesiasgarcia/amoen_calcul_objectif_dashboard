@@ -302,9 +302,14 @@ if st.session_state["authentication_status"]:
                     help="La SRE rénovée est la partie du batiment qui a été rénovée, la surélévation/extension n'est pas incluse",
                 )
                 validate_input("SRE rénovée:", sre_renovation_m2, "m²")
-                st.session_state["data_site"]["sre_renovation_m2"] = float(
-                    sre_renovation_m2
-                )
+                try:
+                    # check if it is numeric and positive
+                    st.session_state["data_site"]["sre_renovation_m2"] = float(
+                        sre_renovation_m2
+                    )
+                except ValueError as e:
+                    st.warning(f"SRE rénovée doit être un chiffre positif. {str(e)}")
+
             with tab2_col02:
                 st.session_state["data_site"]["adresse_projet"] = st.text_input(
                     "Adresse(s) du projet", value=data_sites_db["adresse_projet"]
@@ -312,14 +317,6 @@ if st.session_state["authentication_status"]:
                 st.session_state["data_site"]["amoen_id"] = st.text_input(
                     "AMOen", value=data_sites_db["amoen_id"]
                 )
-
-            try:
-                if st.session_state["data_site"]["sre_renovation_m2"] <= 0:
-                    st.warning(
-                        f"SRE doit être > 0 ({st.session_state['data_site']['sre_renovation_m2']})"
-                    )
-            except ValueError:
-                st.warning("Problème dans la somme des pourcentages des affectations")
 
             st.markdown(
                 '<span style="font-size:1.2em;">**IDC moyen avant travaux et objectif en énergie finale**</span>',
@@ -453,33 +450,6 @@ if st.session_state["authentication_status"]:
                 ] = float(repartition_energie_finale_partie_surelevee_ecs)
 
             # Validation somme des pourcentages
-            # try:
-            #     val1 = get_rounded_float(
-            #         st.session_state["data_site"],
-            #         "repartition_energie_finale_partie_renovee_chauffage",
-            #     )
-            #     val2 = get_rounded_float(
-            #         st.session_state["data_site"],
-            #         "repartition_energie_finale_partie_renovee_ecs",
-            #     )
-            #     val3 = get_rounded_float(
-            #         st.session_state["data_site"],
-            #         "repartition_energie_finale_partie_surelevee_chauffage",
-            #     )
-            #     val4 = get_rounded_float(
-            #         st.session_state["data_site"],
-            #         "repartition_energie_finale_partie_surelevee_ecs",
-            #     )
-            #     # Convert to float before adding
-            #     repartition_ef_somme_avertissement = round(val1 + val2 + val3 + val4, 2)
-            #     if repartition_ef_somme_avertissement != 100.0:
-            #         st.warning(
-            #             f"La somme des pourcentages de répartition de l'énergie finale doit être égale à 100% ({repartition_ef_somme_avertissement:.2f}%)"
-            #         )
-            # except Exception as e:
-            #     st.warning(
-            #         f"Problème dans la somme des pourcentages de répartition de l'énergie finale: {str(e)}"
-            #     )
             fields_to_validate_sum_repartition_energie_finale = [
                 "repartition_energie_finale_partie_renovee_chauffage",
                 "repartition_energie_finale_partie_renovee_ecs",

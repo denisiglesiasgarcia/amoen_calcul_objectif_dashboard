@@ -990,9 +990,8 @@ if st.session_state["authentication_status"]:
                 "Toutes les informations nécessaires ne sont pas disponibles pour générer le PDF."
             )
             invalid_fields_list = "\n".join([f"- {field}" for field in invalid_fields])
-            st.warning(
-                f"Les champs suivants sont invalides ou manquants:\n\n{invalid_fields_list}"
-            )
+            if len(invalid_fields_list) > 0:
+                st.warning(f"Les champs suivants sont invalides ou manquants:\n\n{invalid_fields_list}")
 
     if username_login == "admin":
         with tab7:

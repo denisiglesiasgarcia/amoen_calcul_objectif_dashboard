@@ -426,15 +426,6 @@ if st.session_state["authentication_status"]:
                     zero=True,
                 )
 
-                # if repartition_energie_finale_partie_renovee_ecs != "0":
-                #     validate_input(
-                #         "Répartition EF - ECS partie rénovée:",
-                #         repartition_energie_finale_partie_renovee_ecs,
-                #         "%",
-                #     )
-                # st.session_state["data_site"][
-                #     "repartition_energie_finale_partie_renovee_ecs"
-                # ] = float(repartition_energie_finale_partie_renovee_ecs)
                 # surélévation - ECS
                 repartition_energie_finale_partie_surelevee_ecs = st.text_input(
                     "ECS partie surélévée [%]",
@@ -453,16 +444,6 @@ if st.session_state["authentication_status"]:
                     text=True,
                     zero=True,
                 )
-
-                # if repartition_energie_finale_partie_surelevee_ecs != "0":
-                #     validate_input(
-                #         "Répartition EF - ECS partie surélevée:",
-                #         repartition_energie_finale_partie_surelevee_ecs,
-                #         "%",
-                #     )
-                # st.session_state["data_site"][
-                #     "repartition_energie_finale_partie_surelevee_ecs"
-                # ] = float(repartition_energie_finale_partie_surelevee_ecs)
 
             # Validation somme des pourcentages
             fields_to_validate_sum_repartition_energie_finale = [

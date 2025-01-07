@@ -445,7 +445,7 @@ if st.session_state["authentication_status"]:
             ]
 
             st.session_state["data_site"][
-                "repartition_energie_finale_somme"
+                "somme_repartition_energie_finale"
             ] = validate_percentage_sum(
                 st.session_state["data_site"],
                 fields_to_validate_sum_repartition_energie_finale,

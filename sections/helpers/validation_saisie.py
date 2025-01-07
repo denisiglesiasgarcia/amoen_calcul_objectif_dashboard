@@ -75,21 +75,34 @@ def validate_percentage_sum(data_dict, field_names, expected_sum=100.0, round_di
         field_names (list): List of field names to sum
         expected_sum (float): Expected sum of percentages (default: 100.0)
         round_digits (int): Number of decimal places to round to (default: 2)
+
+    Returns:
+        float: The actual sum of percentages if validation passes, 0 if validation fails
     """
     try:
-        # Get values for each field and convert to float
-        values = [float(get_rounded_float(data_dict, field)) for field in field_names]
+        # Initialize values list
+        values = []
+
+        # Get values for each field and convert to float, handling potential None values
+        for field in field_names:
+            value = get_rounded_float(data_dict, field)
+            if value is None:
+                st.warning(f"Champ manquant ou invalide: {field}")
+                return 0
+            values.append(float(value))
 
         # Calculate sum and round to specified digits
         actual_sum = round(sum(values), round_digits)
-        return actual_sum
-        
-        # Check if sum matches expected value and display warning if needed
+
+        # Check if sum matches expected value
         if actual_sum != expected_sum:
             st.warning(
-                f"La somme des pourcentages doit être égale à {expected_sum}% ({actual_sum:.2f}%)"
+                f"La somme des pourcentages doit être égale à {expected_sum}% (actuellement: {actual_sum:.2f}%)"
             )
             return 0
 
+        return actual_sum
+
     except Exception as e:
         st.warning(f"Problème dans la somme des pourcentages: {str(e)}")
+        return 0

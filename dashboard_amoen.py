@@ -26,6 +26,7 @@ import streamlit_authenticator as stauth
 
 from sections.helpers.validation_saisie import (
     validate_input,
+    validate_input_float,
     validate_energie_input,
     validate_percentage_sum,
 )
@@ -301,14 +302,14 @@ if st.session_state["authentication_status"]:
                     value=get_rounded_float(data_sites_db, "sre_renovation_m2"),
                     help="La SRE rénovée est la partie du batiment qui a été rénovée, la surélévation/extension n'est pas incluse",
                 )
-                validate_input("SRE rénovée:", sre_renovation_m2, "m²")
-                try:
-                    # check if it is numeric and positive
-                    st.session_state["data_site"]["sre_renovation_m2"] = float(
-                        sre_renovation_m2
-                    )
-                except ValueError as e:
-                    st.warning(f"SRE rénovée doit être un chiffre positif. {str(e)}")
+                st.session_state["data_site"]["sre_renovation_m2"] = validate_input_float("SRE rénovée:", sre_renovation_m2, "m²")
+                # try:
+                #     # check if it is numeric and positive
+                #     st.session_state["data_site"]["sre_renovation_m2"] = float(
+                #         sre_renovation_m2
+                #     )
+                # except ValueError as e:
+                #     st.warning(f"SRE rénovée doit être un chiffre positif. {str(e)}")
 
             with tab2_col02:
                 st.session_state["data_site"]["adresse_projet"] = st.text_input(

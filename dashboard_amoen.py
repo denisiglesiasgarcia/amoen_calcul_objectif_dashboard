@@ -302,7 +302,7 @@ if st.session_state["authentication_status"]:
                     value=get_rounded_float(data_sites_db, "sre_renovation_m2"),
                     help="La SRE rénovée est la partie du batiment qui a été rénovée, la surélévation/extension n'est pas incluse",
                 )
-                st.session_state["data_site"]["sre_renovation_m2"] = validate_input_float("SRE rénovée:", sre_renovation_m2, "m²")
+                st.session_state["data_site"]["sre_renovation_m2"] = validate_input_float(name="SRE rénovée:", variable=sre_renovation_m2, unit="m²", text=False)
                 # try:
                 #     # check if it is numeric and positive
                 #     st.session_state["data_site"]["sre_renovation_m2"] = float(

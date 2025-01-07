@@ -338,12 +338,13 @@ if st.session_state["authentication_status"]:
                 #         st.warning("Ef,avant,corr [kWh/m²/an] doit être supérieur à 0")
                 # except ValueError:
                 #     st.warning("Problème dans Ef,avant,corr [kWh/m²/an]")
-                st.session_state["data_site"]["ef_avant_corr_kwh_m2"] = validate_input_float(
-                    name="IDC moyen 3 ans avant travaux (Ef,avant,corr):",
-                    variable=ef_avant_corr_kwh_m2,
-                    unit="kWh/m²/an",
-                    text=True,
-                    zero=False,
+                st.session_state["data_site"]["ef_avant_corr_kwh_m2"] = (
+                    validate_energie_input(
+                        name="IDC moyen 3 ans avant travaux (Ef,avant,corr):",
+                        variable=ef_avant_corr_kwh_m2,
+                        unit1="kWh/m²/an",
+                        unit2="MJ/m²/an",
+                    )
                 )
             with tab2_col6:
                 ef_objectif_pondere_kwh_m2 = st.text_input(

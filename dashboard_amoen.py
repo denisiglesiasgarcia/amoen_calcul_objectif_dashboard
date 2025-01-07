@@ -328,16 +328,6 @@ if st.session_state["authentication_status"]:
                     value=get_rounded_float(data_sites_db, "ef_avant_corr_kwh_m2"),
                     help="Surélévation: C92 / Rénovation: C61",
                 )
-                # if ef_avant_corr_kwh_m2 != "0":
-                #     validate_energie_input(
-                #         "Ef,avant,corr:", ef_avant_corr_kwh_m2, "kWh/m²/an", "MJ/m²/an"
-                #     )
-                # st.session_state["data_site"]["ef_avant_corr_kwh_m2"] = float(ef_avant_corr_kwh_m2)
-                # try:
-                #     if float(ef_avant_corr_kwh_m2) <= 0:
-                #         st.warning("Ef,avant,corr [kWh/m²/an] doit être supérieur à 0")
-                # except ValueError:
-                #     st.warning("Problème dans Ef,avant,corr [kWh/m²/an]")
                 st.session_state["data_site"]["ef_avant_corr_kwh_m2"] = (
                     validate_energie_input(
                         name="Ef,avant,corr:",
@@ -346,7 +336,6 @@ if st.session_state["authentication_status"]:
                         unit2="MJ/m²/an",
                     )
                 )
-                st.text(st.session_state["data_site"]["ef_avant_corr_kwh_m2"])
             with tab2_col6:
                 ef_objectif_pondere_kwh_m2 = st.text_input(
                     "Ef,obj * fp [kWh/m²/an]:",

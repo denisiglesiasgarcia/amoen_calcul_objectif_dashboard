@@ -157,8 +157,7 @@ def default_affectations(data_sites_db: Dict):
 def display_affectations(data_sites_db: Dict, sre_renovation_m2: float):
     """Main function to display and process affectations."""
     st.markdown(
-        '<span style="font-size:1.2em;">**Affectations**</span>', 
-        unsafe_allow_html=True
+        '<span style="font-size:1.2em;">**Affectations**</span>', unsafe_allow_html=True
     )
 
     selected_affectations = st.multiselect(
@@ -170,17 +169,31 @@ def display_affectations(data_sites_db: Dict, sre_renovation_m2: float):
     display_affectation_inputs(data_sites_db, selected_affectations, sre_renovation_m2)
     default_affectations(data_sites_db)
 
+    # Debug: Print contents of session state
+    st.write("Debug - Session State Contents:")
+    values_to_check = {}
+
     # Only validate if there are selected affectations
     if selected_affectations:
         # Get only the fields that are actually selected
         fields_to_validate = [
-            option["variable"] 
-            for option in AFFECTATION_OPTIONS 
+            option["variable"]
+            for option in AFFECTATION_OPTIONS
             if option["label"] in selected_affectations
         ]
-        
+
+        # Debug: Print selected fields and their values
+        st.write("Debug - Selected Fields:")
+        for field in fields_to_validate:
+            value = st.session_state["data_site"].get(field, 0)
+            values_to_check[field] = value
+            st.write(f"{field}: {value}")
+
+        # Debug: Print sum
+        total_sum = sum(float(val) for val in values_to_check.values())
+        st.write(f"Debug - Total Sum: {total_sum}")
+
         # Run the validation
         validate_percentage_sum(
-            data_dict=st.session_state["data_site"],
-            field_names=fields_to_validate
+            data_dict=st.session_state["data_site"], field_names=fields_to_validate
         )

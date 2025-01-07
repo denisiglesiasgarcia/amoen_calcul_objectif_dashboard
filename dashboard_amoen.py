@@ -377,38 +377,39 @@ if st.session_state["authentication_status"]:
                     ),
                     help="Surélévation: C77 / Rénovation: C49",
                 )
-                if repartition_energie_finale_partie_renovee_chauffage != "0":
-                    validate_input(
-                        "Répartition EF - Chauffage partie rénovée:",
-                        repartition_energie_finale_partie_renovee_chauffage,
-                        "%",
-                    )
+                # if repartition_energie_finale_partie_renovee_chauffage != "0":
+                #     validate_input(
+                #         "Répartition EF - Chauffage partie rénovée:",
+                #         repartition_energie_finale_partie_renovee_chauffage,
+                #         "%",
+                #     )
+                # st.session_state["data_site"][
+                #     "repartition_energie_finale_partie_renovee_chauffage"
+                # ] = float(repartition_energie_finale_partie_renovee_chauffage)
+
                 st.session_state["data_site"][
                     "repartition_energie_finale_partie_renovee_chauffage"
-                ] = float(repartition_energie_finale_partie_renovee_chauffage)
+                ] = validate_input_float(
+                    name="Répartition EF - Chauffage partie rénovée:",
+                    variable=repartition_energie_finale_partie_renovee_chauffage,
+                    unit="%",
+                    text=True,
+                    zero=True,
+                )
 
                 # surélévation - chauffage
                 repartition_energie_finale_partie_surelevee_chauffage = st.text_input(
-                    "Chauffage partie surélévée",
+                    "Chauffage partie surélévée [%]",
                     value=get_rounded_float(
                         data_sites_db,
                         "repartition_energie_finale_partie_surelevee_chauffage",
                     ),
                     help="C79",
                 )
-                # if repartition_energie_finale_partie_surelevee_chauffage != "0":
-                #     validate_input(
-                #         "Répartition EF - Chauffage partie surélévée:",
-                #         repartition_energie_finale_partie_surelevee_chauffage,
-                #         "%",
-                #     )
-                # st.session_state["data_site"][
-                #     "repartition_energie_finale_partie_surelevee_chauffage"
-                # ] = float(repartition_energie_finale_partie_surelevee_chauffage)
                 st.session_state["data_site"][
                     "repartition_energie_finale_partie_surelevee_chauffage"
                 ] = validate_input_float(
-                    name="Chauffage partie surélévée:",
+                    name="Répartition EF - Chauffage partie surélévée:",
                     variable=repartition_energie_finale_partie_surelevee_chauffage,
                     unit="%",
                     text=True,

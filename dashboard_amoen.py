@@ -330,7 +330,7 @@ if st.session_state["authentication_status"]:
                 )
                 st.session_state["data_site"]["ef_avant_corr_kwh_m2"] = (
                     validate_energie_input(
-                        name="Ef,avant,corr:",
+                        name="Ef,avant,corr",
                         variable=ef_avant_corr_kwh_m2,
                         unit1="kWh/m²/an",
                         unit2="MJ/m²/an",
@@ -344,20 +344,27 @@ if st.session_state["authentication_status"]:
                     ),
                     help="Surélévation: C94 / Rénovation: C63",
                 )
-                if ef_objectif_pondere_kwh_m2 != "0":
+                # if ef_objectif_pondere_kwh_m2 != "0":
+                #     validate_energie_input(
+                #         "Ef,obj * fp:",
+                #         ef_objectif_pondere_kwh_m2,
+                #         "kWh/m²/an",
+                #         "MJ/m²/an",
+                #     )
+                # st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"] = float(ef_objectif_pondere_kwh_m2)
+                # try:
+                #     if float(ef_objectif_pondere_kwh_m2) <= 0:
+                #         st.warning("Ef,obj *fp [kWh/m²/an] doit être supérieur à 0")
+                # except ValueError:
+                #     st.warning("Problème dans Ef,obj *fp [kWh/m²/an]")
+                st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"] = (
                     validate_energie_input(
-                        "Ef,obj * fp:",
-                        ef_objectif_pondere_kwh_m2,
-                        "kWh/m²/an",
-                        "MJ/m²/an",
+                        name="Ef,obj * fp",
+                        variable=ef_objectif_pondere_kwh_m2,
+                        unit1="kWh/m²/an",
+                        unit2="MJ/m²/an",
                     )
-                st.session_state["data_site"]["ef_objectif_pondere_kwh_m2"] = float(ef_objectif_pondere_kwh_m2)
-                try:
-                    if float(ef_objectif_pondere_kwh_m2) <= 0:
-                        st.warning("Ef,obj *fp [kWh/m²/an] doit être supérieur à 0")
-                except ValueError:
-                    st.warning("Problème dans Ef,obj *fp [kWh/m²/an]")
-
+                )
             st.markdown(
                 '<span style="font-size:1.2em;">**Répartition énergie finale ECS/Chauffage**</span>',
                 unsafe_allow_html=True,

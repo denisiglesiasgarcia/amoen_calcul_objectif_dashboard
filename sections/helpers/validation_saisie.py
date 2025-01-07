@@ -10,6 +10,21 @@ def validate_input(name, variable, unit):
     else:
         st.warning(f"{name} doit être un chiffre")
 
+def validate_input_float(name, variable, unit, text=True):
+    try:
+        variable = float(variable.replace(",", ".", 1))
+        if variable > 0:
+            if text:
+                st.text(f"{name} {variable} {unit}")
+                return round(variable, 2)
+            else:
+                return round(variable, 2)
+        else:
+            st.warning(f"{name} doit être positive")
+            return 0
+    except ValueError:
+        st.warning(f"{name} doit être un chiffre")
+        return 0
 
 def validate_energie_input(name, variable, unit1, unit2):
     try:

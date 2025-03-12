@@ -86,7 +86,7 @@ from sections.helpers.save_excel_streamlit import (
 )
 
 st.set_page_config(page_title="AMOEN Dashboard", page_icon=":bar_chart:", layout="wide")
-# os.environ["USE_ARROW_extension"] = "1"
+os.environ["USE_ARROW_extension"] = "0"
 
 # Variable pour la mise a jour de la météo
 last_update_time_meteo = datetime.datetime(2021, 1, 1)

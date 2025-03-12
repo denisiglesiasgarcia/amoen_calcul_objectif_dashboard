@@ -74,6 +74,7 @@ def graphique_bars_rapport(
         }
     )
 
+    plt.clf()    # Clear the current figure
     cm = 1 / 2.54
     sns.set(style="white", rc={"figure.figsize": (30 * cm, 14.2 * cm)})
 

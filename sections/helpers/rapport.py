@@ -267,6 +267,8 @@ def repartition_renove_sureleve(
     ef_objectif_pondere_kwh_m2,
     energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
 ):
+
+    plt.clf()    # Clear the current figure
     cm = 1 / 2.54
     figsize_a = 21 * cm
     figsize_b = 14.2 * cm
@@ -550,7 +552,9 @@ def repartition_renove_sureleve(
     plt.savefig("02_reno_sur.png", dpi=600, bbox_inches="tight", pad_inches=0)
 
     # nettoyage
-    plt.close()
+    plt.close()  # Close the figure window
+    plt.clf()    # Clear the current figure
+    gc.collect()  # Manually invoke garbage collection
 
     return ratio_figsize
 

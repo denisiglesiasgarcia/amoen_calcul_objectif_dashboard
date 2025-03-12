@@ -406,26 +406,6 @@ def repartition_renove_sureleve(
         fontweight="bold",
         color=color_txt_reno,
     )
-    # ax2.text(
-    #     texte_alignement_droite,  # Additional text
-    #     building_height_reno - texte_hauteur_texte_info,
-    #     r"$SRE_{renovation} = $"
-    #     f"${sre_renovation_m2:.1f}\ m²$"
-    #     "\n"
-    #     r"$E_{f,avant,corr} = $"
-    #     f"${ef_avant_corr_kwh_m2*3.6:.1f}\ MJ/m²$"
-    #     "\n"
-    #     r"$E_{f,obj} * f_p = $"
-    #     f"${ef_objectif_pondere_kwh_m2*3.6:.1f}\ MJ/m²$"
-    #     "\n"
-    #     r"$E_{f,après,corr,rénové} * f_p = $"
-    #     f"${energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2*3.6:.1f}\ MJ/m²$"
-    #     "\n",
-    #     rotation=0,
-    #     verticalalignment="top",
-    #     fontsize=11,
-    #     color=color_txt_reno,
-    # )
 
     # Text on the right for Surélévation
     ax2.text(
@@ -439,15 +419,6 @@ def repartition_renove_sureleve(
         color=color_txt_sur,
         alpha=0.6,
     )
-    # ax2.text(
-    #     texte_alignement_droite,  # Additional text
-    #     building_height_reno + building_height_sur - texte_hauteur_texte_info,
-    #     r"$SRE_{surelevation} = $" + f"${sre_extension_surelevation_m2:.1f}\ m²$",
-    #     rotation=0,
-    #     verticalalignment="top",
-    #     fontsize=11,
-    #     color=color_txt_sur,
-    # )
 
     # Adjust the plot limits to accommodate the text
     ax2.set_xlim(-0.1, building_width_reno + 0.5)
@@ -835,28 +806,6 @@ def generate_pdf(data):
             f"{data['sre_renovation_m2']} m² SRE",
         ]
     )
-    # Add conditional rows for different surface types
-    # for surface_type, percentage in [
-    #     ("Habitat collectif", data["sre_pourcentage_habitat_collectif"]),
-    #     ("Habitat individuel", data["sre_pourcentage_habitat_individuel"]),
-    #     ("Administration", data["sre_pourcentage_administration"]),
-    #     ("Ecoles", data["sre_pourcentage_ecoles"]),
-    #     ("Commerce", data["sre_pourcentage_commerce"]),
-    #     ("Restauration", data["sre_pourcentage_restauration"]),
-    #     ("Lieux de rassemblement", data["sre_pourcentage_lieux_de_rassemblement"]),
-    #     ("Hopitaux", data["sre_pourcentage_hopitaux"]),
-    #     ("Industrie", data["sre_pourcentage_industrie"]),
-    #     ("Depots", data["sre_pourcentage_depots"]),
-    #     ("Installations sportives", data["sre_pourcentage_installations_sportives"]),
-    #     ("Piscines couvertes", data["sre_pourcentage_piscines_couvertes"]),
-    # ]:
-    #     if percentage > 0.0:
-    #         project_surfaces.append(
-    #             [
-    #                 f"{surface_type} (%):",
-    #                 f"{percentage} % de la surface rénovée soit {(percentage/100*data['sre_renovation_m2']):.0f} m² SRE",
-    #             ]
-    #         )
 
     project_surfaces_table = Table(project_surfaces, colWidths=[150, 350])
     project_surfaces_table.setStyle(

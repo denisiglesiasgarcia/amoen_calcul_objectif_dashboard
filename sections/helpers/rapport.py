@@ -1059,10 +1059,10 @@ def generate_pdf(data):
         data["amoen_id"],
     )
     elements.append(Image("01_bar_chart.png", width=510, height=280))
-    elements.append(Spacer(1, 0.5 * cm))
+    # elements.append(Spacer(1, 0.5 * cm))
 
     if data["sre_extension_surelevation_m2"] > 0.0:
-        # elements.append(PageBreak())
+        elements.append(PageBreak())
         elements.append(Spacer(1, 0.5 * cm))
         ratio_figsize_rep_reno_sur = repartition_renove_sureleve(
             data["sre_renovation_m2"],

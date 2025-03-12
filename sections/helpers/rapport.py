@@ -249,7 +249,7 @@ def graphique_bars_rapport(
     plt.yticks(fontsize=18)
 
     # sauvegarder graphique
-    plt.savefig("01_bar_chart.png", dpi=600, bbox_inches="tight")
+    plt.savefig("01_bar_chart.png", dpi=300, bbox_inches="tight")
 
     # nettoyage
     plt.close()  # Close the figure window
@@ -549,7 +549,7 @@ def repartition_renove_sureleve(
     plt.tight_layout()
 
     # sauvegarder graphique
-    plt.savefig("02_reno_sur.png", dpi=600, bbox_inches="tight", pad_inches=0)
+    plt.savefig("02_reno_sur.png", dpi=300, bbox_inches="tight", pad_inches=0)
 
     # nettoyage
     plt.close()  # Close the figure window

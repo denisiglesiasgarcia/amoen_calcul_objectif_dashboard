@@ -84,6 +84,7 @@ def graphique_bars_rapport(
     ax = sns.barplot(
         y="Valeur",
         x="Type",
+        hue="Type",
         data=bar_data1,
         order=[
             "IDC moy 3 ans avant\n$E_{f,avant,corr}$",

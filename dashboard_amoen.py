@@ -553,10 +553,16 @@ if st.session_state["authentication_status"]:
                     )
                 )
 
+            # Bug travaux_start serialization fix
+            try:
+                # Try to convert to datetime if it's a string or timestamp
+                st.session_state["data_site"]["travaux_start"] = pd.to_datetime(data_sites_db["travaux_start"])
+            except Exception as e:
+                print(f"Error converting travaux_start to datetime: {e}")
+                st.session_state["data_site"]["travaux_start"] = data_sites_db["travaux_start"]
+
             # Autres données
-            st.session_state["data_site"]["travaux_start"] = data_sites_db[
-                "travaux_start"
-            ]
+            # st.session_state["data_site"]["travaux_start"] = data_sites_db["travaux_start"]
             st.session_state["data_site"]["travaux_end"] = data_sites_db["travaux_end"]
             st.session_state["data_site"]["annees_calcul_idc_avant_travaux"] = (
                 data_sites_db["annees_calcul_idc_avant_travaux"]

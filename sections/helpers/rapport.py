@@ -1012,7 +1012,7 @@ def generate_pdf(data):
             Image(
                 "02_reno_sur.png",
                 width=width_02_reno_sur,
-                height=(ratio_figsize_rep_reno_sur + 0.50) * width_02_reno_sur,
+                height=(ratio_figsize_rep_reno_sur + 0.54) * width_02_reno_sur,
             )
         )
     # elements.append(PageBreak())

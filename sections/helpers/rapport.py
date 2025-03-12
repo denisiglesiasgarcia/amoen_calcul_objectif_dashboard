@@ -89,6 +89,7 @@ def graphique_bars_rapport(
             "Conso mesurée après\n$E_{f,après,corr,rénové}*f_{p}$",
         ],
         palette=["#1f77b4", "#ff7f0e", "#2ca02c"],
+        legend=False
     )
 
     sns.despine()
@@ -391,7 +392,6 @@ def repartition_renove_sureleve(
     # Adjust the plot limits to accommodate the text
     ax2.set_xlim(-0.1, building_width_reno + 0.5)
     ax2.set_ylim(-0.1, building_height_reno + building_height_sur + 0.1)
-    ax2.set_aspect("auto")
 
     # Remove axes
     ax2.axis("off")
@@ -966,6 +966,17 @@ def generate_pdf(data):
     elements.append(Spacer(1, 1.0 * cm))
 
     # Bar chart
+    graphique_bars_rapport(
+        data["nom_projet"],
+        data["ef_avant_corr_kwh_m2"],
+        data[
+            "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
+        ],
+        data["ef_objectif_pondere_kwh_m2"],
+        data["atteinte_objectif"],
+        data["facteur_ponderation_moyen"],
+        data["amoen_id"],
+    )
     graphique_bars_rapport(
         data["nom_projet"],
         data["ef_avant_corr_kwh_m2"],

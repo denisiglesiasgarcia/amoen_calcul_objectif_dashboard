@@ -1,7 +1,7 @@
 # /sections/helpers/validation_saisie.py
 
 import streamlit as st
-from sections.helpers.sanitize_mongo import get_rounded_float
+from sections.helpers.utils import get_rounded_float
 
 
 def validate_input(name, variable, unit):

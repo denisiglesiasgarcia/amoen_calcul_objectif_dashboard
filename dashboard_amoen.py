@@ -6,15 +6,7 @@ import pandas as pd
 import streamlit as st
 import matplotlib
 
-# import smtplib
-# from email.message import EmailMessage
-# from email.mime.application import MIMEApplication
-# from email.mime.multipart import MIMEMultipart
-# from email.mime.text import MIMEText
-
 matplotlib.use("Agg")
-# import plotly.express as px
-# import altair as alt
 
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
@@ -27,7 +19,6 @@ import streamlit_authenticator as stauth
 # from yaml.loader import SafeLoader
 
 from sections.helpers.validation_saisie import (
-    validate_input,
     validate_input_float,
     validate_energie_input,
     validate_percentage_sum,
@@ -79,7 +70,9 @@ from sections.helpers.admin.admin_chiffre_cle import display_admin_dashboard
 
 from sections.helpers.admin.admin_db_mgmt import display_database_management
 
-from sections.helpers.sanitize_mongo import sanitize_db, get_rounded_float
+from sections.helpers.sanitize_mongo import sanitize_db
+
+from sections.helpers.utils import get_rounded_float
 
 from sections.helpers.save_excel_streamlit import (
     display_dataframe_with_excel_download,

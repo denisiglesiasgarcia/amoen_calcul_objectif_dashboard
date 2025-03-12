@@ -452,6 +452,7 @@ def repartition_renove_sureleve(
     # Adjust the plot limits to accommodate the text
     ax2.set_xlim(-0.1, building_width_reno + 0.5)
     ax2.set_ylim(-0.1, building_height_reno + building_height_sur + 0.1)
+    ax2.set_aspect("auto")
 
     # Remove axes
     ax2.axis("off")

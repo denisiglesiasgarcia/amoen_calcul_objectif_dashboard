@@ -1062,7 +1062,7 @@ def generate_pdf(data):
     elements.append(Spacer(1, 0.5 * cm))
 
     if data["sre_extension_surelevation_m2"] > 0.0:
-        elements.append(PageBreak())
+        # elements.append(PageBreak())
         elements.append(Spacer(1, 0.5 * cm))
         ratio_figsize_rep_reno_sur = repartition_renove_sureleve(
             data["sre_renovation_m2"],
@@ -1082,7 +1082,7 @@ def generate_pdf(data):
             Image(
                 "02_reno_sur.png",
                 width=width_02_reno_sur,
-                height=(ratio_figsize_rep_reno_sur + 0.45) * width_02_reno_sur,
+                height=(ratio_figsize_rep_reno_sur + 0.55) * width_02_reno_sur,
             )
         )
     # elements.append(PageBreak())

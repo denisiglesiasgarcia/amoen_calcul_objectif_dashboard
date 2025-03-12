@@ -604,20 +604,43 @@ def insert_project_to_mongodb(
         return False
 
 
-def delete_project_from_mongodb(mycol_historique_sites, project_id: str) -> bool:
-    """Delete project from MongoDB"""
+def delete_projects_from_mongodb(mycol_historique_sites, project_ids: list) -> tuple:
+    """Delete multiple projects from MongoDB based on their IDs.
+    
+    Args:
+        mycol_historique_sites: MongoDB collection containing the projects
+        project_ids (list): List of project ObjectId strings
+        
+    Returns:
+        tuple: (success_count, failed_count, errors) 
+               Where success_count is the number of successfully deleted projects,
+               failed_count is the number of failed deletions, and
+               errors is a list of error messages
+    """
     try:
         if not check_mongodb_connection(mycol_historique_sites):
-            return False
-
-        result = mycol_historique_sites.delete_one({"_id": ObjectId(project_id)})
-        if result.deleted_count == 0:
-            st.error("Projet non trouvé")
-            return False
-        return True
+            return 0, len(project_ids), ["Database connection failed"]
+        
+        success_count = 0
+        failed_count = 0
+        errors = []
+        
+        for project_id in project_ids:
+            try:
+                result = mycol_historique_sites.delete_one({"_id": ObjectId(project_id)})
+                if result.deleted_count == 0:
+                    failed_count += 1
+                    errors.append(f"Project with ID {project_id} not found")
+                else:
+                    success_count += 1
+            except Exception as e:
+                failed_count += 1
+                errors.append(f"Error deleting project {project_id}: {str(e)}")
+        
+        return success_count, failed_count, errors
+        
     except Exception as e:
-        st.error(f"Error deleting project: {str(e)}")
-        return False
+        return 0, len(project_ids), [f"Error in bulk delete operation: {str(e)}"]
 
 
 def clear_session_state(preserve_keys=None):
@@ -846,83 +869,97 @@ def display_database_management(mycol_historique_sites, data_admin):
                             )
 
         with tab_delete:
-            st.write("🗑️ Supprimer un projet")
-            st.error(
-                "⚠️ ATTENTION: La suppression d'un projet est définitive et irréversible!"
+            st.write("🗑️ Supprimer des projets")
+            st.error("⚠️ ATTENTION: La suppression de projets est définitive et irréversible!")
+            
+            # Create project identifiers
+            df["project_identifier"] = df.apply(
+                lambda row: f"{row['nom_projet']} ({row['date_rapport'].strftime('%d-%m-%Y %H:%M:%S') if pd.notnull(row['date_rapport']) else 'Date non définie'})",
+                axis=1
             )
-
-            project_to_delete = st.selectbox(
-                "Sélectionner le projet à supprimer",
+            
+            # Allow multiple selection of projects to delete
+            projects_to_delete = st.multiselect(
+                "Sélectionner les projets à supprimer",
                 df["project_identifier"].unique(),
-                key="delete_project_select",
+                key="delete_projects_select"
             )
-
-            if project_to_delete:
-                try:
-                    project_name = project_to_delete.split(" (")[0]
-                    project_datetime = project_to_delete.split("(")[1].rstrip(")")
-
-                    # Find the matching project with proper null handling
-                    mask = df["nom_projet"] == project_name
-                    if (
-                        project_datetime != "Date non définie"
-                        and project_datetime != "Date invalide"
-                    ):
-                        mask &= (
-                            df["date_rapport"].dt.strftime("%d-%m-%Y %H:%M:%S")
-                            == project_datetime
-                        )
-
-                    if not any(mask):
-                        st.error("❌ Projet non trouvé")
-                        return
-
-                    project_data = df[mask].iloc[0]
-
+            
+            if projects_to_delete:
+                # Display selected projects in a table format for confirmation
+                st.warning(f"Vous avez sélectionné {len(projects_to_delete)} projet(s) à supprimer:")
+                
+                project_data_list = []
+                project_ids_to_delete = []
+                
+                for project_identifier in projects_to_delete:
+                    try:
+                        # Extract project name and datetime
+                        project_name = project_identifier.split(" (")[0]
+                        project_datetime = project_identifier.split("(")[1].rstrip(")")
+                        
+                        # Find the matching project
+                        mask = df["nom_projet"] == project_name
+                        if project_datetime != "Date non définie" and project_datetime != "Date invalide":
+                            mask &= df["date_rapport"].dt.strftime("%d-%m-%Y %H:%M:%S") == project_datetime
+                        
+                        if any(mask):
+                            project_data = df[mask].iloc[0]
+                            project_data_list.append({
+                                "Nom du projet": project_data["nom_projet"],
+                                "Date du rapport": project_datetime,
+                                "ID": str(project_data["_id"])
+                            })
+                            project_ids_to_delete.append(str(project_data["_id"]))
+                    except Exception as e:
+                        st.error(f"Erreur lors de la récupération des détails du projet: {str(e)}")
+                
+                # Display projects to be deleted in a table
+                if project_data_list:
+                    confirmation_df = pd.DataFrame(project_data_list)
+                    st.dataframe(confirmation_df, use_container_width=True)
+                    
                     st.error(
                         """
-                    ⚠️ ATTENTION: 
-                    - Cette action est IRRÉVERSIBLE
-                    - Toutes les données du projet seront PERDUES
-                    - Cette action ne peut pas être annulée
-                    """
+                        ⚠️ ATTENTION: 
+                        - Cette action est IRRÉVERSIBLE
+                        - Toutes les données des projets sélectionnés seront PERDUES
+                        - Cette action ne peut pas être annulée
+                        """
                     )
-
-                    st.write(
-                        f"🗑️ Vous êtes sur le point de supprimer le projet: **{project_name}**"
-                    )
-                    st.write(f"📅 Date et heure du rapport: **{project_datetime}**")
-
+                    
                     confirm_delete = st.checkbox(
-                        "✅ Je confirme vouloir supprimer ce projet et je comprends que cette action est irréversible",
-                        key="confirm_delete",
+                        "✅ Je confirme vouloir supprimer ces projets et je comprends que cette action est irréversible",
+                        key="confirm_delete_multiple"
                     )
-
+                    
                     if confirm_delete:
                         if st.button(
-                            "🗑️ Supprimer définitivement le projet",
+                            f"🗑️ Supprimer définitivement {len(project_ids_to_delete)} projet(s)",
                             type="primary",
-                            key="delete_button",
+                            key="delete_multiple_button"
                         ):
                             with st.spinner("⏳ Suppression en cours..."):
-                                if delete_project_from_mongodb(
-                                    mycol_historique_sites, str(project_data["_id"])
-                                ):
-                                    st.success(
-                                        f"✅ Projet {project_name} supprimé avec succès!"
-                                    )
+                                success_count, failed_count, errors = delete_projects_from_mongodb(
+                                    mycol_historique_sites, project_ids_to_delete
+                                )
+                                
+                                if success_count > 0:
+                                    st.success(f"✅ {success_count} projet(s) supprimé(s) avec succès!")
+                                    
+                                if failed_count > 0:
+                                    st.error(f"❌ {failed_count} projet(s) n'ont pas pu être supprimés.")
+                                    for error in errors:
+                                        st.error(f"- {error}")
+                                
+                                # Refresh the page after a short delay if at least one project was deleted
+                                if success_count > 0:
                                     time.sleep(1)
                                     st.rerun()
                     else:
-                        st.info(
-                            "💡 Cochez la case de confirmation pour activer le bouton de suppression"
-                        )
-
-                except Exception as e:
-                    st.error(f"❌ Erreur lors de la suppression du projet: {str(e)}")
-                    st.info(
-                        "💡 Si l'erreur persiste, contactez votre administrateur/trice"
-                    )
+                        st.info("💡 Cochez la case de confirmation pour activer le bouton de suppression")
+                else:
+                    st.warning("Aucun projet valide à supprimer n'a été trouvé.")
 
     except Exception as e:
         st.error(f"❌ Une erreur inattendue est survenue: {str(e)}")

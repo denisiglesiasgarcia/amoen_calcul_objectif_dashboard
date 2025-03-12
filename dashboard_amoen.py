@@ -1003,7 +1003,7 @@ if st.session_state["authentication_status"]:
                 # add date to data_rapport
                 st.session_state["data_site"][
                     "date_rapport"
-                ] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                ] = datetime.datetime.now()
 
                 # Remove the _id field if it exists to ensure MongoDB generates a new one
                 if "_id" in st.session_state["data_site"]:

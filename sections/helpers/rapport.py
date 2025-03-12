@@ -15,18 +15,15 @@ from reportlab.platypus import (
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 
-# from reportlab.graphics.shapes import Drawing, Line, String, Polygon
-# from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.lib.units import cm
 from reportlab.lib.enums import TA_LEFT
 
-# from reportlab.pdfgen.canvas import Canvas
 import io
+import gc
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 
-# from datetime import date, datetime
 from datetime import datetime
 import os
 import matplotlib.patches as patches
@@ -110,26 +107,20 @@ def graphique_bars_rapport(
     ####################
 
     # première flèche
-    # find the height of the first and third bars
     first_bar_height = idc_moy_3ans_avant_MJ_m2
     second_bar_height = ef_objectif_pondere_MJ_m2
-    # set the x-coordinate for the third bar
-    x_coord_second_bar = 0.7  # this depends on the actual x-coordinate of the third bar
-    # text for the arrow
+    x_coord_second_bar = 0.7  # Adjusted x-coordinate for the second bar
     text_arrow_baisse_realisee = (
         "Baisse\nobjectif\n" + str("{:.1f}".format(baisse_objectif_MJ_m2)) + " MJ/m²"
     )
-    # add text at the midpoint of the arrow
     midpoint_height = (first_bar_height + second_bar_height) / 2
-    # plot the line (arrow without arrowheads)
     ax.annotate(
         "",
         xy=(x_coord_second_bar, second_bar_height),
         xytext=(x_coord_second_bar, first_bar_height),
         arrowprops=dict(arrowstyle="<->", color="moccasin", lw=3),
-    )  # increase lw for a thicker line
-    # # add the text over the line and centered
-    u = ax.text(
+    )
+    u0 = ax.text(
         x_coord_second_bar,
         midpoint_height,
         text_arrow_baisse_realisee,
@@ -141,25 +132,19 @@ def graphique_bars_rapport(
     )
 
     # deuxième flèche
-    # find the height of the first and third bars
     third_bar_height = ef_apres_corr_MJ_m2
-    # set the x-coordinate for the third bar
-    x_coord_third_bar = 1.7  # this depends on the actual x-coordinate of the third bar
-    # text for the arrow
+    x_coord_third_bar = 1.7  # Adjusted x-coordinate for the third bar
     text_arrow_baisse_realisee = (
         "Baisse\nmesurée\n" + str("{:.1f}".format(baisse_mesuree_MJ_m2)) + " MJ/m²"
     )
-    # add text at the midpoint of the arrow
     midpoint_height = (first_bar_height + third_bar_height) / 2
-    # plot the line (arrow without arrowheads)
     ax.annotate(
         "",
         xy=(x_coord_third_bar, third_bar_height),
         xytext=(x_coord_third_bar, first_bar_height),
         arrowprops=dict(arrowstyle="->", color="lightgreen", lw=4),
-    )  # increase lw for a thicker line
-    # add the text over the line and centered
-    u = ax.text(
+    )
+    u1 = ax.text(
         x_coord_third_bar,
         midpoint_height,
         text_arrow_baisse_realisee,
@@ -190,23 +175,9 @@ def graphique_bars_rapport(
         top=0.945, bottom=0.17, left=0.06, right=0.97, hspace=0.2, wspace=0.2
     )
 
-    # titre pour l'abscisse X
-    # plt.xlabel("\nBaisse d'énergie finale minimum pour obtenir la subvention = 85% * " +
-    #         str('{:.1f}'.format(baisse_objectif_MJ_m2)) + " = " +
-    #         str('{:.1f}'.format(baisse_objectif_MJ_m2*0.85)) + ' MJ/m² \n$E_{f,après,corr}*f_{p}$ maximum pour obtenir la subvention ($(E_{f,après,corr}*f_{p})_{max→subv.}$) = ' +
-    #         str('{:.1f}'.format(idc_moy_3ans_avant_MJ_m2)) + " - " +
-    #         str('{:.1f}'.format(baisse_objectif_MJ_m2*0.85)) + " = " +
-    #         str('{:.1f}'.format(idc_moy_3ans_avant_MJ_m2 - baisse_objectif_MJ_m2*0.85)) + " MJ/m²\nPourcentage de l'objectif atteint = " +
-    #         str('{:.1f}'.format(baisse_mesuree_MJ_m2)) + " / " +
-    #         str('{:.1f}'.format(baisse_objectif_MJ_m2))+ " * 100 = " +
-    #         str('{:.1f}'.format(atteinte_objectif*100)) + "%",
-    #         loc='left', size=18)
-
     formula_atteinte_objectif_titre = r"$Atteinte\ objectif=$"
     formula_atteinte_objectif_titre_pourcent = r"$=$"
-
     formula_atteinte_objectif = r"$\frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}=$"
-
     formula_atteinte_objectif_num = r"$\frac{{{} - {}}}{{{} - {}}}$".format(
         round(idc_moy_3ans_avant_MJ_m2, 1),
         round(ef_apres_corr_MJ_m2, 1),
@@ -218,10 +189,7 @@ def graphique_bars_rapport(
         round(atteinte_objectif * 100, 1)
     )
 
-    # xlabel_sep_x = 0.25
-    # xlabel_sep_y = -0.17
     xlabel_level1 = -0.3
-    # xlabel_level2 = xlabel_level1 + xlabel_sep_y
 
     u1_titre = plt.text(
         0,
@@ -269,10 +237,6 @@ def graphique_bars_rapport(
         fontsize=20,
     )
 
-    # display(formula_atteinte_objectif)
-    # plt.xlabel(formula_atteinte_objectif,
-    #         loc='left', size=14)
-
     # remove xlabel
     plt.xlabel("")
 
@@ -287,7 +251,9 @@ def graphique_bars_rapport(
     plt.savefig("01_bar_chart.png", dpi=600, bbox_inches="tight")
 
     # nettoyage
-    plt.close()
+    plt.close()  # Close the figure window
+    plt.clf()    # Clear the current figure
+    gc.collect()  # Manually invoke garbage collection
 
 
 def repartition_renove_sureleve(

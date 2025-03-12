@@ -554,12 +554,7 @@ if st.session_state["authentication_status"]:
                 )
 
             # Bug travaux_start serialization fix
-            try:
-                # Try to convert to datetime if it's a string or timestamp
-                st.session_state["data_site"]["travaux_start"] = pd.to_datetime(data_sites_db["travaux_start"])
-            except Exception as e:
-                print(f"Error converting travaux_start to datetime: {e}")
-                st.session_state["data_site"]["travaux_start"] = data_sites_db["travaux_start"]
+            st.session_state["data_site"]["travaux_start"] = data_sites_db["travaux_start"].astype(str)
 
             # Autres données
             # st.session_state["data_site"]["travaux_start"] = data_sites_db["travaux_start"]

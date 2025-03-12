@@ -17,6 +17,8 @@ matplotlib.use("Agg")
 # import altair as alt
 
 from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
+import time
 from bson import ObjectId
 
 import streamlit_authenticator as stauth
@@ -96,7 +98,31 @@ URL_INDICE_MOYENNES_3_ANS = "https://vector.sitg.ge.ch/arcgis/rest/services/Host
 MONGODB_URI = st.secrets["MONGODB_URI"]
 
 # BD mongodb
-client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=5000)
+def connect_with_retry(uri, max_retries=3, delay=2):
+    for attempt in range(max_retries):
+        try:
+            client = MongoClient(
+                uri, 
+                serverSelectionTimeoutMS=10000,
+                connectTimeoutMS=30000,
+                socketTimeoutMS=30000,
+                retryWrites=True,
+                retryReads=True
+            )
+            # Test connection
+            client.admin.command('ping')
+            return client
+        except (ConnectionFailure, ServerSelectionTimeoutError) as e:
+            if attempt < max_retries - 1:
+                st.warning(f"MongoDB connection attempt {attempt+1} failed. Retrying in {delay} seconds...")
+                time.sleep(delay)
+                delay *= 2  # Exponential backoff
+            else:
+                st.error(f"Failed to connect to MongoDB after {max_retries} attempts. Error: {str(e)}")
+                raise
+
+client = connect_with_retry(MONGODB_URI)
+# client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=5000)
 db_sites = client["amoen_ancienne_methodo"]
 mycol_historique_sites = db_sites["historique"]
 mycol_authentification_site = db_sites["authentification"]

@@ -1010,7 +1010,7 @@ if st.session_state["authentication_status"]:
                     del st.session_state["data_site"]["_id"]
 
                 # Send data_site to MongoDB
-                x = mycol_historique_sites.insert_one(st.session_state["data_site"])
+                # x = mycol_historique_sites.insert_one(st.session_state["data_site"])
         else:
             st.warning(
                 "Toutes les informations nécessaires ne sont pas disponibles pour générer le PDF."

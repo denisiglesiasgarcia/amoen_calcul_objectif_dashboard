@@ -554,7 +554,7 @@ if st.session_state["authentication_status"]:
                 )
 
             # Bug travaux_start serialization fix
-            st.session_state["data_site"]["travaux_start"] = str(data_sites_db["travaux_start"])
+            st.session_state["data_site"]["travaux_start"] = data_sites_db["travaux_start"]
 
             # Autres données
             # st.session_state["data_site"]["travaux_start"] = data_sites_db["travaux_start"]

@@ -1,4 +1,5 @@
 import pandas as pd
+import polars as pl
 import altair as alt
 import streamlit as st
 import numpy as np
@@ -179,91 +180,149 @@ def display_filtered_data(df: pd.DataFrame) -> pd.DataFrame:
 
 def display_objective_chart(df: pd.DataFrame):
     """
-    Display the objective achievement chart
+    Display objective achievement chart.
+    Improvements: dynamic Y-axis, dashed 100% reference line,
+    legend re-enabled at bottom, labels centered above bars.
 
     Args:
-        df (pd.DataFrame): Input DataFrame containing filtered project data
+        df (pd.DataFrame): Filtered project DataFrame
     """
     try:
-        df_barplot = df.sort_values(by=["nom_projet", "periode_start"])
-        df_barplot = filter_energy_data(df_barplot)
+        # Convert to Polars for data processing
+        lf = pl.from_pandas(df)
 
-        if df_barplot.empty:
+        lf = (
+            lf.sort(["nom_projet", "periode_start"])
+            .with_columns(
+                (
+                    pl.col("atteinte_objectif")
+                    .cast(pl.Float64, strict=False)
+                    .fill_null(0.0)
+                    * 100
+                ).alias("atteinte_objectif"),
+                pl.col("periode_start")
+                .cast(pl.Utf8)
+                .str.to_date(format="%Y-%m-%d", strict=False)
+                .alias("periode_start"),
+                pl.col("periode_end")
+                .cast(pl.Utf8)
+                .str.to_date(format="%Y-%m-%d", strict=False)
+                .alias("periode_end"),
+            )
+            .filter(pl.col("atteinte_objectif") > 0)
+        )
+
+        if lf.is_empty():
             st.warning("No data available for visualization")
             return
 
-        # Process data for visualization
-        df_barplot["atteinte_objectif"] = (
-            pd.to_numeric(df_barplot["atteinte_objectif"], errors="coerce").fillna(0)
-            * 100
+        lf = lf.with_columns(
+            # Period label for legend and tooltip
+            pl.when(
+                pl.col("periode_start").is_not_null()
+                & pl.col("periode_end").is_not_null()
+            )
+            .then(
+                pl.col("periode_start").dt.strftime("%Y-%m-%d")
+                + " – "
+                + pl.col("periode_end").dt.strftime("%Y-%m-%d")
+            )
+            .otherwise(pl.lit("Date non spécifiée"))
+            .alias("periode"),
+            # Rank within each project group for xOffset positioning
+            pl.int_range(pl.len()).over("nom_projet").alias("periode_rank"),
+            # Pre-formatted label string
+            pl.col("atteinte_objectif")
+            .map_elements(lambda x: f"{x:.0f}%", return_dtype=pl.Utf8)
+            .alias("atteinte_objectif_formatted"),
         )
 
-        # Handle dates
-        for col in ["periode_start", "periode_end"]:
-            df_barplot[col] = pd.to_datetime(df_barplot[col], errors="coerce")
+        df_plot = lf.to_pandas()
 
-        # Create period string
-        df_barplot["periode"] = df_barplot.apply(
-            lambda row: (
-                f"{row['periode_start'].strftime('%Y-%m-%d')} - {row['periode_end'].strftime('%Y-%m-%d')}"
-                if pd.notnull(row["periode_start"]) and pd.notnull(row["periode_end"])
-                else "Date non spécifiée"
-            ),
-            axis=1,
-        )
+        # Dynamic Y upper bound: next 10-step above max + one extra step, min 110
+        y_max = max(110, (int(df_plot["atteinte_objectif"].max()) // 10 + 2) * 10)
 
-        df_barplot["periode_rank"] = df_barplot.groupby("nom_projet").cumcount()
-        df_barplot["atteinte_objectif_formatted"] = df_barplot[
-            "atteinte_objectif"
-        ].apply(lambda x: f"{x:.0f}%")
-
-        # Create chart
+        # Bars
         bars = (
-            alt.Chart(df_barplot)
+            alt.Chart(df_plot)
             .mark_bar()
             .encode(
-                x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
+                x=alt.X(
+                    "nom_projet:N",
+                    axis=alt.Axis(title="", labelAngle=-40, labelFontSize=11),
+                ),
                 y=alt.Y(
                     "atteinte_objectif:Q",
                     title="Atteinte Objectif [%]",
-                    scale=alt.Scale(domain=[0, 100]),
+                    scale=alt.Scale(domain=[0, y_max]),
+                    axis=alt.Axis(grid=True, tickCount=6),
                 ),
-                xOffset="periode_rank:N",
-                color="periode:N",
+                xOffset=alt.XOffset(
+                    "periode_rank:O",
+                    scale=alt.Scale(paddingInner=0.05),
+                ),
+                color=alt.Color(
+                    "periode:N",
+                    legend=alt.Legend(
+                        title="Période",
+                        orient="bottom",
+                        columns=4,
+                        labelFontSize=10,
+                        titleFontSize=11,
+                    ),
+                ),
                 tooltip=[
                     alt.Tooltip("nom_projet:N", title="Site"),
                     alt.Tooltip("amoen_id:N", title="AMOén"),
                     alt.Tooltip("periode:N", title="Période"),
-                    alt.Tooltip(
-                        "atteinte_objectif:Q",
-                        title="Atteinte Objectif [%]",
-                        format=".2f",
-                    ),
+                    alt.Tooltip("atteinte_objectif:Q", title="Atteinte Objectif [%]", format=".1f"),
                 ],
             )
-            .properties(width=600, title="Atteinte Objectif par Site")
         )
 
-        # Add labels
-        text = (
-            alt.Chart(df_barplot)
+        # Percentage labels centered above each bar
+        labels = (
+            alt.Chart(df_plot)
             .mark_text(
-                align="left", baseline="bottom", dx=-4, fontSize=12, color="black"
+                align="center",
+                baseline="bottom",
+                dy=-2,
+                fontSize=9,
+                fontWeight="bold",
+                color="black",
             )
             .encode(
-                x=alt.X("nom_projet:N", axis=alt.Axis(title="", labels=True)),
-                y=alt.Y("atteinte_objectif:Q", title="Atteinte Objectif [%]"),
+                x=alt.X("nom_projet:N"),
+                y=alt.Y("atteinte_objectif:Q"),
+                xOffset=alt.XOffset("periode_rank:O"),
                 text="atteinte_objectif_formatted:N",
-                xOffset="periode_rank:N",
             )
         )
 
-        # Combine and configure
-        fig = alt.layer(bars, text)
-        fig = fig.configure_axisX(labelAngle=-45, labelFontSize=12)
-        fig = fig.configure_legend(disable=True)
+        # Dashed reference line at 100%
+        ref_line = (
+            alt.Chart(pd.DataFrame({"y": [100]}))
+            .mark_rule(color="red", strokeWidth=1.5, strokeDash=[5, 4])
+            .encode(y=alt.Y("y:Q"))
+        )
 
-        st.altair_chart(fig, width='stretch')
+        fig = (
+            alt.layer(bars, labels, ref_line)
+            .properties(
+                width=700,
+                height=400,
+                title=alt.TitleParams(
+                    "Atteinte Objectif par Site",
+                    fontSize=14,
+                    fontWeight="bold",
+                    anchor="start",
+                ),
+            )
+            .configure_view(strokeWidth=0)
+            .configure_axis(labelFontSize=11)
+        )
+
+        st.altair_chart(fig, use_container_width=True)
 
     except Exception as e:
         st.error(f"Error in display_objective_chart: {str(e)}")

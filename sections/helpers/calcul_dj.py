@@ -69,7 +69,7 @@ def get_meteo_data(DJ_TEMPERATURE_REFERENCE=20):
     df.dropna(inplace=True)
 
     # Explicit format required: CSV uses DD.MM.YYYY HH:MM
-    df["time"] = pd.to_datetime(df["time"], format="%d.%m.%Y %H:%M")
+    df["time"] = pd.to_datetime(df["time"], format="%d.%m.%Y %H:%M", errors="coerce")
 
     df = df[df["time"] >= "2020-01-01"]
     df.drop_duplicates(inplace=True)

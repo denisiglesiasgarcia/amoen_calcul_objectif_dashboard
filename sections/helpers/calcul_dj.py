@@ -22,22 +22,22 @@ def get_meteo_data(DJ_TEMPERATURE_REFERENCE=20):
     """
     # Mise à jour des données météo de manière journalière
     df_meteo_tre200d0_historique = pd.read_csv(
-        "https://data.geo.admin.ch/ch.meteoschweiz.klima/nbcn-tageswerte/nbcn-daily_GVE_previous.csv",
+        "https://data.geo.admin.ch/ch.meteoschweiz.ogd-smn/gve/ogd-smn_gve_d_historical.csv",
         sep=";",
         encoding="latin1",
-        parse_dates=["date"],
+        parse_dates=["reference_timestamp"],
     )
     df_meteo_tre200d0_annee_cours = pd.read_csv(
-        "https://data.geo.admin.ch/ch.meteoschweiz.klima/nbcn-tageswerte/nbcn-daily_GVE_current.csv",
+        "https://data.geo.admin.ch/ch.meteoschweiz.ogd-smn/gve/ogd-smn_gve_d_recent.csv",
         sep=";",
         encoding="latin1",
-        parse_dates=["date"],
+        parse_dates=["reference_timestamp"],
     )
     df_meteo_tre200d0 = pd.concat(
         [df_meteo_tre200d0_historique, df_meteo_tre200d0_annee_cours]
     )
     df_meteo_tre200d0.rename(
-        columns={"station/location": "stn", "date": "time"}, inplace=True
+        columns={"station_abbr": "stn", "reference_timestamp": "time"}, inplace=True
     )
     df_meteo_tre200d0 = df_meteo_tre200d0[["stn", "time", "tre200d0"]]
     df_meteo_tre200d0 = df_meteo_tre200d0[df_meteo_tre200d0["time"] >= "2020-01-01"]

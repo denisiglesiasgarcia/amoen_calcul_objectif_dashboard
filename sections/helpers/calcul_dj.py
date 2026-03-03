@@ -1,68 +1,95 @@
+# /sections/helpers/calcul_dj.py
+
 import pandas as pd
 import numpy as np
 import streamlit as st
 
+
 @st.cache_data
 def get_meteo_data(DJ_TEMPERATURE_REFERENCE=20):
     """
-    Fetches and processes meteorological data for calculating Degree Days (DJ).
+    Fetch and process meteorological data for degree-day (DJ) calculations.
 
-    This function performs the following steps:
-    1. Reads historical and current meteorological data from specified URLs.
-    2. Concatenates the historical and current data into a single DataFrame.
-    3. Renames columns for consistency and filters the data from January 1, 2015, onwards.
-    4. Removes duplicate entries and handles missing values.
-    5. Sorts the data by date and resets the index.
-    6. Converts temperature values to float and extracts the month from the date.
-    7. Identifies the heating season and calculates whether the temperature is below 16 degrees.
-    8. Computes the Degree Days (DJ) based on a reference temperature.
+    Retrieves historical and recent temperature data from the Swiss Federal Office
+    of Meteorology and Climatology (MeteoSwiss), combines them, and calculates
+    heating degree days (DJ) based on a reference temperature threshold.
 
-    Returns:
-        pd.DataFrame: A DataFrame containing processed meteorological data with additional columns for heating season, temperature below 16 degrees, and Degree Days (DJ).
+    Parameters
+    ----------
+    DJ_TEMPERATURE_REFERENCE : float, optional
+        Reference temperature in Celsius for degree-day calculations (default: 20).
+
+    Returns
+    -------
+    pd.DataFrame
+        Processed meteorological data with columns:
+        - stn : str
+            Station abbreviation code
+        - time : datetime
+            Timestamp in format DD.MM.YYYY HH:MM
+        - tre200d0 : float
+            Temperature measurement in degrees Celsius
+        - mois : int
+            Month number (1-12)
+        - saison_chauffe : int
+            Binary indicator (1 if heating season, 0 otherwise)
+            Heating season: September to May (months 9-12, 1-5)
+        - tre200d0_sous_16 : int
+            Binary indicator (1 if temperature <= 16°C, 0 otherwise)
+        - DJ_theta0_16 : float
+            Heating degree days calculated as:
+            (DJ_TEMPERATURE_REFERENCE - temperature) during heating season
+            when temperature <= 16°C, 0 otherwise
+
+    Notes
+    -----
+    - Data is cached using Streamlit's @st.cache_data decorator
+    - Only records from 2020-01-01 onwards are retained
+    - Missing values ("-") are removed before processing
+    - Duplicates are removed and data is sorted by timestamp
     """
-    # Mise à jour des données météo de manière journalière
-    df_meteo_tre200d0_historique = pd.read_csv(
+    df_hist = pd.read_csv(
         "https://data.geo.admin.ch/ch.meteoschweiz.ogd-smn/gve/ogd-smn_gve_d_historical.csv",
         sep=";",
         encoding="latin1",
-        parse_dates=["reference_timestamp"],
     )
-    df_meteo_tre200d0_annee_cours = pd.read_csv(
+    df_recent = pd.read_csv(
         "https://data.geo.admin.ch/ch.meteoschweiz.ogd-smn/gve/ogd-smn_gve_d_recent.csv",
         sep=";",
         encoding="latin1",
-        parse_dates=["reference_timestamp"],
     )
-    df_meteo_tre200d0 = pd.concat(
-        [df_meteo_tre200d0_historique, df_meteo_tre200d0_annee_cours]
-    )
-    df_meteo_tre200d0.rename(
+    df = pd.concat([df_hist, df_recent])
+    df.rename(
         columns={"station_abbr": "stn", "reference_timestamp": "time"}, inplace=True
     )
-    df_meteo_tre200d0 = df_meteo_tre200d0[["stn", "time", "tre200d0"]]
-    df_meteo_tre200d0 = df_meteo_tre200d0[df_meteo_tre200d0["time"] >= "2020-01-01"]
-    df_meteo_tre200d0.drop_duplicates(inplace=True)
-    # replace values with "-" with nan and drop them
-    df_meteo_tre200d0.replace("-", pd.NA, inplace=True)
-    df_meteo_tre200d0.dropna(inplace=True)
-    df_meteo_tre200d0.sort_values(by="time", inplace=True)
-    df_meteo_tre200d0.reset_index(drop=True, inplace=True)
-    # Calculs pour DJ
-    df_meteo_tre200d0["tre200d0"] = df_meteo_tre200d0["tre200d0"].astype(float)
-    df_meteo_tre200d0["mois"] = df_meteo_tre200d0["time"].dt.month
-    df_meteo_tre200d0["saison_chauffe"] = np.where(
-        df_meteo_tre200d0["mois"].isin([9, 10, 11, 12, 1, 2, 3, 4, 5]), 1, 0
+    df = df[["stn", "time", "tre200d0"]]
+
+    # Replace "-" with NaN before any type conversion
+    df.replace("-", pd.NA, inplace=True)
+    df.dropna(inplace=True)
+
+    # Explicit format required: CSV uses DD.MM.YYYY HH:MM
+    df["time"] = pd.to_datetime(df["time"], format="%d.%m.%Y %H:%M")
+
+    df = df[df["time"] >= "2020-01-01"]
+    df.drop_duplicates(inplace=True)
+    df.sort_values(by="time", inplace=True)
+    df.reset_index(drop=True, inplace=True)
+
+    # DJ calculations
+    df["tre200d0"] = df["tre200d0"].astype(float)
+    df["mois"] = df["time"].dt.month
+    df["saison_chauffe"] = np.where(
+        df["mois"].isin([9, 10, 11, 12, 1, 2, 3, 4, 5]), 1, 0
     )
-    df_meteo_tre200d0["tre200d0_sous_16"] = np.where(
-        df_meteo_tre200d0["tre200d0"] <= 16, 1, 0
-    )
-    df_meteo_tre200d0["DJ_theta0_16"] = (
-        df_meteo_tre200d0["saison_chauffe"]
-        * df_meteo_tre200d0["tre200d0_sous_16"]
-        * (DJ_TEMPERATURE_REFERENCE - df_meteo_tre200d0["tre200d0"])
+    df["tre200d0_sous_16"] = np.where(df["tre200d0"] <= 16, 1, 0)
+    df["DJ_theta0_16"] = (
+        df["saison_chauffe"]
+        * df["tre200d0_sous_16"]
+        * (DJ_TEMPERATURE_REFERENCE - df["tre200d0"])
     )
 
-    return df_meteo_tre200d0
+    return df
 
 
 # Calcul des degrés-jours

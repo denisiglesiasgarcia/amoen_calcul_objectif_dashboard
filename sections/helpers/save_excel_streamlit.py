@@ -190,7 +190,7 @@ def display_dataframe_with_excel_download(
         display_df = prepare_dataframe_for_display(df)
 
         # Display the DataFrame
-        st.dataframe(display_df, use_container_width=True, hide_index=True)
+        st.dataframe(display_df, width='stretch', hide_index=True)
 
         # Generate Excel file
         excel_data = convert_df_to_excel(df)
@@ -205,7 +205,7 @@ def display_dataframe_with_excel_download(
             data=excel_data,
             file_name=filename,
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            use_container_width=True,
+            width='stretch',
         )
 
     except ExcelExportError as e:

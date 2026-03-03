@@ -103,7 +103,7 @@ def create_barplot_historique_amoen(data_df):
     # Display the plot
     st.plotly_chart(
         fig,
-        use_container_width=True,
+        width='stretch',
         config={
             "toImageButtonOptions": {
                 "format": "png",

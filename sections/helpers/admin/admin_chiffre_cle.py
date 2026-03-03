@@ -271,16 +271,6 @@ def display_objective_chart(df: pd.DataFrame):
                     "periode_rank:O",
                     scale=alt.Scale(paddingInner=0.05),
                 ),
-                color=alt.Color(
-                    "periode:N",
-                    legend=alt.Legend(
-                        title="Période",
-                        orient="bottom",
-                        columns=4,
-                        labelFontSize=10,
-                        titleFontSize=11,
-                    ),
-                ),
                 tooltip=[
                     alt.Tooltip("nom_projet:N", title="Site"),
                     alt.Tooltip("amoen_id:N", title="AMOén"),

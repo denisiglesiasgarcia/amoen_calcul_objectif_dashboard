@@ -917,7 +917,7 @@ def display_database_management(mycol_historique_sites, data_admin):
                 # Display projects to be deleted in a table
                 if project_data_list:
                     confirmation_df = pd.DataFrame(project_data_list)
-                    st.dataframe(confirmation_df, use_container_width=True)
+                    st.dataframe(confirmation_df, width='stretch')
                     
                     st.error(
                         """
@@ -971,7 +971,7 @@ def display_database_management(mycol_historique_sites, data_admin):
     with col1:
         if st.button(
             "🔄 Actualiser",
-            use_container_width=True,
+            width='stretch',
             type="primary",
             help="Actualise les données en conservant la session",
         ):
@@ -983,7 +983,7 @@ def display_database_management(mycol_historique_sites, data_admin):
     with col2:
         if st.button(
             "🔁 Réinitialiser complètement",
-            use_container_width=True,
+            width='stretch',
             type="secondary",
             help="Réinitialise complètement l'application et déconnecte l'utilisateur",
         ):

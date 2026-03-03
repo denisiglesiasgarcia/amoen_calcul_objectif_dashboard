@@ -388,7 +388,7 @@ def create_barplot(data_df, nom_projet):
     # Display plot in Streamlit
     st.plotly_chart(
         fig,
-        use_container_width=False,
+        width='stretch',
         config={
             "toImageButtonOptions": {
                 "format": "png",

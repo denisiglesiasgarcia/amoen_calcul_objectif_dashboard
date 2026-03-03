@@ -180,15 +180,33 @@ def display_filtered_data(df: pd.DataFrame) -> pd.DataFrame:
 
 def display_objective_chart(df: pd.DataFrame):
     """
-    Display objective achievement chart.
-    Improvements: dynamic Y-axis, dashed 100% reference line,
-    legend re-enabled at bottom, labels centered above bars.
-
-    Args:
-        df (pd.DataFrame): Filtered project DataFrame
+    Display an objective achievement chart for filtered projects.
+    This function creates an interactive Altair chart showing the percentage of objective
+    achievement across different projects and time periods. The chart includes:
+    - Grouped bars by project with color-coded periods
+    - Dynamic Y-axis scaling based on data
+    - Percentage labels centered above each bar
+    - A dashed reference line at 85%
+    - Interactive tooltips with project details
+    - Legend at the bottom showing time periods
+        df (pd.DataFrame): Filtered project DataFrame containing at least the following columns:
+            - nom_projet: Project/site name
+            - amoen_id: AMOén identifier
+            - periode_start: Start date of the period (string or date format)
+            - periode_end: End date of the period (string or date format)
+            - atteinte_objectif: Objective achievement as a decimal (e.g., 0.85 for 85%)
+    Returns:
+        None: Displays the chart directly in Streamlit using st.altair_chart()
+    Raises:
+        Displays a warning if no data is available for visualization.
+        Displays an error message if an exception occurs during chart generation.
+    Note:
+        - Values are filtered to only show objectives > 0%
+        - Y-axis automatically scales to accommodate all values (minimum 110%)
+        - Periods with null dates are labeled as "Date non spécifiée"
+        - The chart is responsive and stretches to container width
     """
     try:
-        # Convert to Polars for data processing
         lf = pl.from_pandas(df)
 
         lf = (
@@ -230,11 +248,7 @@ def display_objective_chart(df: pd.DataFrame):
             .otherwise(pl.lit("Date non spécifiée"))
             .alias("periode"),
             # Rank within each project group for xOffset positioning
-            pl.int_range(pl.len()).over("nom_projet").alias("periode_rank"),
-            # Pre-formatted label string
-            pl.col("atteinte_objectif")
-            .map_elements(lambda x: f"{x:.0f}%", return_dtype=pl.Utf8)
-            .alias("atteinte_objectif_formatted"),
+            pl.int_range(pl.len()).over("nom_projet").alias("periode_rank")
         )
 
         df_plot = lf.to_pandas()
@@ -275,39 +289,24 @@ def display_objective_chart(df: pd.DataFrame):
                     alt.Tooltip("nom_projet:N", title="Site"),
                     alt.Tooltip("amoen_id:N", title="AMOén"),
                     alt.Tooltip("periode:N", title="Période"),
-                    alt.Tooltip("atteinte_objectif:Q", title="Atteinte Objectif [%]", format=".1f"),
+                    alt.Tooltip(
+                        "atteinte_objectif:Q",
+                        title="Atteinte Objectif [%]",
+                        format=".1f",
+                    ),
                 ],
             )
         )
 
-        # Percentage labels centered above each bar
-        labels = (
-            alt.Chart(df_plot)
-            .mark_text(
-                align="center",
-                baseline="bottom",
-                dy=-2,
-                fontSize=9,
-                fontWeight="bold",
-                color="black",
-            )
-            .encode(
-                x=alt.X("nom_projet:N"),
-                y=alt.Y("atteinte_objectif:Q"),
-                xOffset=alt.XOffset("periode_rank:O"),
-                text="atteinte_objectif_formatted:N",
-            )
-        )
-
-        # Dashed reference line at 100%
+        # Dashed reference line at 85%
         ref_line = (
-            alt.Chart(pd.DataFrame({"y": [100]}))
+            alt.Chart(pd.DataFrame({"y": [85]}))
             .mark_rule(color="red", strokeWidth=1.5, strokeDash=[5, 4])
             .encode(y=alt.Y("y:Q"))
         )
 
         fig = (
-            alt.layer(bars, labels, ref_line)
+            alt.layer(bars, ref_line)
             .properties(
                 width=700,
                 height=400,
@@ -322,7 +321,7 @@ def display_objective_chart(df: pd.DataFrame):
             .configure_axis(labelFontSize=11)
         )
 
-        st.altair_chart(fig, width='stretch')
+        st.altair_chart(fig, width="stretch")
 
     except Exception as e:
         st.error(f"Error in display_objective_chart: {str(e)}")

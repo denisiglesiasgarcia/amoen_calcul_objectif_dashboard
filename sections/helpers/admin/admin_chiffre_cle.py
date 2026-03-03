@@ -219,13 +219,13 @@ def display_objective_chart(df: pd.DataFrame):
                     * 100
                 ).alias("atteinte_objectif"),
                 pl.col("periode_start")
-                .cast(pl.Utf8)
-                .str.to_date(format="%Y-%m-%d", strict=False)
-                .alias("periode_start"),
+                    .cast(pl.Utf8)
+                    .str.slice(0, 10)
+                    .alias("periode_start"),
                 pl.col("periode_end")
-                .cast(pl.Utf8)
-                .str.to_date(format="%Y-%m-%d", strict=False)
-                .alias("periode_end"),
+                    .cast(pl.Utf8)
+                    .str.slice(0, 10)
+                    .alias("periode_end"),
             )
             .filter(pl.col("atteinte_objectif") > 0)
         )
@@ -235,16 +235,12 @@ def display_objective_chart(df: pd.DataFrame):
             return
 
         lf = lf.with_columns(
-            # Period label for legend and tooltip
+            # Period label for tooltip
             pl.when(
                 pl.col("periode_start").is_not_null()
                 & pl.col("periode_end").is_not_null()
             )
-            .then(
-                pl.col("periode_start").dt.strftime("%Y-%m-%d")
-                + " – "
-                + pl.col("periode_end").dt.strftime("%Y-%m-%d")
-            )
+            .then(pl.col("periode_start") + " – " + pl.col("periode_end"))
             .otherwise(pl.lit("Date non spécifiée"))
             .alias("periode"),
             # Rank within each project group for xOffset positioning

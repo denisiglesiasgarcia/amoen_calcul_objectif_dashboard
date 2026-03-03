@@ -322,7 +322,7 @@ def display_objective_chart(df: pd.DataFrame):
             .configure_axis(labelFontSize=11)
         )
 
-        st.altair_chart(fig, use_container_width=True)
+        st.altair_chart(fig, width='stretch')
 
     except Exception as e:
         st.error(f"Error in display_objective_chart: {str(e)}")

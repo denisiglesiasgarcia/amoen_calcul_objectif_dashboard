@@ -15,344 +15,250 @@ class DataValidator:
     """Handles data validation and type conversion for MongoDB documents"""
 
     # Define the schema for project data with form configurations
-    SCHEMA = {  # Changed from tuple to dictionary
-        "nom_projet": {
-            "type": str,
-            "required": True,
-            "form_type": "text",
-            "label": "Nom du projet",
-            "help": "Nom unique du projet",
-        },
-        "adresse_projet": {
-            "type": str,
-            "required": True,
-            "form_type": "text",
-            "label": "Adresse du projet",
-            "help": "Si plusieurs adresses, séparez-les par des points-virgules par exemple: 'Chemin Dr-Adolphe-PASTEUR 23;Chemin Dr-Adolphe-PASTEUR 25;Chemin Dr-Adolphe-PASTEUR 27'. Le format d'adresse doit être celui de SITG.",
-        },
-        "amoen_id": {
-            "type": str,
-            "required": True,
-            "form_type": "text",
-            "label": "AMOén ID",
-        },
-        "sre_renovation_m2": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min_value": 0,
-            "step": 0.1,
-            "format": "%.2f",
-            "label": "SRE rénovée (m²)",
-        },
-        "travaux_start": {
-            "type": datetime,
-            "required": True,
-            "form_type": "date",
-            "label": "Date de début des travaux",
-            "default": datetime(1900, 1, 1),
-        },
-        "travaux_end": {
-            "type": datetime,
-            "required": True,
-            "form_type": "date",
-            "label": "Date de fin des travaux",
-            "default": datetime(1900, 12, 31),
-        },
-        "ef_avant_corr_kwh_m2": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min_value": 0,
-            "step": 0.1,
-            "format": "%.2f",
-            "label": "Ef avant corr (kWh/m²)",
-        },
-        "periode_start": {
-            "type": datetime,
-            "required": False,
-            "form_type": "date",
-            "label": "Date de début période",
-        },
-        "periode_end": {
-            "type": datetime,
-            "required": False,
-            "form_type": "date",
-            "label": "Date de fin période",
-        },
-        "date_rapport": {
-            "type": datetime,
-            "required": False,
-            "form_type": "date",
-            "label": "Date du rapport",
-        },
-        "periode_nb_jours": {
-            "type": int,
-            "required": False,
-            "form_type": "number",
-            "step": 1,
-            "label": "Nombre de jours de la période",
-        },
-        # Percentage fields
-        "sre_pourcentage_habitat_collectif": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        "sre_pourcentage_habitat_individuel": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        "sre_pourcentage_administration": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        "sre_pourcentage_ecoles": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        "sre_pourcentage_commerce": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        "sre_pourcentage_restauration": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        "sre_pourcentage_lieux_de_rassemblement": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        "sre_pourcentage_hopitaux": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        "sre_pourcentage_industrie": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        "sre_pourcentage_depots": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        "sre_pourcentage_installations_sportives": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        "sre_pourcentage_piscines_couvertes": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min": 0,
-            "max": 100,
-        },
-        # Energy agents
-        "agent_energetique_ef_mazout_kg": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_mazout_litres": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_mazout_kwh": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_gaz_naturel_m3": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_gaz_naturel_kwh": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_bois_buches_dur_stere": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_bois_buches_tendre_stere": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_bois_buches_tendre_kwh": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_pellets_m3": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_pellets_kg": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_pellets_kwh": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_plaquettes_m3": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_plaquettes_kwh": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_cad_kwh": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_electricite_pac_kwh": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_electricite_directe_kwh": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "agent_energetique_ef_autre_kwh": {
-            "type": float,
-            "required": False,
-            "form_type": "number",
-            "min": 0,
-        },
-        "ef_objectif_pondere_kwh_m2": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min_value": 0,
-            "step": 0.1,
-            "format": "%.2f",
-            "label": "Ef objectif pondéré (kWh/m²)",
-            "help": "Surélévation: C94 / Rénovation: C63",
-        },
-        "sre_extension_surelevation_m2": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min_value": 0,
-            "step": 0.1,
-            "format": "%.2f",
-            "label": "SRE extension/surélévation (m²)",
-            "help": "SRE de la partie extension ou surélévation, mettre 0 si aucune",
-        },
-        "annees_calcul_idc_avant_travaux": {
-            "type": str,
-            "required": True,
-            "form_type": "text",
-            "label": "Années de calcul IDC avant travaux",
-            "help": "Années utilisées pour le calcul IDC avant travaux, séparées par des virgules (ex: 2018,2019,2020)",
-        },
-        "repartition_energie_finale_partie_renovee_chauffage": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min_value": 0.0,
-            "max_value": 100.0,
-            "step": 0.1,
-            "format": "%.2f",
-            "label": "Chauffage partie rénovée (%)",
-            "help": "Surélévation: C77 / Rénovation: C49",
-        },
-        "repartition_energie_finale_partie_renovee_ecs": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min_value": 0.0,
-            "max_value": 100.0,
-            "step": 0.1,
-            "format": "%.2f",
-            "label": "ECS partie rénovée (%)",
-            "help": "Surélévation: C78 / Rénovation: C50",
-        },
-        "repartition_energie_finale_partie_surelevee_chauffage": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min_value": 0.0,
-            "max_value": 100.0,
-            "step": 0.1,
-            "format": "%.2f",
-            "label": "Chauffage partie surélévée (%)",
-            "help": "C79 — mettre 0 si pas de surélévation",
-        },
-        "repartition_energie_finale_partie_surelevee_ecs": {
-            "type": float,
-            "required": True,
-            "form_type": "number",
-            "min_value": 0.0,
-            "max_value": 100.0,
-            "step": 0.1,
-            "format": "%.2f",
-            "label": "ECS partie surélévée (%)",
-            "help": "C80 — mettre 0 si pas de surélévation",
-        },
-    }
+    SCHEMA = {
+            # --- Identification du projet ---
+            "nom_projet": {
+                "type": str, "required": True, "form_type": "text",
+                "label": "Nom du projet",
+                "help": "Nom unique du projet",
+            },
+            "adresse_projet": {
+                "type": str, "required": True, "form_type": "text",
+                "label": "Adresse(s) du projet",
+                "help": "Plusieurs adresses séparées par des points-virgules. Format SITG (ex: Chemin Dr-Adolphe-PASTEUR 23)",
+            },
+            "amoen_id": {
+                "type": str, "required": True, "form_type": "text",
+                "label": "AMOén ID",
+            },
+            # --- Travaux ---
+            "travaux_start": {
+                "type": datetime, "required": True, "form_type": "date",
+                "label": "Début des travaux",
+                "default": datetime(1900, 1, 1),
+            },
+            "travaux_end": {
+                "type": datetime, "required": True, "form_type": "date",
+                "label": "Fin des travaux",
+                "default": datetime(1900, 12, 31),
+            },
+            # --- SRE ---
+            "sre_renovation_m2": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "SRE rénovée (m²)",
+                "help": "Partie rénovée uniquement, hors extension/surélévation",
+            },
+            "sre_extension_surelevation_m2": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "SRE extension/surélévation (m²)",
+                "help": "Mettre 0 si pas de surélévation",
+            },
+            # --- Pourcentages SRE par affectation ---
+            "sre_pourcentage_habitat_collectif": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Habitat collectif (%)",
+            },
+            "sre_pourcentage_habitat_individuel": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Habitat individuel (%)",
+            },
+            "sre_pourcentage_administration": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Administration (%)",
+            },
+            "sre_pourcentage_ecoles": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Ecoles (%)",
+            },
+            "sre_pourcentage_commerce": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Commerce (%)",
+            },
+            "sre_pourcentage_restauration": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Restauration (%)",
+            },
+            "sre_pourcentage_lieux_de_rassemblement": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Lieux de rassemblement (%)",
+            },
+            "sre_pourcentage_hopitaux": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Hôpitaux (%)",
+            },
+            "sre_pourcentage_industrie": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Industrie (%)",
+            },
+            "sre_pourcentage_depots": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Dépôts (%)",
+            },
+            "sre_pourcentage_installations_sportives": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Installations sportives (%)",
+            },
+            "sre_pourcentage_piscines_couvertes": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Piscines couvertes (%)",
+            },
+            # --- Période de mesure ---
+            "periode_start": {
+                "type": datetime, "required": False, "form_type": "date",
+                "label": "Début de la période de mesure",
+            },
+            "periode_end": {
+                "type": datetime, "required": False, "form_type": "date",
+                "label": "Fin de la période de mesure",
+            },
+            "date_rapport": {
+                "type": datetime, "required": False, "form_type": "date",
+                "label": "Date du rapport",
+            },
+            # --- Energies de référence ---
+            "ef_avant_corr_kwh_m2": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Ef avant correction (kWh/m²)",
+                "help": "IDC moyen 3 ans avant travaux — Surélévation: C92 / Rénovation: C61",
+            },
+            "ef_objectif_pondere_kwh_m2": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Ef objectif pondéré (kWh/m²)",
+                "help": "Surélévation: C94 / Rénovation: C63",
+            },
+            "annees_calcul_idc_avant_travaux": {
+                "type": str, "required": True, "form_type": "text",
+                "label": "Années de calcul IDC avant travaux",
+                "help": "Séparées par des tirets (ex: 2018-2019-2020)",
+            },
+            # --- Répartition EF chauffage / ECS ---
+            "repartition_energie_finale_partie_renovee_chauffage": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Chauffage partie rénovée (%)",
+                "help": "Surélévation: C77 / Rénovation: C49",
+            },
+            "repartition_energie_finale_partie_renovee_ecs": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "ECS partie rénovée (%)",
+                "help": "Surélévation: C78 / Rénovation: C50",
+            },
+            "repartition_energie_finale_partie_surelevee_chauffage": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "Chauffage partie surélévée (%)",
+                "help": "C79 — mettre 0 si pas de surélévation",
+            },
+            "repartition_energie_finale_partie_surelevee_ecs": {
+                "type": float, "required": True, "form_type": "number",
+                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
+                "label": "ECS partie surélévée (%)",
+                "help": "C80 — mettre 0 si pas de surélévation",
+            },
+            # --- Agents énergétiques ---
+            "agent_energetique_ef_mazout_kg": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Mazout (kg)",
+            },
+            "agent_energetique_ef_mazout_litres": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Mazout (litres)",
+            },
+            "agent_energetique_ef_mazout_kwh": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Mazout (kWh)",
+            },
+            "agent_energetique_ef_gaz_naturel_m3": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Gaz naturel (m³)",
+            },
+            "agent_energetique_ef_gaz_naturel_kwh": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Gaz naturel (kWh)",
+            },
+            "agent_energetique_ef_bois_buches_dur_stere": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Bois bûches dur (stère)",
+            },
+            "agent_energetique_ef_bois_buches_tendre_stere": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Bois bûches tendre (stère)",
+            },
+            "agent_energetique_ef_bois_buches_tendre_kwh": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Bois bûches tendre (kWh)",
+            },
+            "agent_energetique_ef_pellets_m3": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Pellets (m³)",
+            },
+            "agent_energetique_ef_pellets_kg": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Pellets (kg)",
+            },
+            "agent_energetique_ef_pellets_kwh": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Pellets (kWh)",
+            },
+            "agent_energetique_ef_plaquettes_m3": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Plaquettes (m³)",
+            },
+            "agent_energetique_ef_plaquettes_kwh": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Plaquettes (kWh)",
+            },
+            "agent_energetique_ef_cad_kwh": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "CAD (kWh)",
+            },
+            "agent_energetique_ef_electricite_pac_kwh": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Electricité PAC (kWh)",
+            },
+            "agent_energetique_ef_electricite_directe_kwh": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Electricité directe (kWh)",
+            },
+            "agent_energetique_ef_autre_kwh": {
+                "type": float, "required": False, "form_type": "number",
+                "min_value": 0.0, "step": 0.1, "format": "%.2f",
+                "label": "Autre agent énergétique (kWh)",
+            },
+        }
 
     @classmethod
     def create_form_field(cls, key: str, schema: dict, current_value: Any = None):
@@ -677,13 +583,13 @@ def insert_project_to_mongodb(
 
 def delete_projects_from_mongodb(mycol_historique_sites, project_ids: list) -> tuple:
     """Delete multiple projects from MongoDB based on their IDs.
-    
+
     Args:
         mycol_historique_sites: MongoDB collection containing the projects
         project_ids (list): List of project ObjectId strings
-        
+
     Returns:
-        tuple: (success_count, failed_count, errors) 
+        tuple: (success_count, failed_count, errors)
                Where success_count is the number of successfully deleted projects,
                failed_count is the number of failed deletions, and
                errors is a list of error messages
@@ -691,14 +597,16 @@ def delete_projects_from_mongodb(mycol_historique_sites, project_ids: list) -> t
     try:
         if not check_mongodb_connection(mycol_historique_sites):
             return 0, len(project_ids), ["Database connection failed"]
-        
+
         success_count = 0
         failed_count = 0
         errors = []
-        
+
         for project_id in project_ids:
             try:
-                result = mycol_historique_sites.delete_one({"_id": ObjectId(project_id)})
+                result = mycol_historique_sites.delete_one(
+                    {"_id": ObjectId(project_id)}
+                )
                 if result.deleted_count == 0:
                     failed_count += 1
                     errors.append(f"Project with ID {project_id} not found")
@@ -707,9 +615,9 @@ def delete_projects_from_mongodb(mycol_historique_sites, project_ids: list) -> t
             except Exception as e:
                 failed_count += 1
                 errors.append(f"Error deleting project {project_id}: {str(e)}")
-        
+
         return success_count, failed_count, errors
-        
+
     except Exception as e:
         return 0, len(project_ids), [f"Error in bulk delete operation: {str(e)}"]
 
@@ -875,13 +783,11 @@ def display_database_management(mycol_historique_sites, data_admin):
                             "last_modified",
                         ]
 
-                        for col in df.columns:
-                            if col not in non_editable and col in DataValidator.SCHEMA:
-                                current_value = project_data[col]
-                                schema = DataValidator.SCHEMA[col]
-                                edited_data[col] = DataValidator.create_form_field(
-                                    col, schema, current_value
-                                )
+                        for col, schema in DataValidator.SCHEMA.items():
+                            if col in non_editable:
+                                continue
+                            current_value = project_data.get(col, None)  # None si absent du doc
+                            edited_data[col] = DataValidator.create_form_field(col, schema, current_value)
 
                         st.warning(
                             "⚠️ Vérifiez bien toutes les informations avant de sauvegarder"
@@ -941,55 +847,71 @@ def display_database_management(mycol_historique_sites, data_admin):
 
         with tab_delete:
             st.write("🗑️ Supprimer des projets")
-            st.error("⚠️ ATTENTION: La suppression de projets est définitive et irréversible!")
-            
+            st.error(
+                "⚠️ ATTENTION: La suppression de projets est définitive et irréversible!"
+            )
+
             # Create project identifiers
             df["project_identifier"] = df.apply(
-                lambda row: f"{row['nom_projet']} ({row['date_rapport'].strftime('%d-%m-%Y %H:%M:%S') if pd.notnull(row['date_rapport']) else 'Date non définie'})",
-                axis=1
+                lambda row: (
+                    f"{row['nom_projet']} ({row['date_rapport'].strftime('%d-%m-%Y %H:%M:%S') if pd.notnull(row['date_rapport']) else 'Date non définie'})"
+                ),
+                axis=1,
             )
-            
+
             # Allow multiple selection of projects to delete
             projects_to_delete = st.multiselect(
                 "Sélectionner les projets à supprimer",
                 df["project_identifier"].unique(),
-                key="delete_projects_select"
+                key="delete_projects_select",
             )
-            
+
             if projects_to_delete:
                 # Display selected projects in a table format for confirmation
-                st.warning(f"Vous avez sélectionné {len(projects_to_delete)} projet(s) à supprimer:")
-                
+                st.warning(
+                    f"Vous avez sélectionné {len(projects_to_delete)} projet(s) à supprimer:"
+                )
+
                 project_data_list = []
                 project_ids_to_delete = []
-                
+
                 for project_identifier in projects_to_delete:
                     try:
                         # Extract project name and datetime
                         project_name = project_identifier.split(" (")[0]
                         project_datetime = project_identifier.split("(")[1].rstrip(")")
-                        
+
                         # Find the matching project
                         mask = df["nom_projet"] == project_name
-                        if project_datetime != "Date non définie" and project_datetime != "Date invalide":
-                            mask &= df["date_rapport"].dt.strftime("%d-%m-%Y %H:%M:%S") == project_datetime
-                        
+                        if (
+                            project_datetime != "Date non définie"
+                            and project_datetime != "Date invalide"
+                        ):
+                            mask &= (
+                                df["date_rapport"].dt.strftime("%d-%m-%Y %H:%M:%S")
+                                == project_datetime
+                            )
+
                         if any(mask):
                             project_data = df[mask].iloc[0]
-                            project_data_list.append({
-                                "Nom du projet": project_data["nom_projet"],
-                                "Date du rapport": project_datetime,
-                                "ID": str(project_data["_id"])
-                            })
+                            project_data_list.append(
+                                {
+                                    "Nom du projet": project_data["nom_projet"],
+                                    "Date du rapport": project_datetime,
+                                    "ID": str(project_data["_id"]),
+                                }
+                            )
                             project_ids_to_delete.append(str(project_data["_id"]))
                     except Exception as e:
-                        st.error(f"Erreur lors de la récupération des détails du projet: {str(e)}")
-                
+                        st.error(
+                            f"Erreur lors de la récupération des détails du projet: {str(e)}"
+                        )
+
                 # Display projects to be deleted in a table
                 if project_data_list:
                     confirmation_df = pd.DataFrame(project_data_list)
-                    st.dataframe(confirmation_df, width='stretch')
-                    
+                    st.dataframe(confirmation_df, width="stretch")
+
                     st.error(
                         """
                         ⚠️ ATTENTION: 
@@ -998,37 +920,45 @@ def display_database_management(mycol_historique_sites, data_admin):
                         - Cette action ne peut pas être annulée
                         """
                     )
-                    
+
                     confirm_delete = st.checkbox(
                         "✅ Je confirme vouloir supprimer ces projets et je comprends que cette action est irréversible",
-                        key="confirm_delete_multiple"
+                        key="confirm_delete_multiple",
                     )
-                    
+
                     if confirm_delete:
                         if st.button(
                             f"🗑️ Supprimer définitivement {len(project_ids_to_delete)} projet(s)",
                             type="primary",
-                            key="delete_multiple_button"
+                            key="delete_multiple_button",
                         ):
                             with st.spinner("⏳ Suppression en cours..."):
-                                success_count, failed_count, errors = delete_projects_from_mongodb(
-                                    mycol_historique_sites, project_ids_to_delete
+                                success_count, failed_count, errors = (
+                                    delete_projects_from_mongodb(
+                                        mycol_historique_sites, project_ids_to_delete
+                                    )
                                 )
-                                
+
                                 if success_count > 0:
-                                    st.success(f"✅ {success_count} projet(s) supprimé(s) avec succès!")
-                                    
+                                    st.success(
+                                        f"✅ {success_count} projet(s) supprimé(s) avec succès!"
+                                    )
+
                                 if failed_count > 0:
-                                    st.error(f"❌ {failed_count} projet(s) n'ont pas pu être supprimés.")
+                                    st.error(
+                                        f"❌ {failed_count} projet(s) n'ont pas pu être supprimés."
+                                    )
                                     for error in errors:
                                         st.error(f"- {error}")
-                                
+
                                 # Refresh the page after a short delay if at least one project was deleted
                                 if success_count > 0:
                                     time.sleep(1)
                                     st.rerun()
                     else:
-                        st.info("💡 Cochez la case de confirmation pour activer le bouton de suppression")
+                        st.info(
+                            "💡 Cochez la case de confirmation pour activer le bouton de suppression"
+                        )
                 else:
                     st.warning("Aucun projet valide à supprimer n'a été trouvé.")
 
@@ -1042,7 +972,7 @@ def display_database_management(mycol_historique_sites, data_admin):
     with col1:
         if st.button(
             "🔄 Actualiser",
-            width='stretch',
+            width="stretch",
             type="primary",
             help="Actualise les données en conservant la session",
         ):
@@ -1054,7 +984,7 @@ def display_database_management(mycol_historique_sites, data_admin):
     with col2:
         if st.button(
             "🔁 Réinitialiser complètement",
-            width='stretch',
+            width="stretch",
             type="secondary",
             help="Réinitialise complètement l'application et déconnecte l'utilisateur",
         ):

@@ -1,11 +1,13 @@
-import streamlit as st
-import pandas as pd
-from datetime import datetime, date
-from bson import ObjectId
-from typing import Dict, Any
-from sections.helpers.save_excel_streamlit import display_dataframe_with_excel_download
-import time
 import logging
+import time
+from datetime import date, datetime
+from typing import Any
+
+import pandas as pd
+import streamlit as st
+from bson import ObjectId
+
+from sections.helpers.save_excel_streamlit import display_dataframe_with_excel_download
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -16,249 +18,431 @@ class DataValidator:
 
     # Define the schema for project data with form configurations
     SCHEMA = {
-            # --- Identification du projet ---
-            "nom_projet": {
-                "type": str, "required": True, "form_type": "text",
-                "label": "Nom du projet",
-                "help": "Nom unique du projet",
-            },
-            "adresse_projet": {
-                "type": str, "required": True, "form_type": "text",
-                "label": "Adresse(s) du projet",
-                "help": "Plusieurs adresses séparées par des points-virgules. Format SITG (ex: Chemin Dr-Adolphe-PASTEUR 23)",
-            },
-            "amoen_id": {
-                "type": str, "required": True, "form_type": "text",
-                "label": "AMOén ID",
-            },
-            # --- Travaux ---
-            "travaux_start": {
-                "type": datetime, "required": True, "form_type": "date",
-                "label": "Début des travaux",
-                "default": datetime(1900, 1, 1),
-            },
-            "travaux_end": {
-                "type": datetime, "required": True, "form_type": "date",
-                "label": "Fin des travaux",
-                "default": datetime(1900, 12, 31),
-            },
-            # --- SRE ---
-            "sre_renovation_m2": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "SRE rénovée (m²)",
-                "help": "Partie rénovée uniquement, hors extension/surélévation",
-            },
-            "sre_extension_surelevation_m2": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "SRE extension/surélévation (m²)",
-                "help": "Mettre 0 si pas de surélévation",
-            },
-            # --- Pourcentages SRE par affectation ---
-            "sre_pourcentage_habitat_collectif": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Habitat collectif (%)",
-            },
-            "sre_pourcentage_habitat_individuel": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Habitat individuel (%)",
-            },
-            "sre_pourcentage_administration": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Administration (%)",
-            },
-            "sre_pourcentage_ecoles": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Ecoles (%)",
-            },
-            "sre_pourcentage_commerce": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Commerce (%)",
-            },
-            "sre_pourcentage_restauration": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Restauration (%)",
-            },
-            "sre_pourcentage_lieux_de_rassemblement": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Lieux de rassemblement (%)",
-            },
-            "sre_pourcentage_hopitaux": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Hôpitaux (%)",
-            },
-            "sre_pourcentage_industrie": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Industrie (%)",
-            },
-            "sre_pourcentage_depots": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Dépôts (%)",
-            },
-            "sre_pourcentage_installations_sportives": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Installations sportives (%)",
-            },
-            "sre_pourcentage_piscines_couvertes": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Piscines couvertes (%)",
-            },
-            # --- Période de mesure ---
-            "periode_start": {
-                "type": datetime, "required": False, "form_type": "date",
-                "label": "Début de la période de mesure",
-            },
-            "periode_end": {
-                "type": datetime, "required": False, "form_type": "date",
-                "label": "Fin de la période de mesure",
-            },
-            "date_rapport": {
-                "type": datetime, "required": False, "form_type": "date",
-                "label": "Date du rapport",
-            },
-            # --- Energies de référence ---
-            "ef_avant_corr_kwh_m2": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Ef avant correction (kWh/m²)",
-                "help": "IDC moyen 3 ans avant travaux — Surélévation: C92 / Rénovation: C61",
-            },
-            "ef_objectif_pondere_kwh_m2": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Ef objectif pondéré (kWh/m²)",
-                "help": "Surélévation: C94 / Rénovation: C63",
-            },
-            "annees_calcul_idc_avant_travaux": {
-                "type": str, "required": True, "form_type": "text",
-                "label": "Années de calcul IDC avant travaux",
-                "help": "Séparées par des tirets (ex: 2018-2019-2020)",
-            },
-            # --- Répartition EF chauffage / ECS ---
-            "repartition_energie_finale_partie_renovee_chauffage": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Chauffage partie rénovée (%)",
-                "help": "Surélévation: C77 / Rénovation: C49",
-            },
-            "repartition_energie_finale_partie_renovee_ecs": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "ECS partie rénovée (%)",
-                "help": "Surélévation: C78 / Rénovation: C50",
-            },
-            "repartition_energie_finale_partie_surelevee_chauffage": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "Chauffage partie surélévée (%)",
-                "help": "C79 — mettre 0 si pas de surélévation",
-            },
-            "repartition_energie_finale_partie_surelevee_ecs": {
-                "type": float, "required": True, "form_type": "number",
-                "min_value": 0.0, "max_value": 100.0, "step": 0.1, "format": "%.2f",
-                "label": "ECS partie surélévée (%)",
-                "help": "C80 — mettre 0 si pas de surélévation",
-            },
-            # --- Agents énergétiques ---
-            "agent_energetique_ef_mazout_kg": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Mazout (kg)",
-            },
-            "agent_energetique_ef_mazout_litres": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Mazout (litres)",
-            },
-            "agent_energetique_ef_mazout_kwh": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Mazout (kWh)",
-            },
-            "agent_energetique_ef_gaz_naturel_m3": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Gaz naturel (m³)",
-            },
-            "agent_energetique_ef_gaz_naturel_kwh": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Gaz naturel (kWh)",
-            },
-            "agent_energetique_ef_bois_buches_dur_stere": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Bois bûches dur (stère)",
-            },
-            "agent_energetique_ef_bois_buches_tendre_stere": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Bois bûches tendre (stère)",
-            },
-            "agent_energetique_ef_bois_buches_tendre_kwh": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Bois bûches tendre (kWh)",
-            },
-            "agent_energetique_ef_pellets_m3": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Pellets (m³)",
-            },
-            "agent_energetique_ef_pellets_kg": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Pellets (kg)",
-            },
-            "agent_energetique_ef_pellets_kwh": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Pellets (kWh)",
-            },
-            "agent_energetique_ef_plaquettes_m3": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Plaquettes (m³)",
-            },
-            "agent_energetique_ef_plaquettes_kwh": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Plaquettes (kWh)",
-            },
-            "agent_energetique_ef_cad_kwh": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "CAD (kWh)",
-            },
-            "agent_energetique_ef_electricite_pac_kwh": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Electricité PAC (kWh)",
-            },
-            "agent_energetique_ef_electricite_directe_kwh": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Electricité directe (kWh)",
-            },
-            "agent_energetique_ef_autre_kwh": {
-                "type": float, "required": False, "form_type": "number",
-                "min_value": 0.0, "step": 0.1, "format": "%.2f",
-                "label": "Autre agent énergétique (kWh)",
-            },
-        }
+        # --- Identification du projet ---
+        "nom_projet": {
+            "type": str,
+            "required": True,
+            "form_type": "text",
+            "label": "Nom du projet",
+            "help": "Nom unique du projet",
+        },
+        "adresse_projet": {
+            "type": str,
+            "required": True,
+            "form_type": "text",
+            "label": "Adresse(s) du projet",
+            "help": "Plusieurs adresses séparées par des points-virgules. Format SITG (ex: Chemin Dr-Adolphe-PASTEUR 23)",
+        },
+        "amoen_id": {
+            "type": str,
+            "required": True,
+            "form_type": "text",
+            "label": "AMOén ID",
+        },
+        # --- Travaux ---
+        "travaux_start": {
+            "type": datetime,
+            "required": True,
+            "form_type": "date",
+            "label": "Début des travaux",
+            "default": datetime(1900, 1, 1),
+        },
+        "travaux_end": {
+            "type": datetime,
+            "required": True,
+            "form_type": "date",
+            "label": "Fin des travaux",
+            "default": datetime(1900, 12, 31),
+        },
+        # --- SRE ---
+        "sre_renovation_m2": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "SRE rénovée (m²)",
+            "help": "Partie rénovée uniquement, hors extension/surélévation",
+        },
+        "sre_extension_surelevation_m2": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "SRE extension/surélévation (m²)",
+            "help": "Mettre 0 si pas de surélévation",
+        },
+        # --- Pourcentages SRE par affectation ---
+        "sre_pourcentage_habitat_collectif": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Habitat collectif (%)",
+        },
+        "sre_pourcentage_habitat_individuel": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Habitat individuel (%)",
+        },
+        "sre_pourcentage_administration": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Administration (%)",
+        },
+        "sre_pourcentage_ecoles": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Ecoles (%)",
+        },
+        "sre_pourcentage_commerce": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Commerce (%)",
+        },
+        "sre_pourcentage_restauration": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Restauration (%)",
+        },
+        "sre_pourcentage_lieux_de_rassemblement": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Lieux de rassemblement (%)",
+        },
+        "sre_pourcentage_hopitaux": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Hôpitaux (%)",
+        },
+        "sre_pourcentage_industrie": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Industrie (%)",
+        },
+        "sre_pourcentage_depots": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Dépôts (%)",
+        },
+        "sre_pourcentage_installations_sportives": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Installations sportives (%)",
+        },
+        "sre_pourcentage_piscines_couvertes": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Piscines couvertes (%)",
+        },
+        # --- Période de mesure ---
+        "periode_start": {
+            "type": datetime,
+            "required": False,
+            "form_type": "date",
+            "label": "Début de la période de mesure",
+        },
+        "periode_end": {
+            "type": datetime,
+            "required": False,
+            "form_type": "date",
+            "label": "Fin de la période de mesure",
+        },
+        "date_rapport": {
+            "type": datetime,
+            "required": False,
+            "form_type": "date",
+            "label": "Date du rapport",
+        },
+        # --- Energies de référence ---
+        "ef_avant_corr_kwh_m2": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Ef avant correction (kWh/m²)",
+            "help": "IDC moyen 3 ans avant travaux — Surélévation: C92 / Rénovation: C61",
+        },
+        "ef_objectif_pondere_kwh_m2": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Ef objectif pondéré (kWh/m²)",
+            "help": "Surélévation: C94 / Rénovation: C63",
+        },
+        "annees_calcul_idc_avant_travaux": {
+            "type": str,
+            "required": True,
+            "form_type": "text",
+            "label": "Années de calcul IDC avant travaux",
+            "help": "Séparées par des tirets (ex: 2018-2019-2020)",
+        },
+        # --- Répartition EF chauffage / ECS ---
+        "repartition_energie_finale_partie_renovee_chauffage": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Chauffage partie rénovée (%)",
+            "help": "Surélévation: C77 / Rénovation: C49",
+        },
+        "repartition_energie_finale_partie_renovee_ecs": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "ECS partie rénovée (%)",
+            "help": "Surélévation: C78 / Rénovation: C50",
+        },
+        "repartition_energie_finale_partie_surelevee_chauffage": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Chauffage partie surélévée (%)",
+            "help": "C79 — mettre 0 si pas de surélévation",
+        },
+        "repartition_energie_finale_partie_surelevee_ecs": {
+            "type": float,
+            "required": True,
+            "form_type": "number",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "ECS partie surélévée (%)",
+            "help": "C80 — mettre 0 si pas de surélévation",
+        },
+        # --- Agents énergétiques ---
+        "agent_energetique_ef_mazout_kg": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Mazout (kg)",
+        },
+        "agent_energetique_ef_mazout_litres": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Mazout (litres)",
+        },
+        "agent_energetique_ef_mazout_kwh": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Mazout (kWh)",
+        },
+        "agent_energetique_ef_gaz_naturel_m3": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Gaz naturel (m³)",
+        },
+        "agent_energetique_ef_gaz_naturel_kwh": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Gaz naturel (kWh)",
+        },
+        "agent_energetique_ef_bois_buches_dur_stere": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Bois bûches dur (stère)",
+        },
+        "agent_energetique_ef_bois_buches_tendre_stere": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Bois bûches tendre (stère)",
+        },
+        "agent_energetique_ef_bois_buches_tendre_kwh": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Bois bûches tendre (kWh)",
+        },
+        "agent_energetique_ef_pellets_m3": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Pellets (m³)",
+        },
+        "agent_energetique_ef_pellets_kg": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Pellets (kg)",
+        },
+        "agent_energetique_ef_pellets_kwh": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Pellets (kWh)",
+        },
+        "agent_energetique_ef_plaquettes_m3": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Plaquettes (m³)",
+        },
+        "agent_energetique_ef_plaquettes_kwh": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Plaquettes (kWh)",
+        },
+        "agent_energetique_ef_cad_kwh": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "CAD (kWh)",
+        },
+        "agent_energetique_ef_electricite_pac_kwh": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Electricité PAC (kWh)",
+        },
+        "agent_energetique_ef_electricite_directe_kwh": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Electricité directe (kWh)",
+        },
+        "agent_energetique_ef_autre_kwh": {
+            "type": float,
+            "required": False,
+            "form_type": "number",
+            "min_value": 0.0,
+            "step": 0.1,
+            "format": "%.2f",
+            "label": "Autre agent énergétique (kWh)",
+        },
+    }
 
     @classmethod
     def create_form_field(cls, key: str, schema: dict, current_value: Any = None):
@@ -427,8 +611,8 @@ class DataValidator:
 
     @classmethod
     def validate_and_convert(
-        cls, data: Dict[str, Any]
-    ) -> tuple[Dict[str, Any], list[str]]:
+        cls, data: dict[str, Any]
+    ) -> tuple[dict[str, Any], list[str]]:
         """Validates and converts data according to schema."""
         converted_data = {}
         errors = []
@@ -483,7 +667,7 @@ class DataValidator:
 
         # Validate percentage fields sum to 100%
         percentage_fields = [
-            f for f in converted_data.keys() if f.startswith("sre_pourcentage_")
+            f for f in converted_data if f.startswith("sre_pourcentage_")
         ]
         if percentage_fields:
             total = sum(converted_data.get(f, 0) for f in percentage_fields)
@@ -506,7 +690,7 @@ def check_mongodb_connection(collection) -> bool:
 
 
 def update_project_in_mongodb(
-    mycol_historique_sites, project_id: str, updated_data: Dict[str, Any]
+    mycol_historique_sites, project_id: str, updated_data: dict[str, Any]
 ) -> bool:
     """Update project in MongoDB with type validation"""
     try:
@@ -546,7 +730,7 @@ def update_project_in_mongodb(
 
 
 def insert_project_to_mongodb(
-    mycol_historique_sites, project_data: Dict[str, Any]
+    mycol_historique_sites, project_data: dict[str, Any]
 ) -> bool:
     """Insert new project into MongoDB with type validation"""
     try:
@@ -562,9 +746,9 @@ def insert_project_to_mongodb(
                 st.error(f"- {error}")
             return False
 
-        if mycol_historique_sites.find_one(
-            {"nom_projet": converted_data["nom_projet"]}
-        ):
+        if mycol_historique_sites.find_one({
+            "nom_projet": converted_data["nom_projet"]
+        }):
             st.error("Un projet avec ce nom existe déjà")
             return False
 
@@ -604,9 +788,9 @@ def delete_projects_from_mongodb(mycol_historique_sites, project_ids: list) -> t
 
         for project_id in project_ids:
             try:
-                result = mycol_historique_sites.delete_one(
-                    {"_id": ObjectId(project_id)}
-                )
+                result = mycol_historique_sites.delete_one({
+                    "_id": ObjectId(project_id)
+                })
                 if result.deleted_count == 0:
                     failed_count += 1
                     errors.append(f"Project with ID {project_id} not found")
@@ -694,21 +878,16 @@ def display_database_management(mycol_historique_sites, data_admin):
             na_position="last",
         )
 
-        tab_view, tab_edit, tab_add, tab_delete, tab_extract = st.tabs(
-            [
-                "👀 Voir les projets",
-                "✏️ Modifier un projet",
-                "➕ Ajouter un projet",
-                "🗑️ Supprimer un projet",
-                "📥 Extraire la BD",
-            ]
-        )
+        tab_view, tab_edit, tab_add, tab_delete, tab_extract = st.tabs([
+            "👀 Voir les projets",
+            "✏️ Modifier un projet",
+            "➕ Ajouter un projet",
+            "🗑️ Supprimer un projet",
+            "📥 Extraire la BD",
+        ])
 
         with tab_view:
             st.write("📋 Liste des projets dans la base de données")
-            st.info(
-                "ℹ️ Utilisez la barre de recherche en haut à droite pour trouver un projet spécifique"
-            )
             display_df = df.copy()
             date_columns = ["date_rapport", "date_creation", "last_modified"]
             for col in date_columns:
@@ -733,7 +912,7 @@ def display_database_management(mycol_historique_sites, data_admin):
                         else "Date non définie"
                     )
                     return f"{row['nom_projet']} ({date_str})"
-                except (AttributeError, ValueError) as e:
+                except (AttributeError, ValueError):
                     return f"{row['nom_projet']} (Date invalide)"
 
             df["project_identifier"] = df.apply(create_project_identifier, axis=1)
@@ -787,8 +966,12 @@ def display_database_management(mycol_historique_sites, data_admin):
                         for col, schema in DataValidator.SCHEMA.items():
                             if col in non_editable:
                                 continue
-                            current_value = project_data.get(col, None)  # None si absent du doc
-                            edited_data[col] = DataValidator.create_form_field(col, schema, current_value)
+                            current_value = project_data.get(
+                                col, None
+                            )  # None si absent du doc
+                            edited_data[col] = DataValidator.create_form_field(
+                                col, schema, current_value
+                            )
 
                         st.warning(
                             "⚠️ Vérifiez bien toutes les informations avant de sauvegarder"
@@ -895,13 +1078,11 @@ def display_database_management(mycol_historique_sites, data_admin):
 
                         if any(mask):
                             project_data = df[mask].iloc[0]
-                            project_data_list.append(
-                                {
-                                    "Nom du projet": project_data["nom_projet"],
-                                    "Date du rapport": project_datetime,
-                                    "ID": str(project_data["_id"]),
-                                }
-                            )
+                            project_data_list.append({
+                                "Nom du projet": project_data["nom_projet"],
+                                "Date du rapport": project_datetime,
+                                "ID": str(project_data["_id"]),
+                            })
                             project_ids_to_delete.append(str(project_data["_id"]))
                     except Exception as e:
                         st.error(
@@ -1032,9 +1213,3 @@ def display_database_management(mycol_historique_sites, data_admin):
             st.cache_resource.clear()
             st.session_state.clear()
             st.rerun()
-
-    # Add footer with support information
-    st.markdown("---")
-    st.info(
-        "💡 En cas de problème ou de question, contactez votre administrateur/trice système"
-    )

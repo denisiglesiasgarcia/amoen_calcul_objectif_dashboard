@@ -1,7 +1,7 @@
 # /sections/helpers/calcul_dj.py
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import streamlit as st
 
 
@@ -96,20 +96,24 @@ def get_meteo_data(DJ_TEMPERATURE_REFERENCE=20):
 @st.cache_data
 def calcul_dj_periode(df_meteo_tre200d0, periode_start, periode_end):
     """
-    Calculate the sum of 'DJ_theta0_16' for a given period.
+    Calculate the sum of ``DJ_theta0_16`` for a given period.
 
-    This function filters the input DataFrame `df_meteo_tre200d0` to include only the rows where the 'time' column
-    falls within the specified `periode_start` and `periode_end` range. It then sums the values in the 'DJ_theta0_16'
+    This function filters ``df_meteo_tre200d0`` to include only the rows
+    where the ``time`` column falls within the specified ``periode_start`` and
+    ``periode_end`` range. It then sums the values in the ``DJ_theta0_16``
     column for the filtered rows.
 
     Parameters:
-    df_meteo_tre200d0 (pd.DataFrame): DataFrame containing meteorological data with at least 'time' and 'DJ_theta0_16' columns.
-    periode_start (str or pd.Timestamp): The start of the period for which to calculate the sum.
-    periode_end (str or pd.Timestamp): The end of the period for which to calculate the sum.
+    df_meteo_tre200d0 (pd.DataFrame): DataFrame containing meteorological data
+        with at least ``time`` and ``DJ_theta0_16`` columns.
+    periode_start (str or pd.Timestamp): The start of the period for which to
+        calculate the sum.
+    periode_end (str or pd.Timestamp): The end of the period for which to
+        calculate the sum.
 
     Returns:
-    float: The sum of 'DJ_theta0_16' values for the specified period.
-    """
+    float: The sum of ``DJ_theta0_16`` values for the specified period.
+    """  # noqa: E501
     dj_periode = df_meteo_tre200d0[
         (df_meteo_tre200d0["time"] >= periode_start)
         & (df_meteo_tre200d0["time"] <= periode_end)

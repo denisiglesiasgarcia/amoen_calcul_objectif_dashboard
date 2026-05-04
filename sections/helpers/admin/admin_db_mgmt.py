@@ -444,6 +444,110 @@ class DataValidator:
         },
     }
 
+    FORM_SECTIONS = [
+        ("Identification du projet", ["nom_projet", "adresse_projet", "amoen_id"]),
+        ("Travaux", ["travaux_start", "travaux_end"]),
+        ("SRE", ["sre_renovation_m2", "sre_extension_surelevation_m2"]),
+        (
+            "Répartition SRE par affectation (%)",
+            [
+                "sre_pourcentage_habitat_collectif",
+                "sre_pourcentage_habitat_individuel",
+                "sre_pourcentage_administration",
+                "sre_pourcentage_ecoles",
+                "sre_pourcentage_commerce",
+                "sre_pourcentage_restauration",
+                "sre_pourcentage_lieux_de_rassemblement",
+                "sre_pourcentage_hopitaux",
+                "sre_pourcentage_industrie",
+                "sre_pourcentage_depots",
+                "sre_pourcentage_installations_sportives",
+                "sre_pourcentage_piscines_couvertes",
+            ],
+        ),
+        ("Période de mesure", ["periode_start", "periode_end", "date_rapport"]),
+        (
+            "Énergies de référence",
+            [
+                "ef_avant_corr_kwh_m2",
+                "ef_objectif_pondere_kwh_m2",
+                "annees_calcul_idc_avant_travaux",
+            ],
+        ),
+        (
+            "Répartition EF chauffage / ECS",
+            [
+                "repartition_energie_finale_partie_renovee_chauffage",
+                "repartition_energie_finale_partie_renovee_ecs",
+                "repartition_energie_finale_partie_surelevee_chauffage",
+                "repartition_energie_finale_partie_surelevee_ecs",
+            ],
+        ),
+        (
+            "Agents énergétiques",
+            [
+                "agent_energetique_ef_mazout_kg",
+                "agent_energetique_ef_mazout_litres",
+                "agent_energetique_ef_mazout_kwh",
+                "agent_energetique_ef_gaz_naturel_m3",
+                "agent_energetique_ef_gaz_naturel_kwh",
+                "agent_energetique_ef_bois_buches_dur_stere",
+                "agent_energetique_ef_bois_buches_tendre_stere",
+                "agent_energetique_ef_bois_buches_tendre_kwh",
+                "agent_energetique_ef_pellets_m3",
+                "agent_energetique_ef_pellets_kg",
+                "agent_energetique_ef_pellets_kwh",
+                "agent_energetique_ef_plaquettes_m3",
+                "agent_energetique_ef_plaquettes_kwh",
+                "agent_energetique_ef_cad_kwh",
+                "agent_energetique_ef_electricite_pac_kwh",
+                "agent_energetique_ef_electricite_directe_kwh",
+                "agent_energetique_ef_autre_kwh",
+            ],
+        ),
+    ]
+
+    _SECTION_COLUMNS = {
+        "Répartition SRE par affectation (%)": 3,
+        "Agents énergétiques": 3,
+        "Répartition EF chauffage / ECS": 2,
+        "Travaux": 2,
+        "Période de mesure": 3,
+        "Énergies de référence": 3,
+        "SRE": 2,
+    }
+
+    @classmethod
+    def render_form_sections(
+        cls, form_data: dict, project_data=None, non_editable=None
+    ):
+        """Render form fields grouped by labelled sections with column layouts."""
+        if non_editable is None:
+            non_editable = []
+
+        for section_title, fields in cls.FORM_SECTIONS:
+            visible = [f for f in fields if f in cls.SCHEMA and f not in non_editable]
+            if not visible:
+                continue
+
+            st.subheader(section_title)
+            n_cols = cls._SECTION_COLUMNS.get(section_title, 1)
+
+            if n_cols > 1:
+                cols = st.columns(n_cols)
+                for i, field in enumerate(visible):
+                    current = project_data.get(field) if project_data is not None else None
+                    with cols[i % n_cols]:
+                        form_data[field] = cls.create_form_field(
+                            field, cls.SCHEMA[field], current
+                        )
+            else:
+                for field in visible:
+                    current = project_data.get(field) if project_data is not None else None
+                    form_data[field] = cls.create_form_field(
+                        field, cls.SCHEMA[field], current
+                    )
+
     @classmethod
     def create_form_field(cls, key: str, schema: dict, current_value: Any = None):
         """Creates the appropriate form field based on schema definition"""
@@ -824,19 +928,16 @@ def display_database_management(mycol_historique_sites, data_admin):
     st.subheader("Base de données")
 
     # Add general usage instructions
-    with st.expander("ℹ️ Instructions d'utilisation", expanded=True):
+    with st.expander("ℹ️ Instructions d'utilisation", expanded=False):
         st.markdown(
             """
-        ### Comment utiliser cette interface:
-        1. **Voir les projets**: Consultez tous les projets existants
-        2. **Modifier un projet**: Effectuez des changements sur un projet existant
-        3. **Ajouter un projet**: Créez un nouveau projet
-        4. **Supprimer un projet**: Supprimez définitivement un projet
-        
-        ⚠️ **Attention**: 
-        - Toute modification ou suppression est **définitive**
-        - Vérifiez toujours les informations avant de valider
-        - En cas de doute, contactez votre administrateur/trice
+        1. **Voir les projets** — consultez tous les projets existants
+        2. **Modifier un projet** — effectuez des changements sur un projet existant
+        3. **Ajouter un projet** — créez un nouveau projet
+        4. **Supprimer un projet** — supprimez définitivement un projet
+
+        > **Attention** : toute modification ou suppression est définitive.
+        > Vérifiez toujours les informations avant de valider.
         """
         )
 
@@ -952,9 +1053,6 @@ def display_database_management(mycol_historique_sites, data_admin):
                     project_data = df[mask].iloc[0]
 
                     with st.form("edit_project_form"):
-                        st.info(
-                            "📝 Modifiez les champs souhaités puis cliquez sur 'Sauvegarder'"
-                        )
                         edited_data = {}
                         non_editable = [
                             "_id",
@@ -963,20 +1061,15 @@ def display_database_management(mycol_historique_sites, data_admin):
                             "last_modified",
                         ]
 
-                        for col, schema in DataValidator.SCHEMA.items():
-                            if col in non_editable:
-                                continue
-                            current_value = project_data.get(
-                                col, None
-                            )  # None si absent du doc
-                            edited_data[col] = DataValidator.create_form_field(
-                                col, schema, current_value
-                            )
+                        DataValidator.render_form_sections(
+                            edited_data, project_data=project_data, non_editable=non_editable
+                        )
 
+                        st.divider()
                         st.warning(
                             "⚠️ Vérifiez bien toutes les informations avant de sauvegarder"
                         )
-                        if st.form_submit_button("💾 Sauvegarder les modifications"):
+                        if st.form_submit_button("💾 Sauvegarder les modifications", type="primary"):
                             with st.spinner("⏳ Validation en cours..."):
                                 if update_project_in_mongodb(
                                     mycol_historique_sites,
@@ -997,25 +1090,16 @@ def display_database_management(mycol_historique_sites, data_admin):
 
         with tab_add:
             st.write("➕ Ajouter un nouveau projet")
-            st.info(
-                "📝 Remplissez tous les champs requis (*) pour créer un nouveau projet"
-            )
 
             with st.form("new_project_form"):
                 new_project_data = {}
-                st.warning("⚠️ Les champs marqués d'un astérisque (*) sont obligatoires")
+                DataValidator.render_form_sections(new_project_data)
 
-                for field, schema in DataValidator.SCHEMA.items():
-                    if schema.get("required", True):
-                        st.markdown(f"**{schema.get('label', field)}** *")
-                        new_project_data[field] = DataValidator.create_form_field(
-                            field, schema
-                        )
-
+                st.divider()
                 st.warning(
                     "⚠️ Vérifiez bien toutes les informations avant de créer le projet"
                 )
-                if st.form_submit_button("➕ Ajouter le projet"):
+                if st.form_submit_button("➕ Ajouter le projet", type="primary"):
                     with st.spinner("⏳ Création en cours..."):
                         if insert_project_to_mongodb(
                             mycol_historique_sites, new_project_data
@@ -1031,9 +1115,7 @@ def display_database_management(mycol_historique_sites, data_admin):
 
         with tab_delete:
             st.write("🗑️ Supprimer des projets")
-            st.error(
-                "⚠️ ATTENTION: La suppression de projets est définitive et irréversible!"
-            )
+            st.warning("La suppression de projets est **définitive et irréversible**.")
 
             # Create project identifiers
             df["project_identifier"] = df.apply(
@@ -1095,12 +1177,7 @@ def display_database_management(mycol_historique_sites, data_admin):
                     st.dataframe(confirmation_df, width="stretch")
 
                     st.error(
-                        """
-                        ⚠️ ATTENTION: 
-                        - Cette action est IRRÉVERSIBLE
-                        - Toutes les données des projets sélectionnés seront PERDUES
-                        - Cette action ne peut pas être annulée
-                        """
+                        "Cette action est **irréversible** — toutes les données des projets sélectionnés seront perdues."
                     )
 
                     confirm_delete = st.checkbox(
@@ -1139,7 +1216,7 @@ def display_database_management(mycol_historique_sites, data_admin):
                                     st.rerun()
                     else:
                         st.info(
-                            "💡 Cochez la case de confirmation pour activerle bouton de suppression"
+                            "💡 Cochez la case de confirmation pour activer le bouton de suppression"
                         )
                 else:
                     st.warning("Aucun projet valide à supprimer n'a été trouvé.")

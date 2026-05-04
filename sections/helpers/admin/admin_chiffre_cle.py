@@ -69,11 +69,10 @@ def _last_per_project(df: pd.DataFrame) -> pd.DataFrame:
 
 def display_kpi_metrics(df: pd.DataFrame):
     try:
-        df_energy = filter_energy_data(df)
-        if df_energy.empty:
+        last = _last_per_project(df)
+        if last.empty:
             return
 
-        last = _last_per_project(df_energy)
         obj = pd.to_numeric(last["atteinte_objectif"], errors="coerce").fillna(0) * 100
 
         total = len(last)
@@ -162,7 +161,7 @@ def display_last_calculations(df: pd.DataFrame):
 
 def display_objective_chart(df: pd.DataFrame):
     try:
-        lf = pl.from_pandas(df)
+        lf = pl.from_pandas(df.drop(columns=["_id"], errors="ignore"))
 
         lf = (
             lf.sort(["nom_projet", "periode_start"])
@@ -324,16 +323,9 @@ def display_energy_mix_chart(df: pd.DataFrame):
 
         fig = (
             alt.layer(bars, labels)
-            .properties(
-                height=max(180, len(df_mix) * 36),
-                title=alt.TitleParams(
-                    "Mix énergétique",
-                    fontSize=14,
-                    fontWeight="bold",
-                    anchor="start",
-                ),
-            )
+            .properties(height=max(180, len(df_mix) * 36))
             .configure_view(strokeWidth=0)
+            .configure_axisY(labelLimit=160)
         )
         st.altair_chart(fig, use_container_width=True)
 

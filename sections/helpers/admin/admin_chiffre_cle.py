@@ -77,10 +77,9 @@ def display_kpi_metrics(df: pd.DataFrame):
 
         total = len(last)
         above = int((obj >= TARGET).sum())
-        below = total - above
         avg = obj.mean()
 
-        c1, c2, c3, c4 = st.columns(4)
+        c1, c2, c3 = st.columns(3)
         c1.metric("Sites actifs", total)
         c2.metric(
             "Objectif atteint ≥ 85%",
@@ -88,12 +87,6 @@ def display_kpi_metrics(df: pd.DataFrame):
             delta=f"{above / total * 100:.0f}%" if total else "0%",
         )
         c3.metric(
-            "Sous objectif < 85%",
-            f"{below}/{total}",
-            delta=f"-{below}" if below else None,
-            delta_color="inverse",
-        )
-        c4.metric(
             "Objectif moyen",
             f"{avg:.1f}%",
             delta=f"{avg - TARGET:+.1f}% vs cible",

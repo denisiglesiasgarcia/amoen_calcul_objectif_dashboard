@@ -1139,7 +1139,7 @@ def display_database_management(mycol_historique_sites, data_admin):
                                     st.rerun()
                     else:
                         st.info(
-                            "💡 Cochez la case de confirmation pour activer le bouton de suppression"
+                            "💡 Cochez la case de confirmation pour activerle bouton de suppression"
                         )
                 else:
                     st.warning("Aucun projet valide à supprimer n'a été trouvé.")
@@ -1159,27 +1159,9 @@ def display_database_management(mycol_historique_sites, data_admin):
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-            col_excel, col_json = st.columns(2)
-
-            with col_excel:
-                display_dataframe_with_excel_download(
-                    extract_df, f"extraction_BD_{timestamp}.xlsx"
-                )
-
-            with col_json:
-                json_data = extract_df.to_json(
-                    orient="records",
-                    force_ascii=False,
-                    indent=2,
-                    date_format="iso",
-                )
-                st.download_button(
-                    label="📥 Télécharger le JSON",
-                    data=json_data.encode("utf-8"),
-                    file_name=f"extraction_BD_{timestamp}.json",
-                    mime="application/json",
-                    width="stretch",
-                )
+            display_dataframe_with_excel_download(
+                extract_df, f"extraction_BD_{timestamp}.xlsx"
+            )
 
     except Exception as e:
         st.error(f"❌ Une erreur inattendue est survenue: {str(e)}")

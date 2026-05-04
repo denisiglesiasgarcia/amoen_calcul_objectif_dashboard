@@ -6,6 +6,7 @@ from typing import Dict, Any
 from sections.helpers.save_excel_streamlit import display_dataframe_with_excel_download
 import time
 import logging
+import json
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -694,12 +695,13 @@ def display_database_management(mycol_historique_sites, data_admin):
             na_position="last",
         )
 
-        tab_view, tab_edit, tab_add, tab_delete = st.tabs(
+        tab_view, tab_edit, tab_add, tab_delete, tab_extract = st.tabs(
             [
                 "👀 Voir les projets",
                 "✏️ Modifier un projet",
                 "➕ Ajouter un projet",
                 "🗑️ Supprimer un projet",
+                "📥 Extraire la BD",
             ]
         )
 
@@ -714,7 +716,7 @@ def display_database_management(mycol_historique_sites, data_admin):
                 if col in display_df.columns:
                     display_df[col] = display_df[col].dt.strftime("%Y-%m-%d %H:%M:%S")
             display_dataframe_with_excel_download(
-                display_df.drop(columns=["_id"]), "dataframe.xslx"
+                display_df.drop(columns=["_id"]), "dataframe.xlsx"
             )
 
         with tab_edit:
@@ -961,6 +963,42 @@ def display_database_management(mycol_historique_sites, data_admin):
                         )
                 else:
                     st.warning("Aucun projet valide à supprimer n'a été trouvé.")
+
+        with tab_extract:
+            st.write("📥 Extraction complète de la base de données")
+            st.info(
+                f"ℹ️ La base de données contient **{len(df)}** entrée(s). "
+                "Téléchargez l'intégralité des données ci-dessous."
+            )
+
+            extract_df = df.copy()
+            for col in ["date_rapport", "date_creation", "last_modified"]:
+                if col in extract_df.columns:
+                    extract_df[col] = extract_df[col].dt.strftime("%Y-%m-%d %H:%M:%S")
+            extract_df["_id"] = extract_df["_id"].astype(str)
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+            col_excel, col_json = st.columns(2)
+
+            with col_excel:
+                display_dataframe_with_excel_download(
+                    extract_df, f"extraction_BD_{timestamp}.xlsx"
+                )
+
+            with col_json:
+                json_data = json.dumps(
+                    extract_df.to_dict(orient="records"),
+                    ensure_ascii=False,
+                    indent=2,
+                )
+                st.download_button(
+                    label="📥 Download JSON",
+                    data=json_data.encode("utf-8"),
+                    file_name=f"extraction_BD_{timestamp}.json",
+                    mime="application/json",
+                    width="stretch",
+                )
 
     except Exception as e:
         st.error(f"❌ Une erreur inattendue est survenue: {str(e)}")

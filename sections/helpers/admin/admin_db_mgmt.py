@@ -6,7 +6,6 @@ from typing import Dict, Any
 from sections.helpers.save_excel_streamlit import display_dataframe_with_excel_download
 import time
 import logging
-import json
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -987,10 +986,11 @@ def display_database_management(mycol_historique_sites, data_admin):
                 )
 
             with col_json:
-                json_data = json.dumps(
-                    extract_df.to_dict(orient="records"),
-                    ensure_ascii=False,
+                json_data = extract_df.to_json(
+                    orient="records",
+                    force_ascii=False,
                     indent=2,
+                    date_format="iso",
                 )
                 st.download_button(
                     label="📥 Download JSON",

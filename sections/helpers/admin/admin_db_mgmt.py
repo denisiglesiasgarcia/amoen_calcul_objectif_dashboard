@@ -996,7 +996,7 @@ def display_database_management(mycol_historique_sites, data_admin):
                     default=str,
                 )
                 st.download_button(
-                    label="📥 Download JSON",
+                    label="📥 Télécharger le JSON",
                     data=json_data.encode("utf-8"),
                     file_name=f"extraction_BD_{timestamp}.json",
                     mime="application/json",

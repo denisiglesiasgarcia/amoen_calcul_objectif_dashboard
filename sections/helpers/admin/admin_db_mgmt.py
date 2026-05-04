@@ -987,10 +987,13 @@ def display_database_management(mycol_historique_sites, data_admin):
                 )
 
             with col_json:
+                json_ready_df = extract_df.where(pd.notnull(extract_df), None)
                 json_data = json.dumps(
-                    extract_df.to_dict(orient="records"),
+                    json_ready_df.to_dict(orient="records"),
                     ensure_ascii=False,
                     indent=2,
+                    allow_nan=False,
+                    default=str,
                 )
                 st.download_button(
                     label="📥 Download JSON",

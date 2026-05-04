@@ -979,23 +979,28 @@ def display_database_management(mycol_historique_sites, data_admin):
             na_position="last",
         )
 
-        tab_view, tab_edit, tab_add, tab_delete, tab_extract = st.tabs([
+        tab_view, tab_edit, tab_add, tab_delete = st.tabs([
             "👀 Voir les projets",
             "✏️ Modifier un projet",
             "➕ Ajouter un projet",
             "🗑️ Supprimer un projet",
-            "📥 Extraire la BD",
         ])
 
         with tab_view:
-            st.write("📋 Liste des projets dans la base de données")
+            st.write(f"📋 {len(df)} projet(s) dans la base de données")
+            include_ids = st.checkbox("Inclure les IDs MongoDB", value=False)
             display_df = df.copy()
             date_columns = ["date_rapport", "date_creation", "last_modified"]
             for col in date_columns:
                 if col in display_df.columns:
                     display_df[col] = display_df[col].dt.strftime("%Y-%m-%d %H:%M:%S")
+            if include_ids:
+                display_df["_id"] = display_df["_id"].astype(str)
+            else:
+                display_df = display_df.drop(columns=["_id"])
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             display_dataframe_with_excel_download(
-                display_df.drop(columns=["_id"]), "dataframe.xlsx"
+                display_df, f"extraction_BD_{timestamp}.xlsx"
             )
 
         with tab_edit:
@@ -1220,25 +1225,6 @@ def display_database_management(mycol_historique_sites, data_admin):
                         )
                 else:
                     st.warning("Aucun projet valide à supprimer n'a été trouvé.")
-
-        with tab_extract:
-            st.write("📥 Extraction complète de la base de données")
-            st.info(
-                f"ℹ️ La base de données contient **{len(df)}** entrée(s). "
-                "Téléchargez l'intégralité des données ci-dessous."
-            )
-
-            extract_df = df.copy()
-            for col in ["date_rapport", "date_creation", "last_modified"]:
-                if col in extract_df.columns:
-                    extract_df[col] = extract_df[col].dt.strftime("%Y-%m-%d %H:%M:%S")
-            extract_df["_id"] = extract_df["_id"].astype(str)
-
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-            display_dataframe_with_excel_download(
-                extract_df, f"extraction_BD_{timestamp}.xlsx"
-            )
 
     except Exception as e:
         st.error(f"❌ Une erreur inattendue est survenue: {str(e)}")

@@ -146,7 +146,7 @@ def display_last_calculations(df: pd.DataFrame):
             .applymap(color_objective, subset=["Objectif (%)"])
             .format({"Objectif (%)": "{:.1f}%"})
         )
-        st.dataframe(styled, use_container_width=True)
+        st.dataframe(styled, width='stretch')
 
     except Exception as e:
         st.error(f"Erreur derniers calculs: {str(e)}")
@@ -264,7 +264,7 @@ def display_objective_chart(df: pd.DataFrame):
             .configure_axis(labelFontSize=11)
         )
 
-        st.altair_chart(fig, use_container_width=True)
+        st.altair_chart(fig, width='stretch')
 
     except Exception as e:
         st.error(f"Erreur graphique objectif: {str(e)}")
@@ -320,7 +320,7 @@ def display_energy_mix_chart(df: pd.DataFrame):
             .configure_view(strokeWidth=0)
             .configure_axisY(labelLimit=160)
         )
-        st.altair_chart(fig, use_container_width=True)
+        st.altair_chart(fig, width='stretch')
 
     except Exception as e:
         st.error(f"Erreur graphique mix énergétique: {str(e)}")
@@ -352,7 +352,7 @@ def display_filtered_data(df: pd.DataFrame) -> pd.DataFrame:
         df_filtre = df_filtre[
             df_filtre["nom_projet"].isin(filtre_projets) & df_filtre["amoen_id"].isin(filtre_amoen)
         ]
-        st.dataframe(df_filtre, use_container_width=True, hide_index=True)
+        st.dataframe(df_filtre, width='stretch', hide_index=True)
         return df_filtre
 
     except Exception as e:

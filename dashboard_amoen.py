@@ -195,7 +195,6 @@ authenticator = stauth.Authenticate(
     config["cookie"]["name"],
     config["cookie"]["key"],
     config["cookie"]["expiry_days"],
-    config["pre-authorized"],
 )
 
 username, authentication_status, username_login = authenticator.login(

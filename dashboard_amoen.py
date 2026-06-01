@@ -135,20 +135,17 @@ def load_project_data(project_name):
 
 
 @st.cache_data
-def load_projets_liste(project_name):
+def load_projets_liste(username):
     """
     Retrieves a list of distinct project names from the 'mycol_historique_sites' collection.
 
     If the logged-in user is 'admin', it returns all distinct project names.
     Otherwise, it returns distinct project names filtered by the user's 'amoen_id'.
 
-    Args:
-        project_name (str): The name of the project to load (not used in the current implementation).
-
     Returns:
         list: A list of distinct project names.
     """
-    if username_login == "admin":
+    if username == "admin":
         nom_projets_liste = mycol_historique_sites.distinct("nom_projet")
     else:
         nom_projets_liste = mycol_historique_sites.distinct(
@@ -197,9 +194,8 @@ authenticator = stauth.Authenticate(
     config["cookie"]["expiry_days"],
 )
 
-username, authentication_status, username_login = authenticator.login(
-    location="sidebar"
-)
+authenticator.login(location="sidebar")
+username_login = st.session_state.get("username")
 
 if st.session_state["authentication_status"]:
     # st.write(config['credentials']['usernames'][st.session_state['username']]['password'])
@@ -304,7 +300,7 @@ if st.session_state["authentication_status"]:
             # projet
             st.subheader("Chargement données de base du projet")
             # in the database search unique values of the field 'nom_projet' in the documents mongodb
-            nom_projets_liste = load_projets_liste(username)
+            nom_projets_liste = load_projets_liste(st.session_state["username"])
             nom_projet_db = st.selectbox("Sélectionner projet", nom_projets_liste)
 
             data_sites_db = load_project_data(nom_projet_db)

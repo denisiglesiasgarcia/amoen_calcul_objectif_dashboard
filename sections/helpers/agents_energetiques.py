@@ -1,6 +1,7 @@
-import streamlit as st
+from typing import Dict, List
+
 import numpy as np
-from typing import List, Dict
+import streamlit as st
 
 # Define energy agent options
 OPTIONS_AGENT_ENERGETIQUE_EF = [

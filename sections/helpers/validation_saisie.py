@@ -1,6 +1,7 @@
 # /sections/helpers/validation_saisie.py
 
 import streamlit as st
+
 from sections.helpers.utils import get_rounded_float
 
 
@@ -56,7 +57,9 @@ def validate_energie_input(name, variable, unit1, unit2):
     try:
         variable = float(variable.replace(",", ".", 1))
         if variable > 0:
-            st.text(f"{name} = {variable} {unit1} → {round((variable * 3.6),2)} {unit2}")
+            st.text(
+                f"{name} = {variable} {unit1} → {round((variable * 3.6), 2)} {unit2}"
+            )
             return variable
         else:
             st.warning(f"{name} doit être positif")

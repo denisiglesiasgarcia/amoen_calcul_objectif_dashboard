@@ -24,6 +24,16 @@ jobs:
           pip install ruff
           ruff check --output-format=github .
         continue-on-error: true
+      - name: Type check with mypy
+        run: |
+          pip install mypy
+          mypy sections/ --ignore-missing-imports
+        continue-on-error: true
+      - name: Security scan with bandit
+        run: |
+          pip install bandit
+          bandit -r sections/ -ll --format github
+        continue-on-error: true
       - name: Test with pytest
         run: |
           pip install pytest pytest-cov coverage

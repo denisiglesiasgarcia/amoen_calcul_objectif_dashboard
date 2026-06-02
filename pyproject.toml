@@ -19,3 +19,33 @@ dependencies = [
     "streamlit>=1.58.0",
     "streamlit-authenticator>=0.4.2",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=1.10.0",
+    "bandit>=1.8.0",
+    "pytest>=8.0.0",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.4.0",
+]
+
+[tool.mypy]
+python_version = "3.13"
+strict = false
+# Gradually enable these as you add type hints:
+warn_return_any = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+disallow_untyped_defs = false   # flip to true once all functions are annotated
+ignore_missing_imports = true   # third-party libs without stubs (streamlit, pymongo…)
+exclude = [
+    "tests/",
+    "mkdocs/",
+]
+
+[tool.bandit]
+exclude_dirs = ["tests", "mkdocs"]
+skips = [
+    "B101",  # assert statements — fine in tests/application code here
+]
+severity = "medium"   # report medium and high findings only

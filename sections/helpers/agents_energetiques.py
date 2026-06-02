@@ -106,14 +106,15 @@ def validate_agent_energetique_input(label: str, value: str, unit: str) -> float
         return 0
 
     try:
+        result: float
         if isinstance(value, (int, float, np.float64)):
-            value = float(value)
+            result = float(value)
         else:
-            value = float(str(value).replace(",", ".", 1))
+            result = float(str(value).replace(",", ".", 1))
 
-        if value > 0:
-            st.text(f"{label}: {value} {unit}")
-            return value
+        if result > 0:
+            st.text(f"{label}: {result} {unit}")
+            return result
         else:
             st.error(f"{label} doit être un chiffre positif")
             return 0
@@ -208,7 +209,7 @@ def display_energy_agents(
         if option["label"] in selected_agents:
             default_value = get_default_value(data_site, option)
             value = st.text_input(option["label"] + ":", value=default_value)
-            if value != "0":
+            if value and value != "0":
                 option["value"] = validate_agent_energetique_input(
                     option["label"], value, option["unit"]
                 )

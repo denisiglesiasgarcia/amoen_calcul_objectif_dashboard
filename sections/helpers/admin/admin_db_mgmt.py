@@ -584,11 +584,8 @@ class DataValidator:
                         if schema.get("min_value") is not None
                         else None
                     )
-                    max_value = (
-                        float(schema.get("max_value"))
-                        if schema.get("max_value") is not None
-                        else None
-                    )
+                    _max_val = schema.get("max_value")
+                    max_value = float(_max_val) if _max_val is not None else None
                     step = float(schema.get("step", 1.0))
                 except (ValueError, TypeError):
                     st.warning(f"Invalid numeric parameters for {label}")
@@ -666,7 +663,7 @@ class DataValidator:
             return None
 
     @staticmethod
-    def _convert_to_datetime(value, field: str, errors: list) -> datetime:
+    def _convert_to_datetime(value, field: str, errors: list) -> datetime | None:
         """Helper method to convert values to datetime"""
         if isinstance(value, datetime):
             return value
@@ -749,7 +746,7 @@ class DataValidator:
 
                 # Convert other types
                 try:
-                    value = field_schema["type"](value)
+                    value = field_schema["type"](value)  # type: ignore[operator]
                 except (ValueError, TypeError) as e:
                     errors.append(f"{field}: erreur de conversion - {str(e)}")
                     continue
@@ -774,7 +771,7 @@ class DataValidator:
             f for f in converted_data if f.startswith("sre_pourcentage_")
         ]
         if percentage_fields:
-            total = sum(converted_data.get(f, 0) for f in percentage_fields)
+            total = sum(converted_data.get(f, 0) for f in percentage_fields)  # type: ignore[misc]
             if abs(total - 100) > 0.01:  # Allow small floating point differences
                 errors.append(
                     f"La somme des pourcentages doit être 100% (actuellement {total}%)"

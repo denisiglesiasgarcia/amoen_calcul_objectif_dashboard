@@ -51,7 +51,7 @@ def make_request(
         "resultRecordCount": chunk_size,
     }
     try:
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params)  # type: ignore[arg-type]
         response.raise_for_status()
         data = response.json()
         if "features" in data:
@@ -126,7 +126,7 @@ def make_request(
                 # convert dataframe to list of dictionaries
                 filtered_list = df.to_dict("records")
 
-                return filtered_list
+                return filtered_list  # type: ignore[return-value]
         else:
             logging.warning(
                 f"{table_name} → 'features' key not found in the API response for offset {offset}"

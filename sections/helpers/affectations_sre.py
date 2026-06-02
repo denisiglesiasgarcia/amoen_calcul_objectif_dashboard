@@ -114,9 +114,9 @@ def get_selected_affectations(data_sites_db: Dict) -> List[str]:
     if not data_sites_db:
         return []
     return [
-        option["label"]
+        str(option["label"])
         for option in AFFECTATION_OPTIONS
-        if data_sites_db.get(option["variable"], 0) > 0
+        if data_sites_db.get(option["variable"], 0) > 0  # type: ignore[operator]
     ]
 
 
@@ -135,7 +135,7 @@ def display_affectation_inputs(
                 validated_value = validate_input_affectation(
                     option["label"] + ":",
                     value,
-                    option["unit"],
+                    str(option["unit"]),
                     sre_renovation_m2,
                 )
                 st.session_state["data_site"][option["variable"]] = validated_value
@@ -171,7 +171,7 @@ def display_affectations(data_sites_db: Dict, sre_renovation_m2: float):
         if option["label"] not in selected_affectations:
             st.session_state["data_site"][option["variable"]] = 0.0
 
-    display_affectation_inputs(data_sites_db, selected_affectations, sre_renovation_m2)
+    display_affectation_inputs(data_sites_db, selected_affectations, sre_renovation_m2)  # type: ignore[arg-type]
 
     # Only run validation if we have selected affectations
     if selected_affectations:

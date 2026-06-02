@@ -43,7 +43,7 @@ class DataSanitizer:
             if isinstance(value, datetime):
                 return value
             if isinstance(value, str):
-                return dateutil_parser.parse(value)
+                return dateutil_parser.parse(value)  # type: ignore[no-any-return]
             return None
         except (ValueError, OverflowError) as e:
             logger.warning("Date conversion failed: %s", e)
@@ -163,7 +163,7 @@ def sanitize_db(data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
             schema = DataValidator.SCHEMA.get(key, {})
             field_type = schema.get("type", str)
             formatted_data[key] = DataSanitizer._sanitize_field(
-                key, value, field_type, schema
+                key, value, field_type, schema  # type: ignore[arg-type]
             )
 
         # Ensure required fields are always present
@@ -171,7 +171,7 @@ def sanitize_db(data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
             if schema.get("required", False) and (
                 field not in formatted_data or formatted_data[field] is None
             ):
-                formatted_data[field] = DataSanitizer._get_default_value(schema["type"])
+                formatted_data[field] = DataSanitizer._get_default_value(schema["type"])  # type: ignore[arg-type]
 
         # Warn if sre_pourcentage_* fields do not sum to 100
         pct_fields = [k for k in formatted_data if k.startswith("sre_pourcentage_")]

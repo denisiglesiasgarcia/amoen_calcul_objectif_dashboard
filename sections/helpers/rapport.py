@@ -121,7 +121,7 @@ def graphique_bars_rapport(
         xytext=(x_coord_second_bar, first_bar_height),
         arrowprops=dict(arrowstyle="<->", color="moccasin", lw=3),
     )
-    u0 = ax.text(
+    u0 = ax.text(  # noqa: F841
         x_coord_second_bar,
         midpoint_height,
         text_arrow_baisse_realisee,
@@ -192,7 +192,7 @@ def graphique_bars_rapport(
 
     xlabel_level1 = -0.3
 
-    u1_titre = plt.text(
+    u1_titre = plt.text(  # noqa: F841
         0,
         xlabel_level1,
         formula_atteinte_objectif_titre,
@@ -201,7 +201,7 @@ def graphique_bars_rapport(
         transform=ax.transAxes,
         fontsize=18,
     )
-    u2_titre = plt.text(
+    u2_titre = plt.text(  # noqa: F841
         0.89,
         xlabel_level1,
         formula_atteinte_objectif_titre_pourcent,
@@ -210,7 +210,7 @@ def graphique_bars_rapport(
         transform=ax.transAxes,
         fontsize=18,
     )
-    u1 = plt.text(
+    u1 = plt.text(  # noqa: F841
         0.22,
         xlabel_level1,
         formula_atteinte_objectif,
@@ -219,7 +219,7 @@ def graphique_bars_rapport(
         transform=ax.transAxes,
         fontsize=24,
     )
-    u2 = plt.text(
+    u2 = plt.text(  # noqa: F841
         0.73,
         xlabel_level1,
         formula_atteinte_objectif_num,
@@ -228,7 +228,7 @@ def graphique_bars_rapport(
         transform=ax.transAxes,
         fontsize=24,
     )
-    u3 = plt.text(
+    u3 = plt.text(  # noqa: F841
         0.92,
         xlabel_level1,
         formula_atteinte_objectifs_pourcent,
@@ -432,7 +432,7 @@ def repartition_renove_sureleve(
     ]
 
     # Main flow
-    s0 = sankey.add(
+    s0 = sankey.add(  # noqa: F841
         flows=flows_s1,
         labels=["Energie\nfinale\nclimatiquement\ncorrigée\net pondérée", None, None],
         orientations=[0, -1, 1],
@@ -444,7 +444,7 @@ def repartition_renove_sureleve(
     )
 
     # Surélévation subflow
-    s1 = sankey.add(
+    s1 = sankey.add(  # noqa: F841
         flows=[repartition_energie_finale_partie_surelevee] + flows_surelevation,
         labels=["Surélévation", "ECS", "Chauffage"],
         orientations=[0, -1, -1],
@@ -458,7 +458,7 @@ def repartition_renove_sureleve(
     )
 
     # Rénovation subflow
-    s2 = sankey.add(
+    s2 = sankey.add(  # noqa: F841
         flows=[repartition_energie_finale_partie_renovee] + flows_renovation,
         labels=[
             "Rénovation",
@@ -752,7 +752,7 @@ def generate_pdf(data):
     ]
     if data["sre_extension_surelevation_m2"] > 0.0:
         # Define a custom style for italic text
-        italic_style = ParagraphStyle(
+        italic_style = ParagraphStyle(  # noqa: F841
             name="Italic",
             parent=styles["Normal"],
             fontName="Helvetica-Oblique",  # Use 'Helvetica-Oblique' for italic text

@@ -163,8 +163,8 @@ def sanitize_db(data: dict[str, Any] | None) -> dict[str, Any] | None:
             formatted_data[key] = DataSanitizer._sanitize_field(
                 key,
                 value,
-                field_type,
-                schema,  # type: ignore[arg-type]
+                field_type,  # type: ignore[arg-type]
+                schema,
             )
 
         # Ensure required fields are always present

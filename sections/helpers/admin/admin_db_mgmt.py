@@ -675,7 +675,7 @@ class DataValidator:
         if isinstance(value, datetime):
             return value
         elif isinstance(value, pd.Timestamp):
-            return value.to_pydatetime()
+            return value.to_pydatetime()  # type: ignore[no-any-return]
         elif isinstance(value, date):
             return datetime.combine(value, datetime.min.time())
         elif isinstance(value, str):
@@ -778,7 +778,7 @@ class DataValidator:
             f for f in converted_data if f.startswith("sre_pourcentage_")
         ]
         if percentage_fields:
-            total = sum(converted_data.get(f, 0) for f in percentage_fields)  # type: ignore[misc]
+            total = sum(converted_data.get(f, 0) for f in percentage_fields)  # type: ignore[arg-type]
             if abs(total - 100) > 0.01:  # Allow small floating point differences
                 errors.append(
                     f"La somme des pourcentages doit être 100% (actuellement {total}%)"

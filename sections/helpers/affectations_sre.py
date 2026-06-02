@@ -116,7 +116,7 @@ def get_selected_affectations(data_sites_db: dict) -> list[str]:
     return [
         str(option["label"])
         for option in AFFECTATION_OPTIONS
-        if data_sites_db.get(option["variable"], 0) > 0  # type: ignore[operator]
+        if data_sites_db.get(option["variable"], 0) > 0
     ]
 
 

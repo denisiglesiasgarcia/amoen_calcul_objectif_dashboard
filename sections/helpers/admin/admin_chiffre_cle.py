@@ -160,7 +160,7 @@ def display_last_calculations(df: pd.DataFrame):
             except (ValueError, TypeError):
                 return ""
 
-        styled = df_last.style.applymap(  # type: ignore
+        styled = df_last.style.applymap(
             color_objective, subset=["Objectif (%)"]
         ).format({"Objectif (%)": "{:.1f}%"})
         st.dataframe(styled, width="stretch")

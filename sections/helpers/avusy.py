@@ -1,7 +1,7 @@
-import streamlit as st
-import pandas as pd
 import matplotlib.pyplot as plt
-import pymongo
+import pandas as pd
+import streamlit as st
+from pymongo.errors import BulkWriteError
 
 
 def load_csv_in_pandas():
@@ -102,9 +102,12 @@ def plot_avusy_data(df):
                            It should have the following columns:
                            - 'time': Timestamps for the x-axis.
                            - 'Chaleur_Immeuble_ECS': Data for Chaleur Immeuble ECS.
-                           - 'Elec_PAC_Immeuble_Villas': Data for Elec PAC Immeuble Villas.
-                           - 'Chaleur_Villas_Chauffage': Data for Chaleur Villas Chauffage.
-                           - 'Chaleur_Immeuble_Chauffage': Data for Chaleur Immeuble Chauffage.
+                           - 'Elec_PAC_Immeuble_Villas': Data for Elec
+                                PAC Immeuble Villas.
+                           - 'Chaleur_Villas_Chauffage': Data for Chaleur
+                                Villas Chauffage.
+                           - 'Chaleur_Immeuble_Chauffage': Data for Chaleur
+                                Immeuble Chauffage.
     Returns:
     None
     """
@@ -144,14 +147,16 @@ def plot_avusy_data(df):
 
 def retrieve_existing_data(mycol_avusy):
     """
-    Retrieve existing data from a MongoDB collection and return it as a pandas DataFrame.
+    Retrieve existing data from a MongoDB collection and return it as a
+    pandas DataFrame.
 
     Args:
-        mycol_avusy (pymongo.collection.Collection): The MongoDB collection from which to retrieve data.
+        mycol_avusy (pymongo.collection.Collection): The MongoDB collection from which
+        to retrieve data.
 
     Returns:
-        pandas.DataFrame: A DataFrame containing the retrieved data. If the collection is empty,
-                          returns an empty DataFrame with predefined columns:
+        pandas.DataFrame: A DataFrame containing the retrieved data. If the collection
+                          is empty, returns an empty DataFrame with predefined columns:
                           ['time', 'Chaleur_Immeuble_ECS', 'Elec_PAC_Immeuble_Villas',
                           'Chaleur_Villas_Chauffage', 'Chaleur_Immeuble_Chauffage'].
     """
@@ -174,10 +179,12 @@ def retrieve_existing_data(mycol_avusy):
 
 def find_missing_data(df_existing, df_new):
     """
-    Identify and return rows in df_new that are not present in df_existing based on specific columns.
+    Identify and return rows in df_new that are not present in df_existing
+    based on specific columns.
 
-    This function merges df_new with df_existing on the columns 'time', 'Chaleur_Immeuble_ECS',
-    'Elec_PAC_Immeuble_Villas', 'Chaleur_Villas_Chauffage', and 'Chaleur_Immeuble_Chauffage'.
+    This function merges df_new with df_existing on the columns 'time',
+    'Chaleur_Immeuble_ECS', 'Elec_PAC_Immeuble_Villas',
+    'Chaleur_Villas_Chauffage', and 'Chaleur_Immeuble_Chauffage'.
     It then filters out the rows that are only present in df_new.
 
     Parameters:
@@ -209,11 +216,13 @@ def insert_missing_data(mycol_avusy, df):
     """
     Inserts missing data from a DataFrame into a MongoDB collection.
     This function removes any '_id' columns from the DataFrame, converts the DataFrame
-    into a list of dictionaries, and inserts the data into the specified MongoDB collection.
+    into a list of dictionaries, and inserts the data into the specified MongoDB
+    collection.
     If the DataFrame is empty, it will notify that there is no new data to insert.
 
     Parameters:
-    mycol_avusy (pymongo.collection.Collection): The MongoDB collection where data will be inserted.
+    mycol_avusy (pymongo.collection.Collection): The MongoDB collection where data will
+        be inserted.
     df (pandas.DataFrame): The DataFrame containing the data to be inserted.
 
     Returns:
@@ -233,11 +242,12 @@ def insert_missing_data(mycol_avusy, df):
         if rows:
             result = mycol_avusy.insert_many(rows)
             st.write(
-                f"{len(result.inserted_ids)} nouvelle(s) valeurs ajoutées à la base de données."
+                f"{len(result.inserted_ids)} nouvelle(s) valeurs ajoutées à la "
+                "base de données."
             )
         else:
             st.write("No new data to insert.")
-    except pymongo.errors.BulkWriteError as e:
+    except BulkWriteError as e:
         st.write(f"BulkWriteError: {e.details}")
 
 
@@ -254,7 +264,8 @@ def update_existing_data_avusy(mycol_avusy):
     7. Provides an option to insert the missing data into the MongoDB collection.
 
     Parameters:
-    mycol_avusy (pymongo.collection.Collection): The MongoDB collection where the Avusy data is stored.
+    mycol_avusy (pymongo.collection.Collection): The MongoDB collection where the
+    Avusy data is stored.
 
     Returns:
     None
@@ -291,7 +302,8 @@ def update_existing_data_avusy(mycol_avusy):
 
 def avusy_consommation_energie_dashboard(start_datetime, end_datetime, mycol_avusy):
     """
-    Generates an energy consumption dashboard for the Avusy dataset within a specified date range.
+    Generates an energy consumption dashboard for the Avusy dataset within a
+    specified date range.
 
     The function performs the following steps:
     1. Converts the start and end dates to pandas.Timestamp.
@@ -306,7 +318,8 @@ def avusy_consommation_energie_dashboard(start_datetime, end_datetime, mycol_avu
     Parameters:
     start_datetime (str or datetime-like): The start date and time for the data range.
     end_datetime (str or datetime-like): The end date and time for the data range.
-    mycol_avusy (pymongo.collection.Collection): The MongoDB collection containing the Avusy data.
+    mycol_avusy (pymongo.collection.Collection): The MongoDB collection containing
+    the Avusy data.
 
     Returns:
     None: The function outputs the dashboard directly using Streamlit.
@@ -321,7 +334,8 @@ def avusy_consommation_energie_dashboard(start_datetime, end_datetime, mycol_avu
 
     # Find the nearest date to start_datetime in the DataFrame
     try:
-        # Query for all documents in the collection and convert the documents to a pandas DataFrame
+        # Query for all documents in the collection and convert the documents to a
+        # pandas DataFrame
         df_index = pd.DataFrame(list(mycol_avusy.find()))
 
         nearest_start_date = min(
@@ -337,7 +351,7 @@ def avusy_consommation_energie_dashboard(start_datetime, end_datetime, mycol_avu
     number_of_days = (nearest_end_date - nearest_start_date).days
 
     st.markdown(
-        '<span style="font-size:1.2em;">**Dates proches et énergie consommée sur la période**</span>',
+        '<span style="font-size:1.2em;">**Dates proches et énergie consommée sur la période**</span>',  # noqa: E501
         unsafe_allow_html=True,
     )
     st.markdown(
@@ -372,7 +386,7 @@ def avusy_consommation_energie_dashboard(start_datetime, end_datetime, mycol_avu
             Number of days between <span class="highlight">{nearest_start_date.date()}</span> and 
             <span class="highlight">{nearest_end_date.date()}</span> is <span class="difference">{number_of_days} days</span>
         </div>
-    """,
+    """,  # noqa: E501
         unsafe_allow_html=True,
     )
 
@@ -442,7 +456,6 @@ def avusy_consommation_energie_dashboard(start_datetime, end_datetime, mycol_avu
 
         container = st.container(border=True)
         with container:
-
             st.write(
                 """
                 <style>
@@ -506,7 +519,8 @@ def display_counter_indices(mycol_avusy):
     Display counter indices from the database between two selected dates.
 
     Parameters:
-    mycol_avusy (pymongo.collection.Collection): MongoDB collection containing the counter data
+    mycol_avusy (pymongo.collection.Collection): MongoDB collection containing
+    the counter data
     """
     st.markdown(
         '<span style="font-size:1.2em;">**Affichage des index des compteurs**</span>',
@@ -570,31 +584,39 @@ def display_counter_indices(mycol_avusy):
                     with col2:
                         st.markdown("**Index de début**")
                         st.write(
-                            f"Chaleur Immeuble ECS: {start_data['Chaleur_Immeuble_ECS']:.1f}"
+                            f"Chaleur Immeuble ECS: "
+                            f"{start_data['Chaleur_Immeuble_ECS']:.1f}"
                         )
                         st.write(
-                            f"Chaleur Immeuble Chauffage: {start_data['Chaleur_Immeuble_Chauffage']:.1f}"
+                            f"Chaleur Immeuble Chauffage: "
+                            f"{start_data['Chaleur_Immeuble_Chauffage']:.1f}"
                         )
                         st.write(
-                            f"Chaleur Villas Chauffage: {start_data['Chaleur_Villas_Chauffage']:.1f}"
+                            f"Chaleur Villas Chauffage: "
+                            f"{start_data['Chaleur_Villas_Chauffage']:.1f}"
                         )
                         st.write(
-                            f"Elec PAC Immeuble Villas: {start_data['Elec_PAC_Immeuble_Villas']:.1f}"
+                            f"Elec PAC Immeuble Villas: "
+                            f"{start_data['Elec_PAC_Immeuble_Villas']:.1f}"
                         )
 
                     with col3:
                         st.markdown("**Index de fin**")
                         st.write(
-                            f"Chaleur Immeuble ECS: {end_data['Chaleur_Immeuble_ECS']:.1f}"
+                            f"Chaleur Immeuble ECS: "
+                            f"{end_data['Chaleur_Immeuble_ECS']:.1f}"
                         )
                         st.write(
-                            f"Chaleur Immeuble Chauffage: {end_data['Chaleur_Immeuble_Chauffage']:.1f}"
+                            f"Chaleur Immeuble Chauffage: "
+                            f"{end_data['Chaleur_Immeuble_Chauffage']:.1f}"
                         )
                         st.write(
-                            f"Chaleur Villas Chauffage: {end_data['Chaleur_Villas_Chauffage']:.1f}"
+                            f"Chaleur Villas Chauffage: "
+                            f"{end_data['Chaleur_Villas_Chauffage']:.1f}"
                         )
                         st.write(
-                            f"Elec PAC Immeuble Villas: {end_data['Elec_PAC_Immeuble_Villas']:.1f}"
+                            f"Elec PAC Immeuble Villas: "
+                            f"{end_data['Elec_PAC_Immeuble_Villas']:.1f}"
                         )
 
                     # Calculate and display differences
@@ -605,16 +627,20 @@ def display_counter_indices(mycol_avusy):
                         with dcol1:
                             st.markdown("**Consommation sur la période**")
                             st.write(
-                                f"Chaleur Immeuble ECS: {end_data['Chaleur_Immeuble_ECS'] - start_data['Chaleur_Immeuble_ECS']:.1f} kWh"
+                                "Chaleur Immeuble ECS: "
+                                f"{(end_data['Chaleur_Immeuble_ECS'] - start_data['Chaleur_Immeuble_ECS']):.1f} kWh"  # noqa: E501
                             )
                             st.write(
-                                f"Chaleur Immeuble Chauffage: {end_data['Chaleur_Immeuble_Chauffage'] - start_data['Chaleur_Immeuble_Chauffage']:.1f} kWh"
+                                f"Chaleur Immeuble Chauffage: "
+                                f"{end_data['Chaleur_Immeuble_Chauffage'] - start_data['Chaleur_Immeuble_Chauffage']:.1f} kWh"  # noqa: E501
                             )
                             st.write(
-                                f"Chaleur Villas Chauffage: {end_data['Chaleur_Villas_Chauffage'] - start_data['Chaleur_Villas_Chauffage']:.1f} kWh"
+                                f"Chaleur Villas Chauffage: "
+                                f"{end_data['Chaleur_Villas_Chauffage'] - start_data['Chaleur_Villas_Chauffage']:.1f} kWh"  # noqa: E501
                             )
                             st.write(
-                                f"Elec PAC Immeuble Villas: {end_data['Elec_PAC_Immeuble_Villas'] - start_data['Elec_PAC_Immeuble_Villas']:.1f} kWh"
+                                f"Elec PAC Immeuble Villas: "
+                                f"{end_data['Elec_PAC_Immeuble_Villas'] - start_data['Elec_PAC_Immeuble_Villas']:.1f} kWh"  # noqa: E501
                             )
 
                         with dcol2:
@@ -623,16 +649,20 @@ def display_counter_indices(mycol_avusy):
                             if days_diff > 0:
                                 st.markdown("**Moyenne journalière**")
                                 st.write(
-                                    f"Chaleur Immeuble ECS: {(end_data['Chaleur_Immeuble_ECS'] - start_data['Chaleur_Immeuble_ECS'])/days_diff:.1f} kWh/jour"
+                                    "Chaleur Immeuble ECS: "
+                                    f"{(end_data['Chaleur_Immeuble_ECS'] - start_data['Chaleur_Immeuble_ECS']) / days_diff:.1f} kWh/jour"  # noqa: E501
                                 )
                                 st.write(
-                                    f"Chaleur Immeuble Chauffage: {(end_data['Chaleur_Immeuble_Chauffage'] - start_data['Chaleur_Immeuble_Chauffage'])/days_diff:.1f} kWh/jour"
+                                    "Chaleur Immeuble Chauffage: "
+                                    f"{(end_data['Chaleur_Immeuble_Chauffage'] - start_data['Chaleur_Immeuble_Chauffage']) / days_diff:.1f} kWh/jour"  # noqa: E501
                                 )
                                 st.write(
-                                    f"Chaleur Villas Chauffage: {(end_data['Chaleur_Villas_Chauffage'] - start_data['Chaleur_Villas_Chauffage'])/days_diff:.1f} kWh/jour"
+                                    "Chaleur Villas Chauffage: "
+                                    f"{(end_data['Chaleur_Villas_Chauffage'] - start_data['Chaleur_Villas_Chauffage']) / days_diff:.1f} kWh/jour"  # noqa: E501
                                 )
                                 st.write(
-                                    f"Elec PAC Immeuble Villas: {(end_data['Elec_PAC_Immeuble_Villas'] - start_data['Elec_PAC_Immeuble_Villas'])/days_diff:.1f} kWh/jour"
+                                    "Elec PAC Immeuble Villas: "
+                                    f"{(end_data['Elec_PAC_Immeuble_Villas'] - start_data['Elec_PAC_Immeuble_Villas']) / days_diff:.1f} kWh/jour"  # noqa: E501
                                 )
 
             else:
@@ -644,25 +674,33 @@ def display_counter_indices(mycol_avusy):
 
 def avusy_consommation_energie_elec_periode(start_datetime, end_datetime, mycol_avusy):
     """
-    Calculate the electrical energy consumption for a given period from a MongoDB collection.
+    Calculate the electrical energy consumption for a given period from a
+    MongoDB collection.
 
     Parameters:
     start_datetime (str or datetime-like): The start date and time of the period.
     end_datetime (str or datetime-like): The end date and time of the period.
-    mycol_avusy (pymongo.collection.Collection): The MongoDB collection containing the data.
+    mycol_avusy (pymongo.collection.Collection): The MongoDB collection containing
+        the data.
 
     Returns:
     tuple: A tuple containing:
-        - conso_elec_pac_immeuble (float or None): The calculated electrical energy consumption for the period.
-        - nearest_start_date (Timestamp or None): The nearest start date found in the data.
+        - conso_elec_pac_immeuble (float or None): The calculated electrical energy
+            consumption for the period.
+        - nearest_start_date (Timestamp or None): The nearest start date found in the
+            data.
         - nearest_end_date (Timestamp or None): The nearest end date found in the data.
 
     Notes:
-    - The function retrieves data from the MongoDB collection and converts it to a pandas DataFrame.
-    - It checks for the existence of the 'time' column and converts it to pandas datetime.
+    - The function retrieves data from the MongoDB collection and converts it to a
+        pandas DataFrame.
+    - It checks for the existence of the 'time' column and converts it to pandas
+        datetime.
     - It ensures the start date is before the end date.
-    - It calculates the energy consumption for different categories and returns the total electrical energy consumption.
-    - If any error occurs during the calculation, it logs the error and returns None for all values.
+    - It calculates the energy consumption for different categories and returns the
+        total electrical energy consumption.
+    - If any error occurs during the calculation, it logs the error and returns None
+        for all values.
     """
     # Convert the start and end datetime to pandas Timestamp
     start_datetime = pd.Timestamp(start_datetime)
@@ -702,38 +740,27 @@ def avusy_consommation_energie_elec_periode(start_datetime, end_datetime, mycol_
         return None, None, None
 
     try:
-        index_chaleur_immeuble_ecs = (
-            df_index.loc[
-                df_index["time"] == nearest_end_date, "Chaleur_Immeuble_ECS"
-            ].values[0]
-            - df_index.loc[
-                df_index["time"] == nearest_start_date, "Chaleur_Immeuble_ECS"
-            ].values[0]
-        )
-        index_chaleur_immeuble_chauffage = (
-            df_index.loc[
-                df_index["time"] == nearest_end_date, "Chaleur_Immeuble_Chauffage"
-            ].values[0]
-            - df_index.loc[
-                df_index["time"] == nearest_start_date, "Chaleur_Immeuble_Chauffage"
-            ].values[0]
-        )
-        index_chaleur_villa_chauffage = (
-            df_index.loc[
-                df_index["time"] == nearest_end_date, "Chaleur_Villas_Chauffage"
-            ].values[0]
-            - df_index.loc[
-                df_index["time"] == nearest_start_date, "Chaleur_Villas_Chauffage"
-            ].values[0]
-        )
-        index_elec_immeuble_villa = (
-            df_index.loc[
-                df_index["time"] == nearest_end_date, "Elec_PAC_Immeuble_Villas"
-            ].values[0]
-            - df_index.loc[
-                df_index["time"] == nearest_start_date, "Elec_PAC_Immeuble_Villas"
-            ].values[0]
-        )
+
+        def _value_at_time(column_name: str, timestamp: pd.Timestamp):
+            matches = df_index.loc[df_index["time"] == timestamp, column_name]
+            if matches.empty:
+                raise KeyError(
+                    f"Aucune donnée trouvée pour {column_name} à la date {timestamp}."
+                )
+            return matches.iloc[0]
+
+        index_chaleur_immeuble_ecs = _value_at_time(
+            "Chaleur_Immeuble_ECS", nearest_end_date
+        ) - _value_at_time("Chaleur_Immeuble_ECS", nearest_start_date)
+        index_chaleur_immeuble_chauffage = _value_at_time(
+            "Chaleur_Immeuble_Chauffage", nearest_end_date
+        ) - _value_at_time("Chaleur_Immeuble_Chauffage", nearest_start_date)
+        index_chaleur_villa_chauffage = _value_at_time(
+            "Chaleur_Villas_Chauffage", nearest_end_date
+        ) - _value_at_time("Chaleur_Villas_Chauffage", nearest_start_date)
+        index_elec_immeuble_villa = _value_at_time(
+            "Elec_PAC_Immeuble_Villas", nearest_end_date
+        ) - _value_at_time("Elec_PAC_Immeuble_Villas", nearest_start_date)
 
         total_chaleur = (
             index_chaleur_immeuble_ecs

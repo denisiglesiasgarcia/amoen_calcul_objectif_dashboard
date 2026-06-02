@@ -1,5 +1,5 @@
 import streamlit as st
-from typing import List, Dict
+
 from sections.helpers.validation_saisie import validate_percentage_sum
 
 # Define data structure
@@ -98,7 +98,7 @@ def validate_input_affectation(
         value = float(variable.replace(",", ".", 1))
         if 0 <= value <= 100:
             st.text(
-                f"{name} {value} {unite} → {round(value * float(sre_renovation_m2) / 100, 2)} m²"
+                f"{name} {value} {unite} → {round(value * float(sre_renovation_m2) / 100, 2)} m²"  # noqa: E501
             )
             return value
         else:
@@ -109,7 +109,7 @@ def validate_input_affectation(
         return 0.0
 
 
-def get_selected_affectations(data_sites_db: Dict) -> List[str]:
+def get_selected_affectations(data_sites_db: dict) -> list[str]:
     """Return list of selected affectations based on database values."""
     if not data_sites_db:
         return []
@@ -121,7 +121,7 @@ def get_selected_affectations(data_sites_db: Dict) -> List[str]:
 
 
 def display_affectation_inputs(
-    data_sites_db: Dict, selected_affectations: List[str], sre_renovation_m2: float
+    data_sites_db: dict, selected_affectations: list[str], sre_renovation_m2: float
 ):
     """Display and process affectation inputs."""
     for option in AFFECTATION_OPTIONS:
@@ -143,7 +143,7 @@ def display_affectation_inputs(
                 st.session_state["data_site"][option["variable"]] = 0.0
 
 
-def default_affectations(data_sites_db: Dict):
+def default_affectations(data_sites_db: dict):
     """Set default affectation values."""
     for option in AFFECTATION_OPTIONS:
         if option["label"] not in get_selected_affectations(data_sites_db):
@@ -154,7 +154,7 @@ def default_affectations(data_sites_db: Dict):
             )
 
 
-def display_affectations(data_sites_db: Dict, sre_renovation_m2: float):
+def display_affectations(data_sites_db: dict, sre_renovation_m2: float):
     """Main function to display and process affectations."""
     st.markdown(
         '<span style="font-size:1.2em;">**Affectations**</span>', unsafe_allow_html=True

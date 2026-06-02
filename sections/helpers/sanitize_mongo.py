@@ -3,7 +3,7 @@
 import logging
 import math
 from datetime import datetime
-from typing import Any, Dict, Optional, Type, Union
+from typing import Any
 
 from bson import ObjectId
 from dateutil import parser as dateutil_parser
@@ -30,7 +30,7 @@ class DataSanitizer:
     """Handles sanitization of database records."""
 
     @staticmethod
-    def _convert_date(value: Any) -> Optional[datetime]:
+    def _convert_date(value: Any) -> datetime | None:
         """
         Convert various date formats to datetime.
 
@@ -50,9 +50,7 @@ class DataSanitizer:
             return None
 
     @staticmethod
-    def _convert_numeric(
-        value: Any, type_: Type[Union[int, float]]
-    ) -> Union[int, float]:
+    def _convert_numeric(value: Any, type_: type[int | float]) -> int | float:
         """
         Convert value to the specified numeric type.
 
@@ -69,9 +67,9 @@ class DataSanitizer:
             return type_(0)
 
     @staticmethod
-    def _get_default_value(type_: Type) -> Any:
+    def _get_default_value(type_: type) -> Any:
         """Return the default sentinel value for a given type."""
-        defaults: Dict[Type, Any] = {
+        defaults: dict[type, Any] = {
             float: 0.0,
             int: 0,
             str: "",
@@ -82,7 +80,7 @@ class DataSanitizer:
 
     @classmethod
     def _sanitize_field(
-        cls, key: str, value: Any, field_type: Type, schema: Dict[str, Any]
+        cls, key: str, value: Any, field_type: type, schema: dict[str, Any]
     ) -> Any:
         """
         Sanitize a single field according to its declared type and schema.
@@ -131,7 +129,7 @@ class DataSanitizer:
             return cls._get_default_value(field_type)
 
 
-def sanitize_db(data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+def sanitize_db(data: dict[str, Any] | None) -> dict[str, Any] | None:
     """
     Sanitize and validate a MongoDB document against the schema.
 
@@ -142,7 +140,7 @@ def sanitize_db(data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
         return None
 
     try:
-        formatted_data: Dict[str, Any] = {}
+        formatted_data: dict[str, Any] = {}
 
         # Normalise ObjectId to string
         if "_id" in data:
@@ -163,7 +161,10 @@ def sanitize_db(data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
             schema = DataValidator.SCHEMA.get(key, {})
             field_type = schema.get("type", str)
             formatted_data[key] = DataSanitizer._sanitize_field(
-                key, value, field_type, schema  # type: ignore[arg-type]
+                key,
+                value,
+                field_type,
+                schema,  # type: ignore[arg-type]
             )
 
         # Ensure required fields are always present

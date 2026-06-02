@@ -1,97 +1,85 @@
 # sections/note_calcul.py
 
-# import pandas as pd
-# import streamlit as st
-
-from sections.helpers.note_calcul.create_dataframe_periode_list import (
-    make_dataframe_df_periode_list,
-)
-
-from sections.helpers.note_calcul.create_dataframe_list import make_dataframe_df_list
-
-from sections.helpers.note_calcul.create_dataframe_agent_energetique import (
-    make_dataframe_df_agent_energetique,
-)
-
-from sections.helpers.note_calcul.create_dataframe_meteo import (
-    make_dataframe_df_meteo_note_calcul,
-)
-
-from sections.helpers.note_calcul.create_dataframe_results import (
-    make_dataframe_df_results,
-)
-
-
 from sections.helpers.calcul_dj import (
     calcul_dj_periode,
 )
-
 from sections.helpers.note_calcul.calculs import (
-    fonction_repartition_energie_finale_partie_renovee_somme,
-    fonction_estimation_ecs_annuel,
-    fonction_estimation_part_chauffage_periode_sur_annuel,
-    fonction_estimation_energie_finale_periode_sur_annuel,
-    fonction_part_ecs_periode_comptage,
-    fonction_part_chauffage_periode_comptage,
-    fonction_correction_ecs,
-    fonction_agent_energetique_ef_mazout_somme_mj,
-    fonction_agent_energetique_ef_gaz_naturel_somme_mj,
+    fonction_agent_energetique_ef_autre_somme_mj,
     fonction_agent_energetique_ef_bois_buches_dur_somme_mj,
     fonction_agent_energetique_ef_bois_buches_tendre_somme_mj,
+    fonction_agent_energetique_ef_cad_somme_mj,
+    fonction_agent_energetique_ef_electricite_directe_somme_mj,
+    fonction_agent_energetique_ef_electricite_pac_somme_mj,
+    fonction_agent_energetique_ef_gaz_naturel_somme_mj,
+    fonction_agent_energetique_ef_mazout_somme_mj,
     fonction_agent_energetique_ef_pellets_somme_mj,
     fonction_agent_energetique_ef_plaquettes_somme_mj,
-    fonction_agent_energetique_ef_cad_somme_mj,
-    fonction_agent_energetique_ef_electricite_pac_somme_mj,
-    fonction_agent_energetique_ef_electricite_directe_somme_mj,
-    fonction_agent_energetique_ef_autre_somme_mj,
     fonction_agent_energetique_ef_somme_kwh,
-    fonction_methodo_b_ww_kwh,
-    fonction_methodo_e_ww_kwh_m2,
-    fonction_methodo_b_h_kwh,
-    fonction_methodo_e_h_kwh_m2,
-    fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2,
-    fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2,
-    fonction_facteur_ponderation_moyen,
-    fonction_methodo_e_ww_renovee_pondere_kwh_m2,
-    fonction_methodo_e_h_renovee_pondere_kwh_m2,
-    fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
-    fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2,
+    fonction_atteinte_objectif,
+    fonction_correction_ecs,
     fonction_delta_ef_realisee_kwh_m2,
     fonction_delta_ef_visee_kwh_m2,
-    fonction_atteinte_objectif,
+    fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2,
+    fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2,
+    fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
+    fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2,
+    fonction_estimation_ecs_annuel,
+    fonction_estimation_energie_finale_periode_sur_annuel,
+    fonction_estimation_part_chauffage_periode_sur_annuel,
+    fonction_facteur_ponderation_moyen,
+    fonction_methodo_b_h_kwh,
+    fonction_methodo_b_ww_kwh,
+    fonction_methodo_e_h_kwh_m2,
+    fonction_methodo_e_h_renovee_pondere_kwh_m2,
+    fonction_methodo_e_ww_kwh_m2,
+    fonction_methodo_e_ww_renovee_pondere_kwh_m2,
+    fonction_part_chauffage_periode_comptage,
+    fonction_part_ecs_periode_comptage,
+    fonction_repartition_energie_finale_partie_renovee_somme,
 )
-
 from sections.helpers.note_calcul.constantes import (
-    CONVERSION_MAZOUT_MJ_KG,
-    CONVERSION_MAZOUT_MJ_LITRES,
-    CONVERSION_MAZOUT_MJ_KWH,
-    CONVERSION_GAZ_NATUREL_MJ_M3,
-    CONVERSION_GAZ_NATUREL_MJ_KWH,
+    CONVERSION_AUTRE_MJ_KWH,
     CONVERSION_BOIS_BUCHES_DUR_MJ_STERE,
-    CONVERSION_BOIS_BUCHES_TENDRE_MJ_STERE,
     CONVERSION_BOIS_BUCHES_TENDRE_MJ_KWH,
-    CONVERSION_PELLETS_MJ_M3,
+    CONVERSION_BOIS_BUCHES_TENDRE_MJ_STERE,
+    CONVERSION_CAD_MJ_KWH,
+    CONVERSION_ELECTRICITE_DIRECTE_MJ_KWH,
+    CONVERSION_ELECTRICITE_PAC_MJ_KWH,
+    CONVERSION_GAZ_NATUREL_MJ_KWH,
+    CONVERSION_GAZ_NATUREL_MJ_M3,
+    CONVERSION_MAZOUT_MJ_KG,
+    CONVERSION_MAZOUT_MJ_KWH,
+    CONVERSION_MAZOUT_MJ_LITRES,
     CONVERSION_PELLETS_MJ_KG,
     CONVERSION_PELLETS_MJ_KWH,
-    CONVERSION_PLAQUETTES_MJ_M3,
+    CONVERSION_PELLETS_MJ_M3,
     CONVERSION_PLAQUETTES_MJ_KWH,
-    CONVERSION_CAD_MJ_KWH,
-    CONVERSION_ELECTRICITE_PAC_MJ_KWH,
-    CONVERSION_ELECTRICITE_DIRECTE_MJ_KWH,
-    CONVERSION_AUTRE_MJ_KWH,
-    FACTEUR_PONDERATION_MAZOUT,
-    FACTEUR_PONDERATION_GAZ_NATUREL,
+    CONVERSION_PLAQUETTES_MJ_M3,
+    DJ_REF_ANNUELS,
+    FACTEUR_PONDERATION_AUTRE,
     FACTEUR_PONDERATION_BOIS_BUCHES_DUR,
     FACTEUR_PONDERATION_BOIS_BUCHES_TENDRE,
+    FACTEUR_PONDERATION_CAD,
+    FACTEUR_PONDERATION_ELECTRICITE_DIRECTE,
+    FACTEUR_PONDERATION_ELECTRICITE_PAC,
+    FACTEUR_PONDERATION_GAZ_NATUREL,
+    FACTEUR_PONDERATION_MAZOUT,
     FACTEUR_PONDERATION_PELLETS,
     FACTEUR_PONDERATION_PLAQUETTES,
-    FACTEUR_PONDERATION_CAD,
-    FACTEUR_PONDERATION_ELECTRICITE_PAC,
-    FACTEUR_PONDERATION_ELECTRICITE_DIRECTE,
-    FACTEUR_PONDERATION_AUTRE,
-    DJ_REF_ANNUELS,
 )
-
+from sections.helpers.note_calcul.create_dataframe_agent_energetique import (
+    make_dataframe_df_agent_energetique,
+)
+from sections.helpers.note_calcul.create_dataframe_list import make_dataframe_df_list
+from sections.helpers.note_calcul.create_dataframe_meteo import (
+    make_dataframe_df_meteo_note_calcul,
+)
+from sections.helpers.note_calcul.create_dataframe_periode_list import (
+    make_dataframe_df_periode_list,
+)
+from sections.helpers.note_calcul.create_dataframe_results import (
+    make_dataframe_df_results,
+)
 from sections.helpers.note_calcul.latex import (
     make_latex_formula_facteur_ponderation_moyen,
 )
@@ -200,12 +188,12 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     - data_site["methodo_e_ww_kwh_m2"]
     - data_site["methodo_b_h_kwh"]
     - data_site["methodo_e_h_kwh_m2"]
-    - data_site["energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2"]
+    - data_site["energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2"]  # noqa: E501
     - data_site["energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2"]
     - data_site["facteur_ponderation_moyen"]
     - data_site["methodo_e_ww_renovee_pondere_kwh_m2"]
     - data_site["methodo_e_h_renovee_pondere_kwh_m2"]
-    - data_site["energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"]
+    - data_site["energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"]  # noqa: E501
     - data_site["energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2"]
     - data_site["delta_ef_realisee_kwh_m2"]
     - data_site["delta_ef_visee_kwh_m2"]
@@ -220,7 +208,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     - formule_facteur_ponderation_moyen_texte (latex texte formule du facteur de pondération moyen)
     - formule_facteur_ponderation_moyen (latex formule résolue numériquement du facteur de pondération moyen)
 
-    """
+    """  # noqa: E501
 
     # df_periode_list
     df_periode_list = make_dataframe_df_periode_list(
@@ -382,7 +370,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     )
     data_site[
         "energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2"
-    ] = fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2(
+    ] = fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2(  # noqa: E501
         data_site["methodo_e_ww_kwh_m2"], data_site["methodo_e_h_kwh_m2"]
     )
     data_site["energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2"] = (
@@ -432,7 +420,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     )
     data_site[
         "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
-    ] = fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2(
+    ] = fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2(  # noqa: E501
         data_site[
             "energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2"
         ],
@@ -440,7 +428,7 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     )
     data_site[
         "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2"
-    ] = fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2(
+    ] = fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2(  # noqa: E501
         data_site[
             "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2"
         ],
@@ -499,16 +487,18 @@ def fonction_note_calcul(data_site, df_meteo_tre200d0):
     )
 
     # latex text
-    formula_facteur_ponderation_moyen_texte = r"facteur\_ponderation\_moyen = \frac{{(agent\_energetique\_mazout\_somme\_mj \times FACTEUR\_PONDERATION\_MAZOUT + \
-                agent\_energetique\_gaz\_naturel\_somme\_mj \times FACTEUR\_PONDERATION\_GAZ\_NATUREL + \
-                agent\_energetique\_bois\_buches\_dur\_somme\_mj \times FACTEUR\_PONDERATION\_BOIS\_BUCHES\_DUR + \
-                agent\_energetique\_bois\_buches\_tendre\_somme\_mj \times FACTEUR\_PONDERATION\_BOIS\_BUCHES\_TENDRE + \
-                agent\_energetique\_pellets\_somme\_mj \times FACTEUR\_PONDERATION\_PELLETS + \
-                agent\_energetique\_plaquettes\_somme\_mj \times FACTEUR\_PONDERATION\_PLAQUETTES + \
-                agent\_energetique\_cad\_somme\_mj \times FACTEUR\_PONDERATION\_CAD + \
-                agent\_energetique\_electricite\_pac\_somme\_mj \times FACTEUR\_PONDERATION\_ELECTRICITE\_PAC + \
-                agent\_energetique\_electricite\_directe\_somme\_mj \times FACTEUR\_PONDERATION\_ELECTRICITE\_DIRECTE + \
-                agent\_energetique\_autre\_somme\_mj \times FACTEUR\_PONDERATION\_AUTRE)}}{{(agent\_energetique\_somme\_kwh \times 3.6)}}"
+    formula_facteur_ponderation_moyen_texte = (
+        r"facteur\_ponderation\_moyen = \frac{{(agent\_energetique\_mazout\_somme\_mj \times FACTEUR\_PONDERATION\_MAZOUT + "  # noqa: E501
+        r"agent\_energetique\_gaz\_naturel\_somme\_mj \times FACTEUR\_PONDERATION\_GAZ\_NATUREL + "  # noqa: E501
+        r"agent\_energetique\_bois\_buches\_dur\_somme\_mj \times FACTEUR\_PONDERATION\_BOIS\_BUCHES\_DUR + "  # noqa: E501
+        r"agent\_energetique\_bois\_buches\_tendre\_somme\_mj \times FACTEUR\_PONDERATION\_BOIS\_BUCHES\_TENDRE + "  # noqa: E501
+        r"agent\_energetique\_pellets\_somme\_mj \times FACTEUR\_PONDERATION\_PELLETS + "  # noqa: E501
+        r"agent\_energetique\_plaquettes\_somme\_mj \times FACTEUR\_PONDERATION\_PLAQUETTES + "  # noqa: E501
+        r"agent\_energetique\_cad\_somme\_mj \times FACTEUR\_PONDERATION\_CAD + "
+        r"agent\_energetique\_electricite\_pac\_somme\_mj \times FACTEUR\_PONDERATION\_ELECTRICITE\_PAC + "  # noqa: E501
+        r"agent\_energetique\_electricite\_directe\_somme\_mj \times FACTEUR\_PONDERATION\_ELECTRICITE\_DIRECTE + "  # noqa: E501
+        r"agent\_energetique\_autre\_somme\_mj \times FACTEUR\_PONDERATION\_AUTRE)}}{{(agent\_energetique\_somme\_kwh \times 3.6)}}"  # noqa: E501
+    )
 
     # latex formula
     formula_facteur_ponderation_moyen = make_latex_formula_facteur_ponderation_moyen(

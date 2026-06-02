@@ -110,10 +110,7 @@ def fonction_part_chauffage_periode_comptage(
 # C97 → correction ECS = 365/nb jour comptage
 def fonction_correction_ecs(periode_nb_jours):
     try:
-        if periode_nb_jours != 0:
-            correction_ecs = 365 / periode_nb_jours
-        else:
-            correction_ecs = 0.0
+        correction_ecs = 365 / periode_nb_jours if periode_nb_jours != 0 else 0.0
     except Exception as e:
         print(e)
         correction_ecs = 0.0
@@ -447,23 +444,19 @@ def fonction_methodo_e_h_kwh_m2(
 
 
 # C105 → Ef,après,corr → Methodo_Eww + Methodo_Eh
-def fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2(
+def fonction_energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2(  # noqa: E501
     methodo_e_ww_kwh_m2, methodo_e_h_kwh_m2
 ):
     try:
         if methodo_e_ww_kwh_m2 >= 0 and methodo_e_h_kwh_m2 >= 0:
-            energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
+            energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (  # noqa: E501
                 methodo_e_ww_kwh_m2 + methodo_e_h_kwh_m2
             )
         else:
-            energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
-                0.0
-            )
+            energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = 0.0  # noqa: E501
     except Exception as e:
         print(e)
-        energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = (
-            0.0
-        )
+        energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2 = 0.0  # noqa: E501
     return (
         energie_finale_apres_travaux_climatiquement_corrigee_inclus_surelevation_kwh_m2
     )
@@ -582,7 +575,7 @@ def fonction_methodo_e_h_renovee_pondere_kwh_m2(
 
 
 # C113 → Ef,après,corr,rénové*fp
-def fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2(
+def fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2(  # noqa: E501
     energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2,
     facteur_ponderation_moyen,
 ):
@@ -591,14 +584,12 @@ def fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_ponder
             energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2 >= 0
             and facteur_ponderation_moyen >= 0
         ):
-            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = (
+            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = (  # noqa: E501
                 energie_finale_apres_travaux_climatiquement_corrigee_renovee_kwh_m2
                 * facteur_ponderation_moyen
             )
         else:
-            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = (
-                0
-            )
+            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = 0  # noqa: E501
     except Exception as e:
         print(e)
         energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 = 0
@@ -614,14 +605,12 @@ def fonction_energie_finale_apres_travaux_climatiquement_corrigee_renovee_ponder
             energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
             >= 0
         ):
-            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = (
+            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = (  # noqa: E501
                 energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
                 * 3.6
             )
         else:
-            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = (
-                0
-            )
+            energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = 0  # noqa: E501
     except Exception as e:
         print(e)
         energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_MJ_m2 = 0
@@ -636,12 +625,12 @@ def fonction_delta_ef_realisee_kwh_m2(
     try:
         if (
             ef_avant_corr_kwh_m2 > 0
-            and energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
+            and energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2  # noqa: E501
             > 0
         ):
             delta_ef_realisee_kwh_m2 = (
                 ef_avant_corr_kwh_m2
-                - energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
+                - energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2  # noqa: E501
             )
         else:
             delta_ef_realisee_kwh_m2 = 0.0

@@ -26,7 +26,7 @@ def make_latex_formula_facteur_ponderation_moyen(
     FACTEUR_PONDERATION_AUTRE,
 ):
     formula_facteur_ponderation_moyen = (
-        r"facteur\_ponderation\_moyen = \frac{{({0})}}{{({1})}} = {2}".format(
+        r"facteur\_ponderation\_moyen = \frac{{({0})}}{{({1})}} = {2}".format(  # noqa: UP030
             agent_energetique_ef_mazout_somme_mj * FACTEUR_PONDERATION_MAZOUT
             + agent_energetique_ef_gaz_naturel_somme_mj
             * FACTEUR_PONDERATION_GAZ_NATUREL

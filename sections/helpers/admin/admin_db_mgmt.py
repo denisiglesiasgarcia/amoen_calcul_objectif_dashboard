@@ -31,7 +31,10 @@ class DataValidator:
             "required": True,
             "form_type": "text",
             "label": "Adresse(s) du projet",
-            "help": "Plusieurs adresses séparées par des points-virgules. Format SITG (ex: Chemin Dr-Adolphe-PASTEUR 23)",
+            "help": (
+                "Plusieurs adresses séparées par des points-virgules. "
+                "Format SITG (ex: Chemin Dr-Adolphe-PASTEUR 23)"
+            ),
         },
         "amoen_id": {
             "type": str,
@@ -224,7 +227,7 @@ class DataValidator:
             "step": 0.1,
             "format": "%.2f",
             "label": "Ef avant correction (kWh/m²)",
-            "help": "IDC moyen 3 ans avant travaux — Surélévation: C92 / Rénovation: C61",
+            "help": "IDC moyen 3 ans avant travaux — Surélevation: C92 / Rénovation: C61",  # noqa: E501
         },
         "ef_objectif_pondere_kwh_m2": {
             "type": float,
@@ -536,14 +539,18 @@ class DataValidator:
             if n_cols > 1:
                 cols = st.columns(n_cols)
                 for i, field in enumerate(visible):
-                    current = project_data.get(field) if project_data is not None else None
+                    current = (
+                        project_data.get(field) if project_data is not None else None
+                    )
                     with cols[i % n_cols]:
                         form_data[field] = cls.create_form_field(
                             field, cls.SCHEMA[field], current
                         )
             else:
                 for field in visible:
-                    current = project_data.get(field) if project_data is not None else None
+                    current = (
+                        project_data.get(field) if project_data is not None else None
+                    )
                     form_data[field] = cls.create_form_field(
                         field, cls.SCHEMA[field], current
                     )
@@ -754,11 +761,11 @@ class DataValidator:
                 # Check min/max if specified
                 if "min" in field_schema and value < field_schema["min"]:
                     errors.append(
-                        f"{field}: valeur inférieure au minimum permis ({field_schema['min']})"
+                        f"{field}: valeur inférieure au minimum permis ({field_schema['min']})"  # noqa: E501
                     )
                 if "max" in field_schema and value > field_schema["max"]:
                     errors.append(
-                        f"{field}: valeur supérieure au maximum permis ({field_schema['max']})"
+                        f"{field}: valeur supérieure au maximum permis ({field_schema['max']})"  # noqa: E501
                     )
 
                 converted_data[field] = value
@@ -940,7 +947,8 @@ def display_database_management(mycol_historique_sites, data_admin):
 
     if not check_mongodb_connection(mycol_historique_sites):
         st.error(
-            "❌ Impossible de se connecter à la base de données. Veuillez réessayer plus tard ou contacter votre administrateur/trice."
+            "❌ Impossible de se connecter à la base de données. Veuillez réessayer "
+            "plus tard ou contacter votre administrateur/trice."
         )
         return
 
@@ -949,7 +957,8 @@ def display_database_management(mycol_historique_sites, data_admin):
         df = pd.DataFrame(data_admin)
         if df.empty:
             st.info(
-                "📝 La base de données est vide. Utilisez l'onglet 'Ajouter un projet' pour commencer."
+                "📝 La base de données est vide. Utilisez l'onglet 'Ajouter un projet' "
+                "pour commencer."
             )
             df = DataValidator.handle_datetime_fields(df)
             return
@@ -964,7 +973,8 @@ def display_database_management(mycol_historique_sites, data_admin):
         missing_columns = [col for col in required_columns if col not in df.columns]
         if missing_columns:
             st.error(
-                f"❌ Structure de données invalide. Colonnes manquantes: {', '.join(missing_columns)}"
+                f"❌ Structure de données invalide. "
+                f"Colonnes manquantes: {', '.join(missing_columns)}"
             )
             st.warning("Contactez votre administrateur/trice système.")
             return
@@ -1003,7 +1013,8 @@ def display_database_management(mycol_historique_sites, data_admin):
         with tab_edit:
             st.write("✏️ Modifier un projet existant")
             st.warning(
-                "⚠️ Assurez-vous de bien vérifier toutes les informations avant de sauvegarder les modifications"
+                "⚠️ Assurez-vous de bien vérifier toutes les informations avant de "
+                "sauvegarder les modifications"
             )
 
             # Create project identifier with safe handling of null dates
@@ -1064,14 +1075,19 @@ def display_database_management(mycol_historique_sites, data_admin):
                         ]
 
                         DataValidator.render_form_sections(
-                            edited_data, project_data=project_data, non_editable=non_editable
+                            edited_data,
+                            project_data=project_data,
+                            non_editable=non_editable,
                         )
 
                         st.divider()
                         st.warning(
-                            "⚠️ Vérifiez bien toutes les informations avant de sauvegarder"
+                            "⚠️ Vérifiez bien toutes les informations avant de "
+                            "sauvegarder"
                         )
-                        if st.form_submit_button("💾 Sauvegarder les modifications", type="primary"):
+                        if st.form_submit_button(
+                            "💾 Sauvegarder les modifications", type="primary"
+                        ):
                             with st.spinner("⏳ Validation en cours..."):
                                 if update_project_in_mongodb(
                                     mycol_historique_sites,
@@ -1079,7 +1095,8 @@ def display_database_management(mycol_historique_sites, data_admin):
                                     edited_data,
                                 ):
                                     st.success(
-                                        f"✅ Projet {selected_project} mis à jour avec succès!"
+                                        f"✅ Projet {selected_project} mis à jour avec "
+                                        "succès!"
                                     )
                                     time.sleep(1)
                                     st.rerun()
@@ -1112,7 +1129,8 @@ def display_database_management(mycol_historique_sites, data_admin):
                         else:
                             st.error("❌ Erreur lors de la création du projet")
                             st.info(
-                                "💡 Vérifiez que tous les champs obligatoires sont remplis correctement"
+                                "💡 Vérifiez que tous les champs obligatoires sont "
+                                "remplis correctement"
                             )
 
         with tab_delete:
@@ -1122,7 +1140,9 @@ def display_database_management(mycol_historique_sites, data_admin):
             # Create project identifiers
             df["project_identifier"] = df.apply(
                 lambda row: (
-                    f"{row['nom_projet']} ({row['date_rapport'].strftime('%d-%m-%Y %H:%M:%S') if pd.notnull(row['date_rapport']) else 'Date non définie'})"
+                    f"{row['nom_projet']} ("
+                    f"{row['date_rapport'].strftime('%d-%m-%Y %H:%M:%S') if pd.notnull(row['date_rapport']) else 'Date non définie'}"  # noqa: E501
+                    f")"
                 ),
                 axis=1,
             )
@@ -1137,7 +1157,8 @@ def display_database_management(mycol_historique_sites, data_admin):
             if projects_to_delete:
                 # Display selected projects in a table format for confirmation
                 st.warning(
-                    f"Vous avez sélectionné {len(projects_to_delete)} projet(s) à supprimer:"
+                    f"Vous avez sélectionné {len(projects_to_delete)} projet(s) à "
+                    "supprimer:"
                 )
 
                 project_data_list = []
@@ -1170,7 +1191,8 @@ def display_database_management(mycol_historique_sites, data_admin):
                             project_ids_to_delete.append(str(project_data["_id"]))
                     except Exception as e:
                         st.error(
-                            f"Erreur lors de la récupération des détails du projet: {str(e)}"
+                            "Erreur lors de la récupération des détails du projet: "
+                            f"{str(e)}"
                         )
 
                 # Display projects to be deleted in a table
@@ -1179,17 +1201,20 @@ def display_database_management(mycol_historique_sites, data_admin):
                     st.dataframe(confirmation_df, width="stretch")
 
                     st.error(
-                        "Cette action est **irréversible** — toutes les données des projets sélectionnés seront perdues."
+                        "Cette action est **irréversible** — toutes les données des "
+                        "projets sélectionnés seront perdues."
                     )
 
                     confirm_delete = st.checkbox(
-                        "✅ Je confirme vouloir supprimer ces projets et je comprends que cette action est irréversible",
+                        "✅ Je confirme vouloir supprimer ces projets et je comprends "
+                        "que cette action est irréversible",
                         key="confirm_delete_multiple",
                     )
 
                     if confirm_delete:
                         if st.button(
-                            f"🗑️ Supprimer définitivement {len(project_ids_to_delete)} projet(s)",
+                            f"🗑️ Supprimer définitivement {len(project_ids_to_delete)} "
+                            "projet(s)",
                             type="primary",
                             key="delete_multiple_button",
                         ):
@@ -1202,23 +1227,27 @@ def display_database_management(mycol_historique_sites, data_admin):
 
                                 if success_count > 0:
                                     st.success(
-                                        f"✅ {success_count} projet(s) supprimé(s) avec succès!"
+                                        f"✅ {success_count} projet(s) supprimé(s) "
+                                        "avec succès!"
                                     )
 
                                 if failed_count > 0:
                                     st.error(
-                                        f"❌ {failed_count} projet(s) n'ont pas pu être supprimés."
+                                        f"❌ {failed_count} projet(s) n'ont pas "
+                                        "pu être supprimés."
                                     )
                                     for error in errors:
                                         st.error(f"- {error}")
 
-                                # Refresh the page after a short delay if at least one project was deleted
+                                # Refresh the page after a short delay if at least one
+                                # project was deleted
                                 if success_count > 0:
                                     time.sleep(1)
                                     st.rerun()
                     else:
                         st.info(
-                            "💡 Cochez la case de confirmation pour activer le bouton de suppression"
+                            "💡 Cochez la case de confirmation pour activer le bouton "
+                            "de suppression"
                         )
                 else:
                     st.warning("Aucun projet valide à supprimer n'a été trouvé.")

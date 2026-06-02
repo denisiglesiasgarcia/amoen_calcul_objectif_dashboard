@@ -18,11 +18,13 @@ def make_dataframe_df_results(
 
     Parameters:
     ef_avant_corr_kwh_m2 (float): Energy performance before correction in kWh/m²/year.
-    ef_objectif_pondere_kwh_m2 (float): Weighted target energy performance in kWh/m²/year.
+    ef_objectif_pondere_kwh_m2 (float): Weighted target energy performance in
+    kWh/m²/year.
     delta_ef_realisee_kwh_m2 (float): Actual energy savings in kWh/m²/year.
     delta_ef_visee_kwh_m2 (float): Targeted energy savings in kWh/m²/year.
     energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2 (float):
-        Weighted and climate-corrected energy performance after renovation in kWh/m²/year.
+        Weighted and climate-corrected energy performance after renovation in
+        kWh/m²/year.
 
     Returns:
     pd.DataFrame: A DataFrame containing the energy performance metrics in both
@@ -39,44 +41,42 @@ def make_dataframe_df_results(
         and energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
         > 0
     ):
-        df_results = pd.DataFrame(
-            {
-                "Variable": [
-                    "IDC moyen 3 ans avant travaux → (Ef,avant,corr)",
-                    "EF pondéré corrigé clim. après travaux → (Ef,après,corr,rénové*fp)",
-                    "Objectif en énergie finale (Ef,obj *fp)",
-                    "Baisse ΔEf réalisée → ∆Ef,réel = Ef,avant,corr - Ef,après,corr*fp",
-                    "Baisse ΔEf visée → ∆Ef,visée = Ef,avant,corr - Ef,obj*fp",
-                ],
-                "kWh/m²/an": [
-                    round(ef_avant_corr_kwh_m2, 4),
-                    round(
-                        energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
-                        4,
-                    ),
-                    round(ef_objectif_pondere_kwh_m2, 4),
-                    round(delta_ef_realisee_kwh_m2, 4),
-                    round(delta_ef_visee_kwh_m2, 4),
-                ],
-                "MJ/m²/an": [
-                    round(ef_avant_corr_kwh_m2 * 3.6, 4),
-                    round(
-                        energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
-                        * 3.6,
-                        4,
-                    ),
-                    round(
-                        ef_objectif_pondere_kwh_m2 * 3.6,
-                        4,
-                    ),
-                    round(
-                        delta_ef_realisee_kwh_m2 * 3.6,
-                        4,
-                    ),
-                    round(delta_ef_visee_kwh_m2 * 3.6, 4),
-                ],
-            }
-        )
+        df_results = pd.DataFrame({
+            "Variable": [
+                "IDC moyen 3 ans avant travaux → (Ef,avant,corr)",
+                "EF pondéré corrigé clim. après travaux → (Ef,après,corr,rénové*fp)",
+                "Objectif en énergie finale (Ef,obj *fp)",
+                "Baisse ΔEf réalisée → ∆Ef,réel = Ef,avant,corr - Ef,après,corr*fp",
+                "Baisse ΔEf visée → ∆Ef,visée = Ef,avant,corr - Ef,obj*fp",
+            ],
+            "kWh/m²/an": [
+                round(ef_avant_corr_kwh_m2, 4),
+                round(
+                    energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
+                    4,
+                ),
+                round(ef_objectif_pondere_kwh_m2, 4),
+                round(delta_ef_realisee_kwh_m2, 4),
+                round(delta_ef_visee_kwh_m2, 4),
+            ],
+            "MJ/m²/an": [
+                round(ef_avant_corr_kwh_m2 * 3.6, 4),
+                round(
+                    energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2
+                    * 3.6,
+                    4,
+                ),
+                round(
+                    ef_objectif_pondere_kwh_m2 * 3.6,
+                    4,
+                ),
+                round(
+                    delta_ef_realisee_kwh_m2 * 3.6,
+                    4,
+                ),
+                round(delta_ef_visee_kwh_m2 * 3.6, 4),
+            ],
+        })
         # dtypes
         df_results["Variable"] = df_results["Variable"].astype(str)
         df_results["kWh/m²/an"] = df_results["kWh/m²/an"].astype(float)

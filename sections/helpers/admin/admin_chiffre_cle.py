@@ -1,6 +1,6 @@
+import altair as alt
 import pandas as pd
 import polars as pl
-import altair as alt
 import streamlit as st
 
 TARGET = 85.0  # cible en %
@@ -49,7 +49,12 @@ def filter_energy_data(df: pd.DataFrame) -> pd.DataFrame:
                 df_clean[col] = safe_numeric_conversion(df_clean[col])
             else:
                 df_clean[col] = 0
-        total_energy = sum(df_clean[col] for col in all_energy_cols if col in df_clean.columns)
+        # Ensure total_energy is always a Series (one value per row).
+        total_energy = pd.Series(0, index=df_clean.index, dtype=float)
+        for col in all_energy_cols:
+            if col in df_clean.columns:
+                total_energy = total_energy + df_clean[col]
+
         return df_clean[total_energy > 0]
     except Exception as e:
         st.error(f"Erreur filter_energy_data: {str(e)}")
@@ -107,30 +112,44 @@ def display_last_calculations(df: pd.DataFrame):
             if col in df_date.columns:
                 df_date[col] = pd.to_datetime(df_date[col], errors="coerce")
 
-        df_date = df_date.sort_values(["nom_projet", "date_rapport"], na_position="last")
+        df_date = df_date.sort_values(
+            ["nom_projet", "date_rapport"], na_position="last"
+        )
 
         if "atteinte_objectif" in df_date.columns:
             df_date["atteinte_objectif"] = (
-                pd.to_numeric(df_date["atteinte_objectif"], errors="coerce").fillna(0) * 100
+                pd.to_numeric(df_date["atteinte_objectif"], errors="coerce").fillna(0)
+                * 100
             )
 
         idx = df_date.groupby("nom_projet")["date_rapport"].idxmax()
-        want_cols = ["nom_projet", "amoen_id", "date_rapport", "periode_start", "periode_end", "atteinte_objectif"]
+        want_cols = [
+            "nom_projet",
+            "amoen_id",
+            "date_rapport",
+            "periode_start",
+            "periode_end",
+            "atteinte_objectif",
+        ]
         want_cols = [c for c in want_cols if c in df_date.columns]
-        df_last = df_date.loc[idx, want_cols].sort_values("atteinte_objectif", ascending=True)
+        df_last = df_date.loc[idx, want_cols].sort_values(
+            "atteinte_objectif", ascending=True
+        )
 
         for col in ["date_rapport", "periode_start", "periode_end"]:
             if col in df_last.columns:
                 df_last[col] = df_last[col].dt.strftime("%Y-%m-%d")
 
-        df_last = df_last.rename(columns={
-            "nom_projet": "Projet",
-            "amoen_id": "AMOén",
-            "date_rapport": "Dernier rapport",
-            "periode_start": "Début période",
-            "periode_end": "Fin période",
-            "atteinte_objectif": "Objectif (%)",
-        }).reset_index(drop=True)
+        df_last = df_last.rename(
+            columns={
+                "nom_projet": "Projet",
+                "amoen_id": "AMOén",
+                "date_rapport": "Dernier rapport",
+                "periode_start": "Début période",
+                "periode_end": "Fin période",
+                "atteinte_objectif": "Objectif (%)",
+            }
+        ).reset_index(drop=True)
 
         def color_objective(val):
             try:
@@ -141,12 +160,10 @@ def display_last_calculations(df: pd.DataFrame):
             except (ValueError, TypeError):
                 return ""
 
-        styled = (
-            df_last.style
-            .applymap(color_objective, subset=["Objectif (%)"])
-            .format({"Objectif (%)": "{:.1f}%"})
-        )
-        st.dataframe(styled, width='stretch')
+        styled = df_last.style.applymap(  # type: ignore
+            color_objective, subset=["Objectif (%)"]
+        ).format({"Objectif (%)": "{:.1f}%"})
+        st.dataframe(styled, width="stretch")
 
     except Exception as e:
         st.error(f"Erreur derniers calculs: {str(e)}")
@@ -157,16 +174,26 @@ def display_objective_chart(df: pd.DataFrame):
         lf = pl.from_pandas(df.drop(columns=["_id"], errors="ignore"))
 
         lf = (
-            lf.sort(["nom_projet", "periode_start"])
+            lf
+            .sort(["nom_projet", "periode_start"])
             .with_columns(
                 (
-                    pl.col("atteinte_objectif")
+                    pl
+                    .col("atteinte_objectif")
                     .cast(pl.Float64, strict=False)
                     .fill_null(0.0)
                     * 100
                 ).alias("atteinte_objectif"),
-                pl.col("periode_start").cast(pl.Utf8).str.slice(0, 10).alias("periode_start"),
-                pl.col("periode_end").cast(pl.Utf8).str.slice(0, 10).alias("periode_end"),
+                pl
+                .col("periode_start")
+                .cast(pl.Utf8)
+                .str.slice(0, 10)
+                .alias("periode_start"),
+                pl
+                .col("periode_end")
+                .cast(pl.Utf8)
+                .str.slice(0, 10)
+                .alias("periode_end"),
             )
             .filter(pl.col("atteinte_objectif") > 0)
         )
@@ -176,14 +203,17 @@ def display_objective_chart(df: pd.DataFrame):
             return
 
         lf = lf.with_columns(
-            pl.when(
-                pl.col("periode_start").is_not_null() & pl.col("periode_end").is_not_null()
+            pl
+            .when(
+                pl.col("periode_start").is_not_null()
+                & pl.col("periode_end").is_not_null()
             )
             .then(pl.col("periode_start") + " – " + pl.col("periode_end"))
             .otherwise(pl.lit("Date non spécifiée"))
             .alias("periode"),
             pl.int_range(pl.len()).over("nom_projet").alias("periode_rank"),
-            pl.when(pl.col("atteinte_objectif") >= TARGET)
+            pl
+            .when(pl.col("atteinte_objectif") >= TARGET)
             .then(pl.lit("≥ 85% ✓"))
             .otherwise(pl.lit("< 85% ✗"))
             .alias("statut"),
@@ -193,17 +223,23 @@ def display_objective_chart(df: pd.DataFrame):
         y_max = max(110, (int(df_plot["atteinte_objectif"].max()) // 10 + 2) * 10)
 
         bars = (
-            alt.Chart(df_plot)
+            alt
+            .Chart(df_plot)
             .mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3)
             .encode(
-                x=alt.X("nom_projet:N", axis=alt.Axis(title="", labelAngle=-40, labelFontSize=11)),
+                x=alt.X(
+                    "nom_projet:N",
+                    axis=alt.Axis(title="", labelAngle=-40, labelFontSize=11),
+                ),
                 y=alt.Y(
                     "atteinte_objectif:Q",
                     title="Atteinte objectif [%]",
                     scale=alt.Scale(domain=[0, y_max]),
                     axis=alt.Axis(grid=True, tickCount=6),
                 ),
-                xOffset=alt.XOffset("periode_rank:O", scale=alt.Scale(paddingInner=0.05)),
+                xOffset=alt.XOffset(
+                    "periode_rank:O", scale=alt.Scale(paddingInner=0.05)
+                ),
                 color=alt.Color(
                     "statut:N",
                     scale=alt.Scale(
@@ -216,13 +252,18 @@ def display_objective_chart(df: pd.DataFrame):
                     alt.Tooltip("nom_projet:N", title="Site"),
                     alt.Tooltip("amoen_id:N", title="AMOén"),
                     alt.Tooltip("periode:N", title="Période"),
-                    alt.Tooltip("atteinte_objectif:Q", title="Atteinte objectif [%]", format=".1f"),
+                    alt.Tooltip(
+                        "atteinte_objectif:Q",
+                        title="Atteinte objectif [%]",
+                        format=".1f",
+                    ),
                 ],
             )
         )
 
         labels = (
-            alt.Chart(df_plot)
+            alt
+            .Chart(df_plot)
             .mark_text(dy=-6, fontSize=9, fontWeight="bold")
             .encode(
                 x=alt.X("nom_projet:N"),
@@ -238,19 +279,29 @@ def display_objective_chart(df: pd.DataFrame):
         )
 
         ref_line = (
-            alt.Chart(pd.DataFrame({"y": [TARGET]}))
+            alt
+            .Chart(pd.DataFrame({"y": [TARGET]}))
             .mark_rule(color="#c0392b", strokeWidth=2, strokeDash=[6, 3])
             .encode(y=alt.Y("y:Q"))
         )
 
         ref_label = (
-            alt.Chart(pd.DataFrame({"y": [TARGET], "label": ["Cible 85%"]}))
-            .mark_text(align="right", dx=-6, dy=-7, color="#c0392b", fontSize=10, fontWeight="bold")
+            alt
+            .Chart(pd.DataFrame({"y": [TARGET], "label": ["Cible 85%"]}))
+            .mark_text(
+                align="right",
+                dx=-6,
+                dy=-7,
+                color="#c0392b",
+                fontSize=10,
+                fontWeight="bold",
+            )
             .encode(y=alt.Y("y:Q"), text=alt.Text("label:N"), x=alt.value(700))
         )
 
         fig = (
-            alt.layer(bars, labels, ref_line, ref_label)
+            alt
+            .layer(bars, labels, ref_line, ref_label)
             .properties(
                 height=420,
                 title=alt.TitleParams(
@@ -264,7 +315,7 @@ def display_objective_chart(df: pd.DataFrame):
             .configure_axis(labelFontSize=11)
         )
 
-        st.altair_chart(fig, width='stretch')
+        st.altair_chart(fig, width="stretch")
 
     except Exception as e:
         st.error(f"Erreur graphique objectif: {str(e)}")
@@ -295,17 +346,25 @@ def display_energy_mix_chart(df: pd.DataFrame):
         df_mix = pd.DataFrame(rows).sort_values("Entrées", ascending=True)
 
         bars = (
-            alt.Chart(df_mix)
-            .mark_bar(color="#3498db", cornerRadiusTopRight=3, cornerRadiusBottomRight=3)
+            alt
+            .Chart(df_mix)
+            .mark_bar(
+                color="#3498db", cornerRadiusTopRight=3, cornerRadiusBottomRight=3
+            )
             .encode(
-                y=alt.Y("Agent:N", sort=None, axis=alt.Axis(labelFontSize=11), title=""),
-                x=alt.X("Entrées:Q", axis=alt.Axis(tickMinStep=1), title="Nombre d'entrées"),
+                y=alt.Y(
+                    "Agent:N", sort=None, axis=alt.Axis(labelFontSize=11), title=""
+                ),
+                x=alt.X(
+                    "Entrées:Q", axis=alt.Axis(tickMinStep=1), title="Nombre d'entrées"
+                ),
                 tooltip=["Agent:N", "Entrées:Q"],
             )
         )
 
         labels = (
-            alt.Chart(df_mix)
+            alt
+            .Chart(df_mix)
             .mark_text(align="left", dx=4, fontSize=11)
             .encode(
                 y=alt.Y("Agent:N", sort=None),
@@ -315,12 +374,13 @@ def display_energy_mix_chart(df: pd.DataFrame):
         )
 
         fig = (
-            alt.layer(bars, labels)
+            alt
+            .layer(bars, labels)
             .properties(height=max(180, len(df_mix) * 36))
             .configure_view(strokeWidth=0)
             .configure_axisY(labelLimit=160)
         )
-        st.altair_chart(fig, width='stretch')
+        st.altair_chart(fig, width="stretch")
 
     except Exception as e:
         st.error(f"Erreur graphique mix énergétique: {str(e)}")
@@ -345,14 +405,19 @@ def display_filtered_data(df: pd.DataFrame) -> pd.DataFrame:
             filtre_amoen = st.multiselect("AMOén", all_amoen, default=all_amoen)
         with col2:
             projects_for_selected = sorted(
-                df_filtre[df_filtre["amoen_id"].isin(filtre_amoen)]["nom_projet"].unique()
+                df_filtre[df_filtre["amoen_id"].isin(filtre_amoen)][
+                    "nom_projet"
+                ].unique()
             )
-            filtre_projets = st.multiselect("Projet", projects_for_selected, default=projects_for_selected)
+            filtre_projets = st.multiselect(
+                "Projet", projects_for_selected, default=projects_for_selected
+            )
 
         df_filtre = df_filtre[
-            df_filtre["nom_projet"].isin(filtre_projets) & df_filtre["amoen_id"].isin(filtre_amoen)
+            df_filtre["nom_projet"].isin(filtre_projets)
+            & df_filtre["amoen_id"].isin(filtre_amoen)
         ]
-        st.dataframe(df_filtre, width='stretch', hide_index=True)
+        st.dataframe(df_filtre, width="stretch", hide_index=True)
         return df_filtre
 
     except Exception as e:

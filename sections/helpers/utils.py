@@ -29,5 +29,7 @@ def get_rounded_float(dictionary, key, decimals=2):
         return round(float(cleaned_value), decimals)
 
     except Exception as e:
-        print(f"Error converting {key}: {value}, Error: {str(e)}")  # Debug print
+        # 'value' may not be defined if the error occurred before assignment
+        value_repr = locals().get("value", None)
+        print(f"Error converting {key}: {value_repr!r}, Error: {e}")  # Debug print
         return 0.0

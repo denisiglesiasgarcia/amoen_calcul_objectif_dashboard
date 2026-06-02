@@ -1,4 +1,4 @@
-from typing import Dict, List
+# sections/helpers/agents_energetiques.py
 
 import numpy as np
 import streamlit as st
@@ -123,7 +123,7 @@ def validate_agent_energetique_input(label: str, value: str, unit: str) -> float
         return 0
 
 
-def get_selected_agents(data_sites_db: Dict) -> List[str]:
+def get_selected_agents(data_sites_db: dict) -> list:
     """
     Get the list of selected energy agents based on the database values.
 
@@ -140,11 +140,10 @@ def get_selected_agents(data_sites_db: Dict) -> List[str]:
     ]
 
 
-def update_data_site(
-    data_site: Dict, selected_agents: List[str], options: List[Dict]
-) -> Dict:
+def update_data_site(data_site: dict, selected_agents: list, options: list) -> dict:
     """
-    Update the data_site dictionary with energy agent values, setting unselected agents to 0.
+    Update the data_site dictionary with energy agent values, setting
+    unselected agents to 0.
 
     Args:
     data_site (Dict): The dictionary to update.
@@ -164,7 +163,7 @@ def update_data_site(
     return data_site
 
 
-def calculate_total_energy(data_site: Dict) -> float:
+def calculate_total_energy(data_site: dict) -> float:
     """
     Calculate the total energy from all energy agents.
 
@@ -180,7 +179,8 @@ def calculate_total_energy(data_site: Dict) -> float:
 
 
 def display_energy_agents(
-    data_site: Dict, data_sites_db: Dict,
+    data_site: dict,
+    data_sites_db: dict,
 ):
     """
     Display energy agents inputs and handle user interactions.
@@ -210,8 +210,16 @@ def display_energy_agents(
             default_value = get_default_value(data_site, option)
             value = st.text_input(option["label"] + ":", value=default_value)
             if value and value != "0":
-                option["value"] = validate_agent_energetique_input(
-                    option["label"], value, option["unit"]
+                # validate_agent_energetique_input returns a float, but the
+                # OPTIONS_AGENT_ENERGETIQUE_EF TypedDict entries are inferred
+                # to have string values for existing keys. To avoid type
+                # conflicts when assigning to option["value"], store the
+                # validated number as a string. Downstream code will cast
+                # back to float when needed.
+                option["value"] = str(
+                    validate_agent_energetique_input(
+                        option["label"], value, option["unit"]
+                    )
                 )
 
     # Update data_site with new values, setting unselected agents to 0
@@ -223,15 +231,15 @@ def display_energy_agents(
     total_energy = calculate_total_energy(data_site)
     if total_energy <= 0:
         st.warning(
-            f"Veuillez renseigner une quantité d'énergie utilisée sur la période ({total_energy})"
+            f"Veuillez renseigner une quantité d'énergie utilisée "
+            f"sur la période ({total_energy})"
         )
         return 0
     else:
         return total_energy
-    
 
 
-def get_default_value(data_site: Dict, option: Dict) -> float:
+def get_default_value(data_site: dict, option: dict) -> float:
     """
     Get the default value for an energy agent input field.
 
@@ -242,4 +250,5 @@ def get_default_value(data_site: Dict, option: Dict) -> float:
     Returns:
     float: The default value for the input field.
     """
-    return 0.0
+    # return existing value from data_site if present
+    return float(data_site.get(option.get("variable", ""), 0) or 0)

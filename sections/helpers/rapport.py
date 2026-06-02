@@ -1,34 +1,32 @@
 # sections/helpers/rapport.py
 
+import gc
+import io
+import os
+from datetime import datetime
+
+import matplotlib.patches as patches
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.sankey import Sankey
+from reportlab.lib import colors
+from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.lib.units import cm
 from reportlab.platypus import (
-    SimpleDocTemplate,
+    Frame,
+    Image,
+    PageBreak,
+    PageTemplate,
     Paragraph,
+    SimpleDocTemplate,
     Spacer,
     Table,
     TableStyle,
-    Image,
-    PageBreak,
-    Frame,
-    PageTemplate,
 )
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib import colors
-
-from reportlab.lib.units import cm
-from reportlab.lib.enums import TA_LEFT
-
-import io
-import gc
-import seaborn as sns
-import matplotlib.pyplot as plt
-import pandas as pd
-
-from datetime import datetime
-import os
-import matplotlib.patches as patches
-from matplotlib.colors import LinearSegmentedColormap
-from matplotlib.sankey import Sankey
 
 
 def graphique_bars_rapport(
@@ -58,23 +56,21 @@ def graphique_bars_rapport(
     )
 
     # données pour le graphique
-    bar_data1 = pd.DataFrame(
-        {
-            "Nom_projet": [site, site, site],
-            "Type": [
-                "IDC moy 3 ans avant\n$E_{f,avant,corr}$",
-                "Objectif\n$E_{f,obj}*f_{p}$",
-                "Conso mesurée après\n$E_{f,après,corr,rénové}*f_{p}$",
-            ],
-            "Valeur": [
-                idc_moy_3ans_avant_MJ_m2,
-                ef_objectif_pondere_MJ_m2,
-                ef_apres_corr_MJ_m2,
-            ],
-        }
-    )
+    bar_data1 = pd.DataFrame({
+        "Nom_projet": [site, site, site],
+        "Type": [
+            "IDC moy 3 ans avant\n$E_{f,avant,corr}$",
+            "Objectif\n$E_{f,obj}*f_{p}$",
+            "Conso mesurée après\n$E_{f,après,corr,rénové}*f_{p}$",
+        ],
+        "Valeur": [
+            idc_moy_3ans_avant_MJ_m2,
+            ef_objectif_pondere_MJ_m2,
+            ef_apres_corr_MJ_m2,
+        ],
+    })
 
-    plt.clf()    # Clear the current figure
+    plt.clf()  # Clear the current figure
     cm = 1 / 2.54
     sns.set(style="white", rc={"figure.figsize": (30 * cm, 14.2 * cm)})
 
@@ -89,7 +85,7 @@ def graphique_bars_rapport(
             "Conso mesurée après\n$E_{f,après,corr,rénové}*f_{p}$",
         ],
         palette=["#1f77b4", "#ff7f0e", "#2ca02c"],
-        legend=False
+        legend=False,
     )
 
     sns.despine()
@@ -112,7 +108,7 @@ def graphique_bars_rapport(
     second_bar_height = ef_objectif_pondere_MJ_m2
     x_coord_second_bar = 0.7  # Adjusted x-coordinate for the second bar
     text_arrow_baisse_realisee = (
-        "Baisse\nobjectif\n" + str("{:.1f}".format(baisse_objectif_MJ_m2)) + " MJ/m²"
+        f"Baisse\nobjectif\n {str(f'{baisse_objectif_MJ_m2:.1f}')} MJ/m²"
     )
     midpoint_height = (first_bar_height + second_bar_height) / 2
     ax.annotate(
@@ -136,7 +132,7 @@ def graphique_bars_rapport(
     third_bar_height = ef_apres_corr_MJ_m2
     x_coord_third_bar = 1.7  # Adjusted x-coordinate for the third bar
     text_arrow_baisse_realisee = (
-        "Baisse\nmesurée\n" + str("{:.1f}".format(baisse_mesuree_MJ_m2)) + " MJ/m²"
+        f"Baisse\nmesurée\n {str(f'{baisse_mesuree_MJ_m2:.1f}')} MJ/m²"
     )
     midpoint_height = (first_bar_height + third_bar_height) / 2
     ax.annotate(
@@ -159,9 +155,7 @@ def graphique_bars_rapport(
     #####################
 
     # titre de l'histogramme
-    title_text = (
-        str("{:.1f}".format(atteinte_objectif * 100)) + "% de l'objectif atteint\n"
-    )
+    title_text = f"{str(f'{atteinte_objectif * 100:.1f}')}% de l'objectif atteint\n"
     title_color = "darkgreen" if atteinte_objectif * 100 >= 85 else "red"
     plt.title(
         title_text,
@@ -178,17 +172,19 @@ def graphique_bars_rapport(
 
     formula_atteinte_objectif_titre = r"$Atteinte\ objectif=$"
     formula_atteinte_objectif_titre_pourcent = r"$=$"
-    formula_atteinte_objectif = r"$\frac{{\Delta E_{{f,réel}}}}{{\Delta E_{{f,visée}}}} = \frac{{E_{{f,avant,corr}} - E_{{f,après,corr,rénové}}*f_{{p}}}}{{E_{{f,avant,corr}} - E_{{f,obj}}*f_{{p}}}}=$"
-    formula_atteinte_objectif_num = r"$\frac{{{} - {}}}{{{} - {}}}$".format(
-        round(idc_moy_3ans_avant_MJ_m2, 1),
-        round(ef_apres_corr_MJ_m2, 1),
-        round(idc_moy_3ans_avant_MJ_m2, 1),
-        round(ef_objectif_pondere_MJ_m2, 1),
+    formula_atteinte_objectif = (
+        r"$\frac{\Delta E_{f,réel}}{\Delta E_{f,visée}} = "
+        r"\frac{E_{f,avant,corr} - E_{f,après,corr,rénové}*f_{p}}"
+        r"{E_{f,avant,corr} - E_{f,obj}*f_{p}}}=$"
     )
 
-    formula_atteinte_objectifs_pourcent = r"${} \%$".format(
-        round(atteinte_objectif * 100, 1)
+    formula_atteinte_objectif_num = (
+        rf"$\frac{{{round(idc_moy_3ans_avant_MJ_m2, 1)} - "
+        rf"{round(ef_apres_corr_MJ_m2, 1)}}}{{{round(idc_moy_3ans_avant_MJ_m2, 1)} - "
+        rf"{round(ef_objectif_pondere_MJ_m2, 1)}}}$"
     )
+
+    formula_atteinte_objectifs_pourcent = rf"${round(atteinte_objectif * 100, 1)} \%$"
 
     xlabel_level1 = -0.3
 
@@ -253,7 +249,7 @@ def graphique_bars_rapport(
 
     # nettoyage
     plt.close()  # Close the figure window
-    plt.clf()    # Clear the current figure
+    plt.clf()  # Clear the current figure
     gc.collect()  # Manually invoke garbage collection
 
 
@@ -269,7 +265,7 @@ def repartition_renove_sureleve(
     energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2,
 ):
 
-    plt.clf()    # Clear the current figure
+    plt.clf()  # Clear the current figure
     cm = 1 / 2.54
     figsize_a = 21 * cm
     figsize_b = 14.2 * cm
@@ -511,37 +507,53 @@ def repartition_renove_sureleve(
     fig.text(
         0.08,
         -0.83,
-        "Il est important de noter que la subvention bonus AMOén ne concerne que la partie rénovée du\n"
+        "Il est important de noter que la subvention bonus AMOén ne concerne que la "
+        + "partie rénovée du\n"
         + "bâtiment, excluant ainsi toute extension ou surélévation.\n"
         + "\n"
-        + "L'énergie finale est l'énergie disponible pour les consommateurs après les étapes de production,\n"
-        + "transformation et transport. Par exemple, l'électricité ou le gaz qui arrive dans un immeuble.\n"
+        + "L'énergie finale est l'énergie disponible pour les consommateurs après les "
+        + "étapes de production,\n"
+        + "transformation et transport. Par exemple, l'électricité ou le gaz "
+        + "qui arrive "
+        + "dans un immeuble.\n"
         + "\n"
-        + "L'énergie finale est répartie entre l'eau chaude sanitaire (ECS) et le chauffage. La consommation liée\n"
-        + "au chauffage est ajustée en fonction du climat pour tenir compte des variations de température. En\n"
-        + "revanche, l'énergie utilisée pour l'ECS n'est pas soumise à cette correction climatique.\n"
-        + "L'énergie finale est aussi pondérée selon les agents énergétiques utilisés.\n"
-        + "Finalement nous obtenons de l'énergie finale qui est corrigée climatiquement et pondérée.\n"
+        + "L'énergie finale est répartie entre l'eau chaude sanitaire (ECS) et le "
+        + "chauffage. La consommation liée\n"
+        + "au chauffage est ajustée en fonction du climat pour tenir compte des "
+        + "variations de température. En\n"
+        + "revanche, l'énergie utilisée pour l'ECS n'est pas soumise à cette "
+        + "correction climatique.\n"
+        + "L'énergie finale est aussi pondérée selon les agents énergétiques "
+        + "utilisés.\n"
+        + "Finalement nous obtenons de l'énergie finale qui est corrigée "
+        + "climatiquement et pondérée.\n"
         + "\n"
         + "L'IDC et l'"
         + r"$E_{f,après,corr,rénové} * f_p$"
         + " se basent sur ce principe pour comparer l'énergie consommée\n"
-        + "par les bâtiments d'année en année. Ils ne sont pas équivalents car ils utilisent des approches\n"
+        + "par les bâtiments d'année en année. Ils ne sont pas équivalents car ils "
+        + "utilisent des approches\n"
         + "significativement différentes (méthodologie).\n"
         + "\n"
         + "Les principales disparités entre l'IDC et l'"
         + r"$E_{f,après,corr,rénové} * f_p$"
         + " sont les suivantes:\n"
         + "\n"
-        + "- SRE: l'IDC prend en compte toute la SRE du bâtiment, alors que la méthodologie AMOén ne prend en\n"
+        + "- SRE: l'IDC prend en compte toute la SRE du bâtiment, alors que la "
+        + "méthodologie AMOén ne prend en\n"
         + "  compte que la SRE de la partie rénovée.\n"
         + "\n"
-        + "- Energie finale: l'IDC prend en compte toute l'énergie finale consommée par le bâtiment, alors que\n"
-        + "  la méthodologie AMOén ne prend en compte que l'énergie finale consommée par la partie rénovée.\n"
+        + "- Energie finale: l'IDC prend en compte toute l'énergie finale consommée "
+        + "par le bâtiment, alors que\n"
+        + "  la méthodologie AMOén ne prend en compte que l'énergie finale consommée "
+        + "par la partie rénovée.\n"
         + "\n"
-        + "- Répartition chauffage/ECS: l'IDC part du principe que pour un logement collectif, 128 MJ/m² sont\n"
-        + "  dédiés à l'ECS et tout le reste est dédié au chauffage. La méthodologie AMOén prend en compte la\n"
-        + "  répartition théorique (besoins de chauffage et ECS) pour répartir le chauffage et ECS.",
+        + "- Répartition chauffage/ECS: l'IDC part du principe que pour un logement "
+        + "collectif, 128 MJ/m² sont\n"
+        + "  dédiés à l'ECS et tout le reste est dédié au chauffage. La méthodologie "
+        + "AMOén prend en compte la\n"
+        + "  répartition théorique (besoins de chauffage et ECS) pour répartir le "
+        + "chauffage et ECS.",
         horizontalalignment="left",
         fontsize=10,
     )
@@ -553,7 +565,7 @@ def repartition_renove_sureleve(
 
     # nettoyage
     plt.close()  # Close the figure window
-    plt.clf()    # Clear the current figure
+    plt.clf()  # Clear the current figure
     gc.collect()  # Manually invoke garbage collection
 
     return ratio_figsize
@@ -722,24 +734,22 @@ def generate_pdf(data):
     # Adjust the column widths to make better use of space
     project_admin_table = Table(project_admin, colWidths=[150, 350])
     project_admin_table.setStyle(
-        TableStyle(
-            [
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-                ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
-                ("SPAN", (0, 0), (1, 1)),
-                ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
-                ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
-                ("VALIGN", (0, 0), (-1, -1), "TOP"),
-                ("ALIGN", (0, 0), (-1, -1), "LEFT"),
-                ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
-                ("FONTSIZE", (0, 0), (-1, -1), 10),
-                ("TOPPADDING", (0, 0), (-1, -1), 3),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-                ("LEFTPADDING", (0, 0), (-1, -1), 6),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-            ]
-        )
+        TableStyle([
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
+            ("SPAN", (0, 0), (1, 1)),
+            ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
+            ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+            ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+            ("FONTSIZE", (0, 0), (-1, -1), 10),
+            ("TOPPADDING", (0, 0), (-1, -1), 3),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+            ("LEFTPADDING", (0, 0), (-1, -1), 6),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ])
     )
 
     elements.append(project_admin_table)
@@ -761,39 +771,33 @@ def generate_pdf(data):
         )
 
         # Create the paragraph with mixed styles
-        project_surfaces.append(
-            [
-                Paragraph("Surface surélévation (m² SRE):", styles["Normal"]),
-                Paragraph(
-                    f"{round(data['sre_extension_surelevation_m2'],2):.1f} m² SRE. <i>La SRE surélevée n'est pas sujette à la subvention AMOén</i>"
-                ),
-            ]
-        )
+        project_surfaces.append([
+            Paragraph("Surface surélévation (m² SRE):", styles["Normal"]),
+            Paragraph(
+                f"{round(data['sre_extension_surelevation_m2'], 2):.1f} m² SRE. <i>La SRE surélevée n'est pas sujette à la subvention AMOén</i>"  # noqa: E501
+            ),
+        ])
 
-    project_surfaces.append(
-        [
-            Paragraph("Surface rénovation (m² SRE):", styles["Normal"]),
-            f"{data['sre_renovation_m2']} m² SRE",
-        ]
-    )
+    project_surfaces.append([
+        Paragraph("Surface rénovation (m² SRE):", styles["Normal"]),
+        f"{data['sre_renovation_m2']} m² SRE",
+    ])
 
     project_surfaces_table = Table(project_surfaces, colWidths=[150, 350])
     project_surfaces_table.setStyle(
-        TableStyle(
-            [
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-                ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
-                ("SPAN", (0, 0), (1, 1)),
-                ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
-                ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
-                ("ALIGN", (0, 0), (-1, -1), "LEFT"),
-                ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
-                ("FONTSIZE", (0, 0), (-1, -1), 10),
-                ("TOPPADDING", (0, 0), (-1, -1), 3),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-            ]
-        )
+        TableStyle([
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
+            ("SPAN", (0, 0), (1, 1)),
+            ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
+            ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
+            ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+            ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+            ("FONTSIZE", (0, 0), (-1, -1), 10),
+            ("TOPPADDING", (0, 0), (-1, -1), 3),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ])
     )
     elements.append(project_surfaces_table)
     elements.append(Spacer(1, 0.5 * cm))
@@ -843,30 +847,27 @@ def generate_pdf(data):
         ("Autre", data["agent_energetique_ef_autre_kwh"], "kWh"),
     ]:
         if value > 0.0:
-            project_energie.append(
-                [
-                    f"{energy_type} ({unit}):",
-                    f"{value:.1f} {unit} du {data['periode_start'].date()} au {data['periode_end'].date()}",
-                ]
-            )
+            project_energie.append([
+                f"{energy_type} ({unit}):",
+                f"{value:.1f} {unit} du {data['periode_start'].date()} au "
+                f"{data['periode_end'].date()}",
+            ])
 
     project_energie_table = Table(project_energie, colWidths=[150, 350])
     project_energie_table.setStyle(
-        TableStyle(
-            [
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-                ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
-                ("SPAN", (0, 0), (1, 1)),
-                ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
-                ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
-                ("ALIGN", (0, 0), (-1, -1), "LEFT"),
-                ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
-                ("FONTSIZE", (0, 0), (-1, -1), 10),
-                ("TOPPADDING", (0, 0), (-1, -1), 3),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-            ]
-        )
+        TableStyle([
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
+            ("SPAN", (0, 0), (1, 1)),
+            ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
+            ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
+            ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+            ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+            ("FONTSIZE", (0, 0), (-1, -1), 10),
+            ("TOPPADDING", (0, 0), (-1, -1), 3),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ])
     )
     elements.append(project_energie_table)
     elements.append(Spacer(1, 0.5 * cm))
@@ -886,34 +887,34 @@ def generate_pdf(data):
             Paragraph("<b>MJ/m²/an</b>", styles["Normal"]),
         ],
         [
-            f"IDC moyen 3 ans avant travaux ({data['annees_calcul_idc_avant_travaux']})",
+            f"IDC moyen 3 ans avant travaux ({data['annees_calcul_idc_avant_travaux']})",  # noqa: E501
             "Ef,avant,corr",
             f"{data['ef_avant_corr_kwh_m2']:.1f}",
-            f"{data['ef_avant_corr_kwh_m2']*3.6:.1f}",
+            f"{data['ef_avant_corr_kwh_m2'] * 3.6:.1f}",
         ],
         [
             "EF pondéré corrigé clim. après travaux",
             "Ef,après,corr,rénové*fp",
             f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}",
-            f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']*3.6:.1f}",
+            f"{data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2'] * 3.6:.1f}",  # noqa: E501
         ],
         [
             "Objectif en énergie finale",
             "Ef,obj*fp",
             f"{data['ef_objectif_pondere_kwh_m2']:.1f}",
-            f"{data['ef_objectif_pondere_kwh_m2']*3.6:.1f}",
+            f"{data['ef_objectif_pondere_kwh_m2'] * 3.6:.1f}",
         ],
         [
             "Baisse mesurée",
             "∆Ef,réel",
-            f"{data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}",
-            f"{(data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2'])*3.6:.1f}",
+            f"{data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']:.1f}",  # noqa: E501
+            f"{(data['ef_avant_corr_kwh_m2'] - data['energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2']) * 3.6:.1f}",  # noqa: E501
         ],
         [
             "Baisse objectif",
             "∆Ef,visée",
             f"{data['delta_ef_visee_kwh_m2']:.1f}",
-            f"{data['delta_ef_visee_kwh_m2']*3.6:.1f}",
+            f"{data['delta_ef_visee_kwh_m2'] * 3.6:.1f}",
         ],
     ]
 
@@ -922,43 +923,41 @@ def generate_pdf(data):
 
     # Update the table style for the additional column
     project_results_table.setStyle(
-        TableStyle(
-            [
-                ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
-                (
-                    "BACKGROUND",
-                    (0, 1),
-                    (-1, 1),
-                    colors.white,
-                ),  # Background for header row
-                ("TEXTCOLOR", (0, 0), (-1, 1), colors.black),
-                ("ALIGN", (0, 0), (0, -1), "LEFT"),  # Left-align first column
-                ("ALIGN", (1, 0), (1, -1), "LEFT"),  # Left-align second column
-                ("ALIGN", (2, 0), (-1, -1), "CENTER"),  # Center-align other columns
-                ("FONTNAME", (0, 0), (-1, 1), "Helvetica-Bold"),
-                ("FONTSIZE", (0, 0), (-1, 0), 12),  # Font size for title row
-                ("FONTSIZE", (0, 1), (-1, 1), 10),  # Font size for header row
-                ("BOTTOMPADDING", (0, 0), (-1, 0), 12),  # Padding for title row
-                (
-                    "BACKGROUND",
-                    (0, 2),
-                    (-1, -1),
-                    colors.white,
-                ),  # Background for data rows
-                (
-                    "TEXTCOLOR",
-                    (0, 2),
-                    (-1, -1),
-                    colors.black,
-                ),  # Text color for data rows
-                ("FONTNAME", (0, 2), (-1, -1), "Helvetica"),  # Font for data rows
-                ("FONTSIZE", (0, 2), (-1, -1), 10),  # Font size for data rows
-                ("TOPPADDING", (0, 0), (-1, -1), 3),  # Padding adjustments
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),  # Table grid
-                ("SPAN", (0, 0), (-1, 0)),  # Merge cells in title row
-            ]
-        )
+        TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+            (
+                "BACKGROUND",
+                (0, 1),
+                (-1, 1),
+                colors.white,
+            ),  # Background for header row
+            ("TEXTCOLOR", (0, 0), (-1, 1), colors.black),
+            ("ALIGN", (0, 0), (0, -1), "LEFT"),  # Left-align first column
+            ("ALIGN", (1, 0), (1, -1), "LEFT"),  # Left-align second column
+            ("ALIGN", (2, 0), (-1, -1), "CENTER"),  # Center-align other columns
+            ("FONTNAME", (0, 0), (-1, 1), "Helvetica-Bold"),
+            ("FONTSIZE", (0, 0), (-1, 0), 12),  # Font size for title row
+            ("FONTSIZE", (0, 1), (-1, 1), 10),  # Font size for header row
+            ("BOTTOMPADDING", (0, 0), (-1, 0), 12),  # Padding for title row
+            (
+                "BACKGROUND",
+                (0, 2),
+                (-1, -1),
+                colors.white,
+            ),  # Background for data rows
+            (
+                "TEXTCOLOR",
+                (0, 2),
+                (-1, -1),
+                colors.black,
+            ),  # Text color for data rows
+            ("FONTNAME", (0, 2), (-1, -1), "Helvetica"),  # Font for data rows
+            ("FONTSIZE", (0, 2), (-1, -1), 10),  # Font size for data rows
+            ("TOPPADDING", (0, 0), (-1, -1), 3),  # Padding adjustments
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),  # Table grid
+            ("SPAN", (0, 0), (-1, 0)),  # Merge cells in title row
+        ])
     )
 
     # Add the table to the document

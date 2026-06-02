@@ -71,7 +71,8 @@ def validate_energie_input(name, variable, unit1, unit2):
 
 def validate_percentage_sum(data_dict, field_names, expected_sum=100.0, round_digits=2):
     """
-    Validates that the sum of specified percentage fields equals an expected value and displays a warning if needed.
+    Validates that the sum of specified percentage fields equals an expected value and
+    displays a warning if needed.
 
     Args:
         data_dict (dict): Dictionary containing the percentage values
@@ -100,7 +101,8 @@ def validate_percentage_sum(data_dict, field_names, expected_sum=100.0, round_di
         # Check if sum matches expected value
         if actual_sum != expected_sum:
             st.warning(
-                f"La somme des pourcentages doit être égale à {expected_sum}% (actuellement: {actual_sum:.2f}%)"
+                f"La somme des pourcentages doit être égale à {expected_sum}% "
+                f"(actuellement: {actual_sum:.2f}%)"
             )
             return 0
 

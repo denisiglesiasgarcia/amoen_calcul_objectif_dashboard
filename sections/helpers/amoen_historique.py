@@ -1,14 +1,14 @@
-# import pandas as pd
-import plotly.express as px
+# sections/helpers/amoen_historique.py
 
-# from datetime import datetime
+import plotly.express as px
 import streamlit as st
 
 
 @st.cache_data
 def create_barplot_historique_amoen(data_df):
     """
-    Creates a bar plot to visualize the historical achievement of objectives for a given project.
+    Creates a bar plot to visualize the historical achievement
+    of objectives for a given project.
     """
     # Data preparation
     df_barplot = data_df.copy()
@@ -103,7 +103,7 @@ def create_barplot_historique_amoen(data_df):
     # Display the plot
     st.plotly_chart(
         fig,
-        width='stretch',
+        width="stretch",
         config={
             "toImageButtonOptions": {
                 "format": "png",

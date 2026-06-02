@@ -4,7 +4,12 @@ import pandas as pd
 import streamlit as st
 
 
-def make_dataframe_df_meteo_note_calcul(periode_start, periode_end, df_meteo_tre200d0):
+def make_dataframe_df_meteo_note_calcul(
+    periode_start: pd.Timestamp,
+    periode_end: pd.Timestamp,
+    df_meteo_tre200d0: pd.DataFrame,
+) -> pd.DataFrame:
+    df_meteo_note_calcul = pd.DataFrame()
     try:
         periode_start = pd.to_datetime(periode_start)
         periode_end = pd.to_datetime(periode_end)
@@ -21,10 +26,13 @@ def make_dataframe_df_meteo_note_calcul(periode_start, periode_end, df_meteo_tre
             ).copy()
         else:
             st.warning(
-                "Erreur lors de la création du DataFrame de météo pour le calcul des degrés-jours."
+                "Erreur lors de la création du DataFrame de météo pour "
+                "le calcul des degrés-jours."
             )
     except Exception as e:
-        st.warning(
-            f"Erreur lors de la création du DataFrame de météo pour le calcul des degrés-jours. Erreur : {e}"
+        err_msg = (
+            "Erreur lors de la création du DataFrame de météo pour le calcul "
+            f"des degrés-jours. Erreur : {e}"
         )
+        st.warning(err_msg)
     return df_meteo_note_calcul

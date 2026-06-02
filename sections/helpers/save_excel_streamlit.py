@@ -1,12 +1,13 @@
 # /sections/helpers/save_excel_streamlit.py
 
-import pandas as pd
-from io import BytesIO
-import streamlit as st
-from typing import Union, Dict, Any, Optional
 import logging
-import traceback
 import re
+import traceback
+from io import BytesIO
+from typing import Any
+
+import pandas as pd
+import streamlit as st
 
 # Configure logging with timestamp
 logging.basicConfig(
@@ -18,7 +19,7 @@ logger = logging.getLogger(__name__)
 class ExcelExportError(Exception):
     """Custom exception for Excel export errors"""
 
-    def __init__(self, message: str, original_error: Optional[Exception] = None):
+    def __init__(self, message: str, original_error: Exception | None = None):
         self.message = message
         self.original_error = original_error
         super().__init__(self.message)
@@ -40,7 +41,8 @@ class DataFrameFormatter:
         for col in df.select_dtypes(include=["object"]).columns:
             # Try to convert to numeric
             numeric_series = pd.to_numeric(df[col], errors="coerce")
-            # If at least 90% of non-null values were converted successfully, keep the conversion
+            # If at least 90% of non-null values were converted successfully,
+            # keep the conversion
             if numeric_series.notna().sum() >= df[col].notna().sum() * 0.9:
                 df[col] = numeric_series
         return df
@@ -115,10 +117,10 @@ def prepare_dataframe_for_display(df: pd.DataFrame) -> pd.DataFrame:
         logger.error(traceback.format_exc())
         raise ExcelExportError(
             "Failed to prepare DataFrame for display", original_error=e
-        )
+        ) from e
 
 
-def convert_df_to_excel(data: Union[pd.DataFrame, Dict[str, Any]]) -> bytes:
+def convert_df_to_excel(data: pd.DataFrame | dict[str, Any]) -> bytes:
     """
     Convert DataFrame or dictionary to Excel bytes.
 
@@ -130,10 +132,7 @@ def convert_df_to_excel(data: Union[pd.DataFrame, Dict[str, Any]]) -> bytes:
     """
     try:
         # Convert to DataFrame if necessary
-        if isinstance(data, dict):
-            df = pd.DataFrame([data])
-        else:
-            df = pd.DataFrame(data)
+        df = pd.DataFrame([data]) if isinstance(data, dict) else pd.DataFrame(data)
 
         # Prepare data for Excel
         df = prepare_dataframe_for_display(df)
@@ -157,11 +156,13 @@ def convert_df_to_excel(data: Union[pd.DataFrame, Dict[str, Any]]) -> bytes:
     except Exception as e:
         logger.error(f"Excel conversion error: {str(e)}")
         logger.error(traceback.format_exc())
-        raise ExcelExportError(f"Excel conversion failed: {str(e)}", original_error=e)
+        raise ExcelExportError(
+            f"Excel conversion failed: {str(e)}", original_error=e
+        ) from e
 
 
 def display_dataframe_with_excel_download(
-    data: Union[pd.DataFrame, Dict[str, Any]], filename: str = "data.xlsx"
+    data: pd.DataFrame | dict[str, Any], filename: str = "data.xlsx"
 ) -> None:
     """
     Display DataFrame and provide Excel download button.
@@ -177,10 +178,7 @@ def display_dataframe_with_excel_download(
             return
 
         # Convert to DataFrame if necessary
-        if isinstance(data, dict):
-            df = pd.DataFrame([data])
-        else:
-            df = pd.DataFrame(data)
+        df = pd.DataFrame([data]) if isinstance(data, dict) else pd.DataFrame(data)
 
         if df.empty:
             st.info("No data to display")
@@ -190,7 +188,7 @@ def display_dataframe_with_excel_download(
         display_df = prepare_dataframe_for_display(df)
 
         # Display the DataFrame
-        st.dataframe(display_df, width='stretch', hide_index=True)
+        st.dataframe(display_df, width="stretch", hide_index=True)
 
         # Generate Excel file
         excel_data = convert_df_to_excel(df)
@@ -205,7 +203,7 @@ def display_dataframe_with_excel_download(
             data=excel_data,
             file_name=filename,
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            width='stretch',
+            width="stretch",
         )
 
     except ExcelExportError as e:

@@ -6,7 +6,7 @@ import streamlit as st
 
 
 @st.cache_data
-def get_meteo_data(DJ_TEMPERATURE_REFERENCE=20):
+def get_meteo_data(DJ_TEMPERATURE_REFERENCE: float = 20.0) -> pd.DataFrame:
     """
     Fetch and process meteorological data for degree-day (DJ) calculations.
 

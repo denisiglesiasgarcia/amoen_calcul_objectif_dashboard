@@ -5,3 +5,8 @@ secrets
 03_dashboard_IDC.py
 Jupyter
 /.claude
+
+# secrets
+.env
+.env.*
+.streamlit/secrets.toml

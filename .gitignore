@@ -10,3 +10,4 @@ Jupyter
 .env
 .env.*
 .streamlit/secrets.toml
+.venv

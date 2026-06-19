@@ -21,9 +21,9 @@ bcrypt==5.0.0
     # via streamlit-authenticator
 blinker==1.9.0
     # via streamlit
-boto3==1.43.32
+boto3==1.43.33
     # via pymongo-auth-aws
-botocore==1.43.32
+botocore==1.43.33
     # via
     #   boto3
     #   pymongo-auth-aws
@@ -189,7 +189,7 @@ pyparsing==3.3.2
     # via matplotlib
 pyproj==3.7.2
     # via amoen-calcul-objectif-dashboard
-pytest==9.1.0
+pytest==9.1.1
     # via amoen-calcul-objectif-dashboard
 python-dateutil==2.9.0.post0
     # via
@@ -206,7 +206,7 @@ referencing==0.37.0
     # via
     #   jsonschema
     #   jsonschema-specifications
-reportlab==4.5.1
+reportlab==5.0.0
     # via amoen-calcul-objectif-dashboard
 requests==2.34.2
     # via streamlit

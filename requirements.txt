@@ -21,9 +21,9 @@ bcrypt==5.0.0
     # via streamlit-authenticator
 blinker==1.9.0
     # via streamlit
-boto3==1.43.33
+boto3==1.43.34
     # via pymongo-auth-aws
-botocore==1.43.33
+botocore==1.43.34
     # via
     #   boto3
     #   pymongo-auth-aws
@@ -127,7 +127,7 @@ narwhals==2.22.1
     # via
     #   altair
     #   plotly
-numpy==2.4.6
+numpy==2.5.0
     # via
     #   contourpy
     #   matplotlib

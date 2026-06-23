@@ -7,13 +7,23 @@
 
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.18 # run `pre-commit autoupdate` to refresh
+    rev: v0.15.18
     hooks:
-      - id: ruff-format # formatter (replaces black)
-      - id: ruff # linter with auto-fix
+      - id: ruff-format
+      - id: ruff
         args: [--fix]
+
+  - repo: local
+    hooks:
+      - id: auto-bump-patch
+        name: auto bump patch version
+        language: script
+        entry: scripts/auto_bump_patch.sh
+        stages: [pre-commit]
+        always_run: true
+        pass_filenames: false
+
   - repo: https://github.com/astral-sh/uv-pre-commit
-    # uv version.
     rev: 0.11.23
     hooks:
       - id: uv-export
@@ -22,3 +32,13 @@ repos:
         args: ["--upgrade"]
       - id: uv-sync
         args: ["--locked", "--all-packages"]
+
+  - repo: local
+    hooks:
+      - id: tag-version
+        name: tag version after commit
+        language: script
+        entry: scripts/tag_version.sh
+        stages: [post-commit]
+        always_run: true
+        pass_filenames: false

@@ -1,6 +1,6 @@
 [project]
 name = "amoen-calcul-objectif-dashboard"
-version = "0.1.0"
+version = "0.1.3"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -53,3 +53,9 @@ skips = [
     "B101",  # assert statements — fine in tests/application code here
 ]
 severity = "medium"   # report medium and high findings only
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.0",
+    "ruff>=0.15.18",
+]

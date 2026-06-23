@@ -1,0 +1,14 @@
+# Pre-commit hooks — ruff only.
+# uv operations (version bump, lock, sync, export) are handled by `make commit`.
+#
+# First-time setup:
+#   pre-commit install
+#   pre-commit autoupdate   # pins ruff rev to its actual latest release
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.12 # run `pre-commit autoupdate` to refresh
+    hooks:
+      - id: ruff-format # formatter (replaces black)
+      - id: ruff # linter with auto-fix
+        args: [--fix]

@@ -21,9 +21,9 @@ bcrypt==5.0.0
     # via streamlit-authenticator
 blinker==1.9.0
     # via streamlit
-boto3==1.43.34
+boto3==1.43.36
     # via pymongo-auth-aws
-botocore==1.43.34
+botocore==1.43.36
     # via
     #   boto3
     #   pymongo-auth-aws
@@ -157,6 +157,8 @@ pillow==12.2.0
     #   matplotlib
     #   reportlab
     #   streamlit
+pip==26.1.2
+    # via amoen-calcul-objectif-dashboard
 plotly==6.8.0
     # via amoen-calcul-objectif-dashboard
 pluggy==1.6.0

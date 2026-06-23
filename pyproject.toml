@@ -10,6 +10,7 @@ dependencies = [
     "cryptography>=48.0.0",
     "mypy>=2.1.0",
     "openpyxl>=3.1.5",
+    "pip>=26.1.2",
     "plotly>=6.7.0",
     "polars>=1.41.2",
     "pymongo>=4.17.0",

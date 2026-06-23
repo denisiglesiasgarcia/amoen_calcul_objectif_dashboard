@@ -12,3 +12,13 @@ repos:
       - id: ruff-format # formatter (replaces black)
       - id: ruff # linter with auto-fix
         args: [--fix]
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.11.23
+    hooks:
+      - id: uv-export
+        args: ["--frozen", "--output-file=requirements.txt", "--quiet"]
+      - id: uv-lock
+        args: ["--upgrade"]
+      - id: uv-sync
+        args: ["--locked", "--all-packages"]

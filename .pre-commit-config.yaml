@@ -1,4 +1,4 @@
-# Pre-commit hooks — ruff only.
+# Pre-commit hooks — ruff, gitleaks, bandit.
 # uv operations (version bump, lock, sync, export) are handled by `make commit`.
 #
 # First-time setup:
@@ -6,12 +6,24 @@
 #   pre-commit autoupdate   # pins ruff rev to its actual latest release
 
 repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.18
     hooks:
       - id: ruff-format
       - id: ruff
         args: [--fix]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.6
+    hooks:
+      - id: bandit
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: ["bandit[toml]"]
 
   - repo: local
     hooks:

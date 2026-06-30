@@ -1,19 +1,18 @@
 # Calcul d'atteinte de l'objectif pour le programme AMOén de SIG/OCEN
 
-Application Streamlit qui calcule l'atteinte de l'objectif énergétique du programme AMOén
+Application Streamlit qui calcule l'atteinte de l'objectif du programme AMOén
 (SIG/OCEN), gère l'historique par site, et génère des rapports PDF.
 
-🔗 **Démo en ligne**: [amoen-calcul.streamlit.app](https://amoen-calcul.streamlit.app/)
-📖 **Documentation utilisateur**: [denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard](https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/)
-(TLDR, description des onglets, surélévations, FAQ, provenance des données)
+🔗 **Dashboard**: [amoen-calcul.streamlit.app](https://amoen-calcul.streamlit.app/)
+
+📖 **Documentation**: [denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard](https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/)
 
 ## Fonctionnalités
 
-- Calcul de l'atteinte de l'objectif énergétique (méthodologie AMOén)
+- Calcul de l'atteinte de l'objectif (méthodologie AMOén)
 - Historique des calculs par site, avec graphiques
 - Génération de rapports PDF
 - Extraction et gestion de la base de données (admin)
-- Calcul IDC (indice de dépense de chaleur)
 - Gestion des utilisateurs avec mots de passe robustes et réinitialisation
 - Mode sombre / clair
 

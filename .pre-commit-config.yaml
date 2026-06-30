@@ -1,9 +1,13 @@
 # Pre-commit hooks — ruff, gitleaks, bandit, ty.
 # uv operations (version bump, lock, sync, export) are handled by `make commit`.
 #
-# First-time setup:
+# This file is synced into target repos by repo-file-sync-action — see
+# .github/sync.yml in this repo. Don't edit it directly in a target repo;
+# edit it here and let the sync PR carry the change out.
+#
+# First-time setup (per repo):
 #   pre-commit install
-#   pre-commit autoupdate   # pins ruff rev to its actual latest release
+#   pre-commit autoupdate   # pins hook revs to their actual latest release
 
 repos:
   - repo: https://github.com/gitleaks/gitleaks

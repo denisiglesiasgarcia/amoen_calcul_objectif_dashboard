@@ -1,6 +1,12 @@
-# Usage: make commit m="your message"
+# Usage:
+#   make setup           # one-time, after cloning
+#   make commit m="your message"
 
-.PHONY: commit
+.PHONY: setup commit
+
+setup:
+	uv sync
+	uv run pre-commit install
 
 commit:
 	# 1. bump patch version in pyproject.toml (skip re-lock, done below)

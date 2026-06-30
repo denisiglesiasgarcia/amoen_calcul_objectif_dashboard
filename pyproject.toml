@@ -1,6 +1,6 @@
 [project]
 name = "amoen-calcul-objectif-dashboard"
-version = "0.1.11"
+version = "0.1.14"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -49,6 +49,30 @@ exclude = [
     "mkdocs/",
 ]
 
+[tool.pyright]
+pythonVersion = "3.13"
+venvPath = "."
+venv = ".venv"
+exclude = [
+    "tests",
+    "mkdocs",
+    ".venv",
+]
+typeCheckingMode = "basic"   # tighten to "standard"/"strict" once typed up
+reportMissingImports = true
+reportMissingTypeStubs = false   # third-party libs without stubs (streamlit, pymongo…)
+# Codebase has no type hints yet, so pandas/numpy's strict stubs are very noisy.
+# Downgrade to warnings (gradual adoption, same approach as [tool.mypy] above);
+# tighten to "error" once these are cleaned up.
+reportAttributeAccessIssue = "warning"
+reportReturnType = "warning"
+reportCallIssue = "warning"
+reportArgumentType = "warning"
+reportOptionalSubscript = "warning"
+reportAssignmentType = "warning"
+reportGeneralTypeIssues = "warning"
+reportOperatorIssue = "warning"
+
 [tool.bandit]
 exclude_dirs = ["tests", "mkdocs"]
 skips = [
@@ -63,7 +87,7 @@ dev = [
 ]
 
 [tool.bumpversion]
-current_version = "0.1.11"
+current_version = "0.1.14"
 commit = false
 tag = false
 

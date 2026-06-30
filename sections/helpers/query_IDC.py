@@ -303,12 +303,14 @@ def create_barplot(data_df, nom_projet):
                     (df_barplot["adresse"] == adresse) & (df_barplot["egid"] == egid)
                 ]["annee"].unique()
             ):
-                new_rows.append({
-                    "adresse": adresse,
-                    "egid": egid,
-                    "annee": year,
-                    "indice": 0,
-                })
+                new_rows.append(
+                    {
+                        "adresse": adresse,
+                        "egid": egid,
+                        "annee": year,
+                        "indice": 0,
+                    }
+                )
 
     # Add new rows if any exist
     if new_rows:

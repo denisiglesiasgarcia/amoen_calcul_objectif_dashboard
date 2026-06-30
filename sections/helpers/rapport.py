@@ -56,19 +56,21 @@ def graphique_bars_rapport(
     )
 
     # données pour le graphique
-    bar_data1 = pd.DataFrame({
-        "Nom_projet": [site, site, site],
-        "Type": [
-            "IDC moy 3 ans avant\n$E_{f,avant,corr}$",
-            "Objectif\n$E_{f,obj}*f_{p}$",
-            "Conso mesurée après\n$E_{f,après,corr,rénové}*f_{p}$",
-        ],
-        "Valeur": [
-            idc_moy_3ans_avant_MJ_m2,
-            ef_objectif_pondere_MJ_m2,
-            ef_apres_corr_MJ_m2,
-        ],
-    })
+    bar_data1 = pd.DataFrame(
+        {
+            "Nom_projet": [site, site, site],
+            "Type": [
+                "IDC moy 3 ans avant\n$E_{f,avant,corr}$",
+                "Objectif\n$E_{f,obj}*f_{p}$",
+                "Conso mesurée après\n$E_{f,après,corr,rénové}*f_{p}$",
+            ],
+            "Valeur": [
+                idc_moy_3ans_avant_MJ_m2,
+                ef_objectif_pondere_MJ_m2,
+                ef_apres_corr_MJ_m2,
+            ],
+        }
+    )
 
     plt.clf()  # Clear the current figure
     cm = 1 / 2.54
@@ -734,22 +736,24 @@ def generate_pdf(data):
     # Adjust the column widths to make better use of space
     project_admin_table = Table(project_admin, colWidths=[150, 350])
     project_admin_table.setStyle(
-        TableStyle([
-            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-            ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
-            ("SPAN", (0, 0), (1, 1)),
-            ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
-            ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
-            ("VALIGN", (0, 0), (-1, -1), "TOP"),
-            ("ALIGN", (0, 0), (-1, -1), "LEFT"),
-            ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
-            ("FONTSIZE", (0, 0), (-1, -1), 10),
-            ("TOPPADDING", (0, 0), (-1, -1), 3),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-            ("LEFTPADDING", (0, 0), (-1, -1), 6),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-        ])
+        TableStyle(
+            [
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+                ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
+                ("SPAN", (0, 0), (1, 1)),
+                ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
+                ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+                ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+                ("FONTSIZE", (0, 0), (-1, -1), 10),
+                ("TOPPADDING", (0, 0), (-1, -1), 3),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+                ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ]
+        )
     )
 
     elements.append(project_admin_table)
@@ -771,33 +775,39 @@ def generate_pdf(data):
         )
 
         # Create the paragraph with mixed styles
-        project_surfaces.append([
-            Paragraph("Surface surélévation (m² SRE):", styles["Normal"]),
-            Paragraph(
-                f"{round(data['sre_extension_surelevation_m2'], 2):.1f} m² SRE. <i>La SRE surélevée n'est pas sujette à la subvention AMOén</i>"  # noqa: E501
-            ),
-        ])
+        project_surfaces.append(
+            [
+                Paragraph("Surface surélévation (m² SRE):", styles["Normal"]),
+                Paragraph(
+                    f"{round(data['sre_extension_surelevation_m2'], 2):.1f} m² SRE. <i>La SRE surélevée n'est pas sujette à la subvention AMOén</i>"  # noqa: E501
+                ),
+            ]
+        )
 
-    project_surfaces.append([
-        Paragraph("Surface rénovation (m² SRE):", styles["Normal"]),
-        f"{data['sre_renovation_m2']} m² SRE",
-    ])
+    project_surfaces.append(
+        [
+            Paragraph("Surface rénovation (m² SRE):", styles["Normal"]),
+            f"{data['sre_renovation_m2']} m² SRE",
+        ]
+    )
 
     project_surfaces_table = Table(project_surfaces, colWidths=[150, 350])
     project_surfaces_table.setStyle(
-        TableStyle([
-            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-            ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
-            ("SPAN", (0, 0), (1, 1)),
-            ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
-            ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
-            ("ALIGN", (0, 0), (-1, -1), "LEFT"),
-            ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
-            ("FONTSIZE", (0, 0), (-1, -1), 10),
-            ("TOPPADDING", (0, 0), (-1, -1), 3),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-        ])
+        TableStyle(
+            [
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+                ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
+                ("SPAN", (0, 0), (1, 1)),
+                ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
+                ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
+                ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+                ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+                ("FONTSIZE", (0, 0), (-1, -1), 10),
+                ("TOPPADDING", (0, 0), (-1, -1), 3),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ]
+        )
     )
     elements.append(project_surfaces_table)
     elements.append(Spacer(1, 0.5 * cm))
@@ -847,27 +857,31 @@ def generate_pdf(data):
         ("Autre", data["agent_energetique_ef_autre_kwh"], "kWh"),
     ]:
         if value > 0.0:
-            project_energie.append([
-                f"{energy_type} ({unit}):",
-                f"{value:.1f} {unit} du {data['periode_start'].date()} au "
-                f"{data['periode_end'].date()}",
-            ])
+            project_energie.append(
+                [
+                    f"{energy_type} ({unit}):",
+                    f"{value:.1f} {unit} du {data['periode_start'].date()} au "
+                    f"{data['periode_end'].date()}",
+                ]
+            )
 
     project_energie_table = Table(project_energie, colWidths=[150, 350])
     project_energie_table.setStyle(
-        TableStyle([
-            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-            ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
-            ("SPAN", (0, 0), (1, 1)),
-            ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
-            ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
-            ("ALIGN", (0, 0), (-1, -1), "LEFT"),
-            ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
-            ("FONTSIZE", (0, 0), (-1, -1), 10),
-            ("TOPPADDING", (0, 0), (-1, -1), 3),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-        ])
+        TableStyle(
+            [
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+                ("BACKGROUND", (0, 0), (1, 1), colors.lightgrey),
+                ("SPAN", (0, 0), (1, 1)),
+                ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
+                ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
+                ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+                ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+                ("FONTSIZE", (0, 0), (-1, -1), 10),
+                ("TOPPADDING", (0, 0), (-1, -1), 3),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ]
+        )
     )
     elements.append(project_energie_table)
     elements.append(Spacer(1, 0.5 * cm))
@@ -923,41 +937,43 @@ def generate_pdf(data):
 
     # Update the table style for the additional column
     project_results_table.setStyle(
-        TableStyle([
-            ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
-            (
-                "BACKGROUND",
-                (0, 1),
-                (-1, 1),
-                colors.white,
-            ),  # Background for header row
-            ("TEXTCOLOR", (0, 0), (-1, 1), colors.black),
-            ("ALIGN", (0, 0), (0, -1), "LEFT"),  # Left-align first column
-            ("ALIGN", (1, 0), (1, -1), "LEFT"),  # Left-align second column
-            ("ALIGN", (2, 0), (-1, -1), "CENTER"),  # Center-align other columns
-            ("FONTNAME", (0, 0), (-1, 1), "Helvetica-Bold"),
-            ("FONTSIZE", (0, 0), (-1, 0), 12),  # Font size for title row
-            ("FONTSIZE", (0, 1), (-1, 1), 10),  # Font size for header row
-            ("BOTTOMPADDING", (0, 0), (-1, 0), 12),  # Padding for title row
-            (
-                "BACKGROUND",
-                (0, 2),
-                (-1, -1),
-                colors.white,
-            ),  # Background for data rows
-            (
-                "TEXTCOLOR",
-                (0, 2),
-                (-1, -1),
-                colors.black,
-            ),  # Text color for data rows
-            ("FONTNAME", (0, 2), (-1, -1), "Helvetica"),  # Font for data rows
-            ("FONTSIZE", (0, 2), (-1, -1), 10),  # Font size for data rows
-            ("TOPPADDING", (0, 0), (-1, -1), 3),  # Padding adjustments
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),  # Table grid
-            ("SPAN", (0, 0), (-1, 0)),  # Merge cells in title row
-        ])
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+                (
+                    "BACKGROUND",
+                    (0, 1),
+                    (-1, 1),
+                    colors.white,
+                ),  # Background for header row
+                ("TEXTCOLOR", (0, 0), (-1, 1), colors.black),
+                ("ALIGN", (0, 0), (0, -1), "LEFT"),  # Left-align first column
+                ("ALIGN", (1, 0), (1, -1), "LEFT"),  # Left-align second column
+                ("ALIGN", (2, 0), (-1, -1), "CENTER"),  # Center-align other columns
+                ("FONTNAME", (0, 0), (-1, 1), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, 0), 12),  # Font size for title row
+                ("FONTSIZE", (0, 1), (-1, 1), 10),  # Font size for header row
+                ("BOTTOMPADDING", (0, 0), (-1, 0), 12),  # Padding for title row
+                (
+                    "BACKGROUND",
+                    (0, 2),
+                    (-1, -1),
+                    colors.white,
+                ),  # Background for data rows
+                (
+                    "TEXTCOLOR",
+                    (0, 2),
+                    (-1, -1),
+                    colors.black,
+                ),  # Text color for data rows
+                ("FONTNAME", (0, 2), (-1, -1), "Helvetica"),  # Font for data rows
+                ("FONTSIZE", (0, 2), (-1, -1), 10),  # Font size for data rows
+                ("TOPPADDING", (0, 0), (-1, -1), 3),  # Padding adjustments
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),  # Table grid
+                ("SPAN", (0, 0), (-1, 0)),  # Merge cells in title row
+            ]
+        )
     )
 
     # Add the table to the document

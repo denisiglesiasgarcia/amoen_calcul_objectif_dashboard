@@ -174,23 +174,19 @@ def display_objective_chart(df: pd.DataFrame):
         lf = pl.from_pandas(df.drop(columns=["_id"], errors="ignore"))
 
         lf = (
-            lf
-            .sort(["nom_projet", "periode_start"])
+            lf.sort(["nom_projet", "periode_start"])
             .with_columns(
                 (
-                    pl
-                    .col("atteinte_objectif")
+                    pl.col("atteinte_objectif")
                     .cast(pl.Float64, strict=False)
                     .fill_null(0.0)
                     * 100
                 ).alias("atteinte_objectif"),
-                pl
-                .col("periode_start")
+                pl.col("periode_start")
                 .cast(pl.Utf8)
                 .str.slice(0, 10)
                 .alias("periode_start"),
-                pl
-                .col("periode_end")
+                pl.col("periode_end")
                 .cast(pl.Utf8)
                 .str.slice(0, 10)
                 .alias("periode_end"),
@@ -203,8 +199,7 @@ def display_objective_chart(df: pd.DataFrame):
             return
 
         lf = lf.with_columns(
-            pl
-            .when(
+            pl.when(
                 pl.col("periode_start").is_not_null()
                 & pl.col("periode_end").is_not_null()
             )
@@ -212,8 +207,7 @@ def display_objective_chart(df: pd.DataFrame):
             .otherwise(pl.lit("Date non spécifiée"))
             .alias("periode"),
             pl.int_range(pl.len()).over("nom_projet").alias("periode_rank"),
-            pl
-            .when(pl.col("atteinte_objectif") >= TARGET)
+            pl.when(pl.col("atteinte_objectif") >= TARGET)
             .then(pl.lit("≥ 85% ✓"))
             .otherwise(pl.lit("< 85% ✗"))
             .alias("statut"),
@@ -223,8 +217,7 @@ def display_objective_chart(df: pd.DataFrame):
         y_max = max(110, (int(df_plot["atteinte_objectif"].max()) // 10 + 2) * 10)
 
         bars = (
-            alt
-            .Chart(df_plot)
+            alt.Chart(df_plot)
             .mark_bar(cornerRadiusTopLeft=3, cornerRadiusTopRight=3)
             .encode(
                 x=alt.X(
@@ -262,8 +255,7 @@ def display_objective_chart(df: pd.DataFrame):
         )
 
         labels = (
-            alt
-            .Chart(df_plot)
+            alt.Chart(df_plot)
             .mark_text(dy=-6, fontSize=9, fontWeight="bold")
             .encode(
                 x=alt.X("nom_projet:N"),
@@ -279,15 +271,13 @@ def display_objective_chart(df: pd.DataFrame):
         )
 
         ref_line = (
-            alt
-            .Chart(pd.DataFrame({"y": [TARGET]}))
+            alt.Chart(pd.DataFrame({"y": [TARGET]}))
             .mark_rule(color="#c0392b", strokeWidth=2, strokeDash=[6, 3])
             .encode(y=alt.Y("y:Q"))
         )
 
         ref_label = (
-            alt
-            .Chart(pd.DataFrame({"y": [TARGET], "label": ["Cible 85%"]}))
+            alt.Chart(pd.DataFrame({"y": [TARGET], "label": ["Cible 85%"]}))
             .mark_text(
                 align="right",
                 dx=-6,
@@ -300,8 +290,7 @@ def display_objective_chart(df: pd.DataFrame):
         )
 
         fig = (
-            alt
-            .layer(bars, labels, ref_line, ref_label)
+            alt.layer(bars, labels, ref_line, ref_label)
             .properties(
                 height=420,
                 title=alt.TitleParams(
@@ -346,8 +335,7 @@ def display_energy_mix_chart(df: pd.DataFrame):
         df_mix = pd.DataFrame(rows).sort_values("Entrées", ascending=True)
 
         bars = (
-            alt
-            .Chart(df_mix)
+            alt.Chart(df_mix)
             .mark_bar(
                 color="#3498db", cornerRadiusTopRight=3, cornerRadiusBottomRight=3
             )
@@ -363,8 +351,7 @@ def display_energy_mix_chart(df: pd.DataFrame):
         )
 
         labels = (
-            alt
-            .Chart(df_mix)
+            alt.Chart(df_mix)
             .mark_text(align="left", dx=4, fontSize=11)
             .encode(
                 y=alt.Y("Agent:N", sort=None),
@@ -374,8 +361,7 @@ def display_energy_mix_chart(df: pd.DataFrame):
         )
 
         fig = (
-            alt
-            .layer(bars, labels)
+            alt.layer(bars, labels)
             .properties(height=max(180, len(df_mix) * 36))
             .configure_view(strokeWidth=0)
             .configure_axisY(labelLimit=160)

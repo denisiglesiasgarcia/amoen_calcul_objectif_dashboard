@@ -854,9 +854,9 @@ def insert_project_to_mongodb(
                 st.error(f"- {error}")
             return False
 
-        if mycol_historique_sites.find_one({
-            "nom_projet": converted_data["nom_projet"]
-        }):
+        if mycol_historique_sites.find_one(
+            {"nom_projet": converted_data["nom_projet"]}
+        ):
             st.error("Un projet avec ce nom existe déjà")
             return False
 
@@ -896,9 +896,9 @@ def delete_projects_from_mongodb(mycol_historique_sites, project_ids: list) -> t
 
         for project_id in project_ids:
             try:
-                result = mycol_historique_sites.delete_one({
-                    "_id": ObjectId(project_id)
-                })
+                result = mycol_historique_sites.delete_one(
+                    {"_id": ObjectId(project_id)}
+                )
                 if result.deleted_count == 0:
                     failed_count += 1
                     errors.append(f"Project with ID {project_id} not found")
@@ -986,12 +986,14 @@ def display_database_management(mycol_historique_sites, data_admin):
             na_position="last",
         )
 
-        tab_view, tab_edit, tab_add, tab_delete = st.tabs([
-            "👀 Voir les projets",
-            "✏️ Modifier un projet",
-            "➕ Ajouter un projet",
-            "🗑️ Supprimer un projet",
-        ])
+        tab_view, tab_edit, tab_add, tab_delete = st.tabs(
+            [
+                "👀 Voir les projets",
+                "✏️ Modifier un projet",
+                "➕ Ajouter un projet",
+                "🗑️ Supprimer un projet",
+            ]
+        )
 
         with tab_view:
             st.write(f"📋 {len(df)} projet(s) dans la base de données")
@@ -1183,11 +1185,13 @@ def display_database_management(mycol_historique_sites, data_admin):
 
                         if any(mask):
                             project_data = df[mask].iloc[0]
-                            project_data_list.append({
-                                "Nom du projet": project_data["nom_projet"],
-                                "Date du rapport": project_datetime,
-                                "ID": str(project_data["_id"]),
-                            })
+                            project_data_list.append(
+                                {
+                                    "Nom du projet": project_data["nom_projet"],
+                                    "Date du rapport": project_datetime,
+                                    "ID": str(project_data["_id"]),
+                                }
+                            )
                             project_ids_to_delete.append(str(project_data["_id"]))
                     except Exception as e:
                         st.error(

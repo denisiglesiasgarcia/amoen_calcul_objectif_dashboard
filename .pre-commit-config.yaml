@@ -1,4 +1,4 @@
-# Pre-commit hooks — ruff, gitleaks, bandit.
+# Pre-commit hooks — ruff, gitleaks, bandit, pyright.
 # uv operations (version bump, lock, sync, export) are handled by `make commit`.
 #
 # First-time setup:
@@ -24,6 +24,11 @@ repos:
       - id: bandit
         args: ["-c", "pyproject.toml"]
         additional_dependencies: ["bandit[toml]"]
+
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.407
+    hooks:
+      - id: pyright
 
   - repo: local
     hooks:

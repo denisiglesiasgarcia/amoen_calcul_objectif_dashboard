@@ -1,81 +1,67 @@
 # /dashboard_amoen.py
 
-import os
 import datetime
+import os
+
+import matplotlib
 import pandas as pd
 import streamlit as st
-import matplotlib
 
 matplotlib.use("Agg")
 
-from pymongo import MongoClient
-from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
 import time
-from bson import ObjectId
 
 import streamlit_authenticator as stauth
+from bson import ObjectId
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
 
-# import yaml
-# from yaml.loader import SafeLoader
-
-from sections.helpers.validation_saisie import (
-    validate_input_float,
-    validate_energie_input,
-    validate_percentage_sum,
-)
-
-from sections.helpers.calcul_dj import (
-    get_meteo_data,
-)
-
-from sections.helpers.graphique_bars_exploitation import (
-    graphique_bars_objectif_exploitation,
-)
-
-from sections.helpers.rapport import (
-    generate_pdf,
-)
-
-from sections.helpers.query_IDC import (
-    make_request,
-    convert_geometry_for_streamlit,
-    show_map,
-    show_dataframe,
-    get_adresses_egid,
-    create_barplot,
-)
-
-from sections.helpers.amoen_historique import create_barplot_historique_amoen
-
-from sections.helpers.avusy import (
-    avusy_consommation_energie_dashboard,
-    update_existing_data_avusy,
-    display_counter_indices,
-)
-
+from sections.helpers.admin.admin_chiffre_cle import display_admin_dashboard
+from sections.helpers.admin.admin_db_mgmt import display_database_management
 from sections.helpers.affectations_sre import display_affectations
-
 from sections.helpers.agents_energetiques import (
     display_energy_agents,
 )
-
+from sections.helpers.amoen_historique import create_barplot_historique_amoen
+from sections.helpers.avusy import (
+    avusy_consommation_energie_dashboard,
+    display_counter_indices,
+    update_existing_data_avusy,
+)
+from sections.helpers.calcul_dj import (
+    get_meteo_data,
+)
+from sections.helpers.graphique_bars_exploitation import (
+    graphique_bars_objectif_exploitation,
+)
 from sections.helpers.note_calcul_main import (
     fonction_note_calcul,
     validate_required_data_for_note_calcul,
 )
-
-from sections.helpers.sidebar import add_sidebar_links
-
-from sections.helpers.admin.admin_chiffre_cle import display_admin_dashboard
-
-from sections.helpers.admin.admin_db_mgmt import display_database_management
-
+from sections.helpers.query_IDC import (
+    convert_geometry_for_streamlit,
+    create_barplot,
+    get_adresses_egid,
+    make_request,
+    show_dataframe,
+    show_map,
+)
+from sections.helpers.rapport import (
+    generate_pdf,
+)
 from sections.helpers.sanitize_mongo import sanitize_db
-
-from sections.helpers.utils import get_rounded_float
-
 from sections.helpers.save_excel_streamlit import (
     display_dataframe_with_excel_download,
+)
+from sections.helpers.sidebar import add_sidebar_links
+from sections.helpers.utils import get_rounded_float
+
+# import yaml
+# from yaml.loader import SafeLoader
+from sections.helpers.validation_saisie import (
+    validate_energie_input,
+    validate_input_float,
+    validate_percentage_sum,
 )
 
 st.set_page_config(page_title="AMOEN Dashboard", page_icon=":bar_chart:", layout="wide")
@@ -90,29 +76,35 @@ URL_INDICE_MOYENNES_3_ANS = "https://vector.sitg.ge.ch/arcgis/rest/services/Host
 
 MONGODB_URI = st.secrets["MONGODB_URI"]
 
+
 # BD mongodb
 def connect_with_retry(uri, max_retries=3, delay=2):
     for attempt in range(max_retries):
         try:
             client = MongoClient(
-                uri, 
+                uri,
                 serverSelectionTimeoutMS=10000,
                 connectTimeoutMS=30000,
                 socketTimeoutMS=30000,
                 retryWrites=True,
-                retryReads=True
+                retryReads=True,
             )
             # Test connection
-            client.admin.command('ping')
+            client.admin.command("ping")
             return client
         except (ConnectionFailure, ServerSelectionTimeoutError) as e:
             if attempt < max_retries - 1:
-                st.warning(f"MongoDB connection attempt {attempt+1} failed. Retrying in {delay} seconds...")
+                st.warning(
+                    f"MongoDB connection attempt {attempt + 1} failed. Retrying in {delay} seconds..."
+                )
                 time.sleep(delay)
                 delay *= 2  # Exponential backoff
             else:
-                st.error(f"Failed to connect to MongoDB after {max_retries} attempts. Error: {str(e)}")
+                st.error(
+                    f"Failed to connect to MongoDB after {max_retries} attempts. Error: {str(e)}"
+                )
                 raise
+
 
 client = connect_with_retry(MONGODB_URI)
 # client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=5000)
@@ -542,7 +534,9 @@ if st.session_state["authentication_status"]:
                 )
 
             # Bug travaux_start serialization fix
-            st.session_state["data_site"]["travaux_start"] = data_sites_db["travaux_start"]
+            st.session_state["data_site"]["travaux_start"] = data_sites_db[
+                "travaux_start"
+            ]
 
             # Autres données
             # st.session_state["data_site"]["travaux_start"] = data_sites_db["travaux_start"]
@@ -556,7 +550,7 @@ if st.session_state["authentication_status"]:
 
         tab2_fragment()
 
-        if st.button("Sauvegarder", width='stretch', type="primary"):
+        if st.button("Sauvegarder", width="stretch", type="primary"):
             st.success("Données validées")
             st.rerun()
 
@@ -989,9 +983,7 @@ if st.session_state["authentication_status"]:
                 )
 
                 # add date to data_rapport
-                st.session_state["data_site"][
-                    "date_rapport"
-                ] = datetime.datetime.now()
+                st.session_state["data_site"]["date_rapport"] = datetime.datetime.now()
 
                 # Remove the _id field if it exists to ensure MongoDB generates a new one
                 if "_id" in st.session_state["data_site"]:
@@ -1005,38 +997,64 @@ if st.session_state["authentication_status"]:
             )
             invalid_fields_list = "\n".join([f"- {field}" for field in invalid_fields])
             if len(invalid_fields_list) > 0:
-                st.warning(f"Les champs suivants sont invalides ou manquants:\n\n{invalid_fields_list}")
-            
+                st.warning(
+                    f"Les champs suivants sont invalides ou manquants:\n\n{invalid_fields_list}"
+                )
+
             # Check and display which conditions are not met
             conditions_not_met = []
-            
+
             if invalid_fields is None:
                 conditions_not_met.append("Des champs sont invalides")
-                
+
             if not st.session_state["data_site"].get("facteur_ponderation_moyen"):
-                conditions_not_met.append("Facteur de pondération moyen manquant ou égal à 0")
-                
+                conditions_not_met.append(
+                    "Facteur de pondération moyen manquant ou égal à 0"
+                )
+
             if not st.session_state["data_site"].get("ef_avant_corr_kwh_m2", 0) > 0:
                 conditions_not_met.append("Énergie finale avant correction ≤ 0")
-                
-            if not st.session_state["data_site"].get("energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2", 0) > 0:
+
+            if (
+                not st.session_state["data_site"].get(
+                    "energie_finale_apres_travaux_climatiquement_corrigee_renovee_pondere_kwh_m2",
+                    0,
+                )
+                > 0
+            ):
                 conditions_not_met.append("Énergie finale après travaux ≤ 0")
-                
-            if not st.session_state["data_site"].get("ef_objectif_pondere_kwh_m2", 0) > 0:
+
+            if (
+                not st.session_state["data_site"].get("ef_objectif_pondere_kwh_m2", 0)
+                > 0
+            ):
                 conditions_not_met.append("Objectif d'énergie finale pondéré ≤ 0")
-                
+
             if not st.session_state["data_site"].get("atteinte_objectif", 0) > 0:
                 conditions_not_met.append("Atteinte de l'objectif ≤ 0")
-                
-            if st.session_state["data_site"].get("somme_repartition_energie_finale") != 100:
-                conditions_not_met.append("La somme des répartitions d'énergie finale n'est pas égale à 100%")
-                
-            if st.session_state["data_site"].get("somme_pourcentage_affectations") != 100:
-                conditions_not_met.append("La somme des pourcentages d'affectations n'est pas égale à 100%")
-                
-            if not st.session_state["data_site"].get("somme_agents_energetiques_mj", 0) > 0:
+
+            if (
+                st.session_state["data_site"].get("somme_repartition_energie_finale")
+                != 100
+            ):
+                conditions_not_met.append(
+                    "La somme des répartitions d'énergie finale n'est pas égale à 100%"
+                )
+
+            if (
+                st.session_state["data_site"].get("somme_pourcentage_affectations")
+                != 100
+            ):
+                conditions_not_met.append(
+                    "La somme des pourcentages d'affectations n'est pas égale à 100%"
+                )
+
+            if (
+                not st.session_state["data_site"].get("somme_agents_energetiques_mj", 0)
+                > 0
+            ):
                 conditions_not_met.append("La somme des agents énergétiques ≤ 0")
-            
+
             if conditions_not_met:
                 st.text("Conditions non respectées:")
                 for condition in conditions_not_met:

@@ -1,6 +1,6 @@
 [project]
 name = "amoen-calcul-objectif-dashboard"
-version = "0.1.18"
+version = "0.1.21"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -35,47 +35,10 @@ dev = [
     "ruff>=0.4.0",
 ]
 
-[tool.mypy]
-python_version = "3.13"
-strict = false
-# Gradually enable these as you add type hints:
-warn_return_any = true
-warn_unused_ignores = true
-warn_redundant_casts = true
-disallow_untyped_defs = false   # flip to true once all functions are annotated
-ignore_missing_imports = true   # third-party libs without stubs (streamlit, pymongo…)
-exclude = [
-    "tests/",
-    "mkdocs/",
-]
-
-[tool.ty.environment]
-python-version = "3.13"
-python = ".venv"
-
-[tool.ty.src]
-exclude = [
-    "tests",
-    "mkdocs",
-]
-
-[tool.ty.rules]
-# Codebase has no type hints yet; these are pre-existing issues, not noise from
-# strict stubs, but blocking every commit on unrelated legacy code isn't useful.
-# Downgrade to warnings (gradual adoption, same approach as [tool.mypy] above);
-# tighten to "error" once these are fixed.
-call-non-callable = "warn"
-invalid-argument-type = "warn"
-missing-argument = "warn"
-unresolved-attribute = "warn"
-unsupported-operator = "warn"
-
-[tool.bandit]
-exclude_dirs = ["tests", "mkdocs"]
-skips = [
-    "B101",  # assert statements — fine in tests/application code here
-]
-severity = "medium"   # report medium and high findings only
+# [tool.mypy], [tool.ty.*], and [tool.bandit] now live in standalone files
+# (mypy.ini, ty.toml, bandit.toml) synced from the ci-templates repo, so they
+# apply consistently across all POS repos without duplicating per-project
+# metadata in this pyproject.toml. See ci-templates/README.md.
 
 [dependency-groups]
 dev = [
@@ -84,7 +47,7 @@ dev = [
 ]
 
 [tool.bumpversion]
-current_version = "0.1.18"
+current_version = "0.1.21"
 commit = false
 tag = false
 

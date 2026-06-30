@@ -1,43 +1,84 @@
 # Calcul d'atteinte de l'objectif pour le programme AMOén de SIG/OCEN
 
-[https://amoen-calcul.streamlit.app/](https://amoen-calcul.streamlit.app/)
+Application Streamlit qui calcule l'atteinte de l'objectif énergétique du programme AMOén
+(SIG/OCEN), gère l'historique par site, et génère des rapports PDF.
 
-## Documentation
+🔗 **Démo en ligne**: [amoen-calcul.streamlit.app](https://amoen-calcul.streamlit.app/)
+📖 **Documentation utilisateur**: [denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard](https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/)
+(TLDR, description des onglets, surélévations, FAQ, provenance des données)
 
-La documentation est disponible [ici](https://denisiglesiasgarcia.github.io/amoen_calcul_objectif_dashboard/)
+## Fonctionnalités
 
-## TODO
+- Calcul de l'atteinte de l'objectif énergétique (méthodologie AMOén)
+- Historique des calculs par site, avec graphiques
+- Génération de rapports PDF
+- Extraction et gestion de la base de données (admin)
+- Calcul IDC (indice de dépense de chaleur)
+- Gestion des utilisateurs avec mots de passe robustes et réinitialisation
+- Mode sombre / clair
 
-- Prioritaire
-  - Base de données
-    - [ ] Améliorer sauvegarde des données
-  - Rapport
-    - [ ] Ajouter barre de 85% dans le graphique du rapport PDF
-  - IDC
-    - [ ] Ajouter calcul IDC
-- Non prioritaire
-  - [ ] Ajouter option de renseigner ECS séparée du chauffage
+## Stack technique
 
-## Fait
+- Python 3.13, géré avec [uv](https://docs.astral.sh/uv/)
+- [Streamlit](https://streamlit.io/) + `streamlit-authenticator`
+- MongoDB (`pymongo`)
+- Polars / Pandas pour le traitement de données
+- Plotly, Altair, Matplotlib/Seaborn pour les graphiques
+- ReportLab pour la génération de PDF
 
-- [x] Météo mise à jour automatique
-- [x] Ajouter README
-- [x] Amélioration performance
-- [x] Déploiement sur streamlit
-- [x] Rapport en PDF
-- [x] Historique par site
-- [x] Ajouter graphiques dans l'onglet de résumé
-- [x] Ajouter utilisateurs avec mot de passes robustes
-- [x] Ajouter le formulaire pour mot de passe oublié
-- [X] Ajouter utilisateur administrateur
-- [X] Ajouter pour les surélévations, le total énergie finale ainsi que la répartition
-- [X] Gérer les cas ou l'atteinte de l'objectif est négative
-- [X] Première version documentation avec mkdocs
-- [x] Ajouter unité de test pour vérifier que le calcul de l'atteinte de l'objectif est correct
-- [X] Corriger bug sur les agents énergétiques
-- [X] Trouver solution pour les noms de rue longs dans le rapport PDF
-- [x] Améliorer impression/sauvegarde graphiques px
-- [x] Bug travaux_start et travaux_end Avusy
-- [x] Schéma validation données
-- [x] Améliorer la documentation
-- [x] Générer les mots de passes pour les utilisateurs
+## Démarrage local
+
+### Prérequis
+
+- Python 3.13
+- [uv](https://docs.astral.sh/uv/)
+- Un URI de connexion MongoDB
+
+### Installation
+
+```bash
+uv sync
+```
+
+### Configuration
+
+L'application lit l'URI MongoDB depuis les secrets Streamlit. Créer
+`.streamlit/secrets.toml` (non versionné) avec :
+
+```toml
+MONGODB_URI = "mongodb+srv://..."
+```
+
+### Lancer l'application
+
+```bash
+uv run streamlit run dashboard_amoen.py
+```
+
+## Tests et qualité
+
+```bash
+uv run pytest                              # tests unitaires
+uv run ruff check                          # lint
+uv run mypy sections/ --ignore-missing-imports   # typage
+uv run bandit -r sections/ -ll             # analyse de sécurité
+```
+
+Ces mêmes vérifications tournent dans la CI (`.github/workflows/run_test.yml`) à chaque push.
+Les hooks pre-commit (`.pre-commit-config.yaml`) lancent ruff et le bump de version automatiquement.
+
+## Structure du projet
+
+```
+dashboard_amoen.py        # point d'entrée Streamlit
+sections/                 # pages/onglets de l'UI
+sections/helpers/         # logique métier (calculs, requêtes Mongo, rapports PDF, etc.)
+tests/                    # tests pytest
+mkdocs/                   # source de la documentation utilisateur
+scripts/                  # scripts de versioning/release
+```
+
+## Versioning et release
+
+`make commit m="message"` bump la version patch, met à jour le lock uv, régénère
+`requirements.txt`, puis crée le commit (voir [Makefile](Makefile)).

@@ -1,4 +1,4 @@
-# Pre-commit hooks — ruff, gitleaks, bandit, ty.
+# Pre-commit hooks — ruff, gitleaks, bandit, mypy.
 # uv operations (version bump, lock, sync, export) run automatically as
 # hooks below on every `git commit` (which `make commit` just wraps).
 #
@@ -30,15 +30,19 @@ repos:
         args: ["-c", "bandit.toml"]
         additional_dependencies: ["bandit[toml]"]
 
-  - repo: https://github.com/astral-sh/ty-pre-commit
-    rev: v0.0.55
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v2.3.0
     hooks:
-      - id: ty
-        # Override the default `uv check` entry: it exits non-zero on any
-        # diagnostic, ignoring per-rule severity. Call `ty` directly so rules
-        # downgraded to "warn" in ty.toml's [rules] stay visible but non-blocking.
-        entry: ty check --exit-zero-on-warning
-        additional_dependencies: ["ty==0.0.55"]
+      - id: mypy
+        args: ["--config-file=mypy.ini"]
+        # mypy's own `exclude =` in mypy.ini is ignored for paths passed
+        # explicitly on the command line, which is exactly how pre-commit
+        # invokes it — so the skip list has to be repeated here.
+        exclude: ^(tests/|mkdocs/)
+        # mypy runs in its own isolated venv, so project deps aren't visible.
+        # ignore_missing_imports = True in mypy.ini covers that; add stub
+        # packages (e.g. "pandas-stubs", "types-requests") to
+        # additional_dependencies per-repo to get real checking of a given lib.
 
   - repo: local
     hooks:

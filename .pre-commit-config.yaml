@@ -64,7 +64,11 @@ repos:
       - id: uv-export
         args: ["--frozen", "--output-file=requirements.txt", "--quiet"]
       - id: uv-sync
-        args: ["--locked", "--all-packages"]
+        # --compile-bytecode writes .pyc files up front. Without it, the venv
+        # is rewritten on every commit (uv-lock --upgrade above) and the next
+        # Jupyter kernel / CLI start pays the full compile cost of pandas,
+        # numpy, etc. on first import — several seconds of apparent hang.
+        args: ["--locked", "--all-packages", "--compile-bytecode"]
 
   - repo: local
     hooks:
